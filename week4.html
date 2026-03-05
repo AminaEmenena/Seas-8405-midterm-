@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -484,8 +513,21 @@
 </div>
 
 <div class="container">
+
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">🎯</span> TL;DR — Week 4 Essentials</div>
+  <ul>
+    <li>🔐 <strong>AAA:</strong> Authentication (who) → Authorization (what) → Accounting (logging)</li>
+    <li>📊 <strong>MFA requires DIFFERENT factor types</strong> (know + have + are)</li>
+    <li>🏰 <strong>RBAC most common in enterprise;</strong> MAC for government/military</li>
+    <li>🔄 <strong>OAuth = authorization only;</strong> OIDC adds identity/authentication</li>
+    <li>⚡ <strong>PAM critical:</strong> privileged accounts = keys to the kingdom</li>
+    <li>💡 <strong>JIT access:</strong> temporary elevated privileges, auto-revoked</li>
+  </ul>
+</div>
+
 <details open>
-        <summary>Architecture's Primary Purpose</summary>
+        <summary>🎯 Architecture's Primary Purpose</summary>
         <div>
             <p>The fundamental purpose of security architecture is to <strong>SUPPORT THE MISSION</strong> and enable business goals. Security is not an end in itself — it exists to protect and enable.</p>
 
@@ -506,7 +548,7 @@
     </details>
 
     <details>
-        <summary>Understanding Organizational Goals — The Cascade</summary>
+        <summary>📊 Understanding Organizational Goals — The Cascade</summary>
         <div>
             <p>Organizational goals flow through multiple levels, each supporting the one above:</p>
 
@@ -521,7 +563,7 @@
     </details>
 
     <details>
-        <summary>AAA Framework</summary>
+        <summary>🔐 AAA Framework</summary>
         <div>
             <div class="red"><strong>KEY IDEA:</strong> IAM (Identity and Access Management) is built on three pillars working in concert. Missing even one creates security gaps and compliance failures.</div>
 
@@ -551,7 +593,7 @@
     </details>
 
     <details>
-        <summary>Authentication Factors</summary>
+        <summary>🔐 Authentication Factors</summary>
         <div>
             <div class="mem"><small>Three Factors</small><br><strong>Something you KNOW · Something you HAVE · Something you ARE</strong></div>
 
@@ -604,7 +646,7 @@
     </details>
 
     <details>
-        <summary>Access Control Models</summary>
+        <summary>📊 Access Control Models</summary>
         <div>
             <table>
                 <thead>
@@ -654,7 +696,7 @@
     </details>
 
     <details>
-        <summary>Least Privilege Principle</summary>
+        <summary>🏰 Least Privilege Principle</summary>
         <div>
             <div class="red"><strong>KEY IDEA:</strong> Least privilege is foundational to defense in depth. A single compromised account with minimal permissions limits lateral movement and reduces the blast radius of a breach.</div>
 
@@ -680,7 +722,7 @@
     </details>
 
     <details>
-        <summary>Federation and SSO</summary>
+        <summary>🔄 Federation and SSO</summary>
         <div>
             <h3>Federation</h3>
             <p>A trust relationship between organizations. Users authenticate once in their home organization and access resources across multiple federated organizations.</p>
@@ -734,7 +776,7 @@
     </details>
 
     <details>
-        <summary>Privileged Access Management (PAM)</summary>
+        <summary>⚡ Privileged Access Management (PAM)</summary>
         <div>
             <p>Managing and securing accounts with elevated privileges (admin accounts, service accounts, root).</p>
 
@@ -758,7 +800,7 @@
     </details>
 
     <details>
-        <summary>Impossible Travel and Behavioral Detection</summary>
+        <summary>💡 Impossible Travel and Behavioral Detection</summary>
         <div>
             <p><strong>Impossible Travel Detection:</strong> A behavioral analytics technique that flags when a user authenticates from two geographically distant locations in a timeframe that makes physical travel impossible.</p>
             <ul>
@@ -774,7 +816,7 @@
     </details>
 
     <details>
-        <summary>Scattered Spider Attack Case Study</summary>
+        <summary>⚠️ Scattered Spider Attack Case Study</summary>
         <div>
             <p><strong>Scattered Spider (UNC3944):</strong> A threat group that targeted major organizations (MGM Resorts, Caesars Entertainment, 2023) using social engineering against identity systems.</p>
             <ul>
@@ -796,7 +838,7 @@
     </details>
 
     <details>
-        <summary>Risk Appetite Drives Design</summary>
+        <summary>⚖️ Risk Appetite Drives Design</summary>
         <div>
             <p><strong>Risk appetite:</strong> The amount and type of risk an organization is willing to accept to achieve its business objectives.</p>
 
@@ -841,7 +883,7 @@
     </details>
 
     <details>
-        <summary>Alignment: Fit with Organization</summary>
+        <summary>🎯 Alignment: Fit with Organization</summary>
         <div>
             <p>A "perfect" security architecture that doesn't fit your organization is worse than a simpler one that works. Consider these dimensions:</p>
 
@@ -864,7 +906,7 @@
     </details>
 
     <details>
-        <summary>Efficiency: Opportunity Cost</summary>
+        <summary>⚖️ Efficiency: Opportunity Cost</summary>
         <div>
             <p>Every choice has a cost. <strong>Opportunity cost</strong> = what you give up by choosing one option over another.</p>
 

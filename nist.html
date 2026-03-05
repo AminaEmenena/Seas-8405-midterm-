@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -484,8 +513,21 @@
 </div>
 
 <div class="container">
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — NIST 800-207 & Zero Trust</div>
+  <ul>
+    <li>🔐 <strong>"Never trust, always verify"</strong> — no implicit trust based on network location</li>
+    <li>🧠 <strong>Three actors:</strong> PE (brain) → PA (enforcer) → PEP (bouncer)</li>
+    <li>📊 <strong>CISA Model:</strong> 5 Pillars + 4 Maturity Levels + 3 Cross-Cutting Capabilities</li>
+    <li>📋 <strong>5 Pillars:</strong> Identity, Devices, Networks, Apps & Workloads, Data</li>
+    <li>🔄 <strong>4 Maturity Levels:</strong> Traditional → Initial → Advanced → Optimal</li>
+    <li>🎯 <strong>Start with Identity</strong> (MFA, SSO), then expand to devices, network, apps, data</li>
+  </ul>
+  <div class="tldr-footer">Master these concepts and you'll ace the NIST 800-207 questions</div>
+</div>
+
 <details>
-            <summary>1. Zero Trust Architecture — Core Principle</summary>
+            <summary>🔐 1. Zero Trust Architecture — Core Principle</summary>
             <div class="section-content">
                 <div class="red"><strong>KEY IDEA:</strong> "Never Trust, Always Verify" — No implicit trust based on network location. Every access request is authenticated, authorized, and encrypted, REGARDLESS of origin.</div>
 
@@ -502,7 +544,7 @@
         </details>
 
         <details>
-            <summary>2. NIST 800-207 Seven Tenets</summary>
+            <summary>📋 2. NIST 800-207 Seven Tenets</summary>
             <div class="section-content">
                 <div class="blue"><b>KEY:</b> The Seven Tenets define NIST's Zero Trust vision. They're not just "never trust" — they're specific, actionable principles about resources, communication, sessions, policies, monitoring, enforcement, and intelligence.</div>
 
@@ -521,7 +563,7 @@
         </details>
 
         <details>
-            <summary>3. Zero Trust Logical Components</summary>
+            <summary>🧠 3. Zero Trust Logical Components</summary>
             <div class="section-content">
                 <div class="red"><strong>KEY IDEA:</strong> Three main actors — PE (brain), PA (enforcer), PEP (bouncer). PE makes decisions. PA tells PEP. PEP enforces. SIEM provides the data feed that keeps PE informed.</div>
 
@@ -540,7 +582,7 @@
         </details>
 
         <details>
-            <summary>4. Trust Algorithm</summary>
+            <summary>📊 4. Trust Algorithm</summary>
             <div class="section-content">
                 <div class="green"><b>Best Practice:</b> The Trust Algorithm must weigh MULTIPLE SIGNALS — identity + device + behavior + threat intel + context. Never rely on just one factor. And it MUST be continuous, not just at login.</div>
 
@@ -560,7 +602,7 @@
         </details>
 
         <details>
-            <summary>5. CISA Zero Trust Maturity Model</summary>
+            <summary>📊 5. CISA Zero Trust Maturity Model</summary>
             <div class="section-content">
                 <div class="blue"><b>KEY:</b> CISA's model is ACTIONABLE: 5 Pillars (what to secure), 4 Levels (how mature you are), 3 Cross-Cutting Capabilities (how to get there). Use this to assess your current state and plan improvements.</div>
 
@@ -575,7 +617,7 @@
         </details>
 
         <details>
-            <summary>6. Five Pillars Deep Dive</summary>
+            <summary>🏰 6. Five Pillars Deep Dive</summary>
             <div class="section-content">
                 <div class="red"><strong>KEY IDEA:</strong> Each pillar has its own maturity progression. You'll likely be at different maturity levels in each — that's normal. Start where you are strongest, then expand.</div>
 
@@ -592,7 +634,7 @@
         </details>
 
         <details>
-            <summary>7. Maturity Levels Explained</summary>
+            <summary>🔄 7. Maturity Levels Explained</summary>
             <div class="section-content">
                 <div class="green"><b>Best Practice:</b> Assess your CURRENT state honestly for each pillar. Don't claim you're "Advanced" if you're really "Initial." Use CISA's maturity model to create a gap analysis and prioritize improvements.</div>
 
@@ -608,7 +650,7 @@
         </details>
 
         <details>
-            <summary>8. Zero Trust Deployment Approaches</summary>
+            <summary>🎯 8. Zero Trust Deployment Approaches</summary>
             <div class="section-content">
                 <div class="blue"><b>KEY:</b> Three main paths to implementing Zero Trust. Most organizations START with Identity Governance (easiest), then move to Micro-Segmentation or SDP as they mature.</div>
 
@@ -625,7 +667,7 @@
         </details>
 
         <details>
-            <summary>9. Zero Trust Implementation — Practical Considerations</summary>
+            <summary>💡 9. Zero Trust Implementation — Practical Considerations</summary>
             <div class="section-content">
                 <div class="red"><strong>KEY IDEA:</strong> Zero Trust is a JOURNEY, not a destination. Phased, multi-year implementation. Start with identity, expand to devices, then network, then applications, then data. Measure progress using CISA maturity levels.</div>
 

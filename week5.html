@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -484,11 +513,24 @@
 </div>
 
 <div class="container">
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — App Security & SDLC</div>
+  <ul>
+    <li>📋 <strong>Three phases:</strong> Planning → Implementation → Maintenance</li>
+    <li>⚠️ <strong>Misuse cases:</strong> how attackers abuse legitimate features</li>
+    <li>💡 <strong>Boehm's Curve:</strong> $1 fix in requirements = $100+ in production</li>
+    <li>🔄 <strong>DevOps</strong> doesn't change security GOALS, just execution</li>
+    <li>📊 <strong>OWASP:</strong> Open Web Application Security Project (industry standard)</li>
+    <li>🏰 <strong>Security is EVERYONE's responsibility,</strong> not just one team</li>
+  </ul>
+  <div class="tldr-footer">Master these concepts and you'll ace the Week 5 questions</div>
+</div>
+
 <div class="header">
             </div>
-        
+
         <details>
-            <summary>1. Three Phases of Technology Projects</summary>
+            <summary>📋 1. Three Phases of Technology Projects</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Every tech project has three distinct phases in sequence: Planning, Implementation, then Maintenance. Each requires different skills and focus.</div>
                 <ul>
@@ -501,7 +543,7 @@
         </details>
         
         <details>
-            <summary>2. Why Organizations De-emphasize Planning</summary>
+            <summary>⚠️ 2. Why Organizations De-emphasize Planning</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Pressure for immediate results causes orgs to skip planning phase, creating costly chaos later. "We'll figure it out as we go" always fails.</div>
                 <ul>
@@ -514,7 +556,7 @@
         </details>
         
         <details>
-            <summary>3. Benefits of Structured Systems</summary>
+            <summary>🏰 3. Benefits of Structured Systems</summary>
             <div>
                 <ul>
                     <li><strong>Performance benefits:</strong> systems designed with goals perform better from start</li>
@@ -528,7 +570,7 @@
         </details>
         
         <details>
-            <summary>4. Role of the Security Architect</summary>
+            <summary>🎯 4. Role of the Security Architect</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Security architect has three core jobs: Vision (goals + constraints), Blueprint (plan + roadmap), Stakeholder collaboration (sell & align).</div>
                 <ul>
@@ -541,7 +583,7 @@
         </details>
         
         <details>
-            <summary>5. Scope of Security Architect</summary>
+            <summary>📊 5. Scope of Security Architect</summary>
             <div>
                 <div class="box"><h4>Three Levels of Security Architecture</h4>
                 <ul>
@@ -555,7 +597,7 @@
         </details>
         
         <details>
-            <summary>6. Application Security Architect Role</summary>
+            <summary>🔐 6. Application Security Architect Role</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Architect role evolves through 4 phases: Requirements (design in security) → Development (implement & test) → Release (deploy safely) → Support (respond & fix).</div>
                 <ul>
@@ -568,7 +610,7 @@
         </details>
         
         <details>
-            <summary>7. Building Security into SDLC</summary>
+            <summary>🔄 7. Building Security into SDLC</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Security must be embedded at every stage of SDLC via design reviews, automated testing, code review, and developer training.</div>
                 <ul>
@@ -582,7 +624,7 @@
         </details>
         
         <details>
-            <summary>8. Modern Development: DevOps and CI/CD</summary>
+            <summary>⚡ 8. Modern Development: DevOps and CI/CD</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> DevOps blurs phases but doesn't change architect's goals—vision, misuse cases, attack resistance. Only execution adapts.</div>
                 <ul>
@@ -596,7 +638,7 @@
         </details>
         
         <details>
-            <summary>9. Security Requirements and Misuse Cases</summary>
+            <summary>⚠️ 9. Security Requirements and Misuse Cases</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Every security requirement must map to a specific misuse case. No security without threat justification.</div>
                 <ul>
@@ -616,7 +658,7 @@
         </details>
         
         <details>
-            <summary>10. Optimism Bias in Projects</summary>
+            <summary>🧠 10. Optimism Bias in Projects</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Optimism Bias = #1 killer of security. Teams underestimate costs & timelines, security gets cut first.</div>
                 <p style="margin-top: 10px;"><strong>Optimism Bias:</strong> The systematic tendency for project teams to be overly optimistic about outcomes — underestimating costs, timelines, and risks while overestimating benefits.</p>
@@ -632,7 +674,7 @@
         </details>
 
         <details>
-            <summary>11. Root Cause Analysis</summary>
+            <summary>💡 11. Root Cause Analysis</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Root Cause Analysis finds the REAL problem, not the symptom. Fix symptoms = same bug returns.</div>
                 <p style="margin-top: 10px;"><strong>Root Cause Analysis (RCA):</strong> A systematic process for identifying the underlying causes of problems or incidents, rather than just treating symptoms.</p>
@@ -646,7 +688,7 @@
         </details>
 
         <details>
-            <summary>12. Four Dimensions of Solution Success</summary>
+            <summary>📊 12. Four Dimensions of Solution Success</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Technical success ≠ overall success. Solution must win on Technical, Organizational, Economic, AND Operational dimensions.</div>
                 <p style="margin-top: 10px;">A solution isn't successful just because it works technically. It must succeed across <strong>four dimensions</strong>:</p>
@@ -684,7 +726,7 @@
         </details>
 
         <details>
-            <summary>13. Top-Down vs Bottom-Up Architecture</summary>
+            <summary>⚖️ 13. Top-Down vs Bottom-Up Architecture</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Top-Down = strategic vision. Bottom-Up = pragmatic reality. Best architecture uses BOTH together.</div>
                 <div class="box"><h4>Top-Down vs Bottom-Up Architecture</h4>
@@ -716,7 +758,7 @@
         </details>
 
         <details>
-            <summary>14. Boehm's Curve — Cost Fixing Defects</summary>
+            <summary>💡 14. Boehm's Curve — Cost Fixing Defects</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Finding bugs early = cheap. Finding them after deployment = catastrophically expensive (100x+). Plan accordingly.</div>
                 <div class="box"><h4>Boehm's Curve: Cost Multipliers by Phase</h4>

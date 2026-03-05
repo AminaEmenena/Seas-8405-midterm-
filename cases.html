@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -434,11 +463,24 @@
 </div>
 
 <div class="container">
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — Case Studies</div>
+  <ul>
+    <li>🏥 <strong>Healthcare:</strong> chose MSP due to talent shortage + 24/7 need</li>
+    <li>📊 <strong>Three-Tool Stack:</strong> EDR (CrowdStrike) + SIEM (Splunk) + SOAR</li>
+    <li>🏢 <strong>Cimpress:</strong> decentralized = Zero Trust FRAMEWORK (not product)</li>
+    <li>🎯 <strong>Lead by example:</strong> prove at corporate first, THEN recommend</li>
+    <li>📋 <strong>Phased implementation:</strong> both cases used incremental rollout</li>
+    <li>💡 <strong>Context drives decisions:</strong> no universal "right answer"</li>
+  </ul>
+  <div class="tldr-footer">Master these concepts and you'll ace the Case Studies questions</div>
+</div>
+
 <p style="margin-bottom: 40px; color: #8b949e;">Healthcare (EY) + Cimpress/Vistaprint</p>
-        
+
         <!-- HEALTHCARE SECTION -->
         <details>
-            <summary>1. Healthcare Case Study: Context</summary>
+            <summary>🏥 1. Healthcare Case Study: Context</summary>
             <div class="content-section">
                 <p><strong>Large Medical Provider:</strong> Cancer treatment center, academic medical facility, Level 1 trauma center. Serves 2 million+ patients annually.</p>
 
@@ -464,7 +506,7 @@
         </details>
         
         <details>
-            <summary>2. Healthcare Decision: The Problem</summary>
+            <summary>⚠️ 2. Healthcare Decision: The Problem</summary>
             <div class="content-section">
                 <div class="blue"><b>KEY:</b> The decision comes down to THREE OPTIONS: Build SOC internally, Buy tools & manage internally, or Partner with MSP. Each trades off cost, speed, and capability.</div>
 
@@ -483,7 +525,7 @@
         </details>
         
         <details>
-            <summary>3. Healthcare Decision: Options Evaluated</summary>
+            <summary>⚖️ 3. Healthcare Decision: Options Evaluated</summary>
             <div class="content-section">
                 <p><strong>Build Internal SOC</strong></p>
                 <ul>
@@ -510,7 +552,7 @@
         </details>
         
         <details>
-            <summary>4. Healthcare Solution: Managed Services Partnership</summary>
+            <summary>🎯 4. Healthcare Solution: Managed Services Partnership</summary>
             <div class="content-section">
                 <div class="red"><strong>KEY IDEA:</strong> Chose MANAGED SERVICES (EY) because it provided immediate 24/7 expertise without the internal hiring burden. Three-tool stack: CrowdStrike (EDR) + Splunk (SIEM) + SOAR automation.</div>
 
@@ -537,7 +579,7 @@
         </details>
         
         <details>
-            <summary>5. Healthcare Results: Measurable Impact</summary>
+            <summary>📊 5. Healthcare Results: Measurable Impact</summary>
             <div class="content-section">
                 <div class="green"><b>Best Practice:</b> MEASURE OUTCOMES. Every security investment should have concrete metrics: devices monitored, incident detection rate, revenue protected, response time improvements.</div>
 
@@ -554,7 +596,7 @@
         
         <!-- CIMPRESS SECTION -->
         <details>
-            <summary>6. Cimpress Case Study: Context</summary>
+            <summary>🏢 6. Cimpress Case Study: Context</summary>
             <div class="content-section">
                 <div class="blue"><b>KEY:</b> Cimpress is HIGHLY DECENTRALIZED — 20+ countries, 16,000+ employees, DOZENS of autonomous business units, each with independent tech stacks.</div>
 
@@ -578,7 +620,7 @@
         </details>
         
         <details>
-            <summary>7. Cimpress Decision: The Challenge</summary>
+            <summary>⚠️ 7. Cimpress Decision: The Challenge</summary>
             <div class="content-section">
                 <div class="red"><strong>KEY IDEA:</strong> Cimpress Security has NO MANDATE AUTHORITY. Can't force subsidiaries to comply. Must lead by example and persuasion. This makes Zero Trust perfect — it's a FRAMEWORK, not a rigid product stack.</div>
 
@@ -595,7 +637,7 @@
         </details>
         
         <details>
-            <summary>8. Cimpress Solution: Multi-Cloud Zero Trust</summary>
+            <summary>🔐 8. Cimpress Solution: Multi-Cloud Zero Trust</summary>
             <div class="content-section">
                 <div class="green"><b>Best Practice:</b> Build FROM SCRATCH in corporate first (no legacy), then use that as a proven blueprint for subsidiaries. Cimpress corporate is 100% cloud-native with NO internal network perimeter.</div>
 
@@ -616,7 +658,7 @@
         </details>
         
         <details>
-            <summary>9. Cimpress Decision: Strategic Approach</summary>
+            <summary>📋 9. Cimpress Decision: Strategic Approach</summary>
             <div class="content-section">
                 <div class="red"><strong>KEY IDEA:</strong> "Lead by Example, Not Mandate" — This is the CRITICAL strategic choice that made the difference. Cimpress couldn't force subsidiaries, so it proved value first, then offered guidance.</div>
 
@@ -645,7 +687,7 @@
         </details>
         
         <details>
-            <summary>10. Cimpress Results: Security Improvements</summary>
+            <summary>📊 10. Cimpress Results: Security Improvements</summary>
             <div class="content-section">
                 <div class="green"><b>Best Practice:</b> Measure maturity gains over time. Don't just count deployments — track MTTD, pen test results, and operational metrics to prove effectiveness.</div>
 
@@ -661,7 +703,7 @@
         </details>
         
         <details>
-            <summary>11. Cimpress Lessons: Decision-Making Insights</summary>
+            <summary>💡 11. Cimpress Lessons: Decision-Making Insights</summary>
             <div class="content-section">
                 <p><strong>Education and Champions:</strong> Security champions program from other business areas. Developers, architects, IT/ops staff recruited to promote security. Mandate participation for corporatewide culture.</p>
 
@@ -678,7 +720,7 @@
         </details>
         
         <details>
-            <summary>12. Cross-Case Patterns: Common Themes</summary>
+            <summary>🎯 12. Cross-Case Patterns: Common Themes</summary>
             <div class="content-section">
                 <p><strong>Context Drives Decisions:</strong> Healthcare = talent shortage drove managed services. Cimpress = decentralized model drove Zero Trust framework. "No universal right answer."</p>
 

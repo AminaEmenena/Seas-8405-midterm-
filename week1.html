@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -442,9 +471,25 @@
   <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</div>
 </div>
 
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — Week 1 Key Points</div>
+  <ul>
+    <li>🏗️ <strong>Architecture = WHY/WHAT</strong> (strategic, 3-5 years) vs <strong>Engineering = HOW</strong> (tactical, short sprints)</li>
+    <li>🍞 <strong>"Bake In, Don't Bolt On"</strong> — security from day 1 is 10-100x cheaper than retrofitting</li>
+    <li>🔐 <strong>CIA Triad</strong> — Confidentiality, Integrity, Availability (balance all three for your context)</li>
+    <li>⚖️ <strong>ASARP</strong> — As Secure As Reasonably Practicable (perfect security is impossible)</li>
+    <li>🎯 <strong>ATT&CK</strong> — 700+ attack techniques, 14 tactics. <strong>81% of intrusions use NO malware!</strong></li>
+    <li>🛡️ <strong>D3FEND</strong> — Defensive countermeasures mapped to ATT&CK attacks</li>
+    <li>🎭 <strong>MITRE Engage</strong> — Active defense through deception (honeypots, canary tokens)</li>
+    <li>📋 <strong>Governance</strong> — Policy → Standards → Procedures → Guidance</li>
+  </ul>
+  <div class="tldr-footer">💡 Expand sections below for details • Quiz at the bottom to test yourself</div>
+</div>
+
 <!-- Section 1: What is Cybersecurity Architecture? -->
         <details>
-            <summary>1. What is Cybersecurity Architecture?</summary>
+            <summary>🏗️ 1. What is Cybersecurity Architecture?</summary>
             <div class="content-section">
                 <div class="red"><strong>KEY IDEA:</strong> Cybersecurity architecture is <em>strategic planning</em> — deciding WHERE and WHY to put security controls. NOT just buying tools.</div>
 
@@ -492,7 +537,7 @@
 
         <!-- Section 2: Bake In, Don't Bolt On -->
         <details>
-            <summary>2. "Bake In, Don't Bolt On"</summary>
+            <summary>🍞 2. "Bake In, Don't Bolt On"</summary>
             <div class="content-section">
                 <div class="mem"><small>Remember This</small><br><strong>"Bake In, Don't Bolt On"</strong></div>
 
@@ -521,7 +566,7 @@
 
         <!-- Section 3: CIA Triad -->
         <details>
-            <summary>3. CIA Triad — Foundation of Security</summary>
+            <summary>🔐 3. CIA Triad — Foundation of Security</summary>
             <div class="content-section">
                 <div class="mem"><small>The Three Pillars</small><br><strong>C = Confidentiality · I = Integrity · A = Availability</strong></div>
 
@@ -610,7 +655,7 @@
 
         <!-- Section: Six Critical Questions -->
         <details>
-            <summary>Six Critical Questions for Security Architects</summary>
+            <summary>❓ Six Critical Questions for Security Architects</summary>
             <div class="content-section">
                 <p>Before designing any security architecture, the architect must answer these <strong>six critical questions</strong> that frame the entire effort:</p>
 
@@ -660,7 +705,7 @@
 
         <!-- Section 4: ASARP -->
         <details>
-            <summary>4. ASARP — As Secure As Reasonably Practicable</summary>
+            <summary>⚖️ 4. ASARP — As Secure As Reasonably Practicable</summary>
             <div class="content-section">
                 <div class="mem"><small>Remember This</small><br><strong>"As Secure As Reasonably Practicable"</strong></div>
 
@@ -714,7 +759,7 @@
 
         <!-- Section 5: Inside-Out vs Outside-In -->
         <details>
-            <summary>5. Inside-Out vs. Outside-In Thinking</summary>
+            <summary>🔄 5. Inside-Out vs. Outside-In Thinking</summary>
             <div class="content-section">
                 <div class="red"><strong>KEY IDEA:</strong> Both <em>inside-out</em> (building secure features) and <em>outside-in</em> (defending against attacks) are essential. Missing either one leaves you vulnerable.</div>
 
@@ -760,7 +805,7 @@
 
         <!-- Section 6: Governance Hierarchy -->
         <details>
-            <summary>6. Governance Hierarchy</summary>
+            <summary>📋 6. Governance Hierarchy</summary>
             <div class="content-section">
                 <p>
                     <strong>Definition:</strong> The formal process ensuring organizational resources (people, money, time, technology) support the organization's mission and strategic goals.
@@ -817,7 +862,7 @@
 
         <!-- Section 7: Root Cause Analysis (7 Whys) -->
         <details>
-            <summary>7. Root Cause Analysis — The 7 Whys Technique</summary>
+            <summary>🔍 7. Root Cause Analysis — The 7 Whys Technique</summary>
             <div class="content-section">
                 <p>
                     A technique to dig past surface-level requirements to find the real strategic objective. Ask "Why?" repeatedly until you reach the organization's core mission.
@@ -855,7 +900,7 @@
 
         <!-- Section 8: Four Dimensions of Solution Success -->
         <details>
-            <summary>8. Four Dimensions of Solution Success</summary>
+            <summary>📊 8. Four Dimensions of Solution Success</summary>
             <div class="content-section">
                 <p>
                     Every security solution must be evaluated across four dimensions. Optimizing one at the expense of others is an architectural failure.
@@ -927,7 +972,7 @@
 
         <!-- Section 9: Optimism Bias -->
         <details>
-            <summary>9. Optimism Bias</summary>
+            <summary>🧠 9. Optimism Bias</summary>
             <div class="content-section">
                 <p>
                     <strong>Definition:</strong> A cognitive bias where humans believe negative outcomes won't happen to them personally, even though they know the outcomes happen to others.
@@ -964,7 +1009,7 @@
 
         <!-- Section 10: Top-Down vs Bottom-Up -->
         <details>
-            <summary>10. Top-Down vs. Bottom-Up Architecture</summary>
+            <summary>⬆️ 10. Top-Down vs. Bottom-Up Architecture</summary>
             <div class="content-section">
                 <p>
                     Two approaches to designing security architecture. Neither is complete alone; best practice uses both in concert.
@@ -1000,7 +1045,7 @@
 
         <!-- Section 11: MITRE Corporation & ATT&CK -->
         <details>
-            <summary>11. MITRE Corporation & ATT&CK Framework</summary>
+            <summary>🎯 11. MITRE Corporation & ATT&CK Framework</summary>
             <div class="content-section">
                 <p>
                     <strong>MITRE Corporation:</strong> A Federally Funded Research and Development Center (FFRDC), non-profit, vendor-neutral. Trusted to conduct research in national interest.
@@ -1169,7 +1214,7 @@
 
         <!-- Section 12: D3FEND, MITRE Engage & Ecosystem -->
         <details>
-            <summary>12. D3FEND, MITRE Engage & Ecosystem</summary>
+            <summary>🛡️ 12. D3FEND, MITRE Engage & Ecosystem</summary>
             <div class="content-section">
                 <h3 style="margin-top: 20px; color: #58a6ff;">D3FEND Framework</h3>
                 <p>
@@ -1250,7 +1295,7 @@
 
         <!-- Section 13: Regulatory Frameworks -->
         <details>
-            <summary>13. Regulatory Frameworks</summary>
+            <summary>⚖️ 13. Regulatory Frameworks</summary>
             <div class="content-section">
                 <p>
                     Regulatory compliance is NOT optional. Non-compliance results in fines, loss of operating license, lawsuits, and criminal penalties. These become non-negotiable architectural requirements.
@@ -1314,7 +1359,7 @@
 
         <!-- Section 14: Security Zones in Practice -->
         <details>
-            <summary>14. Security Zones in Practice</summary>
+            <summary>🏰 14. Security Zones in Practice</summary>
             <div class="content-section">
                 <p>
                     Organize infrastructure into zones of trust. Apply controls at boundaries between zones. Limit what traffic can cross boundaries.
@@ -1382,7 +1427,7 @@
 
         <!-- Section 15: Air Gap Architecture -->
         <details>
-            <summary>15. Air Gap Architecture</summary>
+            <summary>🔌 15. Air Gap Architecture</summary>
             <div class="content-section">
                 <p>
                     <strong>Definition:</strong> Physical or logical disconnection of a system from untrusted networks. Data transfer only through controlled manual processes (no automatic connections).

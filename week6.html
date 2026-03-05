@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -484,11 +513,24 @@
 </div>
 
 <div class="container">
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — Scope & Enterprise Architecture</div>
+  <ul>
+    <li>🎯 <strong>Scope = foundation:</strong> requirements flow FROM scope, not the reverse</li>
+    <li>🔄 <strong>Scope is iterative:</strong> 4 phases: Initial → Gather → Design → Document</li>
+    <li>⚠️ <strong>Empty Scope:</strong> when constraints make architecture impossible — fix foundation first</li>
+    <li>🏰 <strong>Enterprise Security Architecture:</strong> controls AROUND apps, not the apps themselves</li>
+    <li>📊 <strong>Modularity matters:</strong> Microservices = flexible scope. Monolith = all-or-nothing</li>
+    <li>⚖️ <strong>Scope creep</strong> is iterative scope WITHOUT control — freeze during execution</li>
+  </ul>
+  <div class="tldr-footer">Master these concepts and you'll ace the Week 6 questions</div>
+</div>
+
 <header>
             </header>
-        
+
         <details>
-            <summary>1. Why Scope Matters</summary>
+            <summary>🎯 1. Why Scope Matters</summary>
             <div class="content">
                 <ul>
                     <li><strong>Fitness of Purpose:</strong> Purpose changes design. Architecture must match organizational purpose and function.</li>
@@ -502,7 +544,7 @@
         </details>
         
         <details>
-            <summary>2. Scope is Iterative, Not Fixed</summary>
+            <summary>🔄 2. Scope is Iterative, Not Fixed</summary>
             <div class="content">
                 <p>Scope changes as organization changes and as design decisions are made. It's deliberately a tool of the architecture team.</p>
                 <p><strong>Four phases:</strong></p>
@@ -519,7 +561,7 @@
         </details>
         
         <details>
-            <summary>3. Advantages of Setting Scope</summary>
+            <summary>💡 3. Advantages of Setting Scope</summary>
             <div class="content">
                 <ul>
                     <li><strong>Focus:</strong> Subset of broader problem = more manageable (like OSI stack focusing one layer at a time)</li>
@@ -532,7 +574,7 @@
         </details>
         
         <details>
-            <summary>4. Critical Architectural Risks and Empty Scope</summary>
+            <summary>⚠️ 4. Critical Architectural Risks and Empty Scope</summary>
             <div class="content">
                 <p>Sometimes scope is so constrained it's effectively zero. Organizational barriers, technical debt.</p>
                 <p><strong>Warning signs:</strong></p>
@@ -553,7 +595,7 @@
         </details>
         
         <details>
-            <summary>5. Enterprise Security Architecture Definition</summary>
+            <summary>🏰 5. Enterprise Security Architecture Definition</summary>
             <div class="content">
                 <ul>
                     <li>Focuses on <strong>administrative, procedural, and technical controls</strong> securing enterprise or subset</li>
@@ -566,7 +608,7 @@
         </details>
         
         <details>
-            <summary>6. Organizational and Technology Boundaries</summary>
+            <summary>📊 6. Organizational and Technology Boundaries</summary>
             <div class="content">
                 <p><strong>Organizational:</strong> Multiple business units responsible for different portions. Example: retail banking on balance viewing, brokerage on portfolio interface. Different teams, different priorities.</p>
                 <p style="margin-top: 15px;"><strong>Technical:</strong> Legacy technologies (mainframes vs modern APIs) require different approaches. Different security expertise needed (mainframe CICS vs RESTful API security).</p>
@@ -577,7 +619,7 @@
         </details>
         
         <details>
-            <summary>7. Modularity and Scope Flexibility</summary>
+            <summary>🔄 7. Modularity and Scope Flexibility</summary>
             <div class="content">
                 <ul>
                     <li><strong>Monolithic (Tight Integration):</strong> Client-server, same address space. Very difficult to scope out individual components.</li>
@@ -591,7 +633,7 @@
         </details>
         
         <details>
-            <summary>8. Development Models Impact Scope</summary>
+            <summary>⚡ 8. Development Models Impact Scope</summary>
             <div class="content">
                 <ul>
                     <li><strong>1970s-80s Waterfall:</strong> Sequential phases, rigid, must get scope right early</li>
@@ -605,7 +647,7 @@
         </details>
         
         <details>
-            <summary>9. Four-Step Scope-Setting Process</summary>
+            <summary>📋 9. Four-Step Scope-Setting Process</summary>
             <div class="content">
                 <ul>
                     <li><strong>Step 1: Consider High-Level Goals</strong> — Review existing documentation, discuss with stakeholders, seek out ALL stakeholders (users, sponsors, executives, security, auditors, counsel, risk managers, compliance, partners)</li>
@@ -620,7 +662,7 @@
         </details>
         
         <details>
-            <summary>10. Key Principles for Scope Success</summary>
+            <summary>🎯 10. Key Principles for Scope Success</summary>
             <div class="content">
                 <ul>
                     <li><strong>Scope is Iterative:</strong> Question assumptions, amend/update, socialize changes</li>
@@ -633,7 +675,7 @@
         </details>
         
         <details>
-            <summary>11. Risk Management as Scope Input</summary>
+            <summary>⚖️ 11. Risk Management as Scope Input</summary>
             <div class="content">
                 <ul>
                     <li><strong>ISO 27001/ISMS Scope:</strong> Formal document defining what's in/out of security program</li>
@@ -646,7 +688,7 @@
         </details>
         
         <details>
-            <summary>12. Scope-Setting Catch-22</summary>
+            <summary>🧠 12. Scope-Setting Catch-22</summary>
             <div class="content">
                 <p><strong>The Problem:</strong> Until you validate with stakeholders, scope likely falls short. But how do you talk to stakeholders without knowing borders of effort?</p>
                 <p style="margin-top: 15px;"><strong>Solution:</strong></p>

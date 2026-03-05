@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -472,8 +501,21 @@
 </div>
 
 <div class="container">
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">⚡</span> TL;DR — Decision Making</div>
+  <ul>
+    <li>⚖️ <strong>Every decision is a trade-off:</strong> security vs cost vs usability vs time</li>
+    <li>📋 <strong>5-Step Framework:</strong> Define → Identify → Evaluate → Document → Monitor</li>
+    <li>🎯 <strong>Build vs Buy vs Manage:</strong> Strategic = build, Commodity = buy/manage</li>
+    <li>📊 <strong>8-item checklist</strong> before ANY architectural decision</li>
+    <li>🧠 <strong>Context is critical:</strong> what works elsewhere may NOT work for you</li>
+    <li>💡 <strong>Collaborate, don't dictate:</strong> ivory tower mandates FAIL</li>
+  </ul>
+  <div class="tldr-footer">Master these concepts and you'll ace the Week 7 questions</div>
+</div>
+
 <details>
-            <summary>1. What is Architectural Decision Making?</summary>
+            <summary>⚖️ 1. What is Architectural Decision Making?</summary>
             <div class="content">
                 <p><strong>Systematic process</strong> of evaluating options, weighing trade-offs, selecting approaches to best serve organizational goals within real-world constraints.</p>
 
@@ -493,7 +535,7 @@
         </details>
         
         <details>
-            <summary>2. Common Decision-Making Challenges</summary>
+            <summary>⚠️ 2. Common Decision-Making Challenges</summary>
             <div class="content">
                 <div class="blue"><b>KEY:</b> The biggest decision-making trap is premature convergence—jumping to a solution before fully exploring the problem and alternatives.</div>
 
@@ -509,7 +551,7 @@
         </details>
         
         <details>
-            <summary>3. Decision-Making Framework (5 Steps)</summary>
+            <summary>📋 3. Decision-Making Framework (5 Steps)</summary>
             <div class="content">
                 <div class="red"><strong>KEY IDEA:</strong> The 5-step framework is not rigid—it's a checkpoint system to ensure you're thinking holistically before committing to a decision.</div>
 
@@ -526,7 +568,7 @@
         </details>
         
         <details>
-            <summary>4. Evaluation Criteria for Architectural Decisions</summary>
+            <summary>📊 4. Evaluation Criteria for Architectural Decisions</summary>
             <div class="content">
                 <p><strong>Security and Risk Criteria:</strong></p>
                 <ul>
@@ -554,7 +596,7 @@
         </details>
         
         <details>
-            <summary>5. Build vs Buy vs Managed Service</summary>
+            <summary>🎯 5. Build vs Buy vs Managed Service</summary>
             <div class="content">
                 <p><strong>Build Custom:</strong></p>
                 <ul>
@@ -587,7 +629,7 @@
         </details>
         
         <details>
-            <summary>6. Decision-Making Checklist (8 Items)</summary>
+            <summary>📋 6. Decision-Making Checklist (8 Items)</summary>
             <div class="content">
                 <div class="green"><b>Best Practice:</b> Use this checklist before finalizing ANY architectural decision. These 8 items prevent costly mistakes and ensure you're thinking comprehensively.</div>
 
@@ -607,7 +649,7 @@
         </details>
         
         <details>
-            <summary>7. Key Takeaways from Week 7</summary>
+            <summary>💡 7. Key Takeaways from Week 7</summary>
             <div class="content">
                 <div class="red"><strong>KEY IDEA:</strong> Architecture is not an individual sport. Success depends on understanding organizational context, building stakeholder alignment, and being willing to defend—and change—decisions based on outcomes.</div>
 

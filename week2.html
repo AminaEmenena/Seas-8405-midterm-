@@ -81,6 +81,35 @@
   .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
   .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
 
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -484,9 +513,22 @@
 </div>
 
 <div class="container">
+
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">🎯</span> TL;DR — Week 2 Essentials</div>
+  <ul>
+    <li>📋 <strong>Requirements lifecycle:</strong> 8 steps from Elicit to Communicate</li>
+    <li>📊 <strong>Functional (WHAT)</strong> vs <strong>Non-Functional (HOW WELL)</strong> requirements</li>
+    <li>🎯 <strong>SMART criteria:</strong> Specific, Measurable, Achievable, Relevant, Time-bound</li>
+    <li>⚠️ <strong>STRIDE threat model:</strong> Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation</li>
+    <li>⚖️ <strong>Risk = Threat × Vulnerability × Impact</strong></li>
+    <li>🔄 <strong>Impact/Effort matrix:</strong> Quick Wins = High Impact + Low Effort</li>
+  </ul>
+</div>
+
 <!-- Section 1: Requirements Engineering 8-Step Lifecycle -->
         <details open>
-            <summary>1. Requirements Engineering 8-Step Lifecycle</summary>
+            <summary>📋 1. Requirements Engineering 8-Step Lifecycle</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Clear, measurable requirements are the blueprint for the entire system. Vague requirements lead to cost overruns, scope creep, and failed implementations.</div>
 
@@ -560,7 +602,7 @@
 
         <!-- Section 2: Functional vs Non-Functional Requirements -->
         <details open>
-            <summary>2. Functional vs Non-Functional Requirements</summary>
+            <summary>📊 2. Functional vs Non-Functional Requirements</summary>
             <div>
                 <div class="compare">
                     <div>
@@ -651,7 +693,7 @@
 
         <!-- Section 3: SMART Framework -->
         <details open>
-            <summary>3. SMART Framework for Requirements</summary>
+            <summary>🎯 3. SMART Framework for Requirements</summary>
             <div>
                 <p>SMART is a framework for writing clear, measurable, actionable requirements:</p>
 
@@ -720,7 +762,7 @@
 
         <!-- Section 4: Requirements Documentation -->
         <details open>
-            <summary>4. Requirements Documentation</summary>
+            <summary>📋 4. Requirements Documentation</summary>
             <div>
                 <p>Clear, measurable documentation ensures all stakeholders (engineering, security, business, compliance) share the same understanding.</p>
 
@@ -741,7 +783,7 @@
 
         <!-- Section 5: 8 Common Pitfalls -->
         <details open>
-            <summary>5. 8 Common Pitfalls in Requirements Definition</summary>
+            <summary>⚠️ 5. 8 Common Pitfalls in Requirements Definition</summary>
             <div>
                 <table>
                     <thead>
@@ -799,7 +841,7 @@
 
         <!-- Section 6: Diversity vs Redundancy -->
         <details open>
-            <summary>6. Diversity vs Redundancy in Architecture</summary>
+            <summary>⚖️ 6. Diversity vs Redundancy in Architecture</summary>
             <div>
                 <div class="compare">
                     <div>
@@ -853,7 +895,7 @@
 
         <!-- Healthcare Case Study -->
         <details>
-            <summary>Healthcare Case Study: Requirements in Practice</summary>
+            <summary>🏥 Healthcare Case Study: Requirements in Practice</summary>
             <div>
                 <p><strong>Scenario:</strong> Regional healthcare provider with <strong>50,000 patients</strong>, <strong>500 daily logins</strong> across clinical systems, and strict HIPAA/HITECH compliance mandates.</p>
 
@@ -899,7 +941,7 @@
 
         <!-- Section 7: MITRE ATT&CK in Context -->
         <details open>
-            <summary>7. MITRE ATT&CK in Context (Review)</summary>
+            <summary>⚠️ 7. MITRE ATT&CK in Context (Review)</summary>
             <div>
                 <div class="red"><strong>KEY IDEA:</strong> Use STRIDE to systematically identify threats. Map each threat type to security controls and requirements. This ensures you haven't missed any major threat categories.</div>
 
@@ -986,7 +1028,7 @@
 
         <!-- Section 8: Requirements Prioritization -->
         <details open>
-            <summary>8. Requirements Prioritization</summary>
+            <summary>🎯 8. Requirements Prioritization</summary>
             <div>
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Impact vs Effort Matrix (4 Quadrants)</h3>
                 <table>
@@ -1059,7 +1101,7 @@
 
         <!-- Section 9: Trade-offs in Architecture -->
         <details open>
-            <summary>9. Trade-offs in Architecture</summary>
+            <summary>⚖️ 9. Trade-offs in Architecture</summary>
             <div>
                 <p>Every architecture decision involves trade-offs. The job of an architect is to make them explicitly and document the reasoning.</p>
 
@@ -1116,7 +1158,7 @@
 
         <!-- Section 10: Risk Management -->
         <details open>
-            <summary>10. Risk Management</summary>
+            <summary>🔄 10. Risk Management</summary>
             <div>
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">ISO 31000:2018 Risk Management Process</h3>
                 <table>
