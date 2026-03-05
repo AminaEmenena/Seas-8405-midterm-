@@ -1,227 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEAS8405 Cybersecurity Architectures - Midterm Exam</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      background-color: #0d1117;
-      color: #e6edf3;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 19px;
-      line-height: 1.6;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #30363d;
-    }
-    
-    .header-left {
-      flex: 1;
-    }
-    
-    .header-left a {
-      color: #58a6ff;
-      text-decoration: none;
-      font-size: 0.9em;
-      margin-bottom: 10px;
-      display: inline-block;
-    }
-    
-    .header-left a:hover {
-      text-decoration: underline;
-    }
-    
-    h1 {
-      color: #e6edf3;
-      font-size: 1.8em;
-      margin-top: 10px;
-    }
-    
-    .header-right {
-      text-align: right;
-    }
-    
-    .timer {
-      font-size: 1.5em;
-      color: #58a6ff;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    
-    .progress-section {
-      margin-bottom: 20px;
-    }
-    
-    .progress-bar {
-      width: 100%;
-      height: 25px;
-      background-color: #161b22;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #30363d;
-      margin-bottom: 8px;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background-color: #ff6acc;
-      transition: width 0.3s ease;
-      width: 0%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0d1117;
-      font-weight: 700;
-      font-size: 0.9em;
-    }
-    
-    .progress-text {
-      font-size: 0.95em;
-      color: #8b949e;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 15px;
-      margin: 30px 0;
-      flex-wrap: wrap;
-    }
-    
-    button {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .btn-submit {
-      background-color: #238636;
-      color: #e6edf3;
-    }
-    
-    .btn-submit:hover {
-      background-color: #2ea043;
-    }
-    
-    .btn-reset {
-      background-color: #da3633;
-      color: #e6edf3;
-    }
-    
-    .btn-reset:hover {
-      background-color: #f85149;
-    }
-    
-    .section-header {
-      color: #ff6acc;
-      font-size: 1.3em;
-      font-weight: 700;
-      margin: 25px 0 10px;
-      padding: 10px 0;
-      border-bottom: 2px solid #ff6acc;
-    }
-    
-    .mq {
-      margin: 12px 0;
-      padding: 15px;
-      background: #161b22;
-      border-radius: 8px;
-      border: 1px solid #30363d;
-    }
-    
-    .mq p {
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 10px;
-    }
-    
-    .qnum {
-      display: inline-block;
-      background: #ff6acc;
-      color: #0d1117;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 32px;
-      font-size: 0.85em;
-      margin-right: 8px;
-      font-weight: 700;
-    }
-    
-    .mq label {
-      display: block;
-      padding: 8px 12px;
-      margin: 4px 0;
-      border-radius: 6px;
-      cursor: pointer;
-      border: 1px solid #30363d;
-      transition: all 0.15s;
-      background-color: transparent;
-    }
-    
-    .mq label:hover {
-      background-color: #1c2333;
-    }
-    
-    #result {
-      display: none;
-      margin: 40px auto;
-      padding: 30px;
-      background-color: #161b22;
-      border: 2px solid #ff6acc;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 400px;
-    }
-    
-    .result-label {
-      font-size: 1.2em;
-      color: #8b949e;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .footer {
-      text-align: center;
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #30363d;
-      color: #8b949e;
-      font-size: 0.9em;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS8405 Cybersecurity Architectures - Midterm Exam</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #e94560;
+    --page-tint: rgba(233,69,96,0.12);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC;
+    --case: #20C997; --nist: #3BC9DB;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.cs { background: var(--case); color: #000; }
+  .topnav a.ni { background: var(--nist); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* DETAILS / SUMMARY — replaces old topic cards */
+  details {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: var(--card);
+    transition: border-color 0.2s;
+  }
+  details[open] {
+    border-color: var(--page-color);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.1em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: background 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '▶'; font-size: 0.8em; color: var(--page-color);
+    transition: transform 0.2s;
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+  }
+  summary:hover { background: rgba(255,255,255,0.08); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 16px; margin: 16px 0;
+    text-align: center;
+  }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar (mega exam) */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK (now redundant with nav, keep for fallback) */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle / sub-headers */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS8405</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="cases.html" class="cs">Cases</a>
+  <a href="nist.html" class="ni">NIST</a>
+  <a href="mega.html" class="mega active">MEGA EXAM</a>
+</nav>
+<div class="page-hero">
+  <h1>MEGA EXAM — 100 Questions</h1>
+  <div class="sub">SEAS8405 · Spring 2026 · Prof. Wayne Le · GWU</div>
+</div>
+
+<div class="container">
+<div class="header">
       <div class="header-left">
         <a href="index.html">← Back to Hub</a>
-        <h1>SEAS8405 Cybersecurity Architectures</h1>
         <div style="color: #8b949e; font-size: 0.95em;">Midterm Exam</div>
       </div>
       <div class="header-right">
@@ -1082,6 +1186,69 @@
   </div>
   
   <script>
+    var answers = {};
+    var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
+    
+    var startTime = Date.now();
+    setInterval(function(){
+      var s = Math.floor((Date.now() - startTime) / 1000);
+      var m = Math.floor(s / 60);
+      s = s % 60;
+      document.getElementById('timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+    
+    function pick(q, c) {
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      labels.forEach(function(l) {
+        l.style.background = 'transparent';
+        l.style.borderColor = '#30363d';
+      });
+      labels[c].style.background = '#1c2333';
+      labels[c].style.borderColor = '#58a6ff';
+      document.getElementById('progress').textContent = Object.keys(answers).length + '/100 answered';
+      document.getElementById('progbar').style.width = (Object.keys(answers).length) + '%';
+    }
+    
+    function gradeExam() {
+      var score = 0;
+      for (var i = 1; i <= 100; i++) {
+        var labels = document.querySelectorAll('#mq' + i + ' label');
+        if (answers[i] === correct[i]) {
+          score++;
+          labels[correct[i]].style.background = '#1c2a1c';
+          labels[correct[i]].style.borderColor = '#56d364';
+        } else {
+          if (answers[i] !== undefined) {
+            labels[answers[i]].style.background = '#2a1c1c';
+            labels[answers[i]].style.borderColor = '#f97583';
+          }
+          labels[correct[i]].style.background = '#1c2a1c';
+          labels[correct[i]].style.borderColor = '#56d364';
+        }
+      }
+      var pct = Math.round(score / 100 * 100);
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:#58a6ff">' + score + '/100</div><div style="font-size:1.5em;color:#8b949e">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? '#56d364' : '#f97583') + '">' + g + '</div>';
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+    }
+    
+    function resetExam() {
+      answers = {};
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = 'transparent';
+        l.style.borderColor = '#30363d';
+      });
+      document.getElementById('progress').textContent = '0/100 answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  </script>
+</div>
+
+<script>
     var answers = {};
     var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
     

@@ -1,204 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 7 — Architectural Decision Making</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 19px;
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: #79c0ff;
-            text-decoration: none;
-            font-size: 19px;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        h1 {
-            color: #79c0ff;
-            margin-bottom: 30px;
-            font-size: 32px;
-        }
-        
-        details {
-            margin-bottom: 20px;
-            border-left: 3px solid #79c0ff;
-            padding-left: 20px;
-        }
-        
-        summary {
-            color: #79c0ff;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 19px;
-            user-select: none;
-            margin-bottom: 15px;
-        }
-        
-        summary:hover {
-            text-decoration: underline;
-        }
-        
-        details[open] summary {
-            margin-bottom: 15px;
-        }
-        
-        .content {
-            color: #c9d1d9;
-            margin-left: 0;
-        }
-        
-        .content p {
-            margin-bottom: 15px;
-            line-height: 1.8;
-        }
-        
-        .content ul {
-            margin-left: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .content li {
-            margin-bottom: 10px;
-            line-height: 1.8;
-        }
-        
-        .content strong {
-            color: #79c0ff;
-        }
-        
-        .quiz-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #79c0ff;
-        }
-        
-        .quiz-title {
-            color: #79c0ff;
-            font-size: 24px;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        
-        .quiz-questions {
-            display: grid;
-            gap: 20px;
-        }
-        
-        .question {
-            background-color: #161b22;
-            padding: 20px;
-            border-radius: 6px;
-            border-left: 3px solid #79c0ff;
-        }
-        
-        .question-text {
-            color: #c9d1d9;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 19px;
-            margin-top: 8px;
-        }
-        
-        input[type="text"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #79c0ff;
-            box-shadow: 0 0 0 3px rgba(121, 192, 255, 0.1);
-        }
-        
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .button-group {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        button {
-            padding: 12px 24px;
-            background-color: #79c0ff;
-            color: #0d1117;
-            border: none;
-            border-radius: 6px;
-            font-size: 19px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        button:hover {
-            background-color: #58a6ff;
-        }
-        
-        button:active {
-            background-color: #79c0ff;
-        }
-        
-        .score-display {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #161b22;
-            border-radius: 6px;
-            border-left: 3px solid #79c0ff;
-            display: none;
-        }
-        
-        .score-display.show {
-            display: block;
-        }
-        
-        .score-text {
-            color: #c9d1d9;
-            font-size: 19px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 — Architectural Decision Making</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #F783AC;
+    --page-tint: rgba(247,131,172,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC;
+    --case: #20C997; --nist: #3BC9DB;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.cs { background: var(--case); color: #000; }
+  .topnav a.ni { background: var(--nist); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* DETAILS / SUMMARY — replaces old topic cards */
+  details {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: var(--card);
+    transition: border-color 0.2s;
+  }
+  details[open] {
+    border-color: var(--page-color);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.1em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: background 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '▶'; font-size: 0.8em; color: var(--page-color);
+    transition: transform 0.2s;
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+  }
+  summary:hover { background: rgba(255,255,255,0.08); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 16px; margin: 16px 0;
+    text-align: center;
+  }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar (mega exam) */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK (now redundant with nav, keep for fallback) */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle / sub-headers */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Back to Hub</a>
-        
-        <h1>WEEK 7 — Architectural Decision Making</h1>
-        
-        <details>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS8405</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7 active">W7</a>
+  <a href="cases.html" class="cs">Cases</a>
+  <a href="nist.html" class="ni">NIST</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+</nav>
+<div class="page-hero">
+  <h1>Week 7 — Architectural Decision Making</h1>
+  <div class="sub">SEAS8405 · Spring 2026 · Prof. Wayne Le · GWU</div>
+</div>
+
+<div class="container">
+<details>
             <summary>1. What is Architectural Decision Making?</summary>
             <div class="content">
                 <p><strong>Systematic process</strong> of evaluating options, weighing trade-offs, selecting approaches to best serve organizational goals within real-world constraints.</p>
@@ -400,6 +525,34 @@
     </div>
     
     <script>
+        function checkScore(week, totalQuestions) {
+            let answered = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                const answer = document.getElementById('q' + i).value.trim();
+                if (answer.length > 0) {
+                    answered++;
+                }
+            }
+            
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreText = document.getElementById('scoreText');
+            const percentage = Math.round((answered / totalQuestions) * 100);
+            
+            scoreText.textContent = `Completed: ${answered}/${totalQuestions} questions (${percentage}%)`;
+            scoreDisplay.classList.add('show');
+            scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function clearQuiz() {
+            for (let i = 1; i <= 12; i++) {
+                document.getElementById('q' + i).value = '';
+            }
+            document.getElementById('scoreDisplay').classList.remove('show');
+        }
+    </script>
+</div>
+
+<script>
         function checkScore(week, totalQuestions) {
             let answered = 0;
             for (let i = 1; i <= totalQuestions; i++) {
