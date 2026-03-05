@@ -1551,54 +1551,32 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 6
+  function getFlashcardData() {
+    return [
+      { term: "Scope in Security Architecture", definition: "The foundation of security architecture. Requirements flow FROM scope. Without clear scope, security requirements are meaningless and unmeasurable.", category: "red", label: "Key Idea" },
+      { term: "Four Phases of Iterative Scope", definition: "1) Initial Scope Setting, 2) Requirements Gathering (redefine based on stakeholder input), 3) Design Development (adjust for dependencies), 4) Scope Documentation (finalize).", category: "blue", label: "Definition" },
+      { term: "Empty Scope", definition: "When scope is so constrained by technical debt, organizational barriers, or overwhelming constraints that architecture becomes impossible. Fix the foundation first, then return to architecture.", category: "red", label: "Key Idea" },
+      { term: "Enterprise Security Architecture", definition: "Focuses on administrative, procedural, and technical controls securing the enterprise. Controls AROUND applications, not the applications themselves.", category: "blue", label: "Definition" },
+      { term: "Scope Creep", definition: "Iterative scope WITHOUT control. The difference between evolving a document and watching a project drown in forever-changing requirements. Freeze scope during execution.", category: "orange", label: "Caution" },
+      { term: "Modularity and Scope Flexibility", definition: "Monolith = scope the whole system. Microservices = pick and choose services. Loose coupling enables flexible scope boundaries.", category: "red", label: "Key Idea" },
+      { term: "Organizational Boundaries", definition: "Multiple business units responsible for different portions (e.g., retail banking vs brokerage). Align scope with team accountability.", category: "blue", label: "Definition" },
+      { term: "Technology Boundaries", definition: "Legacy systems (mainframes) vs modern APIs require different security approaches and expertise. Use technology differences to set realistic scope.", category: "blue", label: "Definition" },
+      { term: "Four-Step Scope-Setting Process", definition: "1) Consider High-Level Goals, 2) Review Contextual Constraints, 3) Set Initial Scope (what's in/out), 4) Validate and Refine with stakeholders.", category: "green", label: "Best Practice" },
+      { term: "Scope-Setting Catch-22", definition: "You need stakeholder validation for good scope, but need scope to know which stakeholders to consult. Solution: two-phase approach with rough initial scope, then refine.", category: "red", label: "Key Idea" },
+      { term: "Development Models Impact Scope", definition: "Waterfall demands perfect scope upfront. Agile/DevOps lets you evolve scope sprint by sprint. Know your process, set scope accordingly.", category: "red", label: "Key Idea" },
+      { term: "ISO 27001/ISMS Scope", definition: "Formal document defining what's in/out of security program. Use existing risk management scope as your baseline to save time and align priorities.", category: "green", label: "Best Practice" },
+      { term: "Fitness of Purpose", definition: "Purpose changes design. Architecture must match organizational purpose and function. Security measures don't make sense without threats to defend against.", category: "blue", label: "Definition" },
+      { term: "Scope = What, Threats = Why, Requirements = How", definition: "Scope defines what's protected, threats explain why protection is needed, requirements specify how to implement protection.", category: "purple", label: "Memory Aid" },
+      { term: "Loose Coupling = Flexible Scope", definition: "REST and microservice architecture make it much easier to carve scope at the component or service level compared to monolithic systems.", category: "purple", label: "Memory Aid" },
+      { term: "Goals, Constraints, Boundaries, Validation", definition: "The mental model for scope-setting: understand goals, review constraints, set boundaries, then validate with stakeholders.", category: "purple", label: "Memory Aid" },
+      { term: "Draft, Discuss, Refine, Repeat", definition: "The practical approach to solving the scope catch-22. Don't get paralyzed by perfection; iterate through stakeholder conversations.", category: "purple", label: "Memory Aid" },
+      { term: "Document Out-of-Scope Items", definition: "Explicitly say 'this is out' not because it doesn't matter, but because it's someone else's problem or a known constraint. Document so no one wonders later.", category: "green", label: "Best Practice" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }

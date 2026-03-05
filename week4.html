@@ -1785,54 +1785,34 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 4
+  function getFlashcardData() {
+    return [
+      { term: "AAA Framework", definition: "Authentication (who are you?) + Authorization (what can you do?) + Accounting (what did you do?). All three required for complete access management.", category: "red", label: "Key Idea" },
+      { term: "Authentication", definition: "Proving identity - verifying that a user is who they claim to be.", category: "blue", label: "Definition" },
+      { term: "Authorization", definition: "Granting permissions - determining what an authenticated user is allowed to access.", category: "blue", label: "Definition" },
+      { term: "Accounting", definition: "Tracking activity - recording user actions for audit and compliance purposes.", category: "blue", label: "Definition" },
+      { term: "MFA Requirements", definition: "Must combine 2+ DIFFERENT factor types (know + have + are). Password + security question is NOT MFA - both are 'something you know'.", category: "orange", label: "Caution" },
+      { term: "Authentication Factors", definition: "Something you KNOW (password), HAVE (token), ARE (biometrics), WHERE you are (location), or DO (behavior).", category: "red", label: "Key Idea" },
+      { term: "RBAC (Role-Based Access Control)", definition: "Permissions based on job roles. Most common in enterprise. Simple to implement but can cause role explosion.", category: "blue", label: "Definition" },
+      { term: "ABAC (Attribute-Based Access Control)", definition: "Permissions based on attributes (user, resource, environment). Very flexible and fine-grained but complex to manage.", category: "blue", label: "Definition" },
+      { term: "MAC (Mandatory Access Control)", definition: "System-enforced, label-based access. Users cannot change permissions. Used in government/military with clearance levels.", category: "blue", label: "Definition" },
+      { term: "DAC (Discretionary Access Control)", definition: "Owner controls permissions. Most flexible but least secure, prone to over-sharing.", category: "blue", label: "Definition" },
+      { term: "Least Privilege", definition: "Users get minimum access needed for their job, nothing more. Reduces blast radius if account is compromised.", category: "green", label: "Best Practice" },
+      { term: "JIT (Just-In-Time) Access", definition: "Temporary elevated privileges granted only when needed, with automatic revocation after task completion.", category: "green", label: "Best Practice" },
+      { term: "PAM (Privileged Access Management)", definition: "Managing high-value admin accounts with password vaulting, session recording, JIT elevation, and auto-rotation.", category: "red", label: "Key Idea" },
+      { term: "OAuth 2.0", definition: "Authorization framework that delegates access without sharing credentials. Does NOT prove identity.", category: "blue", label: "Definition" },
+      { term: "OIDC (OpenID Connect)", definition: "Identity layer on top of OAuth 2.0. Adds authentication and returns ID token with user information.", category: "blue", label: "Definition" },
+      { term: "OAuth vs OIDC", definition: "OAuth = authorization only (what you can access). OIDC = OAuth + authentication (who you are).", category: "red", label: "Key Idea" },
+      { term: "SAML", definition: "XML-based protocol for enterprise SSO and federation. Exchanges authentication assertions between identity and service providers.", category: "blue", label: "Definition" },
+      { term: "SSO (Single Sign-On)", definition: "One login grants access to multiple applications. Reduces password fatigue and simplifies account management.", category: "blue", label: "Definition" },
+      { term: "Impossible Travel Detection", definition: "Flags when user authenticates from distant locations in impossible timeframes. Example: DC at 2:00 PM, Moscow at 2:15 PM.", category: "green", label: "Best Practice" },
+      { term: "Privilege Creep", definition: "Accumulation of permissions over time as roles change. Regular access reviews are essential to prevent this.", category: "orange", label: "Caution" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }

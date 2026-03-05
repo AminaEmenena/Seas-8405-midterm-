@@ -1560,54 +1560,34 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 3
+  function getFlashcardData() {
+    return [
+      { term: "Defense in Depth", definition: "Multiple overlapping security layers so breaching one doesn't mean total loss. Each layer compensates for weaknesses of others.", category: "red", label: "Key Idea" },
+      { term: "OSI Model", definition: "7-layer network model: Physical, Data Link, Network, Transport, Session, Presentation, Application.", category: "blue", label: "Definition" },
+      { term: "IDS (Intrusion Detection System)", definition: "Monitors network traffic and alerts on suspicious activity. Passive - watches and reports like a security camera.", category: "blue", label: "Definition" },
+      { term: "IPS (Intrusion Prevention System)", definition: "Monitors AND blocks malicious traffic in real-time. Active - watches, reports, and stops threats like a security guard.", category: "blue", label: "Definition" },
+      { term: "IDS vs IPS", definition: "IDS monitors and alerts only (passive). IPS monitors, alerts, AND blocks (active). Both use signature and behavior-based detection.", category: "red", label: "Key Idea" },
+      { term: "3-2-1 Backup Rule", definition: "Keep 3 copies of data, on 2 different types of media, with 1 copy stored offsite.", category: "red", label: "Key Idea" },
+      { term: "Redundancy", definition: "Using identical components from the same vendor. Protects against individual component failure.", category: "blue", label: "Definition" },
+      { term: "Diversity", definition: "Using different vendors or implementations. Protects against systematic failures and zero-day exploits.", category: "blue", label: "Definition" },
+      { term: "Redundancy vs Diversity", definition: "Redundancy = SAME resources for component failures. Diversity = DIFFERENT resources for systematic/zero-day failures. Need BOTH.", category: "red", label: "Key Idea" },
+      { term: "DMZ (Demilitarized Zone)", definition: "Network zone with lowest trust level, hosting public-facing services like web servers and mail servers.", category: "blue", label: "Definition" },
+      { term: "Network Segmentation", definition: "Dividing networks into zones with trust boundaries. Traffic crossing zones requires strict inspection.", category: "green", label: "Best Practice" },
+      { term: "Packet Filter Firewall", definition: "Basic firewall inspecting Layer 3-4 (IP, ports). Very fast but limited detection capability.", category: "blue", label: "Definition" },
+      { term: "Stateful Firewall", definition: "Tracks connection state at Layer 3-4. Faster than application firewalls, detects connection patterns.", category: "blue", label: "Definition" },
+      { term: "Application/Proxy Firewall", definition: "Deep Layer 7 inspection. Slower but can detect SQL injection, malware in HTTP traffic.", category: "blue", label: "Definition" },
+      { term: "NGFW (Next-Gen Firewall)", definition: "All-layer inspection with AI and threat intelligence. Detects zero-days and APTs.", category: "blue", label: "Definition" },
+      { term: "Boehm's Curve", definition: "Cost of fixing defects grows exponentially: Requirements=1x, Design=5x, Development=10x, Testing=15x, Production=100x+.", category: "red", label: "Key Idea" },
+      { term: "Design for Resilience", definition: "Resources remain available AND protected despite disasters and attacks. Goes beyond just availability.", category: "red", label: "Key Idea" },
+      { term: "Protected Mechanisms", definition: "Security controls must be resilient themselves and never fail into an open/permissive state during stress.", category: "orange", label: "Caution" },
+      { term: "VLAN", definition: "Virtual LAN that segments networks logically for security and organization without physical separation.", category: "blue", label: "Definition" },
+      { term: "OSI Security Tip", definition: "Think security across ALL 7 layers, not just Session and Physical. Apply defense in depth at every layer.", category: "purple", label: "Memory Aid" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }

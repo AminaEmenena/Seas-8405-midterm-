@@ -2406,54 +2406,34 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 2
+  function getFlashcardData() {
+    return [
+      { term: "Requirements Engineering", definition: "The systematic process of eliciting, documenting, reviewing, and managing requirements throughout a system's lifecycle.", category: "blue", label: "Definition" },
+      { term: "Functional Requirements", definition: "WHAT the system does: authentication, authorization, encryption, audit logging, threat detection.", category: "blue", label: "Definition" },
+      { term: "Non-Functional Requirements", definition: "HOW WELL the system performs: response time, availability, scalability, maintainability, usability.", category: "blue", label: "Definition" },
+      { term: "SMART Criteria", definition: "Requirements must be Specific, Measurable, Achievable, Relevant, and Time-bound to be effective.", category: "red", label: "Key Idea" },
+      { term: "Requirements Lifecycle (8 Steps)", definition: "Elicit, Document, Review, Communicate, Implement, Validate, Monitor, Update.", category: "red", label: "Key Idea" },
+      { term: "STRIDE Threat Model", definition: "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege.", category: "red", label: "Key Idea" },
+      { term: "Spoofing (STRIDE)", definition: "Pretending to be someone or something else. Mitigated by strong authentication.", category: "blue", label: "Definition" },
+      { term: "Tampering (STRIDE)", definition: "Modifying data or code without authorization. Mitigated by integrity controls and hashing.", category: "blue", label: "Definition" },
+      { term: "Repudiation (STRIDE)", definition: "Denying actions were taken. Mitigated by audit logging and digital signatures.", category: "blue", label: "Definition" },
+      { term: "Information Disclosure (STRIDE)", definition: "Exposing data to unauthorized parties. Mitigated by encryption and access controls.", category: "blue", label: "Definition" },
+      { term: "Denial of Service (STRIDE)", definition: "Making systems unavailable. Mitigated by redundancy, rate limiting, and DDoS protection.", category: "blue", label: "Definition" },
+      { term: "Elevation of Privilege (STRIDE)", definition: "Gaining unauthorized access levels. Mitigated by least privilege and input validation.", category: "blue", label: "Definition" },
+      { term: "Risk Formula", definition: "Risk = Threat x Vulnerability x Impact. All three factors must be present for risk to exist.", category: "red", label: "Key Idea" },
+      { term: "Impact/Effort Matrix", definition: "Prioritization tool: Quick Wins (high impact, low effort) should be done first.", category: "green", label: "Best Practice" },
+      { term: "Misuse Cases", definition: "Analyze how attackers might abuse system features alongside normal use cases during design.", category: "green", label: "Best Practice" },
+      { term: "Elicitation Techniques", definition: "Interviews, workshops, surveys, document analysis, and observation to gather requirements.", category: "blue", label: "Definition" },
+      { term: "Stakeholder Balance", definition: "Good requirements balance Business (speed), Security (control), and User (usability) perspectives.", category: "green", label: "Best Practice" },
+      { term: "Risk Treatment Options", definition: "Accept, Mitigate, Transfer (insurance), or Avoid the risk based on cost-benefit analysis.", category: "blue", label: "Definition" },
+      { term: "STRIDE Memory Trick", definition: "S-T-R-I-D-E: 'Some Thugs Rob Intel During Escapes' for the six threat categories.", category: "purple", label: "Memory Aid" },
+      { term: "Requirements Traceability", definition: "Link each requirement to its source, implementation, and tests for accountability and audit.", category: "green", label: "Best Practice" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }

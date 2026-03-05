@@ -1624,54 +1624,32 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 5
+  function getFlashcardData() {
+    return [
+      { term: "Three Phases of Technology Projects", definition: "Every tech project follows three phases in sequence: Planning (design what we build), Implementation (execute tasks, write code), and Maintenance (continual support over time).", category: "blue", label: "Definition" },
+      { term: "Boehm's Curve", definition: "The cost of fixing defects increases exponentially as projects progress. A $1 fix in requirements becomes $5 in design, $10 in development, $15 in testing, and $100+ in production.", category: "red", label: "Key Idea" },
+      { term: "Misuse Case", definition: "How a system might be abused by an attacker, accidentally, or by circumstance. Every security requirement should map to a specific misuse case.", category: "blue", label: "Definition" },
+      { term: "OWASP", definition: "Open Web Application Security Project. Industry standard resource for web application security, providing guidelines, tools, and training for secure coding.", category: "blue", label: "Definition" },
+      { term: "Security Architect's Three Core Jobs", definition: "Vision (evaluate goals, constraints, requirements), Blueprint (comprehensive plan guiding lifecycle), and Stakeholder Collaboration (work with engineers, leaders, other architects).", category: "red", label: "Key Idea" },
+      { term: "DevOps and Security", definition: "DevOps blurs phases but doesn't change security goals. The architect still develops vision, ensures misuse cases are considered, and designs attack resistance. Only execution adapts.", category: "red", label: "Key Idea" },
+      { term: "Optimism Bias", definition: "The systematic tendency to underestimate costs, timelines, and risks while overestimating benefits. The #1 reason security gets cut from project scope.", category: "orange", label: "Caution" },
+      { term: "Root Cause Analysis (RCA)", definition: "Systematic process for identifying underlying causes of problems, not just symptoms. Use the 5 Whys technique or Fishbone diagrams to find the real issue.", category: "blue", label: "Definition" },
+      { term: "Four Dimensions of Solution Success", definition: "A solution must succeed across Technical (does it work?), Organizational (will people adopt it?), Economic (is it cost-effective?), and Operational (can we maintain it?).", category: "red", label: "Key Idea" },
+      { term: "Top-Down vs Bottom-Up Architecture", definition: "Top-Down starts from business goals and derives requirements. Bottom-Up starts from existing tech and identifies gaps. Best practice: use BOTH together.", category: "green", label: "Best Practice" },
+      { term: "Security in Definition of Done", definition: "Every user story should have security acceptance criteria. Make security part of the completion requirements, not an afterthought.", category: "green", label: "Best Practice" },
+      { term: "STRIDE Methodology", definition: "Threat modeling framework covering Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, and Elevation of privilege.", category: "blue", label: "Definition" },
+      { term: "Three Levels of Security Architecture", definition: "Infrastructure Focus (firewalls, IDS, VPN), Application Focus (sprint planning, auth design), and Enterprise Focus (standards across all domains).", category: "blue", label: "Definition" },
+      { term: "Planned vs Unplanned Cities Analogy", definition: "Manhattan/Dubai (grid, easy to navigate) vs Boston/London (complex patterns, knowledge lost). Structured architecture scales; chaos crumbles.", category: "purple", label: "Memory Aid" },
+      { term: "Fix Early, Fix Cheap", definition: "Finding bugs early is cheap. Finding them after deployment is catastrophically expensive (100x+). Invest in architecture during planning phase.", category: "purple", label: "Memory Aid" },
+      { term: "Security Woven In, Never Bolted On", definition: "Security must be embedded at every SDLC stage via design reviews, automated testing, code review, and developer training.", category: "purple", label: "Memory Aid" },
+      { term: "CI/CD Security Gates", definition: "Implement security gate checks in the CI/CD pipeline. Make failing security tests block deployment, not just generate warnings.", category: "green", label: "Best Practice" },
+      { term: "Tech Perfect + Org Rejects = Failure", definition: "Technical success alone doesn't equal overall success. If the organization won't adopt the solution, it fails regardless of technical merit.", category: "purple", label: "Memory Aid" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }

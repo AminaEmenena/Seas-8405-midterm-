@@ -1513,54 +1513,32 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 7
+  function getFlashcardData() {
+    return [
+      { term: "Architectural Decision Making", definition: "Systematic process of evaluating options, weighing trade-offs, and selecting approaches that best serve organizational goals within real-world constraints.", category: "blue", label: "Definition" },
+      { term: "Every Decision is a Trade-off", definition: "No perfect solutions exist. Good architects make trade-offs explicit and defensible, balancing security, cost, performance, usability, complexity, and time.", category: "red", label: "Key Idea" },
+      { term: "5-Step Decision Framework", definition: "1) Define the problem, 2) Identify options (include status quo), 3) Evaluate trade-offs, 4) Make decision and document, 5) Monitor and adapt.", category: "blue", label: "Definition" },
+      { term: "Premature Convergence", definition: "The biggest decision-making trap: jumping to a solution before fully exploring the problem and alternatives. Always consider multiple options first.", category: "orange", label: "Caution" },
+      { term: "Build vs Buy vs Managed Service", definition: "Build for unique, strategic capabilities with skilled team. Buy/Manage for commodity capabilities, talent shortages, or rapid deployment needs.", category: "red", label: "Key Idea" },
+      { term: "8-Item Decision Checklist", definition: "Before any decision: problem defined? 3+ options? trade-offs evaluated? stakeholders considered? rationale documented? assumptions identified? metrics defined? monitoring planned?", category: "green", label: "Best Practice" },
+      { term: "Context is Critical", definition: "The right decision depends on resources, maturity, constraints, and culture. What works for a Fortune 500 may fail at a startup, and vice versa.", category: "red", label: "Key Idea" },
+      { term: "Defensibility of Decisions", definition: "Document rationale so decisions can be defended during audits, after incidents, or when questioned. If you can't explain decisions, you're vulnerable.", category: "red", label: "Key Idea" },
+      { term: "Status Quo as Option", definition: "Always include 'do nothing' when evaluating alternatives. If no option clearly beats status quo accounting for implementation cost and risk, the change isn't justified.", category: "green", label: "Best Practice" },
+      { term: "Security vs Business Criteria", definition: "Good decisions balance BOTH security effectiveness (threat coverage, residual risk, compliance) AND business viability (cost, timeline, maintenance, skills).", category: "red", label: "Key Idea" },
+      { term: "Legacy Constraints", definition: "Document constraints you cannot remove, design around them, and plan gradual migration. Architecture must work with reality, not against it.", category: "green", label: "Best Practice" },
+      { term: "Collaborate Don't Dictate", definition: "Architecture succeeds through partnership with stakeholders, vendors, and business units. Ivory tower mandates fail.", category: "red", label: "Key Idea" },
+      { term: "Weighted Scoring Matrix", definition: "Assign weights to criteria based on organizational priorities, then score each option systematically. Transparency prevents politics from dominating decisions.", category: "green", label: "Best Practice" },
+      { term: "Strategic = Build, Commodity = Buy", definition: "If it's a competitive advantage, consider building. If it's table stakes (EDR, SIEM, SOC), buy it and focus your team on strategic work.", category: "purple", label: "Memory Aid" },
+      { term: "No Perfect Solutions, Only Defensible Trade-offs", definition: "Accept that every choice has downsides. The goal is making trade-offs explicit, documented, and aligned with organizational priorities.", category: "purple", label: "Memory Aid" },
+      { term: "Define, Identify, Evaluate, Document, Monitor", definition: "The 5-step framework mnemonic. Follow these steps as checkpoints before committing to any architectural decision.", category: "purple", label: "Memory Aid" },
+      { term: "Incomplete Information Challenge", definition: "Architects must decide before all facts are known. Requirements unclear, threats evolving, future direction uncertain. Perfect information never exists.", category: "orange", label: "Caution" },
+      { term: "Measured Outcomes", definition: "Define success metrics upfront. Track whether you're achieving results. Be willing to adapt if the decision isn't working as expected.", category: "green", label: "Best Practice" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-        let term = '';
-        let definition = '';
-
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          definition = text.replace(term, '').trim();
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        if (term.length < 5 || definition.length < 10) return;
-        if (!cards.some(c => c.term === term)) {
-          cards.push({ term, definition, category, label });
-        }
-      });
-    });
-    return cards;
   }
 
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) showFlashcard(0);
   }
