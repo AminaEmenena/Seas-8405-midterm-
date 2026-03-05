@@ -3,53 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEAS8405 Midterm Prep Hub</title>
+<title>SEAS8405 Midterm Prep — Cybersecurity Architectures</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;font-size:19px;line-height:1.7;background:#0d1117;color:#e6edf3;padding:20px;max-width:600px;margin:0 auto}
-h1{font-size:1.8em;text-align:center;color:#58a6ff;margin:20px 0 5px}
-.sub{text-align:center;color:#8b949e;font-size:0.9em;margin-bottom:25px}
-a.card{display:block;text-decoration:none;padding:18px 20px;margin:10px 0;border-radius:12px;border:2px solid #30363d;color:#e6edf3;transition:all 0.2s;font-weight:600;font-size:1.1em}
-a.card:hover,a.card:active{transform:scale(1.02);border-color:#58a6ff}
-a.card .desc{font-weight:400;font-size:0.85em;color:#8b949e;margin-top:4px}
-.w1{border-color:#f97583;background:#1a1015}.w1:hover{border-color:#f97583}
-.w2{border-color:#f0883e;background:#1a1510}.w2:hover{border-color:#f0883e}
-.w3{border-color:#d2a8ff;background:#15101a}.w3:hover{border-color:#d2a8ff}
-.w4{border-color:#58a6ff;background:#101520}.w4:hover{border-color:#58a6ff}
-.w5{border-color:#56d364;background:#101a15}.w5:hover{border-color:#56d364}
-.w6{border-color:#ff7b72;background:#1a1210}.w6:hover{border-color:#ff7b72}
-.w7{border-color:#79c0ff;background:#101518}.w7:hover{border-color:#79c0ff}
-.cs{border-color:#ffa657;background:#1a1510}.cs:hover{border-color:#ffa657}
-.ni{border-color:#7ee787;background:#101a15}.ni:hover{border-color:#7ee787}
-.mg{border-color:#ff6acc;background:#1a101a}.mg:hover{border-color:#ff6acc}
-.tip{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:15px;margin:20px 0;font-size:0.9em;color:#8b949e}
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --w1: #FF6B6B;
+    --w2: #FFA94D;
+    --w3: #FFD43B;
+    --w4: #69DB7C;
+    --w5: #4DABF7;
+    --w6: #9775FA;
+    --w7: #F783AC;
+    --case: #20C997;
+    --nist: #3BC9DB;
+    --mega: #e94560;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.cs { background: var(--case); color: #000; }
+  .topnav a.ni { background: var(--nist); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* HERO */
+  .hero {
+    text-align: center; padding: 50px 20px 30px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+  }
+  .hero h1 { font-size: 2.4em; color: var(--accent1); margin-bottom: 10px; }
+  .hero p { font-size: 1.1em; color: #aaa; max-width: 700px; margin: 0 auto; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  /* SECTION CARDS */
+  a.card {
+    display: block; text-decoration: none;
+    margin: 16px 0; border-radius: 16px;
+    overflow: hidden; transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  a.card:hover { transform: scale(1.02); filter: brightness(1.1); }
+  .card-header {
+    padding: 20px 24px;
+    font-size: 1.25em; font-weight: 800;
+    color: #000;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card-header .arrow { font-size: 1.2em; }
+  .card-body {
+    padding: 14px 24px 18px;
+    font-size: 0.92em; color: #ccc; line-height: 1.6;
+  }
+
+  /* Per-week card colors */
+  .c-w1 { border-color: var(--w1); }
+  .c-w1 .card-header { background: var(--w1); }
+  .c-w1 .card-body { background: rgba(255,107,107,0.08); }
+
+  .c-w2 { border-color: var(--w2); }
+  .c-w2 .card-header { background: var(--w2); }
+  .c-w2 .card-body { background: rgba(255,169,77,0.08); }
+
+  .c-w3 { border-color: var(--w3); }
+  .c-w3 .card-header { background: var(--w3); }
+  .c-w3 .card-body { background: rgba(255,212,59,0.08); }
+
+  .c-w4 { border-color: var(--w4); }
+  .c-w4 .card-header { background: var(--w4); }
+  .c-w4 .card-body { background: rgba(105,219,124,0.08); }
+
+  .c-w5 { border-color: var(--w5); }
+  .c-w5 .card-header { background: var(--w5); }
+  .c-w5 .card-body { background: rgba(77,171,247,0.08); }
+
+  .c-w6 { border-color: var(--w6); }
+  .c-w6 .card-header { background: var(--w6); }
+  .c-w6 .card-body { background: rgba(151,117,250,0.08); }
+
+  .c-w7 { border-color: var(--w7); }
+  .c-w7 .card-header { background: var(--w7); }
+  .c-w7 .card-body { background: rgba(247,131,172,0.08); }
+
+  .c-cs { border-color: var(--case); }
+  .c-cs .card-header { background: var(--case); }
+  .c-cs .card-body { background: rgba(32,201,151,0.08); }
+
+  .c-ni { border-color: var(--nist); }
+  .c-ni .card-header { background: var(--nist); }
+  .c-ni .card-body { background: rgba(59,201,219,0.08); }
+
+  .c-mega { border-color: var(--accent1); }
+  .c-mega .card-header { background: var(--accent1); color: #fff; }
+  .c-mega .card-body { background: rgba(233,69,96,0.12); }
+
+  /* Counts badge */
+  .badge {
+    display: inline-block; background: rgba(0,0,0,0.25);
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 0.65em; font-weight: 600; margin-left: 10px;
+  }
+
+  /* STUDY TIP */
+  .tip {
+    background: #0d1b2a; border: 1px solid #333;
+    border-radius: 12px; padding: 18px 22px;
+    margin: 24px 0; font-size: 0.95em; color: #aaa;
+    border-left: 4px solid var(--accent1);
+  }
+  .tip strong { color: var(--accent1); }
+
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .hero { padding: 30px 15px 20px; }
+    .hero h1 { font-size: 1.8em; }
+    .container { padding: 12px; }
+    .card-header { font-size: 1.1em; padding: 16px 18px; }
+    .card-body { padding: 10px 18px 14px; }
+  }
 </style>
 </head>
 <body>
-<h1>SEAS8405 Cybersecurity Architectures<br>Midterm Prep</h1>
-<p class="sub">Spring 2026 | Prof. Wayne Le | GWU | Weeks 1-7</p>
 
-<div class="tip">Tap any section below to open it. Each page has visual summaries + practice questions with instant feedback. Good luck Amina!</div>
+<!-- STICKY NAV -->
+<nav class="topnav">
+  <span class="title">SEAS8405 MIDTERM</span>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="cases.html" class="cs">Cases</a>
+  <a href="nist.html" class="ni">NIST</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+</nav>
 
-<a href="week1.html" class="card w1">Week 1 — Foundations + MITRE Frameworks<div class="desc">Architecture vs Engineering, CIA Triad, ASARP, Governance, ATT&CK, D3FEND, Engage, Security Zones, Air Gap</div></a>
+<!-- HERO -->
+<div class="hero">
+  <h1>Cybersecurity Architectures — Midterm Prep</h1>
+  <p>SEAS8405 · Spring 2026 · Professor Wayne Le · GWU<br>Interactive study guide — tap any section below to study, then test yourself with the mega exam</p>
+</div>
 
-<a href="week2.html" class="card w2">Week 2 — Requirements Engineering + Risk<div class="desc">Functional/Non-Functional Requirements, SMART, 8-Step Lifecycle, STRIDE, Risk Management, Trade-offs, Prioritization</div></a>
+<div class="container">
 
-<a href="week3.html" class="card w3">Week 3 — Network Security Architecture<div class="desc">Defense in Depth, Network Zones, Firewalls, IDS/IPS, CIA in Networks, Redundancy vs Diversity, OSI Model, Resilience</div></a>
+<div class="tip"><strong>Study tip:</strong> Each page has collapsible topic breakdowns + practice questions with instant feedback. Work through the weeks in order, then hit the Mega Exam when you feel ready. Good luck Amina!</div>
 
-<a href="week4.html" class="card w4">Week 4 — Identity &amp; Access Management<div class="desc">AAA, Auth Factors, MFA, RBAC/ABAC/MAC/DAC, Federation, SSO, SAML/OAuth/OIDC, PAM, Least Privilege</div></a>
+<a href="week1.html" class="card c-w1">
+  <div class="card-header">Week 1 — Foundations + MITRE Frameworks <span class="badge">15 topics · 15 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Architecture vs Engineering, CIA Triad, ASARP, Governance, ATT&CK, D3FEND, Engage, Security Zones, Air Gap, Zero Trust Intro</div>
+</a>
 
-<a href="week5.html" class="card w5">Week 5 — Application Security + SDLC<div class="desc">Three Phases, Scope, Misuse Cases, Boehm's Curve, DevOps/CI-CD, Building Security into SDLC, Requirements &amp; Design Phase</div></a>
+<a href="week2.html" class="card c-w2">
+  <div class="card-header">Week 2 — Requirements Engineering + Risk <span class="badge">10 topics · 15 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Functional/Non-Functional Requirements, SMART Criteria, 8-Step Lifecycle, STRIDE, Risk Management, Trade-offs, Prioritization, 8 Pitfalls</div>
+</a>
 
-<a href="week6.html" class="card w6">Week 6 — Scope + Enterprise Architecture<div class="desc">Why Scope Matters, Scope is Iterative, 4-Step Scope Process, Enterprise vs Application Security, Organizational Boundaries</div></a>
+<a href="week3.html" class="card c-w3">
+  <div class="card-header">Week 3 — Network Security Architecture <span class="badge">10 topics · 12 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Defense in Depth, Network Zones, Firewalls, IDS/IPS, CIA in Networks, Redundancy vs Diversity, OSI Model, Resilience, Boehm's Curve</div>
+</a>
 
-<a href="week7.html" class="card w7">Week 7 — Architectural Decision Making<div class="desc">Decision Challenges, Framework (5 Steps), Evaluation Criteria, Build vs Buy vs Managed, Healthcare &amp; Cimpress Cases</div></a>
+<a href="week4.html" class="card c-w4">
+  <div class="card-header">Week 4 — Identity &amp; Access Management <span class="badge">11 topics · 12 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">AAA Framework, Auth Factors, MFA, RBAC/ABAC/MAC/DAC, Federation, SSO, SAML/OAuth/OIDC, PAM, Least Privilege</div>
+</a>
 
-<a href="cases.html" class="card cs">Case Studies — Healthcare + Cimpress<div class="desc">EY Healthcare SOC (Splunk, CrowdStrike, SOAR), Cimpress/Vistaprint Zero Trust (phased, device-first, multi-cloud)</div></a>
+<a href="week5.html" class="card c-w5">
+  <div class="card-header">Week 5 — Application Security + SDLC <span class="badge">10 topics · 12 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Three Phases, Scope, Misuse Cases, Boehm's Curve, DevOps/CI-CD, Building Security into SDLC, Requirements &amp; Design Phase</div>
+</a>
 
-<a href="nist.html" class="card ni">NIST 800-207 + Zero Trust Maturity<div class="desc">Zero Trust Tenets, PE/PA/PEP, Trust Algorithm, CISA 5 Pillars, 4 Maturity Levels, Deployment Approaches</div></a>
+<a href="week6.html" class="card c-w6">
+  <div class="card-header">Week 6 — Scope + Enterprise Architecture <span class="badge">12 topics · 12 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Why Scope Matters, Scope is Iterative, 4-Step Process, Enterprise vs Application Security, Organizational Boundaries, Modularity</div>
+</a>
 
-<a href="mega.html" class="card mg">MEGA EXAM — 50 Questions with Scoring<div class="desc">Comprehensive exam covering ALL weeks. Tracks your score in real-time. Timer included.</div></a>
+<a href="week7.html" class="card c-w7">
+  <div class="card-header">Week 7 — Architectural Decision Making <span class="badge">7 topics · 12 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Decision Challenges, Framework (5 Steps), Evaluation Criteria, Build vs Buy vs Managed, Healthcare &amp; Cimpress Case Applications</div>
+</a>
 
+<a href="cases.html" class="card c-cs">
+  <div class="card-header">Case Studies — Healthcare + Cimpress <span class="badge">12 topics · 10 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">EY Healthcare SOC (Splunk, CrowdStrike, SOAR), Cimpress/Vistaprint Zero Trust (phased, device-first, multi-cloud)</div>
+</a>
+
+<a href="nist.html" class="card c-ni">
+  <div class="card-header">NIST 800-207 + Zero Trust Maturity <span class="badge">9 topics · 10 questions</span> <span class="arrow">→</span></div>
+  <div class="card-body">Zero Trust Tenets, PE/PA/PEP, Trust Algorithm, CISA 5 Pillars, 4 Maturity Levels, Deployment Approaches</div>
+</a>
+
+<a href="mega.html" class="card c-mega">
+  <div class="card-header">MEGA EXAM — 100 Questions with Scoring <span class="badge">All weeks · Timer · Letter grades</span> <span class="arrow">→</span></div>
+  <div class="card-body">Comprehensive timed exam covering ALL weeks. Real-time progress tracking, instant scoring, and letter grades. The ultimate test before midterm day.</div>
+</a>
+
+</div>
 </body>
 </html>
