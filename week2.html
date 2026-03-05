@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2 — Requirements Engineering, Threat Modeling & Risk Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-size: 19px;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid #58a6ff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+        }
+
+        h1 {
+            color: #f0f6fc;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        details {
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #161b22;
+        }
+
+        details summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #f0f6fc;
+            padding: 10px;
+            margin: -10px -10px 0 -10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        details summary:hover {
+            background-color: #0d1117;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .key {
+            background-color: #0d3922;
+            border-left: 4px solid #3fb950;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #aaffaa;
+        }
+
+        .warn {
+            background-color: #3d1f1a;
+            border-left: 4px solid #f85149;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #ffb3ae;
+        }
+
+        .prof {
+            background-color: #2d1b4e;
+            border-left: 4px solid #d291ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #e8b9f8;
+            font-style: italic;
+        }
+
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .compare > div {
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #161b22;
+        }
+
+        .compare h4 {
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+        }
+
+        table th {
+            background-color: #0d1117;
+            color: #f0f6fc;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #30363d;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border: 1px solid #30363d;
+        }
+
+        table tr:hover {
+            background-color: #0d1117;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #f0f6fc;
+        }
+
+        .quiz-section {
+            margin-top: 40px;
+            border-top: 2px solid #30363d;
+            padding-top: 30px;
+        }
+
+        .quiz-question {
+            margin-bottom: 25px;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #161b22;
+        }
+
+        .quiz-q-text {
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 12px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: #0d1117;
+        }
+
+        .quiz-option input[type="radio"] {
+            cursor: pointer;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .quiz-answer {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            font-size: 18px;
+        }
+
+        .quiz-answer.correct {
+            background-color: #0d3922;
+            color: #3fb950;
+            border-left: 4px solid #3fb950;
+        }
+
+        .quiz-answer.incorrect {
+            background-color: #3d1f1a;
+            color: #f85149;
+            border-left: 4px solid #f85149;
+        }
+
+        .score-section {
+            background-color: #161b22;
+            border: 2px solid #30363d;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .score-btn {
+            background-color: #238636;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+        }
+
+        .score-btn:hover {
+            background-color: #2ea043;
+        }
+
+        .score-result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        code {
+            background-color: #0d1117;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #a5e3ff;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Hub</a>
+
+        <h1>WEEK 2</h1>
+        <p class="subtitle">Requirements Engineering, Threat Modeling & Risk Management</p>
+
+        <!-- Section 1: Requirements Engineering 8-Step Lifecycle -->
+        <details open>
+            <summary>1. Requirements Engineering 8-Step Lifecycle</summary>
+            <div>
+                <p>The requirements engineering lifecycle guides how we gather, document, and manage security and functional requirements across a system's lifetime:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Elicit</strong></td>
+                            <td>Gather requirements from stakeholders through interviews, workshops, surveys, document analysis, and observation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Document</strong></td>
+                            <td>Record requirements in clear, measurable format (SMART framework) with traceability IDs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Review</strong></td>
+                            <td>Validate requirements with stakeholders; ensure clarity, completeness, and feasibility</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Communicate</strong></td>
+                            <td>Share requirements across teams; ensure engineering, security, and business alignment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Implement</strong></td>
+                            <td>Build system features and controls that satisfy documented requirements</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validate</strong></td>
+                            <td>Test that implementation meets acceptance criteria; verify security controls work as intended</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monitor</strong></td>
+                            <td>Track requirement effectiveness in production (MTTD, incident response, compliance audits)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Update</strong></td>
+                            <td>Refine requirements based on new threats, regulatory changes, and operational lessons learned</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Requirements Elicitation Techniques</h3>
+                <ul>
+                    <li><strong>Interviews</strong> — One-on-one with key stakeholders (security team, compliance, business owners) to understand their pain points and priorities</li>
+                    <li><strong>Workshops</strong> — Cross-functional group sessions to align conflicting viewpoints and build consensus</li>
+                    <li><strong>Surveys & Questionnaires</strong> — Gather feedback from large populations; efficient for scaling input</li>
+                    <li><strong>Document Analysis</strong> — Review existing standards and frameworks (ISO 27001, NIST Cybersecurity Framework, PCI-DSS) to identify gaps and compliance requirements</li>
+                    <li><strong>Observation & Use Case Analysis</strong> — Watch users in real workflows to uncover implicit requirements and edge cases</li>
+                </ul>
+
+                <div class="key">
+                    <strong>Key Insight:</strong> Different stakeholders have fundamentally different requirements:
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Business:</strong> Wants performance, scalability, cost-effectiveness. "How fast can we move?"</li>
+                        <li><strong>Security:</strong> Wants control, visibility, threat detection. "What can go wrong?"</li>
+                        <li><strong>Users:</strong> Want usability, speed, minimal friction. "Is this easy to use?"</li>
+                    </ul>
+                    Good elicitation balances all three perspectives rather than optimizing one at the expense of others.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 2: Functional vs Non-Functional Requirements -->
+        <details open>
+            <summary>2. Functional vs Non-Functional Requirements</summary>
+            <div>
+                <div class="compare">
+                    <div>
+                        <h4>Functional Requirements (FR)</h4>
+                        <p><strong>WHAT the system does.</strong></p>
+                        <ul>
+                            <li>Authentication (MFA, password reset)</li>
+                            <li>Authorization (role-based access)</li>
+                            <li>Encryption (data at rest/transit)</li>
+                            <li>Audit Logging (track who did what)</li>
+                            <li>Threat Detection & Incident Response</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>User-facing, easy to test directly.</em></p>
+                    </div>
+                    <div>
+                        <h4>Non-Functional Requirements (NFR)</h4>
+                        <p><strong>HOW WELL the system performs.</strong></p>
+                        <ul>
+                            <li>Response time, throughput</li>
+                            <li>Availability, reliability</li>
+                            <li>Scalability, maintainability</li>
+                            <li>Usability, portability</li>
+                            <li>Testability, security properties</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>Harder to test, often architectural.</em></p>
+                    </div>
+                </div>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">NFR Deep Dive: Categories & Examples</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NFR Category</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Capability</strong></td>
+                            <td>Performance metrics: response time, throughput, latency</td>
+                            <td>MFA must complete in under 5 seconds 99.9% of the time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scalability</strong></td>
+                            <td>System grows with demand: horizontal (add servers) vs vertical (bigger hardware)</td>
+                            <td>Support 100,000 concurrent users. Target website crash = scalability failure under load</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Availability</strong></td>
+                            <td>Uptime percentage. Higher percentages = lower acceptable downtime</td>
+                            <td>99.95% = 22 min/month | 99.9% = 43 min | 99.99% = 4.2 min | 99.999% = 26 sec</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reliability</strong></td>
+                            <td>MTBF (Mean Time Between Failures), MTTR (Mean Time To Recover)</td>
+                            <td>If org has zero failure rotations in 6 months and doesn't notice, security control isn't actively monitored</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maintainability</strong></td>
+                            <td>How quickly can we patch and respond to new threats?</td>
+                            <td>Security patches within 24 hours. Zero-day exploit = immediate response required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Usability</strong></td>
+                            <td>Can users actually use security controls correctly?</td>
+                            <td>If MFA is too complex, users bypass it. "A secure system no one uses correctly is useless"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Portability</strong></td>
+                            <td>Works across platforms and environments consistently</td>
+                            <td>Users shouldn't have different security experiences on desktop vs mobile vs cloud</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testability</strong></td>
+                            <td>How easily can we validate security behavior?</td>
+                            <td>Automated security tests, CI/CD integration, pen test harness</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="key">
+                    <strong>KEY Architectural Impact:</strong> Non-functional requirements generally drive architecture MORE than functional requirements do. A system might have identical FR (authentication, encryption) but completely different architectures based on NFR (5 vs 100,000 concurrent users requires different database design, caching strategy, etc.)
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 3: SMART Framework -->
+        <details open>
+            <summary>3. SMART Framework for Requirements</summary>
+            <div>
+                <p>SMART is a framework for writing clear, measurable, actionable requirements:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Specific</strong></td>
+                            <td>Clearly defines what is required, not vague</td>
+                            <td>"Implement MFA" ✓ vs "Make system more secure" ✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Measurable</strong></td>
+                            <td>Includes quantifiable criteria for success</td>
+                            <td>"MFA success rate ≥99.9%" ✓ vs "MFA should work" ✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Achievable</strong></td>
+                            <td>Realistic given technical and resource constraints</td>
+                            <td>"<5 sec response time" ✓ vs "<100ms" (unrealistic for distributed system) ✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Relevant</strong></td>
+                            <td>Aligns with business objectives and risk priorities</td>
+                            <td>"MFA for VPN" (prevents 80% of breaches) ✓ vs "MFA for system clock API" ✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time-bound</strong></td>
+                            <td>Specifies when implementation is required</td>
+                            <td>"Deploy by Q2 2026" ✓ vs "eventually" ✗</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Documentation Examples</h3>
+
+                <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                    <h4 style="color: #58a6ff;">Functional Requirement Template</h4>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>ID:</strong> FR-001</li>
+                        <li><strong>Description:</strong> User authentication via password and MFA</li>
+                        <li><strong>Acceptance Criteria:</strong> 99.9% of login attempts succeed; failed auth logged within 1 second</li>
+                        <li><strong>Priority:</strong> High (blocks all other features)</li>
+                        <li><strong>Stakeholder:</strong> Security Team, DevOps, Product</li>
+                    </ul>
+                </div>
+
+                <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                    <h4 style="color: #58a6ff;">Non-Functional Requirement Template</h4>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>ID:</strong> NFR-005</li>
+                        <li><strong>Metric:</strong> Response time</li>
+                        <li><strong>Target:</strong> ≤2 seconds for 95th percentile</li>
+                        <li><strong>Measurement Method:</strong> Load testing, APM monitoring, synthetic checks</li>
+                        <li><strong>Priority:</strong> Medium (user experience)</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 4: Requirements Documentation -->
+        <details open>
+            <summary>4. Requirements Documentation</summary>
+            <div>
+                <p>Clear, measurable documentation ensures all stakeholders (engineering, security, business, compliance) share the same understanding.</p>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Why Documentation Matters</h3>
+                <ul>
+                    <li><strong>Accurate Estimation:</strong> Engineering can size the effort when requirements are specific</li>
+                    <li><strong>Facilitates Traceability:</strong> Link requirements to tests, architecture decisions, and compliance controls</li>
+                    <li><strong>Objective Acceptance Criteria:</strong> No ambiguity about what "done" means</li>
+                    <li><strong>Stakeholder Alignment:</strong> Written down = less "I thought we agreed on..." later</li>
+                    <li><strong>Compliance Evidence:</strong> Audit trail shows we met regulatory requirements intentionally</li>
+                </ul>
+
+                <div class="key">
+                    <strong>Real Impact:</strong> Requirements without numbers lead to miscommunication. "The system should be fast" means something different to everyone. "≤2 second response time 95% of the time, measured by APM" = everyone agrees on what success looks like.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 5: 8 Common Pitfalls -->
+        <details open>
+            <summary>5. 8 Common Pitfalls in Requirements Definition</summary>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pitfall</th>
+                            <th>Problem</th>
+                            <th>Fix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Vague Requirements</strong></td>
+                            <td>"The system should be secure" — meaningless without specifics</td>
+                            <td>Define exactly what "secure" means: data encrypted, auth required, audit logging enabled</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Missing NFR</strong></td>
+                            <td>Focus only on features, ignore performance/scalability/reliability</td>
+                            <td>Explicitly list availability target, response time, concurrent user count</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ignoring Trade-offs</strong></td>
+                            <td>Want everything: security + speed + simplicity + low cost</td>
+                            <td>Document trade-offs explicitly; make conscious choices</td>
+                        </tr>
+                        <tr>
+                            <td><strong>No Traceability</strong></td>
+                            <td>Requirement disappears into code; can't prove compliance</td>
+                            <td>Link FR/NFR → architecture decision → test case → compliance control</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Forgetting Stakeholders</strong></td>
+                            <td>Only listen to engineering; miss business and security concerns</td>
+                            <td>Include security team, compliance, product, users in elicitation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Over-Specifying</strong></td>
+                            <td>Too detailed requirements constrain design unnecessarily</td>
+                            <td>Specify WHAT but not HOW; let engineers choose implementation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Not Validating</strong></td>
+                            <td>Assumptions aren't verified; build wrong thing</td>
+                            <td>Review requirements with stakeholders before coding starts</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Not Updating</strong></td>
+                            <td>Requirements don't change as threats/regulations evolve</td>
+                            <td>Review and update requirements quarterly or after major incidents</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+
+        <!-- Section 6: Diversity vs Redundancy -->
+        <details open>
+            <summary>6. Diversity vs Redundancy in Architecture</summary>
+            <div>
+                <div class="compare">
+                    <div>
+                        <h4>Redundancy</h4>
+                        <p>Multiple instances of the <strong>SAME</strong> resource.</p>
+                        <ul>
+                            <li>Key word: <strong>"same"</strong></li>
+                            <li>Like having two identical spare tires</li>
+                            <li>Examples:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Two identical firewalls (Cisco + Cisco)</li>
+                                    <li>Redundant power supplies</li>
+                                    <li>RAID arrays</li>
+                                    <li>Database replicas</li>
+                                </ul>
+                            </li>
+                            <li><strong>When:</strong> Hardware failures, power outages</li>
+                            <li><strong>Benefit:</strong> If one fails, another takes over seamlessly</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Diversity</h4>
+                        <p>Different technologies/vendors for the same function.</p>
+                        <ul>
+                            <li>Key word: <strong>"different"</strong></li>
+                            <li>Like having a spare tire + run-flat tire</li>
+                            <li>Examples:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Two firewalls from different vendors (Cisco + Palo Alto)</li>
+                                    <li>Multiple authentication methods (password + FIDO2)</li>
+                                    <li>Different encryption algorithms</li>
+                                    <li>Multi-cloud deployment</li>
+                                </ul>
+                            </li>
+                            <li><strong>When:</strong> Zero-day vulnerabilities, vendor-specific exploits</li>
+                            <li><strong>Benefit:</strong> Vulnerability in one doesn't compromise entire system</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="key">
+                    <strong>KEY:</strong> Critical systems need <strong>BOTH</strong>.
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Redundancy</strong> handles individual component failures (hardware, power)</li>
+                        <li><strong>Diversity</strong> handles systematic failures (zero-days, vendor exploits)</li>
+                    </ul>
+                    A bank with 2 identical firewalls from the same vendor is vulnerable to a single zero-day affecting that vendor. A bank with diverse firewalls has a better chance of containing impact.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 7: MITRE ATT&CK in Context -->
+        <details open>
+            <summary>7. MITRE ATT&CK in Context (Review)</summary>
+            <div>
+                <p>MITRE ATT&CK provides a structured, community-driven knowledge base of adversary tactics and techniques based on real-world observations.</p>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">STRIDE Threat Model (TM)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Threat</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Spoofing</strong></td>
+                            <td>Identity fraud — claiming to be someone else</td>
+                            <td>Attacker forges auth token, impersonates admin</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tampering</strong></td>
+                            <td>Unauthorized modification of data/system</td>
+                            <td>Modify transaction in flight, corrupt audit log</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Repudiation</strong></td>
+                            <td>Deny responsibility for action</td>
+                            <td>User claims they didn't authorize transaction (no audit trail)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Information Disclosure</strong></td>
+                            <td>Unauthorized access to sensitive data</td>
+                            <td>Read database without permission, memory leak</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Denial of Service</strong></td>
+                            <td>Make system unavailable to legitimate users</td>
+                            <td>DDoS attack, resource exhaustion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Elevation of Privilege</strong></td>
+                            <td>Gain higher permissions than authorized</td>
+                            <td>User escalates to admin, bypass RBAC check</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Risk Framework</h3>
+                <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                    <p style="font-size: 20px; color: #f0f6fc; font-weight: 600; text-align: center;">
+                        Risk = Threat × Vulnerability × Impact
+                    </p>
+                    <ul style="margin-top: 15px;">
+                        <li><strong>Threat:</strong> Adversary intent and capability (from ATT&CK)</li>
+                        <li><strong>Vulnerability:</strong> Weakness in system we can fix</li>
+                        <li><strong>Impact:</strong> Damage if threat exploits vulnerability (financial, compliance, reputation)</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Risk Response Options</h3>
+                <ul>
+                    <li><strong>Accept:</strong> Tolerate the risk; document decision and monitoring</li>
+                    <li><strong>Mitigate:</strong> Reduce likelihood or impact (implement controls)</li>
+                    <li><strong>Transfer:</strong> Shift risk to third party (insurance, outsourcing, SaaS)</li>
+                    <li><strong>Avoid:</strong> Don't engage in risky activity (e.g., don't store password in plaintext, don't build certain features)</li>
+                </ul>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Requirements-to-MITRE Mapping Chain</h3>
+                <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                    <ol>
+                        <li><strong>Threat Analysis:</strong> Use STRIDE/MITRE ATT&CK to identify threats</li>
+                        <li><strong>Control ID:</strong> Assign control from framework (e.g., "MFA-001")</li>
+                        <li><strong>Functional Requirement:</strong> Define what control does (FR: "Users must authenticate with password + TOTP")</li>
+                        <li><strong>Non-Functional Requirement:</strong> Define how well it must perform (NFR: "Auth completes in <5 sec")</li>
+                        <li><strong>Architecture Decision:</strong> How to implement (Database + Authenticator service + Audit logging)</li>
+                    </ol>
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 8: Requirements Prioritization -->
+        <details open>
+            <summary>8. Requirements Prioritization</summary>
+            <div>
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Impact vs Effort Matrix (4 Quadrants)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Quadrant</th>
+                            <th>Characteristics</th>
+                            <th>Action</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>High Impact / Low Effort</strong></td>
+                            <td>Quick Wins — big benefit, small effort</td>
+                            <td>Do first, highest ROI</td>
+                            <td>Enable event logging, update weak passwords</td>
+                        </tr>
+                        <tr>
+                            <td><strong>High Impact / High Effort</strong></td>
+                            <td>Major Projects — critical but resource-intensive</td>
+                            <td>Plan timeline, secure budget, break into phases</td>
+                            <td>Zero-trust architecture, cloud migration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Low Impact / Low Effort</strong></td>
+                            <td>Nice-to-Have — minimal effort, minimal benefit</td>
+                            <td>Do if time permits, fill gaps</td>
+                            <td>Security dashboard, custom reporting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Low Impact / High Effort</strong></td>
+                            <td>Distractions — waste of time and resources</td>
+                            <td>Question if needed, deprioritize, decline</td>
+                            <td>MFA for 1% of users, build custom SIEM</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Prioritization Criteria (in order)</h3>
+                <ol>
+                    <li><strong>Business Impact:</strong> Does it solve a critical problem?</li>
+                    <li><strong>Risk:</strong> Does it reduce high-likelihood or high-impact threats?</li>
+                    <li><strong>Regulatory Requirements:</strong> Is it legally mandated?</li>
+                    <li><strong>Technical Feasibility:</strong> Can we actually build it?</li>
+                    <li><strong>Cost:</strong> Is it worth the ROI?</li>
+                </ol>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Example: MFA Prioritization</h3>
+                <div class="key">
+                    <strong>Good Communication (prioritize):</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Prevents 80% of documented breach techniques (Business Impact)</li>
+                        <li>Required by compliance frameworks (Regulatory)</li>
+                        <li>Implementation feasible, 8-week timeline (Feasibility)</li>
+                        <li>Cost-benefit: $500k investment prevents $50M+ breach (Cost)</li>
+                    </ul>
+                </div>
+
+                <div class="warn">
+                    <strong>Bad Communication (deprioritize):</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>"Because I said so."</li>
+                        <li>"Everyone else has MFA."</li>
+                        <li>"It's best practice."</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 9: Trade-offs in Architecture -->
+        <details open>
+            <summary>9. Trade-offs in Architecture</summary>
+            <div>
+                <p>Every architecture decision involves trade-offs. The job of an architect is to make them explicitly and document the reasoning.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Trade-off</th>
+                            <th>Tension</th>
+                            <th>Resolution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Performance vs Security</strong></td>
+                            <td>Encryption is CPU-heavy; deep packet inspection slows bandwidth</td>
+                            <td>Use hardware acceleration, optimize cipher suites, measure performance impact</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scalability vs Simplicity</strong></td>
+                            <td>1k users = simple architecture works; 1M users = need distribution, caching, sharding</td>
+                            <td>Right-size architecture to expected growth; plan migration path</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Compliance vs Innovation</strong></td>
+                            <td>90-day security review may slow AI/ML deployment</td>
+                            <td>Risk-based review; fast-track low-risk features; pause high-risk ones</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security vs Usability</strong></td>
+                            <td>Complex MFA = users bypass it; simple = vulnerable</td>
+                            <td>Implement usable security (FIDO2 > SMS); user testing before deployment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Availability vs Cost</strong></td>
+                            <td>Multi-region redundancy = expensive; single region = faster failure</td>
+                            <td>Match availability target to business criticality; use incremental approach</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="prof">
+                    <strong>Architect's Perspective:</strong> "Our job is to document trade-offs explicitly and make informed choices, not to satisfy everyone. Here's how we balance:
+                    <ol style="margin-top: 10px;">
+                        <li><strong>Identify Trade-off:</strong> What are we trading? (security vs speed, cost vs reliability?)</li>
+                        <li><strong>Involve Stakeholders:</strong> What does business care about? Security team? Ops?</li>
+                        <li><strong>Technical Constraints:</strong> What are hard limits? (budget, time, tech stack)</li>
+                        <li><strong>Cost-Benefit Analysis:</strong> What's the business impact of each choice?</li>
+                        <li><strong>Document Decision:</strong> Record why we chose A over B, risks accepted</li>
+                    </ol>
+                    "
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 10: Risk Management -->
+        <details open>
+            <summary>10. Risk Management</summary>
+            <div>
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">ISO 31000:2018 Risk Management Process</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Description</th>
+                            <th>Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Establish Context</strong></td>
+                            <td>Understand org mission, risk appetite, stakeholders, external environment</td>
+                            <td>Risk appetite statement, stakeholder map</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Risk Identification</strong></td>
+                            <td>Use threat modeling (STRIDE, ATT&CK) to find threats</td>
+                            <td>Risk register, threat list</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Risk Analysis</strong></td>
+                            <td>Estimate likelihood × impact for each risk</td>
+                            <td>Risk ratings (critical, high, medium, low)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Risk Evaluation</strong></td>
+                            <td>Compare against risk appetite; decide which risks matter</td>
+                            <td>Prioritized risk list</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Risk Treatment</strong></td>
+                            <td>Implement controls (mitigate, accept, transfer, avoid)</td>
+                            <td>Control plan, implementation roadmap</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. Monitor & Review</strong></td>
+                            <td>Track control effectiveness (MTTD, incident metrics); update as needed</td>
+                            <td>Metrics dashboard, quarterly reviews</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Risk Appetite by Industry</h3>
+                <div class="compare">
+                    <div>
+                        <h4>Low Appetite</h4>
+                        <ul>
+                            <li><strong>Financial Services:</strong> Heavily regulated, lots at stake</li>
+                            <li><strong>Healthcare:</strong> Patient safety paramount</li>
+                            <li><strong>Government/Military:</strong> Classified data, national security</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>Default: Mitigate first, ask questions later</em></p>
+                    </div>
+                    <div>
+                        <h4>Higher Appetite</h4>
+                        <ul>
+                            <li><strong>Startups:</strong> Speed-to-market matters; accept risk to move fast</li>
+                            <li><strong>Consumer Tech:</strong> Innovation often outweighs security</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>Default: Move fast, mitigate critical risks only</em></p>
+                    </div>
+                </div>
+
+                <div class="key">
+                    <strong>KEY:</strong> Architecture must match organization's risk appetite, not generic "best practices." A startup deploying an MVP doesn't need the same infrastructure investment as a bank. Document the appetite and design accordingly.
+                </div>
+
+                <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">MTTD: The Measurement Problem</h3>
+                <div class="warn">
+                    <strong>Industry Standard MTTD (Mean Time To Detect):</strong> 200+ days!
+                    <ul style="margin-top: 10px;">
+                        <li>Many orgs don't know they're breached for months</li>
+                        <li>"Without measurement we can't improve"</li>
+                        <li>Goals: Reduce MTTD through better logging, monitoring, alerting</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <!-- QUIZ Section -->
+        <div class="quiz-section">
+            <h2 style="color: #f0f6fc; margin-bottom: 20px;">QUIZ — Week 2 (15 Questions)</h2>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">1. What is the first step in the requirements lifecycle?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="a"> <span>Elicit requirements from stakeholders</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="b"> <span>Document requirements in detail</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="c"> <span>Review requirements with engineering</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="d"> <span>Implement the system</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q1-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">2. What is the key difference between Functional and Non-Functional Requirements?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="a"> <span>FR = what system does, NFR = how well it performs</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="b"> <span>FR = user-facing, NFR = back-end only</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="c"> <span>FR = required, NFR = optional</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="d"> <span>FR = security, NFR = performance</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q2-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">3. What does 99.95% availability mean in terms of downtime per month?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="a"> <span>4.2 minutes</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="b"> <span>22 minutes</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="c"> <span>43 minutes</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="d"> <span>26 seconds</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q3-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">4. What does SMART stand for?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="a"> <span>Secure, Measurable, Achievable, Relevant, Timely</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="b"> <span>Specific, Measurable, Achievable, Relevant, Time-bound</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="c"> <span>Simple, Measurable, Actionable, Required, Time-bound</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="d"> <span>Scalable, Maintainable, Accessible, Reliable, Testable</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q4-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">5. What is the key difference between Redundancy and Diversity?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="a"> <span>Redundancy = multiple identical resources; Diversity = different technologies</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="b"> <span>Redundancy = backup systems; Diversity = primary systems</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="c"> <span>Redundancy = expensive; Diversity = cheap</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="d"> <span>Redundancy = security; Diversity = performance</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q5-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">6. What does STRIDE stand for? (Pick the option that lists all 6 components)</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q6" value="a"> <span>Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q6" value="b"> <span>System, Threat, Response, Identification, Detection, Enumeration</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q6" value="c"> <span>Security, Traffic, Routing, Isolation, Defense, Encryption</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q6" value="d"> <span>Scanning, Testing, Risk, Incident, Detection, Evaluation</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q6-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">7. What is the Risk formula?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q7" value="a"> <span>Risk = Threat + Vulnerability + Impact</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q7" value="b"> <span>Risk = Threat × Vulnerability × Impact</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q7" value="c"> <span>Risk = Threat / Vulnerability - Impact</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q7" value="d"> <span>Risk = (Threat - Vulnerability) × Impact</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q7-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">8. Which NFR category includes MFA response time requirements?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q8" value="a"> <span>Reliability</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q8" value="b"> <span>Capability</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q8" value="c"> <span>Availability</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q8" value="d"> <span>Testability</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q8-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">9. What is NOT one of the 8 common pitfalls in requirements definition?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q9" value="a"> <span>Vague requirements</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q9" value="b"> <span>Missing NFR</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q9" value="c"> <span>Comprehensive documentation</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q9" value="d"> <span>Not updating requirements</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q9-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">10. In the Impact vs Effort matrix, which quadrant represents "Quick Wins"?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q10" value="a"> <span>High Impact / Low Effort</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q10" value="b"> <span>High Impact / High Effort</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q10" value="c"> <span>Low Impact / Low Effort</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q10" value="d"> <span>Low Impact / High Effort</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q10-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">11. What is the correct order in the Requirements-to-MITRE mapping chain?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q11" value="a"> <span>Threat Analysis → Control ID → FR → NFR → Architecture</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q11" value="b"> <span>Architecture → FR → NFR → Control ID → Threat Analysis</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q11" value="c"> <span>FR → NFR → Threat Analysis → Control ID → Architecture</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q11" value="d"> <span>Control ID → Threat Analysis → Architecture → FR → NFR</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q11-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">12. Which industry has the LOWEST risk appetite for security decisions?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q12" value="a"> <span>Financial services and government/military</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q12" value="b"> <span>Startups and consumer tech</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q12" value="c"> <span>Healthcare only</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q12" value="d"> <span>All industries have the same appetite</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q12-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">13. Do Functional or Non-Functional Requirements generally drive architecture more?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q13" value="a"> <span>Functional requirements drive architecture</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q13" value="b"> <span>Non-functional requirements drive architecture</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q13" value="c"> <span>They drive it equally</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q13" value="d"> <span>Neither affects architecture significantly</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q13-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">14. What does the Performance vs Security trade-off primarily impact?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q14" value="a"> <span>Cost only</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q14" value="b"> <span>Encryption is CPU-heavy; deep packet inspection slows bandwidth</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q14" value="c"> <span>User authentication speed</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q14" value="d"> <span>Compliance requirements</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q14-answer"></div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-q-text">15. What is the industry standard MTTD (Mean Time To Detect)?</div>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q15" value="a"> <span>2-5 days</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q15" value="b"> <span>30 days</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q15" value="c"> <span>200+ days</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q15" value="d"> <span>1 year</span>
+                    </label>
+                </div>
+                <div class="quiz-answer" id="q15-answer"></div>
+            </div>
+
+            <div class="score-section">
+                <p style="font-size: 20px; font-weight: 600; color: #f0f6fc;">Ready to check your score?</p>
+                <button class="score-btn" onclick="checkScore('w2', 15)">Check My Score</button>
+                <div id="score-result" class="score-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            'q1': 'a',
+            'q2': 'a',
+            'q3': 'b',
+            'q4': 'b',
+            'q5': 'a',
+            'q6': 'a',
+            'q7': 'b',
+            'q8': 'b',
+            'q9': 'c',
+            'q10': 'a',
+            'q11': 'a',
+            'q12': 'a',
+            'q13': 'b',
+            'q14': 'b',
+            'q15': 'c'
+        };
+
+        function showAns(qid, selected) {
+            const answerDiv = document.getElementById(qid + '-answer');
+            const correct = answers[qid];
+            
+            if (selected === correct) {
+                answerDiv.textContent = '✓ Correct!';
+                answerDiv.className = 'quiz-answer correct';
+            } else {
+                answerDiv.textContent = '✗ Incorrect. Correct answer: ' + correct.toUpperCase();
+                answerDiv.className = 'quiz-answer incorrect';
+            }
+            answerDiv.style.display = 'block';
+        }
+
+        function checkScore(week, totalQuestions) {
+            let score = 0;
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                const qid = 'q' + i;
+                const selected = document.querySelector('input[name="' + qid + '"]:checked');
+                if (selected && selected.value === answers[qid]) {
+                    score++;
+                    showAns(qid, selected.value);
+                } else if (selected) {
+                    showAns(qid, selected.value);
+                }
+            }
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const resultDiv = document.getElementById('score-result');
+            resultDiv.innerHTML = `You scored <strong>${score}/${totalQuestions}</strong> (${percentage}%)`;
+            
+            if (percentage >= 80) {
+                resultDiv.style.color = '#3fb950';
+            } else if (percentage >= 60) {
+                resultDiv.style.color = '#d29922';
+            } else {
+                resultDiv.style.color = '#f85149';
+            }
+        }
+    </script>
+</body>
+</html>

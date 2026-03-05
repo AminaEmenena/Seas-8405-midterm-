@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIST SP 800-207 & CISA Zero Trust Maturity Model</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 19px;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #7ee787;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #1c2128;
+            color: #58a6ff;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #262c36;
+            border-color: #58a6ff;
+        }
+
+        details {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+        }
+
+        summary {
+            cursor: pointer;
+            color: #7ee787;
+            font-weight: bold;
+            padding: 10px;
+            margin: -10px -10px -10px -10px;
+            padding-left: 10px;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+
+        summary:hover {
+            background-color: #0d1117;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+        }
+
+        details > *:not(summary) {
+            color: #e6edf3;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #7ee787;
+        }
+
+        .section-content {
+            color: #c9d1d9;
+        }
+
+        .quiz-container {
+            background-color: #0d1117;
+            border: 2px solid #7ee787;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .quiz-container h2 {
+            color: #7ee787;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #161b22;
+            border-left: 4px solid #7ee787;
+            border-radius: 4px;
+        }
+
+        .quiz-question label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        input[type="text"], input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #7ee787;
+            box-shadow: 0 0 5px rgba(126, 231, 135, 0.3);
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #1f6feb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 19px;
+            font-family: inherit;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #388bfd;
+        }
+
+        button:active {
+            background-color: #1658d4;
+        }
+
+        .check-button {
+            background-color: #7ee787;
+            color: #0d1117;
+        }
+
+        .check-button:hover {
+            background-color: #56d364;
+        }
+
+        .reset-button {
+            background-color: #f85149;
+            color: white;
+        }
+
+        .reset-button:hover {
+            background-color: #f97583;
+        }
+
+        #scoreResult {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+        }
+
+        #scoreResult.show {
+            display: block;
+        }
+
+        .score-success {
+            background-color: rgba(126, 231, 135, 0.2);
+            border: 2px solid #7ee787;
+            color: #7ee787;
+        }
+
+        .score-partial {
+            background-color: rgba(184, 156, 50, 0.2);
+            border: 2px solid #b89c32;
+            color: #d4a574;
+        }
+
+        .score-fail {
+            background-color: rgba(248, 81, 73, 0.2);
+            border: 2px solid #f85149;
+            color: #f85149;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            body {
+                font-size: 17px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+            }
+
+            .quiz-buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">Back to Hub</a>
+
+        <h1>NIST SP 800-207 & CISA Zero Trust Maturity Model</h1>
+        <p class="subtitle">Comprehensive Guide to Zero Trust Architecture and Implementation</p>
+
+        <details>
+            <summary>1. Zero Trust Architecture — Core Principle</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>"Never trust, always verify"</strong> — NIST SP 800-207</li>
+                    <li>Assumes no implicit trust based on network location. Every access request is fully authenticated, authorized, and encrypted, regardless of where it originates.</li>
+                    <li><strong>No Trusted Internal Network:</strong> traditional perimeter security assumed inside = safe. Zero Trust recognizes breaches happen and threats exist INSIDE the perimeter.</li>
+                    <li>Designed to prevent breaches and limit lateral movement. If attacker gains initial access, they can't move freely.</li>
+                    <li><strong>Continuous Verification:</strong> trust is never assumed, always verified. Every access decision considers: <strong>Who</strong> (identity), <strong>What</strong> (resource), <strong>Where</strong> (location), <strong>When</strong> (time), <strong>How</strong> (device posture).</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>2. NIST 800-207 Seven Tenets</summary>
+            <div class="section-content">
+                <ol>
+                    <li>All data sources and computing services are considered resources</li>
+                    <li>All communication is secured regardless of network location</li>
+                    <li>Access to individual enterprise resources is granted on a per-session basis</li>
+                    <li>Access to resources is determined by dynamic policy (including client identity, application, observable state of requesting asset, behavioral/environmental attributes)</li>
+                    <li>Enterprise monitors and measures integrity and security posture of all owned/associated assets</li>
+                    <li>All resource authentication and authorization are dynamic and strictly enforced before access is allowed</li>
+                    <li>Enterprise collects as much information as possible about current state of assets, network infrastructure, and communications to improve security posture</li>
+                </ol>
+            </div>
+        </details>
+
+        <details>
+            <summary>3. Zero Trust Logical Components</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Policy Engine (PE):</strong> Makes the ultimate decision to grant or deny access. "Brain of Zero Trust." Evaluates policies, risk, threat intelligence. Ex: user normally accesses 5 files/day, suddenly accesses 500 → PE elevates risk score. Is the IP known? Device known? Check logs.</li>
+                    <li><strong>Policy Administrator (PA):</strong> "The enforcer." Takes PE decision and makes it happen. Establishes or shuts down communication paths between subjects and resources based on PE decisions.</li>
+                    <li><strong>Policy Enforcement Point (PEP):</strong> "The gateway/bouncer." Enables, monitors, and terminates connections. Enforces PE decisions in real-time. Sits between user and resources, checks IDs, enforces rules. ALL traffic goes through PEP.</li>
+                    <li><strong>SIEM Integration:</strong> Collects security events for analysis. Provides data for policy decisions and threat detection. Feedback loop — tracks all successful and failed authentications, user behavior, network patterns.</li>
+                    <li><strong>Examples:</strong> Impossible travel detection (login from NY at 10am, then London at 10:15am → PE denies London login). Behavior analytics (usually 5 files/day, suddenly 500 → PE sees elevated risk, denies access or requires additional auth).</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>4. Trust Algorithm</summary>
+            <div class="section-content">
+                <p>How the PE makes decisions. Considers multiple inputs:</p>
+                <ul>
+                    <li>User/subject identity and credentials</li>
+                    <li>Device health and compliance status</li>
+                    <li>Resource sensitivity level</li>
+                    <li>Behavioral patterns and anomalies</li>
+                    <li>Threat intelligence feeds</li>
+                    <li>Time and location context</li>
+                    <li><strong>Dynamic:</strong> continuously re-evaluated, not just at initial login</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>5. CISA Zero Trust Maturity Model</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>5 Pillars:</strong> Identity, Devices, Networks, Applications & Workloads, Data</li>
+                    <li><strong>4 Maturity Levels:</strong> Traditional → Initial → Advanced → Optimal</li>
+                    <li><strong>3 Cross-Cutting Capabilities:</strong> Visibility & Analytics, Automation & Orchestration, Governance</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>6. Five Pillars Deep Dive</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Identity:</strong> verification of who/what is accessing resources. MFA, identity governance, continuous validation. Move from "traditional" (limited MFA) to "optimal" (continuous verification, risk-based access).</li>
+                    <li><strong>Devices:</strong> assessment of device health and compliance. Endpoint detection, device inventory, health attestation. Traditional (limited visibility) → Optimal (real-time compliance, automated remediation).</li>
+                    <li><strong>Networks:</strong> segmentation and monitoring. Micro-segmentation, encrypted traffic, network monitoring. Traditional (perimeter-based) → Optimal (fully micro-segmented, encrypted, monitored).</li>
+                    <li><strong>Applications & Workloads:</strong> secure application delivery. App security testing, secure development, workload protection. Traditional (limited testing) → Optimal (continuous testing, secure by design).</li>
+                    <li><strong>Data:</strong> protection of data assets. Classification, encryption, DLP, access controls. Traditional (limited classification) → Optimal (automated classification, granular controls).</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>7. Maturity Levels Explained</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Traditional:</strong> manually configured, static policies, limited visibility. Perimeter-based thinking still dominates.</li>
+                    <li><strong>Initial:</strong> some automation, beginning to implement ZT principles. Starting MFA rollout, basic device management.</li>
+                    <li><strong>Advanced:</strong> centralized identity, automated provisioning, broad MFA. Micro-segmentation beginning. Policy enforcement becoming dynamic.</li>
+                    <li><strong>Optimal:</strong> fully automated, continuous verification, adaptive policies. Real-time risk assessment. All pillars integrated and operating at highest maturity.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>8. Zero Trust Deployment Approaches</summary>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Enhanced Identity Governance:</strong> focus on identity as primary security control. Strong authentication, access policies based on identity attributes. Good starting point for most organizations.</li>
+                    <li><strong>Micro-Segmentation:</strong> divide network into small, isolated segments. Each segment has own security controls. Limits lateral movement.</li>
+                    <li><strong>Software Defined Perimeter (SDP):</strong> creates dynamic, individualized network boundaries around each user/device/application. Resources invisible to unauthorized users.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>9. Zero Trust Implementation — Practical Considerations</summary>
+            <div class="section-content">
+                <ul>
+                    <li>It's a journey, not a destination. Phased approach recommended.</li>
+                    <li>Start with identity (MFA, SSO) as foundation</li>
+                    <li>Expand to device health monitoring</li>
+                    <li>Implement network segmentation progressively</li>
+                    <li>Add application-layer controls</li>
+                    <li>Data classification and protection as ongoing effort</li>
+                    <li>Measure progress against CISA maturity model</li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="quiz-container">
+            <h2>QUIZ — 10 Questions</h2>
+
+            <div class="quiz-question">
+                <label for="q1"><strong>1. Zero Trust core principle:</strong></label>
+                <input type="text" id="q1" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label for="q2"><strong>2. How many tenets in NIST 800-207?</strong></label>
+                <input type="text" id="q2" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label><strong>3. What does Policy Engine (PE) do?</strong></label>
+                <label><input type="radio" name="q3" value="makes_decision"> Makes the ultimate decision to grant or deny access</label>
+                <label><input type="radio" name="q3" value="enforces"> Enforces decisions at the network boundary</label>
+                <label><input type="radio" name="q3" value="monitors"> Only monitors traffic without making decisions</label>
+            </div>
+
+            <div class="quiz-question">
+                <label for="q4"><strong>4. PEP stands for and does what?</strong></label>
+                <input type="text" id="q4" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label><strong>5. Impossible travel detection — which component handles it?</strong></label>
+                <label><input type="radio" name="q5" value="policy_engine"> Policy Engine</label>
+                <label><input type="radio" name="q5" value="policy_admin"> Policy Administrator</label>
+                <label><input type="radio" name="q5" value="policy_enforcement"> Policy Enforcement Point</label>
+            </div>
+
+            <div class="quiz-question">
+                <label for="q6"><strong>6. CISA ZT Maturity Model — name the 5 pillars:</strong></label>
+                <input type="text" id="q6" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label for="q7"><strong>7. Name the 4 maturity levels in order:</strong></label>
+                <input type="text" id="q7" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label for="q8"><strong>8. Name the 3 cross-cutting capabilities:</strong></label>
+                <input type="text" id="q8" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-question">
+                <label><strong>9. Which deployment approach focuses on identity?</strong></label>
+                <label><input type="radio" name="q9" value="identity_governance"> Enhanced Identity Governance</label>
+                <label><input type="radio" name="q9" value="micro_segmentation"> Micro-Segmentation</label>
+                <label><input type="radio" name="q9" value="sdp"> Software Defined Perimeter</label>
+            </div>
+
+            <div class="quiz-question">
+                <label for="q10"><strong>10. What makes Zero Trust different from perimeter security?</strong></label>
+                <input type="text" id="q10" placeholder="Answer here...">
+            </div>
+
+            <div class="quiz-buttons">
+                <button class="check-button" onclick="checkScore('ni', 10)">Check Score</button>
+                <button class="reset-button" onclick="resetQuiz()">Reset Quiz</button>
+            </div>
+
+            <div id="scoreResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function checkScore(quizId, totalQuestions) {
+            let score = 0;
+
+            // Question 1: "Never trust, always verify"
+            const q1Answer = document.getElementById('q1').value.toLowerCase().trim();
+            if (q1Answer.includes('never trust') || q1Answer.includes('always verify') || q1Answer.includes('zero trust principle')) {
+                score++;
+            }
+
+            // Question 2: 7 tenets
+            const q2Answer = document.getElementById('q2').value.toLowerCase().trim();
+            if (q2Answer.includes('7') || q2Answer.includes('seven')) {
+                score++;
+            }
+
+            // Question 3: Policy Engine makes decision
+            const q3Answer = document.querySelector('input[name="q3"]:checked');
+            if (q3Answer && q3Answer.value === 'makes_decision') {
+                score++;
+            }
+
+            // Question 4: Policy Enforcement Point - enables, monitors, terminates connections
+            const q4Answer = document.getElementById('q4').value.toLowerCase().trim();
+            if (q4Answer.includes('policy enforcement point') || q4Answer.includes('pep') || q4Answer.includes('gateway') || q4Answer.includes('bouncer')) {
+                score++;
+            }
+
+            // Question 5: Policy Engine handles impossible travel
+            const q5Answer = document.querySelector('input[name="q5"]:checked');
+            if (q5Answer && q5Answer.value === 'policy_engine') {
+                score++;
+            }
+
+            // Question 6: 5 pillars - Identity, Devices, Networks, Applications & Workloads, Data
+            const q6Answer = document.getElementById('q6').value.toLowerCase().trim();
+            const has5Pillars = (q6Answer.includes('identity') && q6Answer.includes('devices') && q6Answer.includes('networks') && (q6Answer.includes('applications') || q6Answer.includes('workloads')) && q6Answer.includes('data'));
+            if (has5Pillars) {
+                score++;
+            }
+
+            // Question 7: Traditional, Initial, Advanced, Optimal
+            const q7Answer = document.getElementById('q7').value.toLowerCase().trim();
+            const has4Levels = (q7Answer.includes('traditional') && q7Answer.includes('initial') && q7Answer.includes('advanced') && q7Answer.includes('optimal'));
+            if (has4Levels) {
+                score++;
+            }
+
+            // Question 8: Visibility & Analytics, Automation & Orchestration, Governance
+            const q8Answer = document.getElementById('q8').value.toLowerCase().trim();
+            const has3CrossCutting = (q8Answer.includes('visibility') && q8Answer.includes('automation') && q8Answer.includes('governance'));
+            if (has3CrossCutting) {
+                score++;
+            }
+
+            // Question 9: Enhanced Identity Governance
+            const q9Answer = document.querySelector('input[name="q9"]:checked');
+            if (q9Answer && q9Answer.value === 'identity_governance') {
+                score++;
+            }
+
+            // Question 10: No implicit trust, every access verified, not perimeter-based
+            const q10Answer = document.getElementById('q10').value.toLowerCase().trim();
+            if ((q10Answer.includes('no implicit trust') || q10Answer.includes('every access') || q10Answer.includes('always verify') || q10Answer.includes('inside threat')) && !q10Answer.includes('based')) {
+                score++;
+            }
+
+            // Display result
+            const resultDiv = document.getElementById('scoreResult');
+            const percentage = Math.round((score / totalQuestions) * 100);
+
+            let resultClass = 'score-fail';
+            if (percentage >= 80) {
+                resultClass = 'score-success';
+            } else if (percentage >= 60) {
+                resultClass = 'score-partial';
+            }
+
+            resultDiv.innerHTML = `Score: ${score}/${totalQuestions} (${percentage}%)`;
+            resultDiv.className = `show ${resultClass}`;
+
+            window.scrollTo({ top: resultDiv.offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            document.getElementById('q1').value = '';
+            document.getElementById('q2').value = '';
+            document.getElementById('q4').value = '';
+            document.getElementById('q6').value = '';
+            document.getElementById('q7').value = '';
+            document.getElementById('q8').value = '';
+            document.getElementById('q10').value = '';
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            const resultDiv = document.getElementById('scoreResult');
+            resultDiv.className = '';
+            resultDiv.innerHTML = '';
+        }
+    </script>
+</body>
+</html>

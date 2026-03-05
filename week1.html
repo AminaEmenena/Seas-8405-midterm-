@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1 - Cybersecurity Architectures Midterm Prep</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 19px;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 24px;
+            background-color: #21262d;
+            color: #58a6ff;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #30363d;
+            border-color: #58a6ff;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: #58a6ff;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: #8b949e;
+            margin-bottom: 30px;
+        }
+
+        details {
+            margin-bottom: 20px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            background-color: #0d1117;
+            border-color: #58a6ff;
+        }
+
+        summary {
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+            color: #58a6ff;
+            padding: 10px;
+            margin: -10px;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        summary:hover {
+            color: #79c0ff;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+        }
+
+        .key {
+            background-color: #1c2a1c;
+            border-left: 4px solid #56d364;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .warn {
+            background-color: #2a1c1c;
+            border-left: 4px solid #f97583;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .prof {
+            background-color: #1c1c2a;
+            border: 2px solid #d2a8ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-style: italic;
+            color: #d2a8ff;
+        }
+
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .compare-box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .compare-title {
+            font-weight: bold;
+            color: #58a6ff;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #161b22;
+        }
+
+        th {
+            background-color: #21262d;
+            color: #58a6ff;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #30363d;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        tr:hover {
+            background-color: #21262d;
+        }
+
+        .quiz-container {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 30px;
+            border-radius: 6px;
+            margin-top: 30px;
+        }
+
+        .quiz-title {
+            font-size: 32px;
+            color: #58a6ff;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .question-block {
+            background-color: #0d1117;
+            border-left: 4px solid #58a6ff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+
+        .q-number {
+            color: #8b949e;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .q-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e6edf3;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 12px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .option:hover {
+            background-color: #21262d;
+            border-color: #58a6ff;
+        }
+
+        .ans {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .ans.correct {
+            background-color: #1c2a1c;
+            border-left: 4px solid #56d364;
+            color: #56d364;
+        }
+
+        .ans.wrong {
+            background-color: #2a1c1c;
+            border-left: 4px solid #f97583;
+            color: #f97583;
+        }
+
+        .score-button {
+            background-color: #58a6ff;
+            color: #0d1117;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .score-button:hover {
+            background-color: #79c0ff;
+            transform: scale(1.02);
+        }
+
+        #w1score {
+            background-color: #1c2a1c;
+            border: 2px solid #56d364;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 6px;
+            font-size: 22px;
+            color: #56d364;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+        }
+
+        .list-item {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .list-item::before {
+            content: "▸ ";
+            color: #58a6ff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .compare {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            summary {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Hub</a>
+
+        <h1>Week 1: Cybersecurity Architecture Foundations</h1>
+        <p class="subtitle">SEAS8405 Cybersecurity Architectures Midterm Prep Packet</p>
+
+        <!-- Section 1: What is Cybersecurity Architecture? -->
+        <details>
+            <summary>1. What is Cybersecurity Architecture?</summary>
+            <div class="content-section">
+                <p>
+                    <strong>Definition:</strong> Strategic planning of security measures across an organization. Think of it as a blueprint for how security controls, processes, and technologies work together. The key word is <em>"strategic"</em> — not engineering.
+                </p>
+
+                <div class="key">
+                    <strong>Architecture ≠ Buying Tools</strong><br>
+                    Thoughtful design of how security operates. Organizations spend millions on best-of-breed tools but without thoughtful architecture integration, those tools sit isolated and ineffective.
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Architecture vs. Engineering</h3>
+                <div class="compare">
+                    <div class="compare-box">
+                        <div class="compare-title">Architecture (Strategic)</div>
+                        <div class="list-item"><strong>Focus:</strong> WHY/WHAT</div>
+                        <div class="list-item"><strong>Timeline:</strong> 3-5 years</div>
+                        <div class="list-item"><strong>Scope:</strong> Organization-wide</div>
+                        <div class="list-item"><strong>Output:</strong> Blueprints, frameworks</div>
+                        <div class="list-item"><strong>Example:</strong> "We need Zero Trust"</div>
+                    </div>
+                    <div class="compare-box">
+                        <div class="compare-title">Engineering (Tactical)</div>
+                        <div class="list-item"><strong>Focus:</strong> HOW</div>
+                        <div class="list-item"><strong>Timeline:</strong> Short-term sprints</div>
+                        <div class="list-item"><strong>Scope:</strong> Specific systems</div>
+                        <div class="list-item"><strong>Output:</strong> Code, configs, deployments</div>
+                        <div class="list-item"><strong>Example:</strong> "Configure Azure AD conditional access"</div>
+                    </div>
+                </div>
+
+                <div class="key">
+                    <strong>Both Essential</strong><br>
+                    Architecture without engineering = just theory.<br>
+                    Engineering without architecture = chaos.<br>
+                    Feedback flows BOTH ways.
+                </div>
+
+                <div class="prof">
+                    <strong>Professor's Tip:</strong> Think of an architect as a city planner creating a blueprint. They decide where the roads go, where utilities run, how neighborhoods connect. Engineers then build those roads and utilities according to the plan. One without the other fails.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 2: Bake In, Don't Bolt On -->
+        <details>
+            <summary>2. "Bake In, Don't Bolt On"</summary>
+            <div class="content-section">
+                <p>
+                    Security must be integrated from the design phase forward. Bolting on security after development is expensive, ineffective, and fragile.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Real-World Example: Healthcare Organization</h3>
+                <div class="warn">
+                    <strong>Bolting On (After Development):</strong><br>
+                    Required HIPAA compliance requirements<br>
+                    Result: Rewrite 40% of code<br>
+                    Cost: $2 million<br>
+                    Timeline: 9 months<br>
+                    <br>
+                    <strong>If Designed In From Start:</strong><br>
+                    Result: Only 15% added development cost<br>
+                    Timeline: No delay
+                </div>
+
+                <div class="key">
+                    <strong>The Math is Clear:</strong> Designing security early is orders of magnitude cheaper than retrofitting. Every architecture decision should ask: "What security implications does this have?"
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 3: CIA Triad -->
+        <details>
+            <summary>3. CIA Triad — Foundation of Security</summary>
+            <div class="content-section">
+                <p>The CIA Triad is the fundamental framework for security objectives. All security measures map to one of these three pillars.</p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">The Three Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Definition</th>
+                        <th>Controls</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Confidentiality</strong></td>
+                        <td>Protection from unauthorized access. Only authorized parties can view data.</td>
+                        <td>Encryption, least privilege, data classification</td>
+                        <td>Patient medical records, trade secrets</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integrity</strong></td>
+                        <td>Data must be accurate and cannot be modified except by authorized parties.</td>
+                        <td>Digital signatures, hashing, version control</td>
+                        <td>Financial transactions, audit logs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Availability</strong></td>
+                        <td>Resources must be accessible when needed by authorized users.</td>
+                        <td>Uptime, redundancy, recovery plans</td>
+                        <td>ER systems, 911 services, e-commerce sites</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Key Insight: Trade-offs Exist</h3>
+                <p>The CIA pillars are complementary, but they create tensions when optimized independently:</p>
+
+                <div class="compare">
+                    <div class="compare-box">
+                        <div class="compare-title">Confidentiality vs. Availability</div>
+                        <p>Heavy encryption = slower access. Banking apps encrypt everything → users wait for decryption.</p>
+                    </div>
+                    <div class="compare-box">
+                        <div class="compare-title">Availability vs. Confidentiality</div>
+                        <p>More access points for users = larger attack surface. Servers in 20 countries for availability = harder to secure all of them.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">CIA Priority by Industry</h3>
+                <table>
+                    <tr>
+                        <th>Industry</th>
+                        <th>Priority Order</th>
+                        <th>Reasoning</th>
+                    </tr>
+                    <tr>
+                        <td>Military</td>
+                        <td>Confidentiality first</td>
+                        <td>Secrets are strategic assets</td>
+                    </tr>
+                    <tr>
+                        <td>Financial</td>
+                        <td>Integrity first</td>
+                        <td>Accurate transactions are everything</td>
+                    </tr>
+                    <tr>
+                        <td>Emergency Services (911, ER)</td>
+                        <td>Availability first</td>
+                        <td>Lives depend on system uptime</td>
+                    </tr>
+                    <tr>
+                        <td>Healthcare (Holistic)</td>
+                        <td>All balanced</td>
+                        <td>Patient privacy, accurate records, and system uptime all critical</td>
+                    </tr>
+                </table>
+
+                <div class="prof">
+                    <strong>Professor's Exercise:</strong> Credit card payment system. Confidentiality is #1 (PCI-DSS demands encryption and token protection). Integrity is #2 (wrong amount charged = fraud). Availability is #3 (downtime is bad but rare). Remember: "Balance, not absolutes."
+                </div>
+
+                <div class="key">
+                    <strong>Critical Concept:</strong> You cannot optimize all three simultaneously. Architecture means making deliberate choices about which matters most IN YOUR CONTEXT.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 4: ASARP -->
+        <details>
+            <summary>4. ASARP — As Secure As Reasonably Practicable</summary>
+            <div class="content-section">
+                <p>
+                    <strong>Definition (NIST SP 800-160 V1):</strong> The point where investing more in security produces disproportionate negative impact on cost, schedule, or system performance.
+                </p>
+
+                <div class="key">
+                    <strong>Core Principle:</strong> Perfect security is impossible. Your job is to find the right balance for your context. Security enables operations; it doesn't stop them.
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Context Matters: Examples</h3>
+                <table>
+                    <tr>
+                        <th>Context</th>
+                        <th>Priority Sensitivity</th>
+                        <th>Security Level</th>
+                        <th>Rationale</th>
+                    </tr>
+                    <tr>
+                        <td>Medical IoT (infusion pump)</td>
+                        <td>Availability > Confidentiality</td>
+                        <td>Moderate</td>
+                        <td>Patient safety first; breach is bad but patient death is worse</td>
+                    </tr>
+                    <tr>
+                        <td>Nuclear facility SCADA</td>
+                        <td>Everything maximum</td>
+                        <td>Maximum security</td>
+                        <td>Availability (reactor down), Integrity (wrong control = meltdown), Confidentiality (weapon data)</td>
+                    </tr>
+                    <tr>
+                        <td>Consumer web app</td>
+                        <td>Balanced</td>
+                        <td>Industry standard</td>
+                        <td>Competitive; can't sacrifice UX entirely for security</td>
+                    </tr>
+                    <tr>
+                        <td>Super-critical data (nuclear launch codes)</td>
+                        <td>Confidentiality absolute</td>
+                        <td>Maximum security</td>
+                        <td>Cost/schedule/performance are secondary concerns</td>
+                    </tr>
+                </table>
+
+                <div class="prof">
+                    <strong>How to Evaluate ASARP:</strong> (1) Determine data sensitivity level. (2) Conduct threat modeling. (3) Assess user access needs and workflows. (4) Calculate cost/usability impact of each control. (5) Find the sweet spot where adding more security breaks the system or workflow.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 5: Inside-Out vs Outside-In -->
+        <details>
+            <summary>5. Inside-Out vs. Outside-In Thinking</summary>
+            <div class="content-section">
+                <p>
+                    Two complementary perspectives on security architecture. Both are essential; ignoring one creates blind spots.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Inside-Out (Security Functionality)</h3>
+                <p>
+                    <strong>Starting Question:</strong> What features do we need to build secure systems?
+                </p>
+                <div class="compare-box">
+                    <div class="list-item">User authentication (who are you?)</div>
+                    <div class="list-item">Authorization (what can you access?)</div>
+                    <div class="list-item">Logging and audit trails</div>
+                    <div class="list-item">Secrets management (API keys, passwords)</div>
+                    <div class="list-item">API security (rate limiting, validation)</div>
+                    <div class="list-item">Compliance audit capabilities</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Outside-In (Threat Mitigation)</h3>
+                <p>
+                    <strong>Starting Question:</strong> How would an attacker target us, and how do we prevent that?
+                </p>
+                <div class="compare-box">
+                    <div class="list-item">Input validation (prevent SQL injection, XSS)</div>
+                    <div class="list-item">Race condition prevention (Time-of-check-Time-of-use)</div>
+                    <div class="list-item">Secure business logic (can user modify their own ID in URLs?)</div>
+                    <div class="list-item">Auth bypass prevention</div>
+                    <div class="list-item">Secure error handling (don't leak info — "invalid login" not "invalid password for user admin")</div>
+                    <div class="list-item">Injection protection (command injection, etc.)</div>
+                </div>
+
+                <div class="warn">
+                    <strong>Real Attack Scenario:</strong> System implements MFA (inside-out thinking) but forgets session hijacking prevention (outside-in thinking). Attacker steals session cookie after login, completely bypasses MFA. Both perspectives needed!
+                </div>
+
+                <div class="key">
+                    <strong>Remember:</strong> Inside-out = proper features. Outside-in = resilience against attacks. Your architecture needs BOTH.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 6: Governance Hierarchy -->
+        <details>
+            <summary>6. Governance Hierarchy</summary>
+            <div class="content-section">
+                <p>
+                    <strong>Definition:</strong> The formal process ensuring organizational resources (people, money, time, technology) support the organization's mission and strategic goals.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">The Four Levels</h3>
+                <table>
+                    <tr>
+                        <th>Level</th>
+                        <th>Formality</th>
+                        <th>Owner</th>
+                        <th>Scope</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Policy</strong></td>
+                        <td>High Level</td>
+                        <td>Executives</td>
+                        <td>"We will protect customer data"</td>
+                        <td>Data Protection Policy signed by CISO</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standards</strong></td>
+                        <td>Prescriptive</td>
+                        <td>Subject Matter Experts</td>
+                        <td>"Encryption standard is AES-256"</td>
+                        <td>Cryptography Standard document</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Procedures</strong></td>
+                        <td>Step-by-Step</td>
+                        <td>Process Owners</td>
+                        <td>"How to encrypt a database: [1] [2] [3]"</td>
+                        <td>Database Encryption Runbook</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Guidance</strong></td>
+                        <td>Non-Prescriptive</td>
+                        <td>Consultants/Advisors</td>
+                        <td>"Consider using salted hashing for passwords"</td>
+                        <td>Developer Security Best Practices Guide</td>
+                    </tr>
+                </table>
+
+                <div class="prof">
+                    <strong>Architect's Critical Insight:</strong> You must understand WHY before you design HOW. Read the policies to understand what executives care about. Translate business drivers into security architecture. Governance docs reveal what your organization truly values and its risk tolerance.
+                </div>
+
+                <div class="key">
+                    <strong>Flow Direction:</strong> Policy drives Standards, Standards drive Procedures, Procedures are enhanced by Guidance. If you see a security control implemented, trace it back to the policy driver.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 7: Root Cause Analysis (7 Whys) -->
+        <details>
+            <summary>7. Root Cause Analysis — The 7 Whys Technique</summary>
+            <div class="content-section">
+                <p>
+                    A technique to dig past surface-level requirements to find the real strategic objective. Ask "Why?" repeatedly until you reach the organization's core mission.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Example: Background Checks</h3>
+                <div class="compare-box">
+                    <p><strong>1. Why do we require background checks?</strong><br>
+                    → To verify employees are trustworthy.</p>
+
+                    <p><strong>2. Why does trustworthiness matter?</strong><br>
+                    → Company is liable if we hire someone who commits crimes.</p>
+
+                    <p><strong>3. Why is liability bad?</strong><br>
+                    → Damages reputation and customer trust.</p>
+
+                    <p><strong>4. Why does customer trust matter?</strong><br>
+                    → Customers feel safe doing business with us.</p>
+
+                    <p><strong>5. Why does customer feeling safe matter?</strong><br>
+                    → They spend money with us, not competitors.</p>
+
+                    <p><strong>6. Why does customer spending matter?</strong><br>
+                    → Revenue and profit.</p>
+
+                    <p><strong>7. Why does profit matter?</strong><br>
+                    → Shareholder value and organizational survival.</p>
+                </div>
+
+                <div class="key">
+                    <strong>The Point:</strong> Background checks aren't security theater — they drive customer confidence → revenue. Understanding the true "why" prevents building solutions that satisfy immediate needs but miss strategic objectives.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 8: Four Dimensions of Solution Success -->
+        <details>
+            <summary>8. Four Dimensions of Solution Success</summary>
+            <div class="content-section">
+                <p>
+                    Every security solution must be evaluated across four dimensions. Optimizing one at the expense of others is an architectural failure.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">The Four Dimensions</h3>
+
+                <h4 style="color: #56d364; margin-top: 15px;">1. Effectiveness</h4>
+                <p>Does the solution actually work? Is it fit for purpose?</p>
+                <div class="compare-box">
+                    <strong>Example:</strong> WPA2 encryption vs. WEP encryption. Both are encryption, but WPA2 is vastly more effective at protecting WiFi. (WEP is broken.)
+                </div>
+
+                <h4 style="color: #56d364; margin-top: 15px;">2. Maturity (CMMI Levels)</h4>
+                <p>How organized and repeatable is the implementation?</p>
+                <table>
+                    <tr>
+                        <th>Level</th>
+                        <th>Maturity</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Ad-hoc (no process)</td>
+                        <td>Individual engineer patches servers whenever they remember</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Managed (documented process)</td>
+                        <td>Documented patching schedule, someone owns it</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Defined (standardized)</td>
+                        <td>Patching policy applies org-wide consistently</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Quantitatively Managed (measurable)</td>
+                        <td>We track patch deployment time, success rate, uptime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Optimizing (continuous improvement)</td>
+                        <td>Automated patching + continuous monitoring + predictive alerts</td>
+                    </tr>
+                </table>
+
+                <h4 style="color: #56d364; margin-top: 15px;">3. Efficiency</h4>
+                <p>Cost-effectiveness. What's the opportunity cost of this solution?</p>
+                <div class="compare-box">
+                    <p><strong>Budget: $500K + 3 engineers</strong></p>
+                    <p><strong>Option A:</strong> Enterprise SIEM for $500K consuming all 3 engineers full-time</p>
+                    <p><strong>Option B:</strong> Basic EDR for $200K consuming 1 engineer, freeing $300K + 2 engineers for other security initiatives</p>
+                    <p style="margin-top: 15px; font-style: italic;">Key insight: "Ask not just what a solution costs, but what else we could do with those resources."</p>
+                </div>
+
+                <h4 style="color: #56d364; margin-top: 15px;">4. Alignment</h4>
+                <p>Does the solution fit with organizational culture and team skills?</p>
+                <div class="compare-box">
+                    <p>Even a technically perfect solution fails if your team can't maintain it. A complex SIEM might be effective but if your SOC lacks expertise, it won't stay aligned with your operations.</p>
+                </div>
+
+                <div class="key">
+                    <strong>Architectural Decision Rule:</strong> Always evaluate solutions against all four dimensions. If one dimension is failing, the solution will eventually collapse, no matter how strong the other three are.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 9: Optimism Bias -->
+        <details>
+            <summary>9. Optimism Bias</summary>
+            <div class="content-section">
+                <p>
+                    <strong>Definition:</strong> A cognitive bias where humans believe negative outcomes won't happen to them personally, even though they know the outcomes happen to others.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Example Manifestations in Security</h3>
+                <div class="compare-box">
+                    <p>"Our developers write secure code. Other companies get breached, not us."</p>
+                    <p>"We're too small to be targeted."</p>
+                    <p>"Our firewall is good enough; we don't need zero-trust."</p>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Impact on Architecture</h3>
+                <div class="warn">
+                    <div class="list-item">Underestimate likelihood of attacks</div>
+                    <div class="list-item">Underfund security controls</div>
+                    <div class="list-item">Deprioritize security against other projects</div>
+                    <div class="list-item">Assume controls work better than they actually do</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">How to Compensate</h3>
+                <div class="key">
+                    <div class="list-item"><strong>Assume Breach Mentality:</strong> Design for when breach happens, not if.</div>
+                    <div class="list-item"><strong>Threat Modeling:</strong> Use MITRE ATT&CK to systematically map realistic attacks.</div>
+                    <div class="list-item"><strong>Red Team Exercises:</strong> Actually test your defenses against competent adversaries.</div>
+                    <div class="list-item"><strong>Plan for Detection/Response:</strong> You will be breached. Can you detect it? Can you respond?</div>
+                </div>
+
+                <div class="prof">
+                    <strong>Professor's Truth:</strong> "Everyone thinks they're special. Everyone is wrong. Assume breach."
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 10: Top-Down vs Bottom-Up -->
+        <details>
+            <summary>10. Top-Down vs. Bottom-Up Architecture</summary>
+            <div class="content-section">
+                <p>
+                    Two approaches to designing security architecture. Neither is complete alone; best practice uses both in concert.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Top-Down Approach</h3>
+                <div class="compare-box">
+                    <p><strong>Flow:</strong> Org Goals → Tech Goals → Security Requirements → Implementation</p>
+                    <p style="margin-top: 10px;"><strong>Pros:</strong></p>
+                    <div class="list-item">Strategic alignment with business objectives</div>
+                    <div class="list-item">Ensures security serves organizational mission</div>
+                    <p style="margin-top: 10px;"><strong>Cons:</strong></p>
+                    <div class="list-item">Time-consuming to gather all requirements</div>
+                    <div class="list-item">May miss practical technical constraints</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Bottom-Up Approach</h3>
+                <div class="compare-box">
+                    <p><strong>Flow:</strong> Current Tech Environments → Modular Architectures → Aggregate to Org Patterns</p>
+                    <p style="margin-top: 10px;"><strong>Pros:</strong></p>
+                    <div class="list-item">Grounded in practical reality</div>
+                    <div class="list-item">Leverages existing systems and expertise</div>
+                    <p style="margin-top: 10px;"><strong>Cons:</strong></p>
+                    <div class="list-item">May lose strategic view</div>
+                    <div class="list-item">Risk of fragmented, inconsistent architecture</div>
+                </div>
+
+                <div class="key">
+                    <strong>Best Practice:</strong> Concerted use of BOTH. Start top-down for strategic alignment, verify feasibility with bottom-up technical constraints, iterate.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 11: MITRE Corporation & ATT&CK -->
+        <details>
+            <summary>11. MITRE Corporation & ATT&CK Framework</summary>
+            <div class="content-section">
+                <p>
+                    <strong>MITRE Corporation:</strong> A Federally Funded Research and Development Center (FFRDC), non-profit, vendor-neutral. Trusted to conduct research in national interest.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">ATT&CK Framework Overview</h3>
+                <div class="key">
+                    <strong>ATT&CK = Adversarial Tactics, Techniques, and Common Knowledge</strong><br>
+                    <br>
+                    700+ techniques documented<br>
+                    14+ tactics organized in kill chain<br>
+                    Based on real-world observations from incidents and threat intelligence<br>
+                    Vendor-neutral (applies to all environments)
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Kill Chain (Attack Progression)</h3>
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Stage</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Reconnaissance</td>
+                        <td>Gather info about target</td>
+                        <td>Research LinkedIn for employees</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Initial Access</td>
+                        <td>Get first foothold</td>
+                        <td>Phishing email with malware</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Execution</td>
+                        <td>Run attacker code</td>
+                        <td>Execute macro in Office document</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Persistence</td>
+                        <td>Maintain access if rebooted</td>
+                        <td>Create hidden user account</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Privilege Escalation</td>
+                        <td>Gain higher privileges</td>
+                        <td>Exploit kernel vuln for admin</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Defense Evasion</td>
+                        <td>Avoid detection</td>
+                        <td>Disable Windows Defender</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Credential Access</td>
+                        <td>Steal user credentials</td>
+                        <td>Keylogger, credential dumping</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Discovery</td>
+                        <td>Map network and systems</td>
+                        <td>ipconfig, net view commands</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Lateral Movement</td>
+                        <td>Move to other systems</td>
+                        <td>Pass-the-hash attacks</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Collection</td>
+                        <td>Gather target data</td>
+                        <td>Copy files to staging area</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>Exfiltration</td>
+                        <td>Extract data</td>
+                        <td>Upload to attacker server</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>Impact</td>
+                        <td>Achieve objective</td>
+                        <td>Ransomware encryption, deletion</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">ATT&CK Matrices</h3>
+                <table>
+                    <tr>
+                        <th>Matrix</th>
+                        <th>Coverage</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Enterprise</strong></td>
+                        <td>Windows, macOS, Linux, Cloud platforms, Network infrastructure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mobile</strong></td>
+                        <td>Android, iOS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ICS</strong></td>
+                        <td>Industrial Control Systems (power grids, manufacturing, etc.)</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">ATT&CK Navigator</h3>
+                <div class="compare-box">
+                    <p>Interactive tool for gap analysis. Color-code your organization's defenses:</p>
+                    <p style="margin-top: 10px;"><strong style="color: #f97583;">RED:</strong> No coverage against this technique</p>
+                    <p style="margin-top: 5px;"><strong style="color: #d2a8ff;">YELLOW:</strong> Partial coverage</p>
+                    <p style="margin-top: 5px;"><strong style="color: #56d364;">GREEN:</strong> Good coverage</p>
+                    <p style="margin-top: 10px;">Identify your weakest defenses and prioritize remediation.</p>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Critical Statistic</h3>
+                <div class="key">
+                    <strong>81% of successful intrusions involve ZERO malware.</strong><br>
+                    <br>
+                    Attackers use legitimate tools and stolen credentials. This means:<br>
+                    <div class="list-item">Antivirus/anti-malware alone insufficient</div>
+                    <div class="list-item">Behavioral detection critical (unusual login patterns, lateral movement)</div>
+                    <div class="list-item">Credential security is foundation (MFA, credential hygiene)</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">APT Examples</h3>
+                <table>
+                    <tr>
+                        <th>APT Group</th>
+                        <th>Attribution</th>
+                        <th>Known Tactics</th>
+                    </tr>
+                    <tr>
+                        <td><strong>APT28 (Fancy Bear)</strong></td>
+                        <td>Russian GRU (military intelligence)</td>
+                        <td>Spear-phishing, 0-days, persistence</td>
+                    </tr>
+                    <tr>
+                        <td><strong>APT29 (Cozy Bear)</strong></td>
+                        <td>Russian SVR (foreign intelligence)</td>
+                        <td>Sophisticated supply chain attacks, detection evasion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scattered Spider</strong></td>
+                        <td>Criminal gang (extortion group)</td>
+                        <td>Social engineering, credential theft, ransomware deployment</td>
+                    </tr>
+                </table>
+
+                <div class="prof">
+                    <strong>Why This Matters for Architecture:</strong> ATT&CK provides a common language between defenders and executives. Instead of "we need better security," say "We have gaps in lateral movement detection (MITRE ATT&CK technique T1021). Here's our remediation plan."
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 12: D3FEND, MITRE Engage & Ecosystem -->
+        <details>
+            <summary>12. D3FEND, MITRE Engage & Ecosystem</summary>
+            <div class="content-section">
+                <h3 style="margin-top: 20px; color: #58a6ff;">D3FEND Framework</h3>
+                <p>
+                    <strong>D3FEND = Detection, Denial, and Disruption Framework Empowering Network Defense</strong>
+                </p>
+                <p>
+                    Maps defensive techniques that counter ATT&CK techniques. If ATT&CK is "what can attackers do?", D3FEND is "what can defenders do to counter it?"
+                </p>
+
+                <div class="key">
+                    <strong>D3FEND Categories:</strong><br>
+                    <div class="list-item"><strong>Model:</strong> Understand systems and data flows</div>
+                    <div class="list-item"><strong>Harden:</strong> Strengthen systems against attack</div>
+                    <div class="list-item"><strong>Detect:</strong> Identify intrusions in progress</div>
+                    <div class="list-item"><strong>Isolate:</strong> Contain compromise</div>
+                    <div class="list-item"><strong>Deceive:</strong> Mislead attackers</div>
+                    <div class="list-item"><strong>Evict:</strong> Remove attackers from network</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">MITRE Engage Framework</h3>
+                <p>
+                    Active defense through <strong>deception</strong>. Instead of only defending passively, actively deceive attackers.
+                </p>
+
+                <div class="compare-box">
+                    <p><strong>Techniques:</strong></p>
+                    <div class="list-item">Honeypots (fake systems that log attacker activity)</div>
+                    <div class="list-item">Fake credentials (canary tokens that alert if used)</div>
+                    <div class="list-item">Deception infrastructure (fake databases, servers)</div>
+                </div>
+
+                <div class="compare-box">
+                    <p><strong>Goals:</strong></p>
+                    <div class="list-item">Detect & Expose attacker presence</div>
+                    <div class="list-item">Impose costs on attacker (consume their time)</div>
+                    <div class="list-item">Gather intelligence on attacker TTPs (tactics, techniques, procedures)</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Phased Implementation Approach</h3>
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Activity</th>
+                        <th>Outcome</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. Assessment</strong></td>
+                        <td>Map current defenses against ATT&CK/D3FEND</td>
+                        <td>Gap analysis showing weak areas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Telemetry</strong></td>
+                        <td>Implement logging/monitoring of gaps</td>
+                        <td>Visibility into what's happening</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Detection Engineering</strong></td>
+                        <td>Build detection rules for attacks</td>
+                        <td>Automated alerting on suspicious behavior</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Operationalization</strong></td>
+                        <td>Integrate into SOC, runbooks, response</td>
+                        <td>Effective incident response capability</td>
+                    </tr>
+                </table>
+
+                <div class="key">
+                    <strong>MITRE Ecosystem Key Insights:</strong><br>
+                    <div class="list-item">Common Language (ATT&CK): Defenders and executives speak same vocabulary</div>
+                    <div class="list-item">Evidence-Based: Built on real incident data, not theories</div>
+                    <div class="list-item">Vendor-Neutral: Applies regardless of what tools you use</div>
+                    <div class="list-item">Comprehensive Coverage: 14+ tactics, 700+ techniques</div>
+                    <div class="list-item">Integration Ready: Works with existing tools and processes</div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 13: Regulatory Frameworks -->
+        <details>
+            <summary>13. Regulatory Frameworks</summary>
+            <div class="content-section">
+                <p>
+                    Regulatory compliance is NOT optional. Non-compliance results in fines, loss of operating license, lawsuits, and criminal penalties. These become non-negotiable architectural requirements.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Major Regulatory Frameworks</h3>
+                <table>
+                    <tr>
+                        <th>Framework</th>
+                        <th>Scope</th>
+                        <th>Key Requirement</th>
+                        <th>Penalty for Breach</th>
+                    </tr>
+                    <tr>
+                        <td><strong>ISO 27001</strong></td>
+                        <td>Any organization</td>
+                        <td>Information security management system</td>
+                        <td>Loss of certification, competitive disadvantage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NIST 800-53</strong></td>
+                        <td>U.S. Federal agencies</td>
+                        <td>Security controls framework</td>
+                        <td>Contract termination, funding loss</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HIPAA</strong></td>
+                        <td>Healthcare providers</td>
+                        <td>Patient data protection, 60-day breach notification</td>
+                        <td>Up to $50K per violation, loss of Medicare/Medicaid</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCI-DSS</strong></td>
+                        <td>Credit card processors</td>
+                        <td>Payment card security, tokenization</td>
+                        <td>Up to $100K per month, ability to process cards revoked</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GDPR</strong></td>
+                        <td>EU citizens' data</td>
+                        <td>Data protection, 72-hour breach notification</td>
+                        <td>Up to 4% of global revenue, massive reputational damage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SOX</strong></td>
+                        <td>Public companies</td>
+                        <td>Financial controls and audit trail</td>
+                        <td>Criminal penalties, CEO/CFO personal liability</td>
+                    </tr>
+                </table>
+
+                <div class="warn">
+                    <strong>Critical:</strong> Regulatory frameworks are not constraints on architecture — they ARE your architecture drivers. Security architects must understand regulatory landscape in their industry and build it into baseline requirements.
+                </div>
+
+                <div class="prof">
+                    <strong>Case Study Reality:</strong> Healthcare organization: HIPAA 60-day notification requirement means you MUST have: (1) breach detection capability, (2) incident response team, (3) forensic investigation process, (4) legal/compliance team coordinated. These aren't nice-to-haves; they're requirements built into architecture.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 14: Security Zones in Practice -->
+        <details>
+            <summary>14. Security Zones in Practice</summary>
+            <div class="content-section">
+                <p>
+                    Organize infrastructure into zones of trust. Apply controls at boundaries between zones. Limit what traffic can cross boundaries.
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Five-Zone Model (Most to Least Trusted)</h3>
+                <table>
+                    <tr>
+                        <th>Zone</th>
+                        <th>Contents</th>
+                        <th>Trust Level</th>
+                        <th>Access Control</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. Core Assets</strong></td>
+                        <td>Crown jewels: databases, secrets, critical systems</td>
+                        <td>Highest</td>
+                        <td>Extreme restrictions; minimum necessary access only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Trusted Zone</strong></td>
+                        <td>Enterprise LAN, company-owned devices</td>
+                        <td>High</td>
+                        <td>Restricted; behind firewall; on VPN required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Selective Zone</strong></td>
+                        <td>Approved clouds (.mil, .gov), authorized SaaS</td>
+                        <td>Medium</td>
+                        <td>Controlled; specific data types allowed; contracts required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Partner Networks</strong></td>
+                        <td>VPN, third-party vendors, contractors</td>
+                        <td>Low</td>
+                        <td>Restricted to specific functions; monitored; limited to minimum necessary</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Untrusted Zone</strong></td>
+                        <td>Public internet, random users</td>
+                        <td>Lowest</td>
+                        <td>Maximum restrictions; assume hostile; validate everything</td>
+                    </tr>
+                </table>
+
+                <div class="key">
+                    <strong>Zone Control Implementation:</strong><br>
+                    <div class="list-item">Controls enforced at BOUNDARIES between zones</div>
+                    <div class="list-item">Firewall rules limit cross-zone traffic</div>
+                    <div class="list-item">Proxies inspect traffic at boundaries</div>
+                    <div class="list-item">Logging required for all cross-zone attempts</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Shadow IT Risk</h3>
+                <div class="warn">
+                    <strong>Shadow IT bypasses zone controls.</strong><br>
+                    Employee uses personal Dropbox account to store company data → data leaves trusted zone into Selective/Partner zone uncontrolled. Your beautiful zone architecture becomes Swiss cheese.
+                </div>
+
+                <div class="prof">
+                    <strong>Architectural Implication:</strong> Don't just design zones; design policies and monitoring to ensure zones are respected. The architecture is only as strong as its enforcement.
+                </div>
+            </div>
+        </details>
+
+        <!-- Section 15: Air Gap Architecture -->
+        <details>
+            <summary>15. Air Gap Architecture</summary>
+            <div class="content-section">
+                <p>
+                    <strong>Definition:</strong> Physical or logical disconnection of a system from untrusted networks. Data transfer only through controlled manual processes (no automatic connections).
+                </p>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Key Distinction</h3>
+                <div class="compare-box">
+                    <p><strong>Air-Gapped:</strong> System has no network connection. Data transfer is manual (USB, written media, strictly controlled).</p>
+                    <p><strong>NOT Air-Gapped:</strong> System is disconnected during normal operation but has automatic scheduled sync → This is NOT air gapped; it's just intermittently connected.</p>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Data Transfer Methods</h3>
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Risk Level</th>
+                    </tr>
+                    <tr>
+                        <td>USB drive, removable media</td>
+                        <td>Sneakernet</td>
+                        <td>Physical media physically moved between systems</td>
+                        <td>Medium (media can be infected)</td>
+                    </tr>
+                    <tr>
+                        <td>One-way electrical connection</td>
+                        <td>Data Diode</td>
+                        <td>Hardware device allowing only one-way data flow</td>
+                        <td>Low (direction enforced electrically)</td>
+                    </tr>
+                    <tr>
+                        <td>Manual inspection, copying</td>
+                        <td>Human Review</td>
+                        <td>Person manually inspects and copies data</td>
+                        <td>Medium (depends on human error)</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Use Cases</h3>
+                <div class="compare-box">
+                    <div class="list-item"><strong>Nuclear facilities:</strong> Control systems completely isolated from internet</div>
+                    <div class="list-item"><strong>SIPRNET (Secret Internet Protocol Router Network):</strong> U.S. military classified network</div>
+                    <div class="list-item"><strong>Power grid control:</strong> SCADA systems air-gapped from IT networks</div>
+                    <div class="list-item"><strong>Research labs:</strong> Isolate sensitive research systems</div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #58a6ff;">Important Warning</h3>
+                <div class="warn">
+                    <strong>Even air gaps can be bridged.</strong><br>
+                    <br>
+                    <strong>Stuxnet Case Study:</strong> Iranian nuclear enrichment facility used air-gapped SCADA network. Stuxnet bypassed air gap by: (1) Infecting USB drives used by maintenance personnel, (2) Spreading through Windows systems used for configuration, (3) Reaching isolated SCADA network. Result: Physical damage to centrifuges.<br>
+                    <br>
+                    Lesson: Air gaps protect against MOST threats but require defense-in-depth. Assume sophisticated adversary can bridge gaps. Harden endpoints at gap boundaries.
+                </div>
+
+                <div class="key">
+                    <strong>Architectural Decision:</strong> Air gaps are expensive (no remote management, slow incident response) and not foolproof (sophisticated adversaries can bridge them). Use only when confidentiality is absolute priority and threat model includes sophisticated nation-state actors.
+                </div>
+            </div>
+        </details>
+
+        <!-- QUIZ SECTION -->
+        <div class="quiz-container">
+            <div class="quiz-title">Week 1 Knowledge Check Quiz</div>
+            <p style="margin-bottom: 25px; font-size: 18px; color: #8b949e;">
+                Answer all 15 questions. Click an option to see if it's correct. At the bottom, click "Check My Score" to see your results.
+            </p>
+
+            <!-- Q1 -->
+            <div class="question-block" id="w1q1">
+                <div class="q-number">Question 1 of 15</div>
+                <div class="q-text">What is the primary difference between cybersecurity architecture and cybersecurity engineering?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q1','a')">Architecture focuses on WHY/WHAT over 3-5 years organization-wide; Engineering focuses on HOW in short-term sprints</div>
+                    <div class="option" onclick="showAns('w1q1','b')">Architecture is cheaper and faster than engineering</div>
+                    <div class="option" onclick="showAns('w1q1','b')">Engineering is more important than architecture</div>
+                    <div class="option" onclick="showAns('w1q1','b')">They are the same thing; the terms are interchangeable</div>
+                </div>
+                <div class="ans correct">Correct! Architecture is strategic (WHY/WHAT, long-term, org-wide). Engineering is tactical (HOW, short-term, specific systems). Both are essential.</div>
+                <div class="ans wrong">Incorrect. Review Section 1. Architecture and engineering are distinct but complementary disciplines.</div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question-block" id="w1q2">
+                <div class="q-number">Question 2 of 15</div>
+                <div class="q-text">What does "Bake In, Don't Bolt On" mean in security architecture?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q2','a')">Security should be integrated from the design phase forward, not added afterward as an afterthought</div>
+                    <div class="option" onclick="showAns('w1q2','b')">Security controls should be bolted onto existing systems for flexibility</div>
+                    <div class="option" onclick="showAns('w1q2','b')">Security should only be considered after development is complete</div>
+                    <div class="option" onclick="showAns('w1q2','b')">Baking and bolting refer to different types of firewalls</div>
+                </div>
+                <div class="ans correct">Correct! "Bake In, Don't Bolt On" means security must be part of initial design. Bolting on later is expensive (e.g., $2M + 9 months for healthcare org).</div>
+                <div class="ans wrong">Incorrect. Review Section 2. Early integration is dramatically cheaper and more effective than retrofitting.</div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question-block" id="w1q3">
+                <div class="q-number">Question 3 of 15</div>
+                <div class="q-text">For a hospital's patient records system, which CIA component is the highest priority?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q3','b')">Confidentiality only; patient privacy is all that matters</div>
+                    <div class="option" onclick="showAns('w1q3','b')">Availability only; uptime is all that matters</div>
+                    <div class="option" onclick="showAns('w1q3','a')">All three balanced: patient privacy (confidentiality), accurate records (integrity), and system uptime (availability) are all critical</div>
+                    <div class="option" onclick="showAns('w1q3','b')">Integrity only; data accuracy is all that matters</div>
+                </div>
+                <div class="ans correct">Correct! Healthcare requires balanced CIA. Patient privacy, accurate medical records, and system uptime all directly impact patient safety.</div>
+                <div class="ans wrong">Incorrect. Review Section 3. Healthcare systems need all three pillars balanced; no single component can be ignored.</div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question-block" id="w1q4">
+                <div class="q-number">Question 4 of 15</div>
+                <div class="q-text">What does ASARP stand for in NIST SP 800-160?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q4','a')">As Secure As Reasonably Practicable</div>
+                    <div class="option" onclick="showAns('w1q4','b')">Authentication System And Reporting Protocol</div>
+                    <div class="option" onclick="showAns('w1q4','b')">Advanced Security Architecture and Risk Plan</div>
+                    <div class="option" onclick="showAns('w1q4','b')">Architecture Standards And Practice Requirements</div>
+                </div>
+                <div class="ans correct">Correct! ASARP is the point where additional security investment produces disproportionate negative impact on cost/schedule/performance.</div>
+                <div class="ans wrong">Incorrect. Review Section 4. ASARP defines the balance point between security and operational practicality.</div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question-block" id="w1q5">
+                <div class="q-number">Question 5 of 15</div>
+                <div class="q-text">According to the course, what percentage of successful intrusions involve zero malware?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q5','a')">81%</div>
+                    <div class="option" onclick="showAns('w1q5','b')">45%</div>
+                    <div class="option" onclick="showAns('w1q5','b')">92%</div>
+                    <div class="option" onclick="showAns('w1q5','b')">23%</div>
+                </div>
+                <div class="ans correct">Correct! 81% of successful intrusions use legitimate tools and stolen credentials, not malware. This means antivirus alone is insufficient; behavioral detection is critical.</div>
+                <div class="ans wrong">Incorrect. Review Section 11. The 81% statistic shows that most modern attacks use legitimate tools, not malware.</div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="question-block" id="w1q6">
+                <div class="q-number">Question 6 of 15</div>
+                <div class="q-text">What does D3FEND stand for?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q6','a')">Detection, Denial, and Disruption Framework Empowering Network Defense</div>
+                    <div class="option" onclick="showAns('w1q6','b')">Defensive Deployment and Deception Endpoint Framework</div>
+                    <div class="option" onclick="showAns('w1q6','b')">Data Defense and Digital Engagement Framework</div>
+                    <div class="option" onclick="showAns('w1q6','b')">Distributed Defense and Detection Engineering Framework</div>
+                </div>
+                <div class="ans correct">Correct! D3FEND maps defensive techniques that counter ATT&CK attack techniques. It provides the defensive counterpart to ATT&CK's attack perspective.</div>
+                <div class="ans wrong">Incorrect. Review Section 12. D3FEND is MITRE's defensive framework complementing ATT&CK.</div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="question-block" id="w1q7">
+                <div class="q-number">Question 7 of 15</div>
+                <div class="q-text">What is the correct order in the governance hierarchy from high-level to prescriptive?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q7','a')">Policy → Standards → Procedures → Guidance</div>
+                    <div class="option" onclick="showAns('w1q7','b')">Guidance → Procedures → Standards → Policy</div>
+                    <div class="option" onclick="showAns('w1q7','b')">Procedures → Policy → Standards → Guidance</div>
+                    <div class="option" onclick="showAns('w1q7','b')">Standards → Policy → Guidance → Procedures</div>
+                </div>
+                <div class="ans correct">Correct! Policy (high-level exec) → Standards (prescriptive SME) → Procedures (step-by-step) → Guidance (non-prescriptive consultant advice).</div>
+                <div class="ans wrong">Incorrect. Review Section 6. The governance hierarchy flows from strategic policy down to tactical guidance.</div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="question-block" id="w1q8">
+                <div class="q-number">Question 8 of 15</div>
+                <div class="q-text">What is the primary impact of optimism bias on security architecture?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q8','a')">It leads organizations to underestimate attacks, underfund security, and assume breach won't happen to them</div>
+                    <div class="option" onclick="showAns('w1q8','b')">It causes architects to over-design security unnecessarily</div>
+                    <div class="option" onclick="showAns('w1q8','b')">It prevents organizations from buying any security tools</div>
+                    <div class="option" onclick="showAns('w1q8','b')">It has no impact on security decisions</div>
+                </div>
+                <div class="ans correct">Correct! Optimism bias causes "it won't happen to us" thinking. Combat it with assume-breach mentality, threat modeling, and red team exercises.</div>
+                <div class="ans wrong">Incorrect. Review Section 9. Optimism bias is a real cognitive threat that undermines security decision-making.</div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="question-block" id="w1q9">
+                <div class="q-number">Question 9 of 15</div>
+                <div class="q-text">How many tactics and techniques does the MITRE ATT&CK framework document?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q9','a')">700+ techniques and 14+ tactics</div>
+                    <div class="option" onclick="showAns('w1q9','b')">50 techniques and 5 tactics</div>
+                    <div class="option" onclick="showAns('w1q9','b')">200 techniques and 10 tactics</div>
+                    <div class="option" onclick="showAns('w1q9','b')">1000+ techniques and 20+ tactics</div>
+                </div>
+                <div class="ans correct">Correct! ATT&CK documents 700+ attack techniques across 14+ tactics, based on real-world attack observations.</div>
+                <div class="ans wrong">Incorrect. Review Section 11. ATT&CK is comprehensive but not unlimited.</div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="question-block" id="w1q10">
+                <div class="q-number">Question 10 of 15</div>
+                <div class="q-text">What is the key difference between Inside-Out and Outside-In security thinking?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q10','a')">Inside-Out asks "What features do we need?" (functionality). Outside-In asks "How would attackers target us?" (threat mitigation)</div>
+                    <div class="option" onclick="showAns('w1q10','b')">Inside-Out is for internal networks; Outside-In is for external networks</div>
+                    <div class="option" onclick="showAns('w1q10','b')">Outside-In is older and Inside-Out is newer</div>
+                    <div class="option" onclick="showAns('w1q10','b')">They are the same concept with different names</div>
+                </div>
+                <div class="ans correct">Correct! Inside-Out: "What security features should we build?" (authentication, authorization, logging). Outside-In: "What attacks should we defend against?" (injection, session hijacking, privilege escalation). Both essential.</div>
+                <div class="ans wrong">Incorrect. Review Section 5. These are complementary perspectives; missing either creates vulnerabilities.</div>
+            </div>
+
+            <!-- Q11 -->
+            <div class="question-block" id="w1q11">
+                <div class="q-number">Question 11 of 15</div>
+                <div class="q-text">What is MITRE Engage's primary mechanism for active defense?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q11','a')">Deception through honeypots, fake credentials, and deception infrastructure to detect/expose attackers and gather intelligence</div>
+                    <div class="option" onclick="showAns('w1q11','b')">Installing more firewalls and intrusion prevention systems</div>
+                    <div class="option" onclick="showAns('w1q11','b')">Hiring more security staff to monitor networks</div>
+                    <div class="option" onclick="showAns('w1q11','b')">Blocking all external internet traffic</div>
+                </div>
+                <div class="ans correct">Correct! MITRE Engage uses deception (honeypots, canary tokens, fake systems) to deceive attackers, expose their presence, impose costs, and gather intelligence on their TTPs.</div>
+                <div class="ans wrong">Incorrect. Review Section 12. Engage focuses on active deception, not passive defense.</div>
+            </div>
+
+            <!-- Q12 -->
+            <div class="question-block" id="w1q12">
+                <div class="q-number">Question 12 of 15</div>
+                <div class="q-text">According to the Four Dimensions of Solution Success, what happens when alignment fails?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q12','a')">Even a technically correct solution fails because the team lacks skills or cultural fit to maintain it</div>
+                    <div class="option" onclick="showAns('w1q12','b')">The solution is automatically successful regardless of team capability</div>
+                    <div class="option" onclick="showAns('w1q12','b')">Alignment is irrelevant to architecture decisions</div>
+                    <div class="option" onclick="showAns('w1q12','b')">Alignment only matters for sales, not implementation</div>
+                </div>
+                <div class="ans correct">Correct! Alignment is critical. A perfect SIEM architecture fails if your SOC lacks expertise or your culture can't support it. All four dimensions matter.</div>
+                <div class="ans wrong">Incorrect. Review Section 8. Alignment is one of four critical dimensions. Ignoring it is an architectural failure.</div>
+            </div>
+
+            <!-- Q13 -->
+            <div class="question-block" id="w1q13">
+                <div class="q-number">Question 13 of 15</div>
+                <div class="q-text">What is the correct order for phased implementation of MITRE frameworks?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q13','a')">Assessment → Telemetry → Detection Engineering → Operationalization</div>
+                    <div class="option" onclick="showAns('w1q13','b')">Operationalization → Assessment → Telemetry → Detection Engineering</div>
+                    <div class="option" onclick="showAns('w1q13','b')">Detection Engineering → Assessment → Operationalization → Telemetry</div>
+                    <div class="option" onclick="showAns('w1q13','b')">Telemetry → Operationalization → Assessment → Detection Engineering</div>
+                </div>
+                <div class="ans correct">Correct! Phased implementation: (1) Assessment (gap analysis), (2) Telemetry (visibility), (3) Detection Engineering (automated detection), (4) Operationalization (integrate into SOC).</div>
+                <div class="ans wrong">Incorrect. Review Section 12. The phases must be sequential; operationalization comes last after foundation work.</div>
+            </div>
+
+            <!-- Q14 -->
+            <div class="question-block" id="w1q14">
+                <div class="q-number">Question 14 of 15</div>
+                <div class="q-text">What defines an air-gapped system?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q14','a')">Physical or logical disconnection from untrusted networks; data transfer only through manual controlled processes, not automatic connections</div>
+                    <div class="option" onclick="showAns('w1q14','b')">A system that is disconnected during business hours but syncs automatically at night</div>
+                    <div class="option" onclick="showAns('w1q14','b')">A system with a slow internet connection</div>
+                    <div class="option" onclick="showAns('w1q14','b')">A system that uses satellite internet instead of cables</div>
+                </div>
+                <div class="ans correct">Correct! Air gaps require NO automatic network connections. Data transfer is manual (USB, sneakernet). Automatic scheduled sync = NOT air gapped.</div>
+                <div class="ans wrong">Incorrect. Review Section 15. Air gap means truly isolated; any automatic connection breaks the air gap.</div>
+            </div>
+
+            <!-- Q15 -->
+            <div class="question-block" id="w1q15">
+                <div class="q-number">Question 15 of 15</div>
+                <div class="q-text">What is the primary purpose of the ATT&CK Navigator tool?</div>
+                <div class="options">
+                    <div class="option" onclick="showAns('w1q15','a')">Color-coded gap analysis showing which ATT&CK techniques your defenses cover (red=no coverage, yellow=partial, green=good)</div>
+                    <div class="option" onclick="showAns('w1q15','b')">A tool for launching attacks against your own systems</div>
+                    <div class="option" onclick="showAns('w1q15','b')">A navigation app for traveling between office locations</div>
+                    <div class="option" onclick="showAns('w1q15','b')">A training tool exclusively for pentesting companies</div>
+                </div>
+                <div class="ans correct">Correct! ATT&CK Navigator enables visual gap analysis. Color-code your defensive coverage and identify weakest areas for remediation prioritization.</div>
+                <div class="ans wrong">Incorrect. Review Section 11. Navigator is a defense-focused tool for visualizing coverage gaps against ATT&CK techniques.</div>
+            </div>
+
+            <!-- Score Section -->
+            <button class="score-button" onclick="checkScore('w1',15)">Check My Score</button>
+            <div id="w1score"></div>
+        </div>
+    </div>
+
+    <script>
+        function showAns(qid,type){
+            var q=document.getElementById(qid);
+            q.querySelectorAll('.ans').forEach(a=>a.style.display='none');
+            if(type==='a'){
+                q.querySelector('.ans.correct').style.display='block';
+                q.dataset.correct='1';
+            }
+            else{
+                q.querySelector('.ans.wrong').style.display='block';
+                q.dataset.correct='0';
+            }
+        }
+        function checkScore(prefix,total){
+            var correct=0;
+            for(var i=1;i<=total;i++){
+                var q=document.getElementById(prefix+'q'+i);
+                if(q&&q.dataset.correct==='1')correct++;
+            }
+            var pct=Math.round((correct/total)*100);
+            var grade=pct>=90?'A - Excellent!':pct>=80?'B - Good!':pct>=70?'C - Review weak areas':pct>=60?'D - Need more study':'F - Start from the top';
+            document.getElementById(prefix+'score').innerHTML='Score: '+correct+'/'+total+' ('+pct+'%)<br><span style="font-size:1.2em">'+grade+'</span>';
+        }
+    </script>
+</body>
+</html>

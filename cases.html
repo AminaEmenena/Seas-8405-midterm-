@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Studies - Healthcare & Cimpress</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 19px;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #ffa657;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        details {
+            margin-bottom: 20px;
+            border-left: 4px solid #ffa657;
+            padding-left: 20px;
+            background-color: rgba(255, 166, 87, 0.05);
+            padding: 15px 15px 15px 20px;
+            border-radius: 4px;
+        }
+        
+        summary {
+            color: #ffa657;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.05em;
+            padding: 5px 0;
+        }
+        
+        summary:hover {
+            color: #ffb86d;
+        }
+        
+        details[open] > summary {
+            margin-bottom: 15px;
+        }
+        
+        details > div {
+            color: #e6edf3;
+        }
+        
+        .content-section {
+            margin-bottom: 15px;
+        }
+        
+        .content-section p {
+            margin-bottom: 12px;
+            line-height: 1.8;
+        }
+        
+        .content-section ul {
+            margin-left: 30px;
+            margin-bottom: 12px;
+        }
+        
+        .content-section li {
+            margin-bottom: 8px;
+        }
+        
+        .key-point {
+            background-color: rgba(255, 166, 87, 0.15);
+            border-left: 3px solid #ffa657;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+            font-style: italic;
+            color: #ffd699;
+        }
+        
+        .quiz-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #ffa657;
+        }
+        
+        .quiz-title {
+            color: #ffa657;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-question {
+            background-color: rgba(255, 166, 87, 0.08);
+            border-left: 4px solid #ffa657;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .quiz-question label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .quiz-question input[type="radio"],
+        .quiz-question input[type="text"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .quiz-question input[type="text"] {
+            padding: 8px;
+            background-color: #161b22;
+            color: #e6edf3;
+            border: 1px solid #30363d;
+            border-radius: 3px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 19px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .button-group {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        button {
+            background-color: #ffa657;
+            color: #0d1117;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        
+        button:hover {
+            background-color: #ffb86d;
+        }
+        
+        .result-message {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 4px;
+            font-size: 1.1em;
+            text-align: center;
+            display: none;
+        }
+        
+        .result-message.show {
+            display: block;
+        }
+        
+        .result-success {
+            background-color: rgba(76, 194, 100, 0.2);
+            border: 2px solid #4cc264;
+            color: #7ee787;
+        }
+        
+        .result-failure {
+            background-color: rgba(248, 81, 73, 0.2);
+            border: 2px solid #f85149;
+            color: #ff7b72;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Hub</a>
+        
+        <h1>CASE STUDIES</h1>
+        <p style="margin-bottom: 40px; color: #8b949e;">Healthcare (EY) + Cimpress/Vistaprint</p>
+        
+        <!-- HEALTHCARE SECTION -->
+        <details>
+            <summary>1. Healthcare Case Study: Context</summary>
+            <div class="content-section">
+                <p><strong>Large Medical Provider:</strong> Cancer treatment center, academic medical facility, Level 1 trauma center. Serves 2 million+ patients annually.</p>
+                
+                <p><strong>Why Healthcare is Challenging:</strong></p>
+                <ul>
+                    <li>Electronic health records</li>
+                    <li>Patient portals</li>
+                    <li>Remote monitoring</li>
+                    <li>Virtual visits</li>
+                    <li>Cloud/web apps increase exposure</li>
+                </ul>
+                
+                <p><strong>Breach Cost Impact:</strong> Average healthcare breach cost: nearly $11 million (2023). 53% increase over 3 years. Highest breach costs of ALL industries.</p>
+                
+                <p><strong>Detection Time:</strong> Up to 8 months to detect and resolve. 12%+ of annual cybersecurity spend just on incident response.</p>
+                
+                <p><strong>Complex Environment:</strong> Thousands of interconnected endpoints — computers, monitors, patient medical devices. Massive attack surface.</p>
+                
+                <div class="key-point">
+                    Healthcare organizations face the highest breach costs of all industries, with average costs reaching nearly $11 million in 2023.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>2. Healthcare Decision: The Problem</summary>
+            <div class="content-section">
+                <p><strong>Security Challenges:</strong></p>
+                <ul>
+                    <li>Need 24/7 visibility across thousands of endpoints</li>
+                    <li>Ability to detect and respond quickly</li>
+                    <li>Proactive monitoring required</li>
+                    <li>Limited internal resources and cybersecurity talent shortage</li>
+                </ul>
+                
+                <p><strong>Business Criteria:</strong> Build internal SOC vs buy endpoint tools and manage internally vs partner with managed service provider. Each has trade-offs across cost, timeline, operational capability, long-term resilience.</p>
+                
+                <div class="key-point">
+                    Hospitals cannot have extended downtime.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>3. Healthcare Decision: Options Evaluated</summary>
+            <div class="content-section">
+                <p><strong>Build Internal SOC</strong></p>
+                <ul>
+                    <li>Pros: Full control, data stays internal, deep org knowledge</li>
+                    <li>Cons: High cost to hire/retain, 24/7 staffing expensive, long time to build capability, skills gap in market</li>
+                </ul>
+                
+                <p><strong>Buy Tools Manage Internally</strong></p>
+                <ul>
+                    <li>Pros: Own technology, moderate cost, faster than building SOC</li>
+                    <li>Cons: Still need skilled analysts 24/7, alert fatigue, may miss threats outside business hours</li>
+                </ul>
+                
+                <p><strong>Managed Service Provider</strong></p>
+                <ul>
+                    <li>Pros: Immediate 24/7 coverage, proven experience, scalable, predictable cost, no hiring challenges</li>
+                    <li>Cons: Less direct control, data sharing, vendor dependency, may not understand your environment</li>
+                </ul>
+                
+                <div class="key-point">
+                    Medical facility evaluated against criteria: security effectiveness, cost, time to implement, and operational sustainability.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>4. Healthcare Solution: Managed Services Partnership</summary>
+            <div class="content-section">
+                <p><strong>Partnership Choice:</strong> Chose managed services partnership with EY.</p>
+                
+                <p><strong>Endpoint Detection and Response (EDR):</strong> Behavior-based tool (CrowdStrike) distinguishes malicious from benign activity. Deployed across ALL endpoints and servers.</p>
+                
+                <p><strong>Splunk SIEM Integration:</strong> Extensive log source integration, analytics, dashboarding. Real-time reporting dashboards give CISO instant visibility.</p>
+                
+                <p><strong>24/7 Monitoring and Response:</strong> EY custom detection logic and proactive threat hunting using Splunk + CrowdStrike. Around-the-clock alert triage and attack disruption.</p>
+                
+                <p><strong>SOAR Automation:</strong> Security Orchestration, Automation & Response. Automates routine tasks: password resets, phishing analysis, account disabling, malware removal.</p>
+                
+                <p><strong>Not One-Size-Fits-All:</strong> Managed services team worked shoulder-to-shoulder with client. Tailored solutions to specific organizational needs.</p>
+                
+                <p><strong>Talent Gap:</strong> Cybersecurity talent shortage is real. Managed services offer experienced professionals without cost of hiring large full-time team.</p>
+                
+                <p><strong>Automation Multiplies Effectiveness:</strong> SOAR reduced manual effort, allowed internal team to focus on strategic initiatives.</p>
+                
+                <p><strong>Partnership Not Abdication:</strong> Client maintains oversight and strategic direction. Provider brings expertise and operational capacity. Collaborative model.</p>
+                
+                <div class="key-point">
+                    The partnership resulted in stronger security posture, reduced response times, and freed internal team to focus on strategic initiatives.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>5. Healthcare Results: Measurable Impact</summary>
+            <div class="content-section">
+                <ul>
+                    <li>25,000+ devices monitored 24/7 with expert support</li>
+                    <li>50%+ increase in cyber incident detection and remediation</li>
+                    <li>$80M+ estimated organizational revenue protected from cyber incidents</li>
+                    <li>24/7/365 continuous monitoring and response without internal hiring burden</li>
+                </ul>
+                
+                <div class="key-point">
+                    Partnership resulted in stronger security posture, reduced response times, and freed internal team to focus on strategic initiatives.
+                </div>
+            </div>
+        </details>
+        
+        <!-- CIMPRESS SECTION -->
+        <details>
+            <summary>6. Cimpress Case Study: Context</summary>
+            <div class="content-section">
+                <p><strong>Organization Profile:</strong> $2 billion global company, mass customization of print products (Vistaprint is subsidiary). Founded 1994, Vistaprint 1999, back to Cimpress 2011.</p>
+                
+                <p><strong>Organizational Complexity:</strong></p>
+                <ul>
+                    <li>20+ countries</li>
+                    <li>16,000+ employees</li>
+                    <li>Dozens of autonomous business units with independent technology stacks</li>
+                </ul>
+                
+                <p><strong>Decentralized Model:</strong> Each subsidiary chooses own tech stack locally. No mandate from parent company. "Oversight and guidance but doesn't govern." Different from command-and-control.</p>
+                
+                <p><strong>Varied Maturity:</strong> Different business units have different levels of technology and security maturity.</p>
+                
+                <p><strong>Geographic Distribution:</strong> Businesses spread across various geographies with different internal policies and privacy regulations.</p>
+            </div>
+        </details>
+        
+        <details>
+            <summary>7. Cimpress Decision: The Challenge</summary>
+            <div class="content-section">
+                <p><strong>The Core Problem:</strong> How to implement consistent security across dozens of independent business units with different tech stacks, cloud providers, maturity levels, geographic requirements?</p>
+                
+                <p><strong>Authority Constraint:</strong> Cimpress Security has NO mandate authority — must lead by example and persuasion, not governance.</p>
+                
+                <p><strong>Zero Trust as Solution:</strong> Design principle not specific technology. "Never trust, always verify, least privilege, adaptive access controls, continuous verification, decisions made close to asset."</p>
+                
+                <p><strong>Framework Advantage:</strong> Can be adapted to different technology stacks while maintaining security posture.</p>
+                
+                <div class="key-point">
+                    Zero Trust is perfect for highly complex distributed multi-level-maturity organizations because it is a framework rather than a defined product stack.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>8. Cimpress Solution: Multi-Cloud Zero Trust</summary>
+            <div class="content-section">
+                <p><strong>Device-First Approach:</strong> Considering health of devices connecting to network. Zero Trust endpoint protection across entire user base.</p>
+                
+                <p><strong>MDM and Monitoring:</strong> Mobile device management for provisioning, certificate management. Metrics to analyze, triage, monitor user behavior.</p>
+                
+                <p><strong>Cloud-based Infrastructure:</strong> Cimpress corporate entirely cloud-based. No corporate network. Helping subsidiaries SaaS-ify and phase out legacy over 2-3 years.</p>
+                
+                <p><strong>Centralized Authentication:</strong></p>
+                <ul>
+                    <li>Phase 1: MFA rollout to all subsidiaries</li>
+                    <li>Phase 2: Zero Trust authentication tool (broker) across all 16,000 employees regardless of business unit</li>
+                </ul>
+            </div>
+        </details>
+        
+        <details>
+            <summary>9. Cimpress Decision: Strategic Approach</summary>
+            <div class="content-section">
+                <p><strong>Lead by Example, Not Mandate:</strong> This was the critical strategic choice.</p>
+                
+                <p><strong>Phase 1: Implement at Corporate</strong></p>
+                <ul>
+                    <li>Deploy Zero Trust for 8,000-9,000 users</li>
+                    <li>Test and refine</li>
+                    <li>Document lessons learned</li>
+                </ul>
+                
+                <p><strong>Phase 2: Demonstrate Value</strong></p>
+                <ul>
+                    <li>Show business units concrete benefits: improved security, better user experience, business continuity during COVID</li>
+                </ul>
+                
+                <p><strong>Phase 3: Gradual Rollout to Subsidiaries</strong></p>
+                <ul>
+                    <li>Recommend concepts, provide support and guidance</li>
+                    <li>Let them adopt at own pace</li>
+                </ul>
+                
+                <div class="key-point">
+                    Required tailored architecture that scales across Cimpress and can be applied as blueprint at each business unit.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>10. Cimpress Results: Security Improvements</summary>
+            <div class="content-section">
+                <ul>
+                    <li><strong>Faster Threat Detection:</strong> MTTD decreased every year, now measured in hours instead of days/weeks</li>
+                    <li><strong>Reduced Password Issues:</strong> Measurable decrease in password reset requests. Less burden on IT</li>
+                    <li><strong>Better Pen Test Results:</strong> Simulated adversaries must work harder, use more advanced tactics</li>
+                    <li><strong>Centralized Visibility:</strong> Better understanding of user environments where Zero Trust deployed</li>
+                </ul>
+            </div>
+        </details>
+        
+        <details>
+            <summary>11. Cimpress Lessons: Decision-Making Insights</summary>
+            <div class="content-section">
+                <p><strong>Education and Champions:</strong> Security champions program from other business areas. Developers, architects, IT/ops staff recruited to promote security. Mandate participation for corporatewide culture.</p>
+                
+                <p><strong>Framework Over Technology:</strong> Zero Trust is design principle not product. Decisions adhere to principles but adapt based on local choices. Flexibility for autonomous business units.</p>
+                
+                <p><strong>Lead by Example:</strong> Implement at parent first, show concrete benefits, recommend based on proven success not governance mandate.</p>
+                
+                <p><strong>Cloud Enablement:</strong> Being cloud-native made Zero Trust easier. On-premises orgs face more complexity.</p>
+                
+                <div class="key-point">
+                    Balance Autonomy and Standards: respect business unit autonomy while working toward holistic security directive.
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>12. Cross-Case Patterns: Common Themes</summary>
+            <div class="content-section">
+                <p><strong>Context Drives Decisions:</strong> Healthcare = talent shortage drove managed services. Cimpress = decentralized model drove Zero Trust framework. "No universal right answer."</p>
+                
+                <p><strong>Phased Implementation:</strong> Both used phased approaches.</p>
+                <ul>
+                    <li>Healthcare: EDR → SIEM → SOAR</li>
+                    <li>Cimpress: Corporate first → MFA → Centralized auth</li>
+                </ul>
+                <p>"Phased reduces risk and proves value incrementally."</p>
+                
+                <p><strong>Measurement Matters:</strong> Both track concrete metrics.</p>
+                <ul>
+                    <li>Healthcare: 50% detection increase, $80M protected</li>
+                    <li>Cimpress: MTTD in hours, pen test improvements</li>
+                </ul>
+                <p>"Measurable outcomes justify decisions and guide refinement."</p>
+                
+                <p><strong>Partnership and Collaboration:</strong> Healthcare shoulder-to-shoulder with MSP. Cimpress security champions across business units. "Architecture succeeds through collaboration, not ivory tower mandates."</p>
+                
+                <div class="key-point">
+                    Success requires understanding your unique context, implementing in phases, measuring outcomes, and building partnerships across the organization.
+                </div>
+            </div>
+        </details>
+        
+        <!-- QUIZ SECTION -->
+        <div class="quiz-section">
+            <h2 class="quiz-title">QUIZ</h2>
+            <p style="margin-bottom: 30px; color: #8b949e;">Test your understanding of the case studies</p>
+            
+            <form id="quizForm">
+                <!-- Q1 -->
+                <div class="quiz-question">
+                    <p><strong>1. Why did healthcare choose managed services over building SOC?</strong></p>
+                    <label><input type="radio" name="q1" value="a"> Managed services were cheaper than building from scratch</label>
+                    <label><input type="radio" name="q1" value="b"> They could get immediate 24/7 coverage with proven expertise, avoiding talent shortage and hiring challenges</label>
+                    <label><input type="radio" name="q1" value="c"> They wanted to avoid all responsibility for security</label>
+                    <label><input type="radio" name="q1" value="d"> Managed services don't require monitoring infrastructure</label>
+                </div>
+                
+                <!-- Q2 -->
+                <div class="quiz-question">
+                    <p><strong>2. What tools did healthcare deploy? (Select all that apply)</strong></p>
+                    <label><input type="checkbox" name="q2" value="edr"> EDR (Endpoint Detection and Response)</label>
+                    <label><input type="checkbox" name="q2" value="siem"> SIEM (Security Information and Event Management)</label>
+                    <label><input type="checkbox" name="q2" value="soar"> SOAR (Security Orchestration, Automation & Response)</label>
+                    <label><input type="checkbox" name="q2" value="msp"> MSP (Managed Service Provider)</label>
+                </div>
+                
+                <!-- Q3 -->
+                <div class="quiz-question">
+                    <p><strong>3. What was the percentage increase in healthcare cyber incident detection and remediation?</strong></p>
+                    <label><input type="radio" name="q3" value="a"> 25%+ increase</label>
+                    <label><input type="radio" name="q3" value="b"> 50%+ increase</label>
+                    <label><input type="radio" name="q3" value="c"> 75%+ increase</label>
+                    <label><input type="radio" name="q3" value="d"> 80%+ increase</label>
+                </div>
+                
+                <!-- Q4 -->
+                <div class="quiz-question">
+                    <p><strong>4. What was the primary organizational challenge for Cimpress?</strong></p>
+                    <label><input type="radio" name="q4" value="a"> They had only one technology stack</label>
+                    <label><input type="radio" name="q4" value="b"> How to implement consistent security across dozens of autonomous business units with different tech stacks, maturity levels, and geographic requirements</label>
+                    <label><input type="radio" name="q4" value="c"> They had a highly centralized governance model</label>
+                    <label><input type="radio" name="q4" value="d"> They wanted to mandate a single security solution</label>
+                </div>
+                
+                <!-- Q5 -->
+                <div class="quiz-question">
+                    <p><strong>5. Why did Zero Trust fit Cimpress's needs?</strong></p>
+                    <label><input type="radio" name="q5" value="a"> It's the cheapest security solution</label>
+                    <label><input type="radio" name="q5" value="b"> It's a design principle/framework that can adapt to different tech stacks while maintaining security posture, not a rigid product</label>
+                    <label><input type="radio" name="q5" value="c"> It requires command-and-control governance</label>
+                    <label><input type="radio" name="q5" value="d"> It only works with cloud services</label>
+                </div>
+                
+                <!-- Q6 -->
+                <div class="quiz-question">
+                    <p><strong>6. What was Cimpress's Phase 1 of the Zero Trust strategic approach?</strong></p>
+                    <label><input type="radio" name="q6" value="a"> Mandate all subsidiaries to implement immediately</label>
+                    <label><input type="radio" name="q6" value="b"> Deploy Zero Trust for 8,000-9,000 corporate users, test, refine, and document lessons learned</label>
+                    <label><input type="radio" name="q6" value="c"> Hire external consultants to manage all deployments</label>
+                    <label><input type="radio" name="q6" value="d"> Roll out MFA without any Zero Trust components</label>
+                </div>
+                
+                <!-- Q7 -->
+                <div class="quiz-question">
+                    <p><strong>7. What does SOAR stand for and what does it do?</strong></p>
+                    <label><input type="radio" name="q7" value="a"> Security Operations Alert Response - monitors alerts only</label>
+                    <label><input type="radio" name="q7" value="b"> Security Orchestration, Automation & Response - automates routine tasks like password resets, phishing analysis, account disabling, malware removal</label>
+                    <label><input type="radio" name="q7" value="c"> Systems Operations Authentication Requirement - handles login only</label>
+                    <label><input type="radio" name="q7" value="d"> Secure Online Asset Registration - tracks device inventory</label>
+                </div>
+                
+                <!-- Q8 -->
+                <div class="quiz-question">
+                    <p><strong>8. What is a common cross-case pattern mentioned in both case studies?</strong></p>
+                    <label><input type="radio" name="q8" value="a"> Both required large upfront capital investments</label>
+                    <label><input type="radio" name="q8" value="b"> Both used phased implementation approaches to reduce risk and prove value incrementally (EDR→SIEM→SOAR and Corporate→MFA→Auth)</label>
+                    <label><input type="radio" name="q8" value="c"> Both had completely centralized decision-making</label>
+                    <label><input type="radio" name="q8" value="d"> Both avoided measuring outcomes</label>
+                </div>
+                
+                <!-- Q9 -->
+                <div class="quiz-question">
+                    <p><strong>9. What was the average healthcare breach cost in 2023?</strong></p>
+                    <label><input type="radio" name="q9" value="a"> Approximately $5 million</label>
+                    <label><input type="radio" name="q9" value="b"> Approximately $8 million</label>
+                    <label><input type="radio" name="q9" value="c"> Approximately $11 million</label>
+                    <label><input type="radio" name="q9" value="d"> Approximately $15 million</label>
+                </div>
+                
+                <!-- Q10 -->
+                <div class="quiz-question">
+                    <p><strong>10. How did Cimpress's security team approach rolling out Zero Trust to business units?</strong></p>
+                    <label><input type="radio" name="q10" value="a"> Through mandates and command-and-control authority</label>
+                    <label><input type="radio" name="q10" value="b"> Lead by example at corporate, demonstrate value, recommend based on proven success, let business units adopt at their own pace</label>
+                    <label><input type="radio" name="q10" value="c"> By forcing all units to use the same technology stack</label>
+                    <label><input type="radio" name="q10" value="d"> By avoiding any security recommendations</label>
+                </div>
+            </form>
+            
+            <div class="button-group">
+                <button onclick="checkScore('cs', 10)">Submit Quiz</button>
+                <button onclick="resetQuiz()">Reset</button>
+            </div>
+            
+            <div id="resultMessage" class="result-message"></div>
+        </div>
+    </div>
+    
+    <script>
+        function checkScore(courseCode, totalQuestions) {
+            let score = 0;
+            
+            // Q1 - Single choice
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            if (q1 && q1.value === 'b') score++;
+            
+            // Q2 - Multiple checkboxes (EDR, SIEM, SOAR should be checked)
+            const q2Checked = document.querySelectorAll('input[name="q2"]:checked');
+            const q2Values = Array.from(q2Checked).map(cb => cb.value);
+            if (q2Values.includes('edr') && q2Values.includes('siem') && q2Values.includes('soar') && q2Values.length === 3) {
+                score++;
+            }
+            
+            // Q3
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            if (q3 && q3.value === 'b') score++;
+            
+            // Q4
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            if (q4 && q4.value === 'b') score++;
+            
+            // Q5
+            const q5 = document.querySelector('input[name="q5"]:checked');
+            if (q5 && q5.value === 'b') score++;
+            
+            // Q6
+            const q6 = document.querySelector('input[name="q6"]:checked');
+            if (q6 && q6.value === 'b') score++;
+            
+            // Q7
+            const q7 = document.querySelector('input[name="q7"]:checked');
+            if (q7 && q7.value === 'b') score++;
+            
+            // Q8
+            const q8 = document.querySelector('input[name="q8"]:checked');
+            if (q8 && q8.value === 'b') score++;
+            
+            // Q9
+            const q9 = document.querySelector('input[name="q9"]:checked');
+            if (q9 && q9.value === 'c') score++;
+            
+            // Q10
+            const q10 = document.querySelector('input[name="q10"]:checked');
+            if (q10 && q10.value === 'b') score++;
+            
+            // Display result
+            const resultDiv = document.getElementById('resultMessage');
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            if (percentage >= 80) {
+                resultDiv.className = 'result-message show result-success';
+                resultDiv.innerHTML = `Excellent! You scored ${score}/${totalQuestions} (${percentage}%). You have a strong understanding of these case studies.`;
+            } else if (percentage >= 60) {
+                resultDiv.className = 'result-message show result-success';
+                resultDiv.innerHTML = `Good job! You scored ${score}/${totalQuestions} (${percentage}%). Review the sections you missed for deeper understanding.`;
+            } else {
+                resultDiv.className = 'result-message show result-failure';
+                resultDiv.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%). Review the case studies and try again to improve your understanding.`;
+            }
+            
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('resultMessage').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS8405 Cybersecurity Architectures - Midterm Exam</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 19px;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #30363d;
+    }
+    
+    .header-left {
+      flex: 1;
+    }
+    
+    .header-left a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    
+    .header-left a:hover {
+      text-decoration: underline;
+    }
+    
+    h1 {
+      color: #e6edf3;
+      font-size: 1.8em;
+      margin-top: 10px;
+    }
+    
+    .header-right {
+      text-align: right;
+    }
+    
+    .timer {
+      font-size: 1.5em;
+      color: #58a6ff;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .progress-section {
+      margin-bottom: 20px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 25px;
+      background-color: #161b22;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+      margin-bottom: 8px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #ff6acc;
+      transition: width 0.3s ease;
+      width: 0%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0d1117;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+    
+    .progress-text {
+      font-size: 0.95em;
+      color: #8b949e;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn-submit {
+      background-color: #238636;
+      color: #e6edf3;
+    }
+    
+    .btn-submit:hover {
+      background-color: #2ea043;
+    }
+    
+    .btn-reset {
+      background-color: #da3633;
+      color: #e6edf3;
+    }
+    
+    .btn-reset:hover {
+      background-color: #f85149;
+    }
+    
+    .section-header {
+      color: #ff6acc;
+      font-size: 1.3em;
+      font-weight: 700;
+      margin: 25px 0 10px;
+      padding: 10px 0;
+      border-bottom: 2px solid #ff6acc;
+    }
+    
+    .mq {
+      margin: 12px 0;
+      padding: 15px;
+      background: #161b22;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    
+    .mq p {
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 10px;
+    }
+    
+    .qnum {
+      display: inline-block;
+      background: #ff6acc;
+      color: #0d1117;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-size: 0.85em;
+      margin-right: 8px;
+      font-weight: 700;
+    }
+    
+    .mq label {
+      display: block;
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #30363d;
+      transition: all 0.15s;
+      background-color: transparent;
+    }
+    
+    .mq label:hover {
+      background-color: #1c2333;
+    }
+    
+    #result {
+      display: none;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #161b22;
+      border: 2px solid #ff6acc;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 400px;
+    }
+    
+    .result-label {
+      font-size: 1.2em;
+      color: #8b949e;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #30363d;
+      color: #8b949e;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <a href="index.html">← Back to Hub</a>
+        <h1>SEAS8405 Cybersecurity Architectures</h1>
+        <div style="color: #8b949e; font-size: 0.95em;">Midterm Exam</div>
+      </div>
+      <div class="header-right">
+        <div class="timer">
+          <span id="timer">00:00</span>
+        </div>
+        <div style="font-size: 0.9em; color: #8b949e;">Elapsed Time</div>
+      </div>
+    </div>
+    
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progbar" style="width: 0%"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progress">0/100 answered</span>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
+      <button class="btn-reset" onclick="resetExam()">Reset</button>
+    </div>
+    
+    <!-- WEEK 1: Foundations + MITRE -->
+    <div class="section-header">Week 1: Foundations & MITRE (Questions 1-15)</div>
+    
+    <div class="mq" id="mq1">
+      <p><span class="qnum">1</span> Architecture answers ___ and ___, while engineering answers ___.</p>
+      <label onclick="pick(1,0)">A) HOW, WHEN, WHERE</label>
+      <label onclick="pick(1,1)">B) WHY/WHAT, HOW</label>
+      <label onclick="pick(1,2)">C) WHAT, WHO, WHY</label>
+      <label onclick="pick(1,3)">D) WHEN, WHERE, HOW</label>
+    </div>
+    
+    <div class="mq" id="mq2">
+      <p><span class="qnum">2</span> "Bake In, Don't Bolt On" means:</p>
+      <label onclick="pick(2,0)">A) Integrate security from the design phase forward</label>
+      <label onclick="pick(2,1)">B) Add security during testing</label>
+      <label onclick="pick(2,2)">C) Security is optional for internal systems</label>
+      <label onclick="pick(2,3)">D) Bolt security to the perimeter only</label>
+    </div>
+    
+    <div class="mq" id="mq3">
+      <p><span class="qnum">3</span> What percentage of successful intrusions involve ZERO malware?</p>
+      <label onclick="pick(3,0)">A) 50%</label>
+      <label onclick="pick(3,1)">B) 65%</label>
+      <label onclick="pick(3,2)">C) 81%</label>
+      <label onclick="pick(3,3)">D) 95%</label>
+    </div>
+    
+    <div class="mq" id="mq4">
+      <p><span class="qnum">4</span> D3FEND stands for:</p>
+      <label onclick="pick(4,0)">A) Detection, Denial, and Disruption Framework Empowering Network Defense</label>
+      <label onclick="pick(4,1)">B) Digital Defense Framework for Enterprise Networks</label>
+      <label onclick="pick(4,2)">C) Distributed Denial Defense Framework</label>
+      <label onclick="pick(4,3)">D) Dynamic Defense and Disruption Framework</label>
+    </div>
+    
+    <div class="mq" id="mq5">
+      <p><span class="qnum">5</span> The MITRE ATT&amp;CK framework contains approximately:</p>
+      <label onclick="pick(5,0)">A) 200 techniques, 8 tactics</label>
+      <label onclick="pick(5,1)">B) 700+ techniques, 14+ tactics</label>
+      <label onclick="pick(5,2)">C) 1000+ techniques, 20 tactics</label>
+      <label onclick="pick(5,3)">D) 500 techniques, 10 tactics</label>
+    </div>
+    
+    <div class="mq" id="mq6">
+      <p><span class="qnum">6</span> ASARP is defined as:</p>
+      <label onclick="pick(6,0)">A) Always Secure All Resources Permanently</label>
+      <label onclick="pick(6,1)">B) Automated Security Architecture Review Process</label>
+      <label onclick="pick(6,2)">C) The point where more security would disproportionately impact cost/schedule/performance</label>
+      <label onclick="pick(6,3)">D) A NIST compliance requirement</label>
+    </div>
+    
+    <div class="mq" id="mq7">
+      <p><span class="qnum">7</span> In the governance hierarchy, which document type is authored by executive management?</p>
+      <label onclick="pick(7,0)">A) Policy</label>
+      <label onclick="pick(7,1)">B) Standards</label>
+      <label onclick="pick(7,2)">C) Procedures</label>
+      <label onclick="pick(7,3)">D) Guidance</label>
+    </div>
+    
+    <div class="mq" id="mq8">
+      <p><span class="qnum">8</span> Optimism bias in security architecture leads to:</p>
+      <label onclick="pick(8,0)">A) Over-investment in security controls</label>
+      <label onclick="pick(8,1)">B) Underestimating attack likelihood and underfunding security</label>
+      <label onclick="pick(8,2)">C) Perfect threat models</label>
+      <label onclick="pick(8,3)">D) Faster deployment of security solutions</label>
+    </div>
+    
+    <div class="mq" id="mq9">
+      <p><span class="qnum">9</span> The Four Dimensions of Solution Success are:</p>
+      <label onclick="pick(9,0)">A) Cost, Speed, Quality, Scope</label>
+      <label onclick="pick(9,1)">B) People, Process, Technology, Culture</label>
+      <label onclick="pick(9,2)">C) CIA plus Compliance</label>
+      <label onclick="pick(9,3)">D) Effectiveness, Maturity, Efficiency, Alignment</label>
+    </div>
+    
+    <div class="mq" id="mq10">
+      <p><span class="qnum">10</span> An air-gapped system is characterized by:</p>
+      <label onclick="pick(10,0)">A) Encrypted automated data flows</label>
+      <label onclick="pick(10,1)">B) VPN-only connections</label>
+      <label onclick="pick(10,2)">C) No physical connection; manual-only data transfer</label>
+      <label onclick="pick(10,3)">D) Firewall-separated networks</label>
+    </div>
+    
+    <div class="mq" id="mq11">
+      <p><span class="qnum">11</span> Which MITRE framework uses honeypots and fake credentials for active defense?</p>
+      <label onclick="pick(11,0)">A) MITRE Engage</label>
+      <label onclick="pick(11,1)">B) ATT&amp;CK</label>
+      <label onclick="pick(11,2)">C) D3FEND</label>
+      <label onclick="pick(11,3)">D) MITRE Shield</label>
+    </div>
+    
+    <div class="mq" id="mq12">
+      <p><span class="qnum">12</span> The correct phased MITRE implementation order is:</p>
+      <label onclick="pick(12,0)">A) Detection → Assessment → Telemetry → Operations</label>
+      <label onclick="pick(12,1)">B) Assessment → Telemetry → Detection Engineering → Operationalization</label>
+      <label onclick="pick(12,2)">C) Telemetry → Assessment → Operations → Detection</label>
+      <label onclick="pick(12,3)">D) Operations → Detection → Assessment → Telemetry</label>
+    </div>
+    
+    <div class="mq" id="mq13">
+      <p><span class="qnum">13</span> Inside-Out thinking focuses on _____, Outside-In focuses on _____:</p>
+      <label onclick="pick(13,0)">A) External threats; internal features</label>
+      <label onclick="pick(13,1)">B) Compliance; performance</label>
+      <label onclick="pick(13,2)">C) Building security features into system; defending against attacker techniques</label>
+      <label onclick="pick(13,3)">D) Network security; application security</label>
+    </div>
+    
+    <div class="mq" id="mq14">
+      <p><span class="qnum">14</span> The Root Cause Analysis (7 Whys) technique traces requirements back to:</p>
+      <label onclick="pick(14,0)">A) The organization's core mission and reason for existing</label>
+      <label onclick="pick(14,1)">B) Technical specifications</label>
+      <label onclick="pick(14,2)">C) Vendor recommendations</label>
+      <label onclick="pick(14,3)">D) Industry benchmarks</label>
+    </div>
+    
+    <div class="mq" id="mq15">
+      <p><span class="qnum">15</span> ATT&amp;CK Navigator uses color coding where RED means:</p>
+      <label onclick="pick(15,0)">A) Good coverage</label>
+      <label onclick="pick(15,1)">B) No coverage</label>
+      <label onclick="pick(15,2)">C) Partial coverage</label>
+      <label onclick="pick(15,3)">D) Under review</label>
+    </div>
+    
+    <!-- WEEK 2: Requirements Engineering + Risk -->
+    <div class="section-header">Week 2: Requirements Engineering & Risk (Questions 16-30)</div>
+    
+    <div class="mq" id="mq16">
+      <p><span class="qnum">16</span> The requirements engineering lifecycle has how many steps?</p>
+      <label onclick="pick(16,0)">A) 5</label>
+      <label onclick="pick(16,1)">B) 8</label>
+      <label onclick="pick(16,2)">C) 6</label>
+      <label onclick="pick(16,3)">D) 10</label>
+    </div>
+    
+    <div class="mq" id="mq17">
+      <p><span class="qnum">17</span> Non-functional requirements focus on:</p>
+      <label onclick="pick(17,0)">A) What the system does</label>
+      <label onclick="pick(17,1)">B) User-facing features</label>
+      <label onclick="pick(17,2)">C) HOW WELL the system performs</label>
+      <label onclick="pick(17,3)">D) Business logic</label>
+    </div>
+    
+    <div class="mq" id="mq18">
+      <p><span class="qnum">18</span> An availability of 99.95% means maximum downtime per month of:</p>
+      <label onclick="pick(18,0)">A) 22 minutes</label>
+      <label onclick="pick(18,1)">B) 43 minutes</label>
+      <label onclick="pick(18,2)">C) 4.2 minutes</label>
+      <label onclick="pick(18,3)">D) 8.6 hours</label>
+    </div>
+    
+    <div class="mq" id="mq19">
+      <p><span class="qnum">19</span> In the SMART framework, the "A" stands for:</p>
+      <label onclick="pick(19,0)">A) Automated</label>
+      <label onclick="pick(19,1)">B) Achievable</label>
+      <label onclick="pick(19,2)">C) Applicable</label>
+      <label onclick="pick(19,3)">D) Auditable</label>
+    </div>
+    
+    <div class="mq" id="mq20">
+      <p><span class="qnum">20</span> Redundancy uses ___ resources; diversity uses ___ resources:</p>
+      <label onclick="pick(20,0)">A) Different; same</label>
+      <label onclick="pick(20,1)">B) New; old</label>
+      <label onclick="pick(20,2)">C) Same; different</label>
+      <label onclick="pick(20,3)">D) External; internal</label>
+    </div>
+    
+    <div class="mq" id="mq21">
+      <p><span class="qnum">21</span> The STRIDE threat model does NOT include:</p>
+      <label onclick="pick(21,0)">A) Spoofing</label>
+      <label onclick="pick(21,1)">B) Tampering</label>
+      <label onclick="pick(21,2)">C) Reconnaissance</label>
+      <label onclick="pick(21,3)">D) Denial of Service</label>
+    </div>
+    
+    <div class="mq" id="mq22">
+      <p><span class="qnum">22</span> The Risk formula is:</p>
+      <label onclick="pick(22,0)">A) Risk = Threat + Vulnerability</label>
+      <label onclick="pick(22,1)">B) Risk = Threat × Vulnerability × Impact</label>
+      <label onclick="pick(22,2)">C) Risk = Impact / Probability</label>
+      <label onclick="pick(22,3)">D) Risk = Cost × Likelihood</label>
+    </div>
+    
+    <div class="mq" id="mq23">
+      <p><span class="qnum">23</span> In the Impact vs Effort matrix, "Quick Wins" are:</p>
+      <label onclick="pick(23,0)">A) Low Impact / Low Effort</label>
+      <label onclick="pick(23,1)">B) High Impact / High Effort</label>
+      <label onclick="pick(23,2)">C) High Impact / Low Effort</label>
+      <label onclick="pick(23,3)">D) Low Impact / High Effort</label>
+    </div>
+    
+    <div class="mq" id="mq24">
+      <p><span class="qnum">24</span> Which is NOT one of the 8 Common Pitfalls in requirements?</p>
+      <label onclick="pick(24,0)">A) Vague Requirements</label>
+      <label onclick="pick(24,1)">B) Missing NFRs</label>
+      <label onclick="pick(24,2)">C) Ignoring Trade-offs</label>
+      <label onclick="pick(24,3)">D) Using too many frameworks</label>
+    </div>
+    
+    <div class="mq" id="mq25">
+      <p><span class="qnum">25</span> The Requirements-to-MITRE mapping chain order is:</p>
+      <label onclick="pick(25,0)">A) Threat Analysis → Control ID → FR → NFR → Architecture Decision</label>
+      <label onclick="pick(25,1)">B) FR → NFR → Threat → Control → Decision</label>
+      <label onclick="pick(25,2)">C) Control → Threat → FR → Decision → NFR</label>
+      <label onclick="pick(25,3)">D) Architecture Decision → FR → NFR → Threat → Control</label>
+    </div>
+    
+    <div class="mq" id="mq26">
+      <p><span class="qnum">26</span> HIPAA requires breach notification within:</p>
+      <label onclick="pick(26,0)">A) 24 hours</label>
+      <label onclick="pick(26,1)">B) 60 days</label>
+      <label onclick="pick(26,2)">C) 72 hours</label>
+      <label onclick="pick(26,3)">D) 30 days</label>
+    </div>
+    
+    <div class="mq" id="mq27">
+      <p><span class="qnum">27</span> GDPR can impose penalties of up to:</p>
+      <label onclick="pick(27,0)">A) $1 million</label>
+      <label onclick="pick(27,1)">B) 2% of revenue</label>
+      <label onclick="pick(27,2)">C) 4% of global annual revenue</label>
+      <label onclick="pick(27,3)">D) $10 million</label>
+    </div>
+    
+    <div class="mq" id="mq28">
+      <p><span class="qnum">28</span> Which NFR category addresses "How easily we can patch and fix issues"?</p>
+      <label onclick="pick(28,0)">A) Maintainability</label>
+      <label onclick="pick(28,1)">B) Scalability</label>
+      <label onclick="pick(28,2)">C) Portability</label>
+      <label onclick="pick(28,3)">D) Testability</label>
+    </div>
+    
+    <div class="mq" id="mq29">
+      <p><span class="qnum">29</span> "A secure system that no one uses correctly is useless" refers to which NFR?</p>
+      <label onclick="pick(29,0)">A) Reliability</label>
+      <label onclick="pick(29,1)">B) Usability</label>
+      <label onclick="pick(29,2)">C) Capability</label>
+      <label onclick="pick(29,3)">D) Availability</label>
+    </div>
+    
+    <div class="mq" id="mq30">
+      <p><span class="qnum">30</span> NFRs generally drive architecture _____ than functional requirements:</p>
+      <label onclick="pick(30,0)">A) Less</label>
+      <label onclick="pick(30,1)">B) The same amount</label>
+      <label onclick="pick(30,2)">C) More</label>
+      <label onclick="pick(30,3)">D) NFRs don't affect architecture</label>
+    </div>
+    
+    <!-- WEEK 3: Network Security -->
+    <div class="section-header">Week 3: Network Security (Questions 31-42)</div>
+    
+    <div class="mq" id="mq31">
+      <p><span class="qnum">31</span> The 3-2-1 backup rule means:</p>
+      <label onclick="pick(31,0)">A) 3 copies, 2 types of media, 1 offsite</label>
+      <label onclick="pick(31,1)">B) 3 backups daily, 2 weekly, 1 monthly</label>
+      <label onclick="pick(31,2)">C) 3 servers, 2 sites, 1 cloud</label>
+      <label onclick="pick(31,3)">D) 3 encryptions, 2 hashes, 1 signature</label>
+    </div>
+    
+    <div class="mq" id="mq32">
+      <p><span class="qnum">32</span> The key difference between IDS and IPS is:</p>
+      <label onclick="pick(32,0)">A) IDS is newer</label>
+      <label onclick="pick(32,1)">B) IDS monitors and alerts; IPS monitors, alerts, AND blocks</label>
+      <label onclick="pick(32,2)">C) IPS is cheaper</label>
+      <label onclick="pick(32,3)">D) There is no difference</label>
+    </div>
+    
+    <div class="mq" id="mq33">
+      <p><span class="qnum">33</span> A Next-Generation Firewall (NGFW) combines:</p>
+      <label onclick="pick(33,0)">A) Only packet filtering and stateful inspection</label>
+      <label onclick="pick(33,1)">B) IDS and VPN</label>
+      <label onclick="pick(33,2)">C) All firewall types plus IPS, threat intelligence, and application awareness</label>
+      <label onclick="pick(33,3)">D) Only application-layer filtering</label>
+    </div>
+    
+    <div class="mq" id="mq34">
+      <p><span class="qnum">34</span> At which Boehm's Curve phase is fixing a defect approximately 100x more expensive?</p>
+      <label onclick="pick(34,0)">A) Testing</label>
+      <label onclick="pick(34,1)">B) Deployment</label>
+      <label onclick="pick(34,2)">C) Design</label>
+      <label onclick="pick(34,3)">D) Development</label>
+    </div>
+    
+    <div class="mq" id="mq35">
+      <p><span class="qnum">35</span> "Protected mechanisms" in resilience means:</p>
+      <label onclick="pick(35,0)">A) Security controls are protected by insurance</label>
+      <label onclick="pick(35,1)">B) Security controls are well-documented</label>
+      <label onclick="pick(35,2)">C) Security mechanisms themselves must remain resilient during failures</label>
+      <label onclick="pick(35,3)">D) Only physical security is resilient</label>
+    </div>
+    
+    <div class="mq" id="mq36">
+      <p><span class="qnum">36</span> Network segmentation primarily supports which CIA property?</p>
+      <label onclick="pick(36,0)">A) Integrity</label>
+      <label onclick="pick(36,1)">B) Availability</label>
+      <label onclick="pick(36,2)">C) Confidentiality</label>
+      <label onclick="pick(36,3)">D) Non-repudiation</label>
+    </div>
+    
+    <div class="mq" id="mq37">
+      <p><span class="qnum">37</span> The OSI model has how many layers?</p>
+      <label onclick="pick(37,0)">A) 5</label>
+      <label onclick="pick(37,1)">B) 7</label>
+      <label onclick="pick(37,2)">C) 6</label>
+      <label onclick="pick(37,3)">D) 4</label>
+    </div>
+    
+    <div class="mq" id="mq38">
+      <p><span class="qnum">38</span> Which OSI layer handles encryption and data formatting?</p>
+      <label onclick="pick(38,0)">A) Presentation</label>
+      <label onclick="pick(38,1)">B) Session</label>
+      <label onclick="pick(38,2)">C) Application</label>
+      <label onclick="pick(38,3)">D) Transport</label>
+    </div>
+    
+    <div class="mq" id="mq39">
+      <p><span class="qnum">39</span> Defense in Depth means:</p>
+      <label onclick="pick(39,0)">A) Deep packet inspection only</label>
+      <label onclick="pick(39,1)">B) Maximum encryption at all levels</label>
+      <label onclick="pick(39,2)">C) Multiple overlapping layers of security controls</label>
+      <label onclick="pick(39,3)">D) Only using firewalls at every boundary</label>
+    </div>
+    
+    <div class="mq" id="mq40">
+      <p><span class="qnum">40</span> "Critical systems need BOTH redundancy AND diversity" because:</p>
+      <label onclick="pick(40,0)">A) Redundancy is cheaper</label>
+      <label onclick="pick(40,1)">B) Diversity is more modern</label>
+      <label onclick="pick(40,2)">C) Both handle the same failures</label>
+      <label onclick="pick(40,3)">D) Redundancy handles individual failures; diversity handles systematic failures</label>
+    </div>
+    
+    <div class="mq" id="mq41">
+      <p><span class="qnum">41</span> In the misuse case for password reset via email, the recommended mitigation is:</p>
+      <label onclick="pick(41,0)">A) Expire reset links in 15 minutes and add additional verification</label>
+      <label onclick="pick(41,1)">B) Remove password reset functionality</label>
+      <label onclick="pick(41,2)">C) Use SMS only</label>
+      <label onclick="pick(41,3)">D) Allow unlimited reset attempts</label>
+    </div>
+    
+    <div class="mq" id="mq42">
+      <p><span class="qnum">42</span> The Boehm's Curve teaches us to:</p>
+      <label onclick="pick(42,0)">A) Test more in production</label>
+      <label onclick="pick(42,1)">B) Fix security issues as early as possible in the lifecycle</label>
+      <label onclick="pick(42,2)">C) Ship fast and patch later</label>
+      <label onclick="pick(42,3)">D) Avoid the requirements phase</label>
+    </div>
+    
+    <!-- WEEK 4: IAM -->
+    <div class="section-header">Week 4: IAM (Questions 43-55)</div>
+    
+    <div class="mq" id="mq43">
+      <p><span class="qnum">43</span> In the AAA framework, "Accounting" refers to:</p>
+      <label onclick="pick(43,0)">A) Financial budgeting for security</label>
+      <label onclick="pick(43,1)">B) Counting user licenses</label>
+      <label onclick="pick(43,2)">C) Tracking and recording user activity for audit</label>
+      <label onclick="pick(43,3)">D) Calculating ROI</label>
+    </div>
+    
+    <div class="mq" id="mq44">
+      <p><span class="qnum">44</span> Using a password AND a security question is NOT MFA because:</p>
+      <label onclick="pick(44,0)">A) Both are "something you know" — same factor type</label>
+      <label onclick="pick(44,1)">B) Security questions are not secure</label>
+      <label onclick="pick(44,2)">C) Passwords are too weak</label>
+      <label onclick="pick(44,3)">D) You need three factors minimum</label>
+    </div>
+    
+    <div class="mq" id="mq45">
+      <p><span class="qnum">45</span> Which access control model is most common in enterprise environments?</p>
+      <label onclick="pick(45,0)">A) DAC</label>
+      <label onclick="pick(45,1)">B) RBAC</label>
+      <label onclick="pick(45,2)">C) MAC</label>
+      <label onclick="pick(45,3)">D) ABAC</label>
+    </div>
+    
+    <div class="mq" id="mq46">
+      <p><span class="qnum">46</span> MAC (Mandatory Access Control) is primarily used in:</p>
+      <label onclick="pick(46,0)">A) Startups</label>
+      <label onclick="pick(46,1)">B) Social media companies</label>
+      <label onclick="pick(46,2)">C) Government/military with clearance levels</label>
+      <label onclick="pick(46,3)">D) Small businesses</label>
+    </div>
+    
+    <div class="mq" id="mq47">
+      <p><span class="qnum">47</span> OAuth 2.0 provides:</p>
+      <label onclick="pick(47,0)">A) Authorization (delegated access) but NOT authentication</label>
+      <label onclick="pick(47,1)">B) Both authentication and authorization</label>
+      <label onclick="pick(47,2)">C) Only authentication</label>
+      <label onclick="pick(47,3)">D) Neither — it's just a data format</label>
+    </div>
+    
+    <div class="mq" id="mq48">
+      <p><span class="qnum">48</span> OIDC adds what to OAuth 2.0?</p>
+      <label onclick="pick(48,0)">A) Encryption</label>
+      <label onclick="pick(48,1)">B) Authentication/identity layer</label>
+      <label onclick="pick(48,2)">C) Network security</label>
+      <label onclick="pick(48,3)">D) Database access</label>
+    </div>
+    
+    <div class="mq" id="mq49">
+      <p><span class="qnum">49</span> The organizational goals cascade flows:</p>
+      <label onclick="pick(49,0)">A) Security → Technology → Enterprise</label>
+      <label onclick="pick(49,1)">B) Technology → Security → Enterprise</label>
+      <label onclick="pick(49,2)">C) Enterprise → Technology → Security</label>
+      <label onclick="pick(49,3)">D) Security → Enterprise → Technology</label>
+    </div>
+    
+    <div class="mq" id="mq50">
+      <p><span class="qnum">50</span> Privileged Access Management (PAM) is critical because:</p>
+      <label onclick="pick(50,0)">A) It's required by law everywhere</label>
+      <label onclick="pick(50,1)">B) It manages cloud infrastructure</label>
+      <label onclick="pick(50,2)">C) It's free to implement</label>
+      <label onclick="pick(50,3)">D) Compromised privileged accounts give attackers full access</label>
+    </div>
+    
+    <div class="mq" id="mq51">
+      <p><span class="qnum">51</span> The purpose of Just-In-Time (JIT) access is:</p>
+      <label onclick="pick(51,0)">A) Faster login</label>
+      <label onclick="pick(51,1)">B) Temporary elevated privileges only when needed, auto-revoked after</label>
+      <label onclick="pick(51,2)">C) Permanent admin access</label>
+      <label onclick="pick(51,3)">D) Bypassing MFA</label>
+    </div>
+    
+    <div class="mq" id="mq52">
+      <p><span class="qnum">52</span> "If it doesn't enable the mission, question whether it belongs in the architecture" refers to:</p>
+      <label onclick="pick(52,0)">A) Mission Alignment principle</label>
+      <label onclick="pick(52,1)">B) Cost reduction</label>
+      <label onclick="pick(52,2)">C) Vendor selection</label>
+      <label onclick="pick(52,3)">D) Compliance requirement</label>
+    </div>
+    
+    <div class="mq" id="mq53">
+      <p><span class="qnum">53</span> LDAP/Active Directory is used for:</p>
+      <label onclick="pick(53,0)">A) Network monitoring</label>
+      <label onclick="pick(53,1)">B) Firewall management</label>
+      <label onclick="pick(53,2)">C) Centralized user management and directory services</label>
+      <label onclick="pick(53,3)">D) Backup and recovery</label>
+    </div>
+    
+    <div class="mq" id="mq54">
+      <p><span class="qnum">54</span> The difference between SAML and OIDC is:</p>
+      <label onclick="pick(54,0)">A) They are identical</label>
+      <label onclick="pick(54,1)">B) SAML is XML-based for enterprise SSO; OIDC is JSON-based built on OAuth</label>
+      <label onclick="pick(54,2)">C) SAML is newer</label>
+      <label onclick="pick(54,3)">D) OIDC doesn't support SSO</label>
+    </div>
+    
+    <div class="mq" id="mq55">
+      <p><span class="qnum">55</span> Risk appetite for a startup vs financial services:</p>
+      <label onclick="pick(55,0)">A) Startup has higher risk appetite (speed to market); financial services has low (penalties too costly)</label>
+      <label onclick="pick(55,1)">B) Both have the same risk appetite</label>
+      <label onclick="pick(55,2)">C) Financial services has higher risk appetite</label>
+      <label onclick="pick(55,3)">D) Neither accepts any risk</label>
+    </div>
+    
+    <!-- WEEK 5: App Security + SDLC -->
+    <div class="section-header">Week 5: App Security & SDLC (Questions 56-67)</div>
+    
+    <div class="mq" id="mq56">
+      <p><span class="qnum">56</span> The three phases of technology projects are:</p>
+      <label onclick="pick(56,0)">A) Design, Build, Deploy</label>
+      <label onclick="pick(56,1)">B) Analyze, Code, Test</label>
+      <label onclick="pick(56,2)">C) Planning, Implementation, Maintenance</label>
+      <label onclick="pick(56,3)">D) Requirements, Development, Operations</label>
+    </div>
+    
+    <div class="mq" id="mq57">
+      <p><span class="qnum">57</span> Organizations de-emphasize planning because:</p>
+      <label onclick="pick(57,0)">A) Planning is too expensive</label>
+      <label onclick="pick(57,1)">B) Stakeholders push for visible progress; planning doesn't feel like progress</label>
+      <label onclick="pick(57,2)">C) Planning is not needed</label>
+      <label onclick="pick(57,3)">D) Agile eliminated planning</label>
+    </div>
+    
+    <div class="mq" id="mq58">
+      <p><span class="qnum">58</span> The planned vs unplanned cities analogy — Manhattan represents:</p>
+      <label onclick="pick(58,0)">A) Unplanned organic growth</label>
+      <label onclick="pick(58,1)">B) Failed architecture</label>
+      <label onclick="pick(58,2)">C) Structured architecture that is navigable and maintainable</label>
+      <label onclick="pick(58,3)">D) Over-engineered systems</label>
+    </div>
+    
+    <div class="mq" id="mq59">
+      <p><span class="qnum">59</span> A misuse case describes:</p>
+      <label onclick="pick(59,0)">A) Normal system usage</label>
+      <label onclick="pick(59,1)">B) Performance benchmarks</label>
+      <label onclick="pick(59,2)">C) How a system might be attacked or misused</label>
+      <label onclick="pick(59,3)">D) Compliance requirements</label>
+    </div>
+    
+    <div class="mq" id="mq60">
+      <p><span class="qnum">60</span> In DevOps, the security architect's GOALS:</p>
+      <label onclick="pick(60,0)">A) Change completely</label>
+      <label onclick="pick(60,1)">B) Stay the same, but execution adapts to the development model</label>
+      <label onclick="pick(60,2)">C) Are eliminated</label>
+      <label onclick="pick(60,3)">D) Focus only on testing</label>
+    </div>
+    
+    <div class="mq" id="mq61">
+      <p><span class="qnum">61</span> OWASP stands for:</p>
+      <label onclick="pick(61,0)">A) Open Web Application Security Project</label>
+      <label onclick="pick(61,1)">B) Online Web Architecture Security Protocol</label>
+      <label onclick="pick(61,2)">C) Organizational Web Application Safety Program</label>
+      <label onclick="pick(61,3)">D) Open Wireless Application Security Platform</label>
+    </div>
+    
+    <div class="mq" id="mq62">
+      <p><span class="qnum">62</span> Application security lifecycle four phases are:</p>
+      <label onclick="pick(62,0)">A) Plan, Build, Test, Deploy</label>
+      <label onclick="pick(62,1)">B) Design, Code, Review, Ship</label>
+      <label onclick="pick(62,2)">C) Requirements, Development, Release, Support</label>
+      <label onclick="pick(62,3)">D) Analyze, Develop, Verify, Maintain</label>
+    </div>
+    
+    <div class="mq" id="mq63">
+      <p><span class="qnum">63</span> Boehm's Curve cost at the design phase is approximately:</p>
+      <label onclick="pick(63,0)">A) 1x</label>
+      <label onclick="pick(63,1)">B) 5x</label>
+      <label onclick="pick(63,2)">C) 10x</label>
+      <label onclick="pick(63,3)">D) 50x</label>
+    </div>
+    
+    <div class="mq" id="mq64">
+      <p><span class="qnum">64</span> "Do the work upfront when it's cheap" refers to:</p>
+      <label onclick="pick(64,0)">A) Hiring early</label>
+      <label onclick="pick(64,1)">B) Getting security requirements right in the requirements/design phase</label>
+      <label onclick="pick(64,2)">C) Buying tools early for discounts</label>
+      <label onclick="pick(64,3)">D) Writing documentation first</label>
+    </div>
+    
+    <div class="mq" id="mq65">
+      <p><span class="qnum">65</span> Security Design Reviews should be incorporated into:</p>
+      <label onclick="pick(65,0)">A) Only waterfall projects</label>
+      <label onclick="pick(65,1)">B) The release process under both waterfall and agile</label>
+      <label onclick="pick(65,2)">C) Post-deployment only</label>
+      <label onclick="pick(65,3)">D) Annual audits only</label>
+    </div>
+    
+    <div class="mq" id="mq66">
+      <p><span class="qnum">66</span> The profile picture upload misuse case solution includes:</p>
+      <label onclick="pick(66,0)">A) Block all uploads</label>
+      <label onclick="pick(66,1)">B) Validate file type, scan for malware, store outside webroot</label>
+      <label onclick="pick(66,2)">C) Only allow JPG files</label>
+      <label onclick="pick(66,3)">D) Require admin approval for every upload</label>
+    </div>
+    
+    <div class="mq" id="mq67">
+      <p><span class="qnum">67</span> Building security into SDLC requires a cultural shift where security is:</p>
+      <label onclick="pick(67,0)">A) Only the architect's job</label>
+      <label onclick="pick(67,1)">B) Handled by a separate team post-release</label>
+      <label onclick="pick(67,2)">C) The responsibility of ALL employees</label>
+      <label onclick="pick(67,3)">D) Optional based on project budget</label>
+    </div>
+    
+    <!-- WEEK 6: Scope + Enterprise Architecture -->
+    <div class="section-header">Week 6: Scope & Enterprise Architecture (Questions 68-80)</div>
+    
+    <div class="mq" id="mq68">
+      <p><span class="qnum">68</span> "Scope creep" is dangerous because:</p>
+      <label onclick="pick(68,0)">A) It saves time</label>
+      <label onclick="pick(68,1)">B) It reduces costs</label>
+      <label onclick="pick(68,2)">C) Uncontrolled expansion destroys projects</label>
+      <label onclick="pick(68,3)">D) It improves security</label>
+    </div>
+    
+    <div class="mq" id="mq69">
+      <p><span class="qnum">69</span> The four-step scope-setting process starts with:</p>
+      <label onclick="pick(69,0)">A) Set Initial Scope</label>
+      <label onclick="pick(69,1)">B) Consider High-Level Goals</label>
+      <label onclick="pick(69,2)">C) Review Contextual Constraints</label>
+      <label onclick="pick(69,3)">D) Validate and Refine</label>
+    </div>
+    
+    <div class="mq" id="mq70">
+      <p><span class="qnum">70</span> Which application architecture provides the MOST scope flexibility?</p>
+      <label onclick="pick(70,0)">A) Monolithic</label>
+      <label onclick="pick(70,1)">B) N-Tier</label>
+      <label onclick="pick(70,2)">C) Microservices</label>
+      <label onclick="pick(70,3)">D) Client-Server</label>
+    </div>
+    
+    <div class="mq" id="mq71">
+      <p><span class="qnum">71</span> The scope-setting Catch-22 is:</p>
+      <label onclick="pick(71,0)">A) Scope is too expensive</label>
+      <label onclick="pick(71,1)">B) Can't validate scope without stakeholders, but can't talk to stakeholders without initial scope</label>
+      <label onclick="pick(71,2)">C) Scope never changes</label>
+      <label onclick="pick(71,3)">D) Only architects can set scope</label>
+    </div>
+    
+    <div class="mq" id="mq72">
+      <p><span class="qnum">72</span> Enterprise security architecture focuses on:</p>
+      <label onclick="pick(72,0)">A) Writing application code</label>
+      <label onclick="pick(72,1)">B) Controls, countermeasures, and operational constraints around existing infrastructure</label>
+      <label onclick="pick(72,2)">C) Hardware procurement only</label>
+      <label onclick="pick(72,3)">D) End-user training exclusively</label>
+    </div>
+    
+    <div class="mq" id="mq73">
+      <p><span class="qnum">73</span> Step 4 (Validate and Refine) is critical because:</p>
+      <label onclick="pick(73,0)">A) Stakeholders catch blind spots and it builds trust through collaboration</label>
+      <label onclick="pick(73,1)">B) It is required by law</label>
+      <label onclick="pick(73,2)">C) It generates documentation</label>
+      <label onclick="pick(73,3)">D) It reduces the number of meetings</label>
+    </div>
+    
+    <div class="mq" id="mq74">
+      <p><span class="qnum">74</span> Development methodology impacts scope because:</p>
+      <label onclick="pick(74,0)">A) All methodologies handle scope the same way</label>
+      <label onclick="pick(74,1)">B) Waterfall requires getting scope right upfront; Agile allows sprint-by-sprint changes</label>
+      <label onclick="pick(74,2)">C) Only Agile uses scope</label>
+      <label onclick="pick(74,3)">D) Scope is not related to development methodology</label>
+    </div>
+    
+    <div class="mq" id="mq75">
+      <p><span class="qnum">75</span> Three factors for establishing enterprise scope are:</p>
+      <label onclick="pick(75,0)">A) Cost, Time, Quality</label>
+      <label onclick="pick(75,1)">B) Existing Capability, Risk Management, Strategic Planning</label>
+      <label onclick="pick(75,2)">C) People, Process, Technology</label>
+      <label onclick="pick(75,3)">D) CIA Triad</label>
+    </div>
+    
+    <div class="mq" id="mq76">
+      <p><span class="qnum">76</span> Empty scope occurs when:</p>
+      <label onclick="pick(76,0)">A) The project is too small</label>
+      <label onclick="pick(76,1)">B) The architect has no budget</label>
+      <label onclick="pick(76,2)">C) Organizational constraints reduce what can be changed to effectively zero</label>
+      <label onclick="pick(76,3)">D) Stakeholders approve everything</label>
+    </div>
+    
+    <div class="mq" id="mq77">
+      <p><span class="qnum">77</span> Key principle: "Scope is a tool" means:</p>
+      <label onclick="pick(77,0)">A) Buy scope management software</label>
+      <label onclick="pick(77,1)">B) Use scope to selectively delegate security requirements to other teams</label>
+      <label onclick="pick(77,2)">C) Scope is rigid and final</label>
+      <label onclick="pick(77,3)">D) Only use scope in waterfall projects</label>
+    </div>
+    
+    <div class="mq" id="mq78">
+      <p><span class="qnum">78</span> In the DevOps era, Amazon deploys approximately:</p>
+      <label onclick="pick(78,0)">A) Once a month</label>
+      <label onclick="pick(78,1)">B) Every minute</label>
+      <label onclick="pick(78,2)">C) Once a week</label>
+      <label onclick="pick(78,3)">D) Once a day</label>
+    </div>
+    
+    <div class="mq" id="mq79">
+      <p><span class="qnum">79</span> Formal risk frameworks (ISO 31000, NIST RMF) help scope by:</p>
+      <label onclick="pick(79,0)">A) Eliminating all risk</label>
+      <label onclick="pick(79,1)">B) Providing predefined scope boundaries and risk prioritization</label>
+      <label onclick="pick(79,2)">C) Replacing architecture</label>
+      <label onclick="pick(79,3)">D) Automating security</label>
+    </div>
+    
+    <div class="mq" id="mq80">
+      <p><span class="qnum">80</span> The Catch-22 solution involves:</p>
+      <label onclick="pick(80,0)">A) Skip stakeholder involvement</label>
+      <label onclick="pick(80,1)">B) A two-phase approach with initial scope that accepts error</label>
+      <label onclick="pick(80,2)">C) Hire consultants</label>
+      <label onclick="pick(80,3)">D) Use only bottom-up approach</label>
+    </div>
+    
+    <!-- WEEK 7: Decision Making -->
+    <div class="section-header">Week 7: Decision Making (Questions 81-90)</div>
+    
+    <div class="mq" id="mq81">
+      <p><span class="qnum">81</span> The Decision-Making Framework has how many steps?</p>
+      <label onclick="pick(81,0)">A) 3</label>
+      <label onclick="pick(81,1)">B) 5</label>
+      <label onclick="pick(81,2)">C) 7</label>
+      <label onclick="pick(81,3)">D) 10</label>
+    </div>
+    
+    <div class="mq" id="mq82">
+      <p><span class="qnum">82</span> Why include "status quo" as an option in decision-making?</p>
+      <label onclick="pick(82,0)">A) To evaluate whether change is actually needed vs current state</label>
+      <label onclick="pick(82,1)">B) It's required by policy</label>
+      <label onclick="pick(82,2)">C) To satisfy auditors</label>
+      <label onclick="pick(82,3)">D) Status quo is always the best option</label>
+    </div>
+    
+    <div class="mq" id="mq83">
+      <p><span class="qnum">83</span> The four decision-making challenges are:</p>
+      <label onclick="pick(83,0)">A) Budget, timeline, staffing, tools</label>
+      <label onclick="pick(83,1)">B) Incomplete information, conflicting requirements, legacy constraints, resource limitations</label>
+      <label onclick="pick(83,2)">C) Compliance, cost, culture, competition</label>
+      <label onclick="pick(83,3)">D) Authentication, authorization, accounting, auditing</label>
+    </div>
+    
+    <div class="mq" id="mq84">
+      <p><span class="qnum">84</span> "Defensibility" in architectural decisions means:</p>
+      <label onclick="pick(84,0)">A) Building physical defenses</label>
+      <label onclick="pick(84,1)">B) Documenting rationale so decisions can be defended during audits and incidents</label>
+      <label onclick="pick(84,2)">C) Using only defensive technologies</label>
+      <label onclick="pick(84,3)">D) Avoiding risk entirely</label>
+    </div>
+    
+    <div class="mq" id="mq85">
+      <p><span class="qnum">85</span> When should an organization BUILD a custom solution?</p>
+      <label onclick="pick(85,0)">A) Always — custom is always better</label>
+      <label onclick="pick(85,1)">B) When talent is scarce</label>
+      <label onclick="pick(85,2)">C) When requirements are highly unique, team is skilled, and it's a long-term strategic capability</label>
+      <label onclick="pick(85,3)">D) When budget is limited</label>
+    </div>
+    
+    <div class="mq" id="mq86">
+      <p><span class="qnum">86</span> When should an organization BUY or use managed services?</p>
+      <label onclick="pick(86,0)">A) Never — always build</label>
+      <label onclick="pick(86,1)">B) Only for compliance</label>
+      <label onclick="pick(86,2)">C) When it's a commodity capability, talent is scarce, or rapid deployment is needed</label>
+      <label onclick="pick(86,3)">D) Only for small projects</label>
+    </div>
+    
+    <div class="mq" id="mq87">
+      <p><span class="qnum">87</span> The Decision-Making Checklist has how many items?</p>
+      <label onclick="pick(87,0)">A) 5</label>
+      <label onclick="pick(87,1)">B) 8</label>
+      <label onclick="pick(87,2)">C) 10</label>
+      <label onclick="pick(87,3)">D) 12</label>
+    </div>
+    
+    <div class="mq" id="mq88">
+      <p><span class="qnum">88</span> "Ivory tower mandates fail" means:</p>
+      <label onclick="pick(88,0)">A) Don't build tall buildings</label>
+      <label onclick="pick(88,1)">B) Architecture succeeds through collaboration and partnership, not top-down dictation</label>
+      <label onclick="pick(88,2)">C) Mandates are always effective</label>
+      <label onclick="pick(88,3)">D) Only executives should make decisions</label>
+    </div>
+    
+    <div class="mq" id="mq89">
+      <p><span class="qnum">89</span> Evaluation criteria include two main categories:</p>
+      <label onclick="pick(89,0)">A) Cost and Timeline</label>
+      <label onclick="pick(89,1)">B) Technical and Non-Technical</label>
+      <label onclick="pick(89,2)">C) Security/Risk Criteria AND Business/Operational Criteria</label>
+      <label onclick="pick(89,3)">D) Internal and External</label>
+    </div>
+    
+    <div class="mq" id="mq90">
+      <p><span class="qnum">90</span> "Perfect solution exists in theory, not affordable or achievable" relates to:</p>
+      <label onclick="pick(90,0)">A) Optimism bias</label>
+      <label onclick="pick(90,1)">B) Resource limitations challenge</label>
+      <label onclick="pick(90,2)">C) Compliance requirements</label>
+      <label onclick="pick(90,3)">D) Vendor negotiations</label>
+    </div>
+    
+    <!-- CASES + NIST -->
+    <div class="section-header">Cases & NIST (Questions 91-100)</div>
+    
+    <div class="mq" id="mq91">
+      <p><span class="qnum">91</span> The healthcare case study chose managed services primarily because of:</p>
+      <label onclick="pick(91,0)">A) Lowest cost option</label>
+      <label onclick="pick(91,1)">B) Executive preference</label>
+      <label onclick="pick(91,2)">C) Cybersecurity talent shortage and need for immediate 24/7 coverage</label>
+      <label onclick="pick(91,3)">D) Regulatory mandate</label>
+    </div>
+    
+    <div class="mq" id="mq92">
+      <p><span class="qnum">92</span> The healthcare solution achieved detection increase of:</p>
+      <label onclick="pick(92,0)">A) 10%</label>
+      <label onclick="pick(92,1)">B) 25%</label>
+      <label onclick="pick(92,2)">C) 50%+</label>
+      <label onclick="pick(92,3)">D) 90%</label>
+    </div>
+    
+    <div class="mq" id="mq93">
+      <p><span class="qnum">93</span> Cimpress drove Zero Trust adoption by:</p>
+      <label onclick="pick(93,0)">A) Firing non-compliant business units</label>
+      <label onclick="pick(93,1)">B) Lead by example, not mandate</label>
+      <label onclick="pick(93,2)">C) Regulatory requirement</label>
+      <label onclick="pick(93,3)">D) Government contract requirement</label>
+    </div>
+    
+    <div class="mq" id="mq94">
+      <p><span class="qnum">94</span> SOAR stands for:</p>
+      <label onclick="pick(94,0)">A) Security Orchestration, Automation and Response</label>
+      <label onclick="pick(94,1)">B) System Operations and Reporting</label>
+      <label onclick="pick(94,2)">C) Secure Operations Architecture Review</label>
+      <label onclick="pick(94,3)">D) Security Operations Analytics and Reporting</label>
+    </div>
+    
+    <div class="mq" id="mq95">
+      <p><span class="qnum">95</span> The Policy Engine (PE) in Zero Trust is responsible for:</p>
+      <label onclick="pick(95,0)">A) Enforcing network firewall rules</label>
+      <label onclick="pick(95,1)">B) Managing user passwords</label>
+      <label onclick="pick(95,2)">C) Making the ultimate decision to grant or deny access</label>
+      <label onclick="pick(95,3)">D) Encrypting all data</label>
+    </div>
+    
+    <div class="mq" id="mq96">
+      <p><span class="qnum">96</span> The CISA Zero Trust Maturity Model has these pillars:</p>
+      <label onclick="pick(96,0)">A) CIA Triad + Compliance</label>
+      <label onclick="pick(96,1)">B) Identity, Devices, Networks, Applications & Workloads, Data</label>
+      <label onclick="pick(96,2)">C) People, Process, Technology</label>
+      <label onclick="pick(96,3)">D) Prevent, Detect, Respond, Recover</label>
+    </div>
+    
+    <div class="mq" id="mq97">
+      <p><span class="qnum">97</span> Zero Trust differs from perimeter security because:</p>
+      <label onclick="pick(97,0)">A) It uses stronger firewalls</label>
+      <label onclick="pick(97,1)">B) It only works in the cloud</label>
+      <label onclick="pick(97,2)">C) It assumes no implicit trust based on network location — always verify</label>
+      <label onclick="pick(97,3)">D) It eliminates the need for authentication</label>
+    </div>
+    
+    <div class="mq" id="mq98">
+      <p><span class="qnum">98</span> The PEP (Policy Enforcement Point) acts as:</p>
+      <label onclick="pick(98,0)">A) The brain making access decisions</label>
+      <label onclick="pick(98,1)">B) The gateway/bouncer that enforces PE decisions in real-time</label>
+      <label onclick="pick(98,2)">C) The logging system</label>
+      <label onclick="pick(98,3)">D) The backup server</label>
+    </div>
+    
+    <div class="mq" id="mq99">
+      <p><span class="qnum">99</span> The cross-case pattern "phased implementation" means:</p>
+      <label onclick="pick(99,0)">A) Do everything at once</label>
+      <label onclick="pick(99,1)">B) Skip testing phases</label>
+      <label onclick="pick(99,2)">C) Deploy incrementally, proving value at each stage and reducing risk</label>
+      <label onclick="pick(99,3)">D) Only implement in phases during emergencies</label>
+    </div>
+    
+    <div class="mq" id="mq100">
+      <p><span class="qnum">100</span> The single most important lesson from BOTH case studies is:</p>
+      <label onclick="pick(100,0)">A) Always build custom solutions</label>
+      <label onclick="pick(100,1)">B) Only use managed services</label>
+      <label onclick="pick(100,2)">C) Compliance drives all decisions</label>
+      <label onclick="pick(100,3)">D) Context drives decisions — no universal right answer; use phased approaches with measurable outcomes</label>
+    </div>
+    
+    <div id="result">
+      <div class="result-label">Exam Results</div>
+      <div style="margin-bottom: 20px;"></div>
+    </div>
+    
+    <div class="footer">
+      <p>SEAS8405 Cybersecurity Architectures Midterm Exam</p>
+      <p style="margin-top: 10px; color: #6e7681;">All 100 questions. Good luck!</p>
+    </div>
+  </div>
+  
+  <script>
+    var answers = {};
+    var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
+    
+    var startTime = Date.now();
+    setInterval(function(){
+      var s = Math.floor((Date.now() - startTime) / 1000);
+      var m = Math.floor(s / 60);
+      s = s % 60;
+      document.getElementById('timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+    
+    function pick(q, c) {
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      labels.forEach(function(l) {
+        l.style.background = 'transparent';
+        l.style.borderColor = '#30363d';
+      });
+      labels[c].style.background = '#1c2333';
+      labels[c].style.borderColor = '#58a6ff';
+      document.getElementById('progress').textContent = Object.keys(answers).length + '/100 answered';
+      document.getElementById('progbar').style.width = (Object.keys(answers).length) + '%';
+    }
+    
+    function gradeExam() {
+      var score = 0;
+      for (var i = 1; i <= 100; i++) {
+        var labels = document.querySelectorAll('#mq' + i + ' label');
+        if (answers[i] === correct[i]) {
+          score++;
+          labels[correct[i]].style.background = '#1c2a1c';
+          labels[correct[i]].style.borderColor = '#56d364';
+        } else {
+          if (answers[i] !== undefined) {
+            labels[answers[i]].style.background = '#2a1c1c';
+            labels[answers[i]].style.borderColor = '#f97583';
+          }
+          labels[correct[i]].style.background = '#1c2a1c';
+          labels[correct[i]].style.borderColor = '#56d364';
+        }
+      }
+      var pct = Math.round(score / 100 * 100);
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:#58a6ff">' + score + '/100</div><div style="font-size:1.5em;color:#8b949e">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? '#56d364' : '#f97583') + '">' + g + '</div>';
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+    }
+    
+    function resetExam() {
+      answers = {};
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = 'transparent';
+        l.style.borderColor = '#30363d';
+      });
+      document.getElementById('progress').textContent = '0/100 answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  </script>
+</body>
+</html>
