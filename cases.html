@@ -554,6 +554,61 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ STUDY TIMER ═══ */
+  .study-timer-wrapper { background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98)); border-bottom: 2px solid var(--page-color); overflow: hidden; transition: max-height 0.3s ease-out; }
+  .study-timer-wrapper.collapsed { max-height: 48px !important; }
+  .study-timer-wrapper.collapsed .timer-content { opacity: 0; pointer-events: none; }
+  .timer-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; cursor: pointer; user-select: none; }
+  .timer-header:hover { background: rgba(255,255,255,0.03); }
+  .timer-header-left { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--page-color); font-size: 0.95em; }
+  .timer-header-left .timer-icon { font-size: 1.2em; }
+  .timer-mini-display { font-family: 'Courier New', monospace; font-size: 1em; color: #fff; background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 6px; display: none; }
+  .study-timer-wrapper.collapsed .timer-mini-display { display: inline-block; }
+  .timer-toggle-btn { background: none; border: none; color: var(--page-color); font-size: 1.2em; cursor: pointer; padding: 5px; transition: transform 0.3s; }
+  .study-timer-wrapper.collapsed .timer-toggle-btn { transform: rotate(180deg); }
+  .timer-content { padding: 0 20px 20px; opacity: 1; transition: opacity 0.2s; }
+  .timer-presets { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .preset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid transparent; background: rgba(255,255,255,0.06); color: #aaa; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: all 0.2s; }
+  .preset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .preset-btn.active { border-color: var(--page-color); color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .timer-custom-inputs { display: none; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .timer-custom-inputs.show { display: flex; }
+  .timer-custom-inputs label { font-size: 0.85em; color: #aaa; }
+  .timer-custom-inputs input { width: 60px; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 0.9em; text-align: center; }
+  .timer-custom-inputs input:focus { outline: none; border-color: var(--page-color); }
+  .timer-display-section { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+  .timer-countdown { font-family: 'Courier New', monospace; font-size: 3em; font-weight: 700; color: #fff; background: rgba(0,0,0,0.4); padding: 10px 30px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); min-width: 200px; text-align: center; transition: all 0.3s; }
+  .timer-countdown.study-mode { border-color: var(--page-color); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+  .timer-countdown.break-mode { border-color: var(--correct); color: var(--correct); box-shadow: 0 0 20px rgba(81,207,102,0.2); }
+  .timer-countdown.paused { opacity: 0.6; }
+  .timer-status { font-size: 0.9em; color: #aaa; text-align: center; min-width: 120px; }
+  .timer-status .status-label { font-weight: 700; color: var(--page-color); font-size: 1.1em; }
+  .timer-status .status-label.break { color: var(--correct); }
+  .timer-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .timer-btn { padding: 10px 24px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.95em; cursor: pointer; transition: all 0.2s; }
+  .timer-btn.start { background: var(--page-color); color: #000; }
+  .timer-btn.start:hover { filter: brightness(1.1); transform: scale(1.02); }
+  .timer-btn.pause { background: rgba(255,169,77,0.8); color: #000; }
+  .timer-btn.pause:hover { background: rgba(255,169,77,1); }
+  .timer-btn.reset { background: rgba(255,255,255,0.1); color: #aaa; border: 1px solid rgba(255,255,255,0.2); }
+  .timer-btn.reset:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .timer-btn.skip { background: rgba(255,255,255,0.06); color: #aaa; border: 1px solid rgba(255,255,255,0.1); font-size: 0.85em; padding: 8px 16px; }
+  .timer-btn.skip:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .timer-stats { display: flex; justify-content: center; gap: 24px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .timer-stat { text-align: center; }
+  .timer-stat .stat-value { font-size: 1.3em; font-weight: 700; color: var(--page-color); font-family: 'Courier New', monospace; }
+  .timer-stat .stat-label { font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .break-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10001; justify-content: center; align-items: center; }
+  .break-overlay.show { display: flex; }
+  .break-message { background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2)); border: 3px solid var(--correct); border-radius: 20px; padding: 40px 60px; text-align: center; max-width: 500px; margin: 20px; }
+  .break-message h2 { color: var(--correct); font-size: 1.8em; margin-bottom: 12px; }
+  .break-message p { color: #ccc; font-size: 1.1em; margin-bottom: 8px; line-height: 1.6; }
+  .break-message .break-tip { background: rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 10px; margin: 16px 0; font-size: 0.95em; color: #aaa; }
+  .break-message .break-countdown { font-family: 'Courier New', monospace; font-size: 2.5em; color: var(--correct); margin: 16px 0; }
+  .break-message button { padding: 12px 30px; border-radius: 10px; border: none; background: var(--correct); color: #000; font-weight: 700; font-size: 1em; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+  .break-message button:hover { filter: brightness(1.1); transform: scale(1.02); }
+  @media (max-width: 768px) { .timer-countdown { font-size: 2.2em; padding: 8px 20px; min-width: 150px; } .timer-display-section { gap: 12px; } .timer-stats { gap: 16px; } .break-message { padding: 30px 24px; } .break-message h2 { font-size: 1.4em; } }
 </style>
 </head>
 <body>
@@ -571,6 +626,70 @@
   <a href="nist.html" class="ni">NIST</a>
   <a href="mega.html" class="mega">MEGA EXAM</a>
 </nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">⏱️</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">▼</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
 <div class="page-hero">
   <h1>Case Studies — Healthcare + Cimpress</h1>
   <div class="sub">SEAS8405 · Spring 2026 · Prof. Wayne Le · GWU</div>
@@ -1112,6 +1231,44 @@
 
     updateScore();
   });
+})();
+
+// ═══ STUDY TIMER ═══
+(function() {
+  let timerState = { studyMinutes: 25, breakMinutes: 5, secondsRemaining: 25 * 60, isRunning: false, isBreak: false, totalStudySeconds: 0, sessionsCompleted: 0, currentStreak: 0, intervalId: null };
+  const presets = { pomodoro: { study: 25, break: 5 }, short: { study: 15, break: 3 }, custom: { study: 25, break: 5 } };
+  const breakMessages = [{ title: "Time for a Break!", text: "Great focus session! You've earned this rest." }, { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." }, { title: "Break Time!", text: "Step away, stretch, and come back refreshed." }, { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." }, { title: "Rest Up!", text: "A short break now means better focus later." }, { title: "You Did It!", text: "Another session down! Keep up the great work." }];
+  const breakTips = ["Stand up and stretch your legs for a minute.", "Look away from the screen - focus on something 20 feet away.", "Grab a glass of water to stay hydrated.", "Do some shoulder rolls to release tension.", "Take a few deep breaths to reset your focus.", "Walk around the room or do some light movement.", "Close your eyes and rest them for 30 seconds.", "Snack on something healthy if you're hungry."];
+  function formatTime(s) { return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`; }
+  function formatTotalTime(s) { return s >= 3600 ? `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m` : formatTime(s); }
+  function updateDisplay() {
+    const timeStr = formatTime(timerState.secondsRemaining);
+    document.getElementById('timerCountdown').textContent = timeStr;
+    document.getElementById('timerMiniDisplay').textContent = timeStr;
+    document.getElementById('totalStudyTime').textContent = formatTotalTime(timerState.totalStudySeconds);
+    document.getElementById('sessionsCompleted').textContent = timerState.sessionsCompleted;
+    document.getElementById('currentStreak').textContent = timerState.currentStreak;
+    const countdown = document.getElementById('timerCountdown'), statusLabel = document.getElementById('timerStatusLabel'), statusText = document.getElementById('timerStatusText'), startPauseBtn = document.getElementById('startPauseBtn'), skipBtn = document.getElementById('skipBtn');
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) { countdown.classList.add('break-mode'); statusLabel.textContent = 'BREAK'; statusLabel.classList.add('break'); statusText.textContent = 'Relax and recharge'; skipBtn.textContent = 'End Break'; document.getElementById('breakCountdown').textContent = timeStr; }
+    else if (timerState.isRunning) { countdown.classList.add('study-mode'); statusLabel.textContent = 'STUDYING'; statusLabel.classList.remove('break'); statusText.textContent = 'Stay focused!'; skipBtn.textContent = 'Skip to Break'; }
+    else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) { countdown.classList.add('paused'); statusLabel.textContent = 'PAUSED'; statusLabel.classList.remove('break'); statusText.textContent = 'Click Start to resume'; }
+    else { statusLabel.textContent = 'READY'; statusLabel.classList.remove('break'); statusText.textContent = 'Click Start to begin'; }
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start'; startPauseBtn.classList.toggle('pause', timerState.isRunning); startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+  function playNotification() { try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const play = (f,t,d) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value = f; o.type = 'sine'; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.3,t+0.1); g.gain.linearRampToValueAtTime(0,t+d); o.start(t); o.stop(t+d); }; const n = ctx.currentTime; play(523.25,n,0.3); play(659.25,n+0.15,0.3); play(783.99,n+0.3,0.4); } catch(e){} }
+  function showBreakOverlay() { const m = breakMessages[Math.floor(Math.random()*breakMessages.length)], t = breakTips[Math.floor(Math.random()*breakTips.length)]; document.getElementById('breakTitle').textContent = m.title; document.getElementById('breakEncouragement').textContent = m.text; document.getElementById('breakTip').textContent = t; document.getElementById('breakOverlay').classList.add('show'); }
+  function tick() { if (!timerState.isRunning) return; timerState.secondsRemaining--; if (!timerState.isBreak) timerState.totalStudySeconds++; updateDisplay(); if (timerState.secondsRemaining <= 0) { playNotification(); if (timerState.isBreak) { timerState.isBreak = false; timerState.secondsRemaining = timerState.studyMinutes * 60; timerState.currentStreak++; dismissBreak(); } else { timerState.sessionsCompleted++; timerState.isBreak = true; timerState.secondsRemaining = timerState.breakMinutes * 60; showBreakOverlay(); } updateDisplay(); } }
+  window.toggleTimer = function() { if (timerState.isRunning) { timerState.isRunning = false; clearInterval(timerState.intervalId); } else { timerState.isRunning = true; timerState.intervalId = setInterval(tick, 1000); } updateDisplay(); };
+  window.resetTimer = function() { timerState.isRunning = false; timerState.isBreak = false; clearInterval(timerState.intervalId); timerState.secondsRemaining = timerState.studyMinutes * 60; dismissBreak(); updateDisplay(); };
+  window.skipToBreak = function() { if (timerState.isBreak) { timerState.isBreak = false; timerState.secondsRemaining = timerState.studyMinutes * 60; timerState.currentStreak++; dismissBreak(); } else { timerState.sessionsCompleted++; timerState.isBreak = true; timerState.secondsRemaining = timerState.breakMinutes * 60; showBreakOverlay(); } updateDisplay(); };
+  window.dismissBreak = function() { document.getElementById('breakOverlay').classList.remove('show'); };
+  window.setPreset = function(p) { document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === p)); document.getElementById('customInputs').classList.toggle('show', p === 'custom'); if (p !== 'custom') { const pr = presets[p]; timerState.studyMinutes = pr.study; timerState.breakMinutes = pr.break; if (!timerState.isRunning && !timerState.isBreak) timerState.secondsRemaining = timerState.studyMinutes * 60; updateDisplay(); } };
+  window.applyCustom = function() { const s = Math.max(1, Math.min(120, parseInt(document.getElementById('customStudy').value) || 25)), b = Math.max(1, Math.min(30, parseInt(document.getElementById('customBreak').value) || 5)); document.getElementById('customStudy').value = s; document.getElementById('customBreak').value = b; timerState.studyMinutes = s; timerState.breakMinutes = b; presets.custom = { study: s, break: b }; if (!timerState.isRunning && !timerState.isBreak) timerState.secondsRemaining = timerState.studyMinutes * 60; updateDisplay(); };
+  window.toggleStudyTimer = function() { document.getElementById('studyTimerWrapper').classList.toggle('collapsed'); };
+  updateDisplay();
+  setInterval(() => { if (timerState.totalStudySeconds > 0) localStorage.setItem('studyTimerStats', JSON.stringify({ totalStudySeconds: timerState.totalStudySeconds, sessionsCompleted: timerState.sessionsCompleted, date: new Date().toDateString() })); }, 30000);
+  const saved = localStorage.getItem('studyTimerStats'); if (saved) { try { const d = JSON.parse(saved); if (d.date === new Date().toDateString()) { timerState.totalStudySeconds = d.totalStudySeconds || 0; timerState.sessionsCompleted = d.sessionsCompleted || 0; updateDisplay(); } } catch(e){} }
 })();
 </script>
 
