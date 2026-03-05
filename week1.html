@@ -176,6 +176,72 @@
     color: #ddd;
   }
 
+  
+  /* ═══ ORIGINAL DESIGN CLASSES (callout boxes, mnemonics, flow diagrams) ═══ */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -243,6 +309,23 @@
   }
   .explanation.show { display: block; }
 
+  /* ═══ QUIZ SECTION ═══ */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
   /* Score boxes */
   .score-box, #result, #scoreBox, [id*="score"] {
     background: rgba(233,69,96,0.15);
@@ -288,6 +371,13 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -327,6 +417,8 @@
         <details>
             <summary>1. What is Cybersecurity Architecture?</summary>
             <div class="content-section">
+                <div class="red"><strong>KEY IDEA:</strong> Cybersecurity architecture is <em>strategic planning</em> — deciding WHERE and WHY to put security controls. NOT just buying tools.</div>
+
                 <p>
                     <strong>Definition:</strong> Strategic planning of security measures across an organization. Think of it as a blueprint for how security controls, processes, and technologies work together. The key word is <em>"strategic"</em> — not engineering.
                 </p>
@@ -373,6 +465,8 @@
         <details>
             <summary>2. "Bake In, Don't Bolt On"</summary>
             <div class="content-section">
+                <div class="mem"><small>Remember This</small><br><strong>"Bake In, Don't Bolt On"</strong></div>
+
                 <p>
                     Security must be integrated from the design phase forward. Bolting on security after development is expensive, ineffective, and fragile.
                 </p>
@@ -400,6 +494,8 @@
         <details>
             <summary>3. CIA Triad — Foundation of Security</summary>
             <div class="content-section">
+                <div class="mem"><small>The Three Pillars</small><br><strong>C = Confidentiality · I = Integrity · A = Availability</strong></div>
+
                 <p>The CIA Triad is the fundamental framework for security objectives. All security measures map to one of these three pillars.</p>
 
                 <h3 style="margin-top: 20px; color: #58a6ff;">The Three Components</h3>
@@ -537,6 +633,8 @@
         <details>
             <summary>4. ASARP — As Secure As Reasonably Practicable</summary>
             <div class="content-section">
+                <div class="mem"><small>Remember This</small><br><strong>"As Secure As Reasonably Practicable"</strong></div>
+
                 <p>
                     <strong>Definition (NIST SP 800-160 V1):</strong> The point where investing more in security produces disproportionate negative impact on cost, schedule, or system performance.
                 </p>
@@ -589,6 +687,8 @@
         <details>
             <summary>5. Inside-Out vs. Outside-In Thinking</summary>
             <div class="content-section">
+                <div class="red"><strong>KEY IDEA:</strong> Both <em>inside-out</em> (building secure features) and <em>outside-in</em> (defending against attacks) are essential. Missing either one leaves you vulnerable.</div>
+
                 <p>
                     Two complementary perspectives on security architecture. Both are essential; ignoring one creates blind spots.
                 </p>
@@ -1317,277 +1417,257 @@
         </details>
 
         <!-- QUIZ SECTION -->
-        <div class="quiz-container">
-            <div class="quiz-title">Week 1 Knowledge Check Quiz</div>
-            <p style="margin-bottom: 25px; font-size: 18px; color: #8b949e;">
-                Answer all 15 questions. Click an option to see if it's correct. At the bottom, click "Check My Score" to see your results.
-            </p>
+        
+    <div class="quiz-section">
+      <h2>Week 1 — Test Yourself (15 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
 
-            <!-- Q1 -->
-            <div class="question-block" id="w1q1">
-                <div class="q-number">Question 1 of 15</div>
-                <div class="q-text">What is the primary difference between cybersecurity architecture and cybersecurity engineering?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q1','a')">Architecture focuses on WHY/WHAT over 3-5 years organization-wide; Engineering focuses on HOW in short-term sprints</div>
-                    <div class="option" onclick="showAns('w1q1','b')">Architecture is cheaper and faster than engineering</div>
-                    <div class="option" onclick="showAns('w1q1','b')">Engineering is more important than architecture</div>
-                    <div class="option" onclick="showAns('w1q1','b')">They are the same thing; the terms are interchangeable</div>
-                </div>
-                <div class="ans correct">Correct! Architecture is strategic (WHY/WHAT, long-term, org-wide). Engineering is tactical (HOW, short-term, specific systems). Both are essential.</div>
-                <div class="ans wrong">Incorrect. Review Section 1. Architecture and engineering are distinct but complementary disciplines.</div>
-            </div>
-
-            <!-- Q2 -->
-            <div class="question-block" id="w1q2">
-                <div class="q-number">Question 2 of 15</div>
-                <div class="q-text">What does "Bake In, Don't Bolt On" mean in security architecture?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q2','a')">Security should be integrated from the design phase forward, not added afterward as an afterthought</div>
-                    <div class="option" onclick="showAns('w1q2','b')">Security controls should be bolted onto existing systems for flexibility</div>
-                    <div class="option" onclick="showAns('w1q2','b')">Security should only be considered after development is complete</div>
-                    <div class="option" onclick="showAns('w1q2','b')">Baking and bolting refer to different types of firewalls</div>
-                </div>
-                <div class="ans correct">Correct! "Bake In, Don't Bolt On" means security must be part of initial design. Bolting on later is expensive (e.g., $2M + 9 months for healthcare org).</div>
-                <div class="ans wrong">Incorrect. Review Section 2. Early integration is dramatically cheaper and more effective than retrofitting.</div>
-            </div>
-
-            <!-- Q3 -->
-            <div class="question-block" id="w1q3">
-                <div class="q-number">Question 3 of 15</div>
-                <div class="q-text">For a hospital's patient records system, which CIA component is the highest priority?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q3','b')">Confidentiality only; patient privacy is all that matters</div>
-                    <div class="option" onclick="showAns('w1q3','b')">Availability only; uptime is all that matters</div>
-                    <div class="option" onclick="showAns('w1q3','a')">All three balanced: patient privacy (confidentiality), accurate records (integrity), and system uptime (availability) are all critical</div>
-                    <div class="option" onclick="showAns('w1q3','b')">Integrity only; data accuracy is all that matters</div>
-                </div>
-                <div class="ans correct">Correct! Healthcare requires balanced CIA. Patient privacy, accurate medical records, and system uptime all directly impact patient safety.</div>
-                <div class="ans wrong">Incorrect. Review Section 3. Healthcare systems need all three pillars balanced; no single component can be ignored.</div>
-            </div>
-
-            <!-- Q4 -->
-            <div class="question-block" id="w1q4">
-                <div class="q-number">Question 4 of 15</div>
-                <div class="q-text">What does ASARP stand for in NIST SP 800-160?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q4','a')">As Secure As Reasonably Practicable</div>
-                    <div class="option" onclick="showAns('w1q4','b')">Authentication System And Reporting Protocol</div>
-                    <div class="option" onclick="showAns('w1q4','b')">Advanced Security Architecture and Risk Plan</div>
-                    <div class="option" onclick="showAns('w1q4','b')">Architecture Standards And Practice Requirements</div>
-                </div>
-                <div class="ans correct">Correct! ASARP is the point where additional security investment produces disproportionate negative impact on cost/schedule/performance.</div>
-                <div class="ans wrong">Incorrect. Review Section 4. ASARP defines the balance point between security and operational practicality.</div>
-            </div>
-
-            <!-- Q5 -->
-            <div class="question-block" id="w1q5">
-                <div class="q-number">Question 5 of 15</div>
-                <div class="q-text">According to the course, what percentage of successful intrusions involve zero malware?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q5','a')">81%</div>
-                    <div class="option" onclick="showAns('w1q5','b')">45%</div>
-                    <div class="option" onclick="showAns('w1q5','b')">92%</div>
-                    <div class="option" onclick="showAns('w1q5','b')">23%</div>
-                </div>
-                <div class="ans correct">Correct! 81% of successful intrusions use legitimate tools and stolen credentials, not malware. This means antivirus alone is insufficient; behavioral detection is critical.</div>
-                <div class="ans wrong">Incorrect. Review Section 11. The 81% statistic shows that most modern attacks use legitimate tools, not malware.</div>
-            </div>
-
-            <!-- Q6 -->
-            <div class="question-block" id="w1q6">
-                <div class="q-number">Question 6 of 15</div>
-                <div class="q-text">What does D3FEND stand for?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q6','a')">Detection, Denial, and Disruption Framework Empowering Network Defense</div>
-                    <div class="option" onclick="showAns('w1q6','b')">Defensive Deployment and Deception Endpoint Framework</div>
-                    <div class="option" onclick="showAns('w1q6','b')">Data Defense and Digital Engagement Framework</div>
-                    <div class="option" onclick="showAns('w1q6','b')">Distributed Defense and Detection Engineering Framework</div>
-                </div>
-                <div class="ans correct">Correct! D3FEND maps defensive techniques that counter ATT&CK attack techniques. It provides the defensive counterpart to ATT&CK's attack perspective.</div>
-                <div class="ans wrong">Incorrect. Review Section 12. D3FEND is MITRE's defensive framework complementing ATT&CK.</div>
-            </div>
-
-            <!-- Q7 -->
-            <div class="question-block" id="w1q7">
-                <div class="q-number">Question 7 of 15</div>
-                <div class="q-text">What is the correct order in the governance hierarchy from high-level to prescriptive?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q7','a')">Policy → Standards → Procedures → Guidance</div>
-                    <div class="option" onclick="showAns('w1q7','b')">Guidance → Procedures → Standards → Policy</div>
-                    <div class="option" onclick="showAns('w1q7','b')">Procedures → Policy → Standards → Guidance</div>
-                    <div class="option" onclick="showAns('w1q7','b')">Standards → Policy → Guidance → Procedures</div>
-                </div>
-                <div class="ans correct">Correct! Policy (high-level exec) → Standards (prescriptive SME) → Procedures (step-by-step) → Guidance (non-prescriptive consultant advice).</div>
-                <div class="ans wrong">Incorrect. Review Section 6. The governance hierarchy flows from strategic policy down to tactical guidance.</div>
-            </div>
-
-            <!-- Q8 -->
-            <div class="question-block" id="w1q8">
-                <div class="q-number">Question 8 of 15</div>
-                <div class="q-text">What is the primary impact of optimism bias on security architecture?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q8','a')">It leads organizations to underestimate attacks, underfund security, and assume breach won't happen to them</div>
-                    <div class="option" onclick="showAns('w1q8','b')">It causes architects to over-design security unnecessarily</div>
-                    <div class="option" onclick="showAns('w1q8','b')">It prevents organizations from buying any security tools</div>
-                    <div class="option" onclick="showAns('w1q8','b')">It has no impact on security decisions</div>
-                </div>
-                <div class="ans correct">Correct! Optimism bias causes "it won't happen to us" thinking. Combat it with assume-breach mentality, threat modeling, and red team exercises.</div>
-                <div class="ans wrong">Incorrect. Review Section 9. Optimism bias is a real cognitive threat that undermines security decision-making.</div>
-            </div>
-
-            <!-- Q9 -->
-            <div class="question-block" id="w1q9">
-                <div class="q-number">Question 9 of 15</div>
-                <div class="q-text">How many tactics and techniques does the MITRE ATT&CK framework document?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q9','a')">700+ techniques and 14+ tactics</div>
-                    <div class="option" onclick="showAns('w1q9','b')">50 techniques and 5 tactics</div>
-                    <div class="option" onclick="showAns('w1q9','b')">200 techniques and 10 tactics</div>
-                    <div class="option" onclick="showAns('w1q9','b')">1000+ techniques and 20+ tactics</div>
-                </div>
-                <div class="ans correct">Correct! ATT&CK documents 700+ attack techniques across 14+ tactics, based on real-world attack observations.</div>
-                <div class="ans wrong">Incorrect. Review Section 11. ATT&CK is comprehensive but not unlimited.</div>
-            </div>
-
-            <!-- Q10 -->
-            <div class="question-block" id="w1q10">
-                <div class="q-number">Question 10 of 15</div>
-                <div class="q-text">What is the key difference between Inside-Out and Outside-In security thinking?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q10','a')">Inside-Out asks "What features do we need?" (functionality). Outside-In asks "How would attackers target us?" (threat mitigation)</div>
-                    <div class="option" onclick="showAns('w1q10','b')">Inside-Out is for internal networks; Outside-In is for external networks</div>
-                    <div class="option" onclick="showAns('w1q10','b')">Outside-In is older and Inside-Out is newer</div>
-                    <div class="option" onclick="showAns('w1q10','b')">They are the same concept with different names</div>
-                </div>
-                <div class="ans correct">Correct! Inside-Out: "What security features should we build?" (authentication, authorization, logging). Outside-In: "What attacks should we defend against?" (injection, session hijacking, privilege escalation). Both essential.</div>
-                <div class="ans wrong">Incorrect. Review Section 5. These are complementary perspectives; missing either creates vulnerabilities.</div>
-            </div>
-
-            <!-- Q11 -->
-            <div class="question-block" id="w1q11">
-                <div class="q-number">Question 11 of 15</div>
-                <div class="q-text">What is MITRE Engage's primary mechanism for active defense?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q11','a')">Deception through honeypots, fake credentials, and deception infrastructure to detect/expose attackers and gather intelligence</div>
-                    <div class="option" onclick="showAns('w1q11','b')">Installing more firewalls and intrusion prevention systems</div>
-                    <div class="option" onclick="showAns('w1q11','b')">Hiring more security staff to monitor networks</div>
-                    <div class="option" onclick="showAns('w1q11','b')">Blocking all external internet traffic</div>
-                </div>
-                <div class="ans correct">Correct! MITRE Engage uses deception (honeypots, canary tokens, fake systems) to deceive attackers, expose their presence, impose costs, and gather intelligence on their TTPs.</div>
-                <div class="ans wrong">Incorrect. Review Section 12. Engage focuses on active deception, not passive defense.</div>
-            </div>
-
-            <!-- Q12 -->
-            <div class="question-block" id="w1q12">
-                <div class="q-number">Question 12 of 15</div>
-                <div class="q-text">According to the Four Dimensions of Solution Success, what happens when alignment fails?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q12','a')">Even a technically correct solution fails because the team lacks skills or cultural fit to maintain it</div>
-                    <div class="option" onclick="showAns('w1q12','b')">The solution is automatically successful regardless of team capability</div>
-                    <div class="option" onclick="showAns('w1q12','b')">Alignment is irrelevant to architecture decisions</div>
-                    <div class="option" onclick="showAns('w1q12','b')">Alignment only matters for sales, not implementation</div>
-                </div>
-                <div class="ans correct">Correct! Alignment is critical. A perfect SIEM architecture fails if your SOC lacks expertise or your culture can't support it. All four dimensions matter.</div>
-                <div class="ans wrong">Incorrect. Review Section 8. Alignment is one of four critical dimensions. Ignoring it is an architectural failure.</div>
-            </div>
-
-            <!-- Q13 -->
-            <div class="question-block" id="w1q13">
-                <div class="q-number">Question 13 of 15</div>
-                <div class="q-text">What is the correct order for phased implementation of MITRE frameworks?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q13','a')">Assessment → Telemetry → Detection Engineering → Operationalization</div>
-                    <div class="option" onclick="showAns('w1q13','b')">Operationalization → Assessment → Telemetry → Detection Engineering</div>
-                    <div class="option" onclick="showAns('w1q13','b')">Detection Engineering → Assessment → Operationalization → Telemetry</div>
-                    <div class="option" onclick="showAns('w1q13','b')">Telemetry → Operationalization → Assessment → Detection Engineering</div>
-                </div>
-                <div class="ans correct">Correct! Phased implementation: (1) Assessment (gap analysis), (2) Telemetry (visibility), (3) Detection Engineering (automated detection), (4) Operationalization (integrate into SOC).</div>
-                <div class="ans wrong">Incorrect. Review Section 12. The phases must be sequential; operationalization comes last after foundation work.</div>
-            </div>
-
-            <!-- Q14 -->
-            <div class="question-block" id="w1q14">
-                <div class="q-number">Question 14 of 15</div>
-                <div class="q-text">What defines an air-gapped system?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q14','a')">Physical or logical disconnection from untrusted networks; data transfer only through manual controlled processes, not automatic connections</div>
-                    <div class="option" onclick="showAns('w1q14','b')">A system that is disconnected during business hours but syncs automatically at night</div>
-                    <div class="option" onclick="showAns('w1q14','b')">A system with a slow internet connection</div>
-                    <div class="option" onclick="showAns('w1q14','b')">A system that uses satellite internet instead of cables</div>
-                </div>
-                <div class="ans correct">Correct! Air gaps require NO automatic network connections. Data transfer is manual (USB, sneakernet). Automatic scheduled sync = NOT air gapped.</div>
-                <div class="ans wrong">Incorrect. Review Section 15. Air gap means truly isolated; any automatic connection breaks the air gap.</div>
-            </div>
-
-            <!-- Q15 -->
-            <div class="question-block" id="w1q15">
-                <div class="q-number">Question 15 of 15</div>
-                <div class="q-text">What is the primary purpose of the ATT&CK Navigator tool?</div>
-                <div class="options">
-                    <div class="option" onclick="showAns('w1q15','a')">Color-coded gap analysis showing which ATT&CK techniques your defenses cover (red=no coverage, yellow=partial, green=good)</div>
-                    <div class="option" onclick="showAns('w1q15','b')">A tool for launching attacks against your own systems</div>
-                    <div class="option" onclick="showAns('w1q15','b')">A navigation app for traveling between office locations</div>
-                    <div class="option" onclick="showAns('w1q15','b')">A training tool exclusively for pentesting companies</div>
-                </div>
-                <div class="ans correct">Correct! ATT&CK Navigator enables visual gap analysis. Color-code your defensive coverage and identify weakest areas for remediation prioritization.</div>
-                <div class="ans wrong">Incorrect. Review Section 11. Navigator is a defense-focused tool for visualizing coverage gaps against ATT&CK techniques.</div>
-            </div>
-
-            <!-- Score Section -->
-            <button class="score-button" onclick="checkScore('w1',15)">Check My Score</button>
-            <div id="w1score"></div>
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">1</span> What is the primary difference between cybersecurity architecture and cybersecurity engineering?</p>
+        <div class="options">
+          <div class="opt">Architecture focuses on WHY/WHAT over 3-5 years organization-wide; Engineering focuses on HOW in short-term sprints</div>
+          <div class="opt">Architecture is cheaper and faster than engineering</div>
+          <div class="opt">Engineering is more important than architecture</div>
+          <div class="opt">They are the same thing; the terms are interchangeable</div>
         </div>
-    </div>
+        <div class="explanation">Architecture is strategic (WHY/WHAT, long-term, org-wide). Engineering is tactical (HOW, short-term, specific systems). Both are essential.</div>
+      </div>
 
-    <script>
-        function showAns(qid,type){
-            var q=document.getElementById(qid);
-            q.querySelectorAll('.ans').forEach(a=>a.style.display='none');
-            if(type==='a'){
-                q.querySelector('.ans.correct').style.display='block';
-                q.dataset.correct='1';
-            }
-            else{
-                q.querySelector('.ans.wrong').style.display='block';
-                q.dataset.correct='0';
-            }
-        }
-        function checkScore(prefix,total){
-            var correct=0;
-            for(var i=1;i<=total;i++){
-                var q=document.getElementById(prefix+'q'+i);
-                if(q&&q.dataset.correct==='1')correct++;
-            }
-            var pct=Math.round((correct/total)*100);
-            var grade=pct>=90?'A - Excellent!':pct>=80?'B - Good!':pct>=70?'C - Review weak areas':pct>=60?'D - Need more study':'F - Start from the top';
-            document.getElementById(prefix+'score').innerHTML='Score: '+correct+'/'+total+' ('+pct+'%)<br><span style="font-size:1.2em">'+grade+'</span>';
-        }
-    </script>
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">2</span> What does "Bake In, Don't Bolt On" mean in security architecture?</p>
+        <div class="options">
+          <div class="opt">Security should be integrated from the design phase forward, not added afterward as an afterthought</div>
+          <div class="opt">Security controls should be bolted onto existing systems for flexibility</div>
+          <div class="opt">Security should only be considered after development is complete</div>
+          <div class="opt">Baking and bolting refer to different types of firewalls</div>
+        </div>
+        <div class="explanation">"Bake In, Don't Bolt On" means security must be part of initial design. Bolting on later is expensive (e.g., $2M + 9 months for healthcare org).</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">3</span> For a hospital's patient records system, which CIA component is the highest priority?</p>
+        <div class="options">
+          <div class="opt">Confidentiality only; patient privacy is all that matters</div>
+          <div class="opt">Availability only; uptime is all that matters</div>
+          <div class="opt">All three balanced: patient privacy (confidentiality), accurate records (integrity), and system uptime (availability) are all critical</div>
+          <div class="opt">Integrity only; data accuracy is all that matters</div>
+        </div>
+        <div class="explanation">Healthcare requires balanced CIA. Patient privacy, accurate medical records, and system uptime all directly impact patient safety.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">4</span> What does ASARP stand for in NIST SP 800-160?</p>
+        <div class="options">
+          <div class="opt">As Secure As Reasonably Practicable</div>
+          <div class="opt">Authentication System And Reporting Protocol</div>
+          <div class="opt">Advanced Security Architecture and Risk Plan</div>
+          <div class="opt">Architecture Standards And Practice Requirements</div>
+        </div>
+        <div class="explanation">ASARP is the point where additional security investment produces disproportionate negative impact on cost/schedule/performance.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">5</span> According to the course, what percentage of successful intrusions involve zero malware?</p>
+        <div class="options">
+          <div class="opt">81%</div>
+          <div class="opt">45%</div>
+          <div class="opt">92%</div>
+          <div class="opt">23%</div>
+        </div>
+        <div class="explanation">81% of successful intrusions use legitimate tools and stolen credentials, not malware. This means antivirus alone is insufficient; behavioral detection is critical.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">6</span> What does D3FEND stand for?</p>
+        <div class="options">
+          <div class="opt">Detection, Denial, and Disruption Framework Empowering Network Defense</div>
+          <div class="opt">Defensive Deployment and Deception Endpoint Framework</div>
+          <div class="opt">Data Defense and Digital Engagement Framework</div>
+          <div class="opt">Distributed Defense and Detection Engineering Framework</div>
+        </div>
+        <div class="explanation">D3FEND maps defensive techniques that counter ATT&CK attack techniques. It provides the defensive counterpart to ATT&CK's attack perspective.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">7</span> What is the correct order in the governance hierarchy from high-level to prescriptive?</p>
+        <div class="options">
+          <div class="opt">Policy → Standards → Procedures → Guidance</div>
+          <div class="opt">Guidance → Procedures → Standards → Policy</div>
+          <div class="opt">Procedures → Policy → Standards → Guidance</div>
+          <div class="opt">Standards → Policy → Guidance → Procedures</div>
+        </div>
+        <div class="explanation">Policy (high-level exec) → Standards (prescriptive SME) → Procedures (step-by-step) → Guidance (non-prescriptive consultant advice).</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">8</span> What is the primary impact of optimism bias on security architecture?</p>
+        <div class="options">
+          <div class="opt">It leads organizations to underestimate attacks, underfund security, and assume breach won't happen to them</div>
+          <div class="opt">It causes architects to over-design security unnecessarily</div>
+          <div class="opt">It prevents organizations from buying any security tools</div>
+          <div class="opt">It has no impact on security decisions</div>
+        </div>
+        <div class="explanation">Optimism bias causes "it won't happen to us" thinking. Combat it with assume-breach mentality, threat modeling, and red team exercises.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">9</span> How many tactics and techniques does the MITRE ATT&CK framework document?</p>
+        <div class="options">
+          <div class="opt">700+ techniques and 14+ tactics</div>
+          <div class="opt">50 techniques and 5 tactics</div>
+          <div class="opt">200 techniques and 10 tactics</div>
+          <div class="opt">1000+ techniques and 20+ tactics</div>
+        </div>
+        <div class="explanation">ATT&CK documents 700+ attack techniques across 14+ tactics, based on real-world attack observations.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">10</span> What is the key difference between Inside-Out and Outside-In security thinking?</p>
+        <div class="options">
+          <div class="opt">Inside-Out asks "What features do we need?" (functionality). Outside-In asks "How would attackers target us?" (threat mitigation)</div>
+          <div class="opt">Inside-Out is for internal networks; Outside-In is for external networks</div>
+          <div class="opt">Outside-In is older and Inside-Out is newer</div>
+          <div class="opt">They are the same concept with different names</div>
+        </div>
+        <div class="explanation">Inside-Out: "What security features should we build?" (authentication, authorization, logging). Outside-In: "What attacks should we defend against?" (injection, session hijacking, privilege escalation). Both essential.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">11</span> What is MITRE Engage's primary mechanism for active defense?</p>
+        <div class="options">
+          <div class="opt">Deception through honeypots, fake credentials, and deception infrastructure to detect/expose attackers and gather intelligence</div>
+          <div class="opt">Installing more firewalls and intrusion prevention systems</div>
+          <div class="opt">Hiring more security staff to monitor networks</div>
+          <div class="opt">Blocking all external internet traffic</div>
+        </div>
+        <div class="explanation">MITRE Engage uses deception (honeypots, canary tokens, fake systems) to deceive attackers, expose their presence, impose costs, and gather intelligence on their TTPs.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">12</span> According to the Four Dimensions of Solution Success, what happens when alignment fails?</p>
+        <div class="options">
+          <div class="opt">Even a technically correct solution fails because the team lacks skills or cultural fit to maintain it</div>
+          <div class="opt">The solution is automatically successful regardless of team capability</div>
+          <div class="opt">Alignment is irrelevant to architecture decisions</div>
+          <div class="opt">Alignment only matters for sales, not implementation</div>
+        </div>
+        <div class="explanation">Alignment is critical. A perfect SIEM architecture fails if your SOC lacks expertise or your culture can't support it. All four dimensions matter.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">13</span> What is the correct order for phased implementation of MITRE frameworks?</p>
+        <div class="options">
+          <div class="opt">Assessment → Telemetry → Detection Engineering → Operationalization</div>
+          <div class="opt">Operationalization → Assessment → Telemetry → Detection Engineering</div>
+          <div class="opt">Detection Engineering → Assessment → Operationalization → Telemetry</div>
+          <div class="opt">Telemetry → Operationalization → Assessment → Detection Engineering</div>
+        </div>
+        <div class="explanation">Phased implementation: (1) Assessment (gap analysis), (2) Telemetry (visibility), (3) Detection Engineering (automated detection), (4) Operationalization (integrate into SOC).</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">14</span> What defines an air-gapped system?</p>
+        <div class="options">
+          <div class="opt">Physical or logical disconnection from untrusted networks; data transfer only through manual controlled processes, not automatic connections</div>
+          <div class="opt">A system that is disconnected during business hours but syncs automatically at night</div>
+          <div class="opt">A system with a slow internet connection</div>
+          <div class="opt">A system that uses satellite internet instead of cables</div>
+        </div>
+        <div class="explanation">Air gaps require NO automatic network connections. Data transfer is manual (USB, sneakernet). Automatic scheduled sync = NOT air gapped.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">15</span> What is the primary purpose of the ATT&CK Navigator tool?</p>
+        <div class="options">
+          <div class="opt">Color-coded gap analysis showing which ATT&CK techniques your defenses cover (red=no coverage, yellow=partial, green=good)</div>
+          <div class="opt">A tool for launching attacks against your own systems</div>
+          <div class="opt">A navigation app for traveling between office locations</div>
+          <div class="opt">A training tool exclusively for pentesting companies</div>
+        </div>
+        <div class="explanation">ATT&CK Navigator enables visual gap analysis. Color-code your defensive coverage and identify weakest areas for remediation prioritization.</div>
+      </div>
+    </div>
 </div>
 
+
 <script>
-        function showAns(qid,type){
-            var q=document.getElementById(qid);
-            q.querySelectorAll('.ans').forEach(a=>a.style.display='none');
-            if(type==='a'){
-                q.querySelector('.ans.correct').style.display='block';
-                q.dataset.correct='1';
+(function() {
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          if (idx === correctIdx) {
+            opt.classList.add('selected-correct');
+            correct++;
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+          }
+          if (explanation) {
+              const isRight = idx === correctIdx;
+              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              if (isRight) {
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+              } else {
+                const correctText = opts[correctIdx].textContent.trim();
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+              }
+              explanation.classList.add('show');
             }
-            else{
-                q.querySelector('.ans.wrong').style.display='block';
-                q.dataset.correct='0';
-            }
-        }
-        function checkScore(prefix,total){
-            var correct=0;
-            for(var i=1;i<=total;i++){
-                var q=document.getElementById(prefix+'q'+i);
-                if(q&&q.dataset.correct==='1')correct++;
-            }
-            var pct=Math.round((correct/total)*100);
-            var grade=pct>=90?'A - Excellent!':pct>=80?'B - Good!':pct>=70?'C - Review weak areas':pct>=60?'D - Need more study':'F - Start from the top';
-            document.getElementById(prefix+'score').innerHTML='Score: '+correct+'/'+total+' ('+pct+'%)<br><span style="font-size:1.2em">'+grade+'</span>';
-        }
-    </script>
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) exp.classList.remove('show');
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
 </body>
 </html>

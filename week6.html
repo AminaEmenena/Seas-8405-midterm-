@@ -176,6 +176,72 @@
     color: #ddd;
   }
 
+  
+  /* ═══ ORIGINAL DESIGN CLASSES (callout boxes, mnemonics, flow diagrams) ═══ */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -288,6 +354,13 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -300,6 +373,73 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ QUIZ SECTION ═══ */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text {
+    font-size: 1.05em; font-weight: 700; color: var(--page-color);
+  }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333;
+    border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    user-select: none; line-height: 1.5;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct {
+    background: rgba(81,207,102,0.2); border-color: var(--correct);
+    color: var(--correct); font-weight: 700;
+  }
+  .quiz-q .opt.selected-wrong {
+    background: rgba(255,107,107,0.2); border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct); color: var(--correct);
+  }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
 </style>
 </head>
 <body>
@@ -335,6 +475,8 @@
                     <li><strong>Practical Boundaries:</strong> No single architect can be responsible for everything. Scope defines bounded areas.</li>
                     <li><strong>KEY:</strong> <span class="quote">Scope creep is the enemy of project management. Focus on developing, validating, and agreeing on scope before execution.</span></li>
                 </ul>
+                <div class="red"><strong>KEY IDEA:</strong> Scope is the foundation of security architecture. Without clear scope, security requirements float in the void—meaningless and unmeasurable.</div>
+                <div class="mem"><small>Remember This</small><br><strong>"Scope = What, Threats = Why, Requirements = How"</strong></div>
             </div>
         </details>
         
@@ -350,6 +492,8 @@
                     <li>4) <strong>Scope Documentation</strong> — finalize and document. <span class="quote">If it's not in the statement of work, we don't do it.</span></li>
                 </ul>
                 <p style="margin-top: 15px;">Not about perfection initially — close enough to refine with stakeholders.</p>
+                <div class="blue"><b>KEY:</b> Scope is not a one-time event. It evolves as you learn more about the organization, technology, and constraints. Think of it as a living document.</div>
+                <div class="prof"><strong>Prof. Le's Tip:</strong> The first scope you write will be wrong. Plan for it. Build in buffer and stakeholder time to refine. That's not failure—that's the process.</div>
             </div>
         </details>
         
@@ -362,6 +506,7 @@
                     <li><strong>Acknowledge Limitations:</strong> Areas we cannot affect due to budget/skills can be removed from scope</li>
                     <li><strong>Manage Known Risks:</strong> Remove from consideration areas representing known accepted/mitigated risks</li>
                 </ul>
+                <div class="green"><b>Best Practice:</b> Use scope boundaries to explicitly say "this is out" — not because it doesn't matter, but because it's someone else's problem or a known constraint. Document it so no one wonders later.</div>
             </div>
         </details>
         
@@ -382,6 +527,7 @@
                     <li>Use initial scope as diagnostic (identify problems early)</li>
                 </ul>
                 <p style="margin-top: 15px;"><span class="quote">A house on quicksand — need to address foundation first. Does not mean organization doesn't need architecture.</span></p>
+                <div class="red"><strong>KEY IDEA:</strong> Empty Scope = architecture impossible due to foundation problems. This isn't failure. It's a diagnostic: go fix the foundation, then come back to architecture.</div>
             </div>
         </details>
         
@@ -394,6 +540,7 @@
                     <li><strong>Focus on environment</strong> — generally cannot directly change software employees use. Focus is on controls, countermeasures, operational constraints around existing apps</li>
                     <li><strong>Systematic approach:</strong> Selection, application, operationalization, monitoring of security decisions across enterprise</li>
                 </ul>
+                <div class="blue"><b>KEY:</b> Enterprise Security Architecture is about what surrounds and supports applications, not the applications themselves. Build the secure environment; apps live inside it.</div>
             </div>
         </details>
         
@@ -403,6 +550,8 @@
                 <p><strong>Organizational:</strong> Multiple business units responsible for different portions. Example: retail banking on balance viewing, brokerage on portfolio interface. Different teams, different priorities.</p>
                 <p style="margin-top: 15px;"><strong>Technical:</strong> Legacy technologies (mainframes vs modern APIs) require different approaches. Different security expertise needed (mainframe CICS vs RESTful API security).</p>
                 <p style="margin-top: 15px;"><strong>Key:</strong> Scope can be artificially constrained to level of tier, component, or service based on technology or organizational factors.</p>
+                <div class="green"><b>Best Practice:</b> Map your organization's teams to your scope boundaries. If Team A owns retail and Team B owns brokerage, your scope can reflect that split. Align scope with accountability.</div>
+                <div class="prof"><strong>Prof. Le's Tip:</strong> Technology boundaries are often your hidden scope leverage. Legacy mainframes and modern APIs have different risk profiles. Use that to set realistic, focused scope.</div>
             </div>
         </details>
         
@@ -415,6 +564,8 @@
                     <li><strong>Microservices (Maintenance-style):</strong> Stateless components using HTTP transport. Easy to set scope around individual services. Highly flexible and modular.</li>
                 </ul>
                 <p style="margin-top: 15px;"><strong>KEY:</strong> REST and microservice architecture make it much easier to carve scope at component or service level.</p>
+                <div class="blue"><b>KEY:</b> Architecture modularity directly enables scope flexibility. Monoliths force you to scope the whole system. Microservices let you pick and choose which services to focus on.</div>
+                <div class="mem"><small>Remember This</small><br><strong>"Loose Coupling = Flexible Scope"</strong></div>
             </div>
         </details>
         
@@ -427,6 +578,8 @@
                     <li><strong>2000s Agile/Lean:</strong> Iterative/incremental, emphasize flexibility, scope can change sprint by sprint</li>
                     <li><strong>2010s DevOps:</strong> Continuous delivery, scope adjusts weekly as new services spin up. <span class="quote">Amazon deploying every minute.</span></li>
                 </ul>
+                <div class="red"><strong>KEY IDEA:</strong> Your development methodology shapes scope. Waterfall demands perfect scope upfront. Agile/DevOps lets you evolve it. Know your process, set scope accordingly.</div>
+                <div class="green"><b>Best Practice:</b> For waterfall, invest heavily in scope definition upfront. For agile/DevOps, set initial scope loosely and plan for regular reviews.</div>
             </div>
         </details>
         
@@ -439,6 +592,9 @@
                     <li><strong>Step 3: Set Initial Scope</strong> — Crystallize boundaries. What's in, what's out, what's middle ground. Must include core systems and critical functions.</li>
                     <li><strong>Step 4: Validate and Refine</strong> — Stakeholder feedback loop. Go back to stakeholders. Demonstrates listening, catches blind spots, saves time long-term. <span class="quote">Don't make decisions in isolation.</span></li>
                 </ul>
+                <div class="blue"><b>KEY:</b> The 4-step process is your roadmap. Follow it in order. Each step informs the next. Skip steps and you'll miss critical stakeholders or constraints.</div>
+                <div class="mem"><small>Remember This</small><br><strong>"Goals → Constraints → Boundaries → Validation"</strong></div>
+                <div class="prof"><strong>Prof. Le's Tip:</strong> Step 4 is where most people cut corners due to time pressure. That's where the real work happens. Invest in validation—it saves rework later.</div>
             </div>
         </details>
         
@@ -451,6 +607,7 @@
                     <li><strong>Avoid Scope Creep:</strong> While iterative, uncontrolled creep destroys projects. Freeze scope during execution, changes require agreement and re-validation.</li>
                     <li><strong>Communicate Changes:</strong> Document, socialize with stakeholders, get buy-in, update plans.</li>
                 </ul>
+                <div class="red"><strong>KEY IDEA:</strong> Scope creep is iterative scope without control. It's the difference between evolving a document and watching a project drown in forever-changing requirements.</div>
             </div>
         </details>
         
@@ -462,6 +619,8 @@
                     <li><strong>Formal Risk Frameworks:</strong> ISO 31000, NIST RMF, OCTAVE — all include scope definition. Risks at highest priority inform architectural scope.</li>
                     <li><strong>Using Existing Risk Scope:</strong> Directly incorporate or reference existing risk management scope.</li>
                 </ul>
+                <div class="green"><b>Best Practice:</b> Don't invent scope from scratch. Check if your organization has an existing risk management scope (ISO 27001, NIST RMF). Use that as your baseline. You'll save time and align with organizational priorities.</div>
+                <div class="blue"><b>KEY:</b> Risk frameworks already define scope. Leverage them. That's the whole point of using a framework.</div>
             </div>
         </details>
         
@@ -476,169 +635,210 @@
                     <li>Iterate and refine (output of initial scope WILL change)</li>
                 </ul>
                 <p style="margin-top: 15px;"><span class="quote">Know the rules well so you can break them effectively. Adapt formal methods to practical effect for efficiency.</span></p>
+                <div class="red"><strong>KEY IDEA:</strong> The Catch-22 isn't a problem to solve—it's a feature. It's permission to draft a rough scope, use it to organize stakeholder conversations, then refine. Don't get paralyzed by perfection.</div>
+                <div class="mem"><small>Remember This</small><br><strong>"Draft. Discuss. Refine. Repeat."</strong></div>
             </div>
         </details>
         
-        <div class="quiz-section">
-            <h2>Quiz</h2>
-            <form id="quizForm">
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q1" value="correct">
-                        1. Why does scope matter for security architecture?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q2" value="correct">
-                        2. Scope is iterative — what are the 4 phases?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q3" value="correct">
-                        3. What is scope creep?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q4" value="correct">
-                        4. Monolithic vs Microservices — which is easier to scope?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q5" value="correct">
-                        5. Step 4 of scope-setting process
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q6" value="correct">
-                        6. What is empty scope?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q7" value="correct">
-                        7. Enterprise security architecture focuses on what?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q8" value="correct">
-                        8. How does Agile handle scope differently than Waterfall?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q9" value="correct">
-                        9. Three factors for enterprise scope
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q10" value="correct">
-                        10. Scope-setting catch-22 solution
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q11" value="correct">
-                        11. Why validate scope with stakeholders?
-                    </label>
-                </div>
-                
-                <div class="quiz-question">
-                    <label>
-                        <input type="radio" name="q12" value="correct">
-                        12. Technology boundary example
-                    </label>
-                </div>
-                
-                <button type="button" class="score-button" onclick="checkScore('w6', 12)">Check Score</button>
-            </form>
-            <div id="scoreMessage" class="score-message"></div>
+        
+    <div class="quiz-section">
+      <h2>Week 6 — Test Yourself (12 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">12</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">1</span> Why does scope matter in security architecture?</p>
+        <div class="options">
+          <div class="opt">It determines the budget for the project</div>
+          <div class="opt">Requirements flow from scope — security measures don't make sense without knowing what's being defended</div>
+          <div class="opt">Scope only matters for compliance audits</div>
+          <div class="opt">It replaces the need for stakeholder input</div>
         </div>
+        <div class="explanation">Scope defines what is being protected and against what threats. Security requirements logically flow from scope boundaries.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">2</span> How many phases does the iterative scope-setting process have?</p>
+        <div class="options">
+          <div class="opt">2 phases</div>
+          <div class="opt">3 phases</div>
+          <div class="opt">4 phases: Initial Setting, Requirements Gathering, Design Development, Documentation</div>
+          <div class="opt">6 phases</div>
+        </div>
+        <div class="explanation">The four phases are: Initial Scope Setting → Requirements Gathering → Design Development → Scope Documentation.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">3</span> What is "empty scope" and what causes it?</p>
+        <div class="options">
+          <div class="opt">When scope is so constrained by debt, barriers, or constraints that it's effectively zero — need to address foundation first</div>
+          <div class="opt">When stakeholders haven't been consulted yet</div>
+          <div class="opt">When the budget is $0</div>
+          <div class="opt">When the project is cancelled</div>
+        </div>
+        <div class="explanation">Empty scope = overwhelming constraints, technical debt, or organizational barriers make architecture impossible. "A house on quicksand — address foundation first."</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">4</span> What does Enterprise Security Architecture focus on?</p>
+        <div class="options">
+          <div class="opt">Writing application code</div>
+          <div class="opt">Administrative, procedural, and technical controls securing the enterprise or a subset</div>
+          <div class="opt">Only network firewall configuration</div>
+          <div class="opt">Vendor selection exclusively</div>
+        </div>
+        <div class="explanation">Enterprise Security Architecture focuses on controls, countermeasures, and operational constraints around existing applications — not changing the software itself.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">5</span> Which architecture style makes it EASIEST to set scope at component/service level?</p>
+        <div class="options">
+          <div class="opt">Monolithic (tight integration)</div>
+          <div class="opt">N-Tier (loose integration)</div>
+          <div class="opt">Microservices (stateless, HTTP transport)</div>
+          <div class="opt">All are equally flexible</div>
+        </div>
+        <div class="explanation">Microservices architecture makes it much easier to carve scope at individual service level due to modularity and stateless design.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="3">
+        <p><span class="qnum">6</span> Which development model allows scope to adjust weekly as new services spin up?</p>
+        <div class="options">
+          <div class="opt">1970s Waterfall</div>
+          <div class="opt">1990s Unified Process</div>
+          <div class="opt">2000s Agile/Lean</div>
+          <div class="opt">2010s DevOps (continuous delivery)</div>
+        </div>
+        <div class="explanation">DevOps enables continuous delivery where scope adjusts weekly. "Amazon deploying every minute."</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">7</span> What are the 4 steps in the scope-setting process?</p>
+        <div class="options">
+          <div class="opt">Consider Goals → Review Constraints → Set Initial Scope → Validate and Refine</div>
+          <div class="opt">Identify Threats → Build Controls → Test → Deploy</div>
+          <div class="opt">Plan → Execute → Monitor → Update</div>
+          <div class="opt">Assess → Implement → Verify → Document</div>
+        </div>
+        <div class="explanation">The 4-step process: (1) Consider High-Level Goals, (2) Review Contextual Constraints, (3) Set Initial Scope, (4) Validate and Refine with stakeholders.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">8</span> What is the Scope-Setting Catch-22?</p>
+        <div class="options">
+          <div class="opt">You can't set scope without funding, but can't get funding without scope</div>
+          <div class="opt">You need stakeholder validation for good scope, but need scope to know which stakeholders to consult</div>
+          <div class="opt">Scope always changes so there's no point setting it</div>
+          <div class="opt">Technical debt prevents any scope definition</div>
+        </div>
+        <div class="explanation">The catch-22: until you validate with stakeholders, scope likely falls short — but how do you talk to stakeholders without knowing borders? Solution: two-phase approach with initial scope that allows for refinement.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">9</span> What type of boundary exists when retail banking and brokerage teams handle different parts of the same application?</p>
+        <div class="options">
+          <div class="opt">Technology boundary</div>
+          <div class="opt">Security boundary</div>
+          <div class="opt">Organizational boundary</div>
+          <div class="opt">Network boundary</div>
+        </div>
+        <div class="explanation">This is an organizational boundary — multiple business units responsible for different portions with different teams and priorities.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">10</span> What risk framework can be directly used as scope input?</p>
+        <div class="options">
+          <div class="opt">ISO 27001/ISMS scope — directly incorporate or reference existing risk management scope</div>
+          <div class="opt">OWASP Top 10 — use as the sole scope definition</div>
+          <div class="opt">There are no risk frameworks that inform scope</div>
+          <div class="opt">CVE database</div>
+        </div>
+        <div class="explanation">ISO 27001/ISMS includes formal scope definition. ISO 31000, NIST RMF, OCTAVE all include scope definition that can be incorporated directly.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">11</span> What is the biggest risk to managing scope during execution?</p>
+        <div class="options">
+          <div class="opt">Stakeholder disagreement</div>
+          <div class="opt">Scope creep — uncontrolled expansion that destroys projects</div>
+          <div class="opt">Budget overruns</div>
+          <div class="opt">Technology changes</div>
+        </div>
+        <div class="explanation">While scope is iterative, uncontrolled scope creep destroys projects. Freeze scope during execution; changes require agreement and re-validation.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="3">
+        <p><span class="qnum">12</span> What is a technology boundary example that impacts scope?</p>
+        <div class="options">
+          <div class="opt">Multiple stakeholders with different priorities</div>
+          <div class="opt">Budget constraints limiting tool selection</div>
+          <div class="opt">Regulatory compliance requirements</div>
+          <div class="opt">Legacy mainframes vs modern APIs requiring different security expertise (CICS vs RESTful)</div>
+        </div>
+        <div class="explanation">Technology boundaries arise when legacy systems (mainframes, CICS) coexist with modern APIs, requiring different approaches and security expertise.</div>
+      </div>
     </div>
-    
-    <script>
-        function checkScore(week, totalQuestions) {
-            const form = document.getElementById('quizForm');
-            const scoreMessage = document.getElementById('scoreMessage');
-            let answered = 0;
-            
-            for (let i = 1; i <= totalQuestions; i++) {
-                const checked = form.querySelector(`input[name="q${i}"]:checked`);
-                if (checked) {
-                    answered++;
-                }
-            }
-            
-            const percentage = (answered / totalQuestions) * 100;
-            
-            scoreMessage.classList.add('show');
-            scoreMessage.innerHTML = `<strong>Score: ${answered}/${totalQuestions} (${percentage.toFixed(0)}%)</strong>`;
-            
-            if (answered === totalQuestions) {
-                scoreMessage.className = 'score-message show success';
-                scoreMessage.innerHTML += ' - Excellent! You got all questions answered.';
-            } else if (answered >= totalQuestions * 0.75) {
-                scoreMessage.className = 'score-message show partial';
-                scoreMessage.innerHTML += ' - Good progress! Review the remaining questions.';
-            } else if (answered >= totalQuestions * 0.5) {
-                scoreMessage.className = 'score-message show partial';
-                scoreMessage.innerHTML += ' - Keep studying! You got about half.';
-            } else {
-                scoreMessage.className = 'score-message show error';
-                scoreMessage.innerHTML += ' - Review the material and try again.';
-            }
-        }
-    </script>
 </div>
 
 <script>
-        function checkScore(week, totalQuestions) {
-            const form = document.getElementById('quizForm');
-            const scoreMessage = document.getElementById('scoreMessage');
-            let answered = 0;
-            
-            for (let i = 1; i <= totalQuestions; i++) {
-                const checked = form.querySelector(`input[name="q${i}"]:checked`);
-                if (checked) {
-                    answered++;
-                }
+(function() {
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0;
+    if (totalEl) totalEl.textContent = qs.length;
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+    }
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+          if (idx === correctIdx) { opt.classList.add('selected-correct'); correct++; }
+          else { opt.classList.add('selected-wrong'); opts[correctIdx].classList.add('show-correct'); }
+          if (explanation) {
+              const isRight = idx === correctIdx;
+              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              if (isRight) {
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+              } else {
+                const correctText = opts[correctIdx].textContent.trim();
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+              }
+              explanation.classList.add('show');
             }
-            
-            const percentage = (answered / totalQuestions) * 100;
-            
-            scoreMessage.classList.add('show');
-            scoreMessage.innerHTML = `<strong>Score: ${answered}/${totalQuestions} (${percentage.toFixed(0)}%)</strong>`;
-            
-            if (answered === totalQuestions) {
-                scoreMessage.className = 'score-message show success';
-                scoreMessage.innerHTML += ' - Excellent! You got all questions answered.';
-            } else if (answered >= totalQuestions * 0.75) {
-                scoreMessage.className = 'score-message show partial';
-                scoreMessage.innerHTML += ' - Good progress! Review the remaining questions.';
-            } else if (answered >= totalQuestions * 0.5) {
-                scoreMessage.className = 'score-message show partial';
-                scoreMessage.innerHTML += ' - Keep studying! You got about half.';
-            } else {
-                scoreMessage.className = 'score-message show error';
-                scoreMessage.innerHTML += ' - Review the material and try again.';
-            }
-        }
-    </script>
+          updateScore();
+        });
+      });
+    });
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered');
+          q.querySelectorAll('.opt').forEach(o => o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered'));
+          const exp = q.querySelector('.explanation');
+          if (exp) exp.classList.remove('show');
+        });
+        updateScore();
+      });
+    }
+    updateScore();
+  });
+})();
+</script>
 </body>
 </html>

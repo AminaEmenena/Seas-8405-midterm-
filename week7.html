@@ -176,6 +176,72 @@
     color: #ddd;
   }
 
+  
+  /* ═══ ORIGINAL DESIGN CLASSES (callout boxes, mnemonics, flow diagrams) ═══ */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -288,6 +354,13 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -300,6 +373,61 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ QUIZ SECTION ═══ */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease; width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    user-select: none; line-height: 1.5;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct {
+    background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700;
+  }
+  .quiz-q .opt.selected-wrong {
+    background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong);
+  }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
 </style>
 </head>
 <body>
@@ -327,7 +455,9 @@
             <summary>1. What is Architectural Decision Making?</summary>
             <div class="content">
                 <p><strong>Systematic process</strong> of evaluating options, weighing trade-offs, selecting approaches to best serve organizational goals within real-world constraints.</p>
-                
+
+                <div class="red"><strong>KEY IDEA:</strong> Architectural decisions are rarely about finding the "perfect" solution—they're about making defensible trade-offs that serve organizational goals within real-world constraints.</div>
+
                 <p><strong>Constant trade-offs.</strong> It's hard — judgment, communication, solving short-term problems while thinking long-term, managing organizational culture.</p>
                 
                 <ul>
@@ -336,24 +466,32 @@
                     <li><strong>Defensibility:</strong> must document rationale so decisions can be defended during audits, after incidents, when questioned. "If we can't explain decisions, we are vulnerable."</li>
                     <li><strong>Future Adaptability:</strong> good decisions account for future growth, changing threats, technology evolution.</li>
                 </ul>
+
+                <div class="mem"><small>Remember This</small><br><strong>"No Perfect Solutions, Only Defensible Trade-offs"</strong></div>
             </div>
         </details>
         
         <details>
             <summary>2. Common Decision-Making Challenges</summary>
             <div class="content">
+                <div class="blue"><b>KEY:</b> The biggest decision-making trap is premature convergence—jumping to a solution before fully exploring the problem and alternatives.</div>
+
                 <ul>
                     <li><strong>Incomplete Information:</strong> must decide before all facts known. Requirements unclear, threats evolving, future direction uncertain. Architects rarely have perfect information.</li>
                     <li><strong>Conflicting Requirements:</strong> security conflicts with usability, performance, cost. Business wants innovation and speed; security needs control. Finding balance is constant challenge. "Continuous negotiation and reevaluation."</li>
                     <li><strong>Legacy Constraints:</strong> existing technical debt, sunk costs. Must architect AROUND constraints you cannot remove. "Creativity — how to solve threats under constraint."</li>
                     <li><strong>Resource Limitations:</strong> finite budget, limited personnel, skills gaps, aggressive timelines. "Perfect solution exists in theory, not affordable or achievable. Must optimize within constraints."</li>
                 </ul>
+
+                <div class="prof"><strong>Prof. Le's Tip:</strong> "The smartest architects I've worked with don't have all the answers—they ask the right questions. They force the team to think through WHY constraints exist and whether they're truly immovable."</div>
             </div>
         </details>
         
         <details>
             <summary>3. Decision-Making Framework (5 Steps)</summary>
             <div class="content">
+                <div class="red"><strong>KEY IDEA:</strong> The 5-step framework is not rigid—it's a checkpoint system to ensure you're thinking holistically before committing to a decision.</div>
+
                 <ul>
                     <li><strong>Step 1: Define the Problem</strong> — clearly articulate WHAT decision needs to be made and WHY it matters. What are success criteria? Be specific.</li>
                     <li><strong>Step 2: Identify Options</strong> — generate multiple potential solutions. Avoid premature convergence. Include status quo as option to evaluate.</li>
@@ -361,6 +499,8 @@
                     <li><strong>Step 4: Make Decision and Document</strong> — select best option. Document decision rationale, alternatives considered, trade-offs accepted, assumptions made.</li>
                     <li><strong>Step 5: Monitor and Adapt</strong> — after implementation, monitor outcomes. Be willing to adapt if circumstances change or assumptions prove wrong.</li>
                 </ul>
+
+                <div class="mem"><small>Remember This</small><br><strong>"Define → Identify → Evaluate → Document → Monitor"</strong></div>
             </div>
         </details>
         
@@ -375,7 +515,7 @@
                     <li>Resilience against failures</li>
                     <li>Compliance and regulatory alignment</li>
                 </ul>
-                
+
                 <p><strong>Business and Operational Criteria:</strong></p>
                 <ul>
                     <li>Total cost of ownership over lifecycle</li>
@@ -385,8 +525,10 @@
                     <li>User experience and productivity impact</li>
                     <li>Skills required and team capacity</li>
                 </ul>
-                
-                <p><strong>KEY:</strong> "Good architectural decisions balance BOTH security effectiveness AND business viability."</p>
+
+                <div class="red"><strong>KEY IDEA:</strong> Good architectural decisions balance BOTH security effectiveness AND business viability. Choosing maximum security at any cost OR minimum cost regardless of risk both fail.</div>
+
+                <div class="green"><b>Best Practice:</b> Use weighted scoring matrix to evaluate options. Assign weights to each criterion based on organizational priorities, then score each option systematically. Transparency prevents politics from dominating the decision.</div>
             </div>
         </details>
         
@@ -398,30 +540,36 @@
                     <li><strong>Pros</strong> — perfect fit, full control, no vendor lock-in.</li>
                     <li><strong>Cons</strong> — high development cost, long timeline, ongoing maintenance, skills retention risk.</li>
                 </ul>
-                
+
                 <p><strong>Buy Commercial:</strong></p>
                 <ul>
                     <li><strong>Pros</strong> — faster deployment, proven technology, vendor support.</li>
                     <li><strong>Cons</strong> — licensing costs, may not fit perfectly, vendor dependency, integration complexity, product discontinuation risk.</li>
                 </ul>
-                
+
                 <p><strong>Managed Service:</strong></p>
                 <ul>
                     <li><strong>Pros</strong> — expertise without hiring, 24/7 coverage, scalable, predictable cost.</li>
                     <li><strong>Cons</strong> — less control, data sharing concerns, vendor dependency, may not understand your environment.</li>
                 </ul>
-                
+
+                <div class="blue"><b>KEY:</b> There is no universally "best" option. The right choice depends entirely on organizational maturity, available resources, team skills, and whether the capability is strategic or commodity.</div>
+
                 <p><strong>When to Build:</strong> highly unique requirements, skilled internal team with capacity, long-term strategic capability, acceptable to take time. Example: custom threat intelligence platform.</p>
-                
+
                 <p><strong>When to Buy/Manage:</strong> commodity capability, talent shortage, need rapid deployment, want team focused on strategic work. Example: EDR, SIEM, SOC operations.</p>
-                
-                <p><strong>KEY:</strong> "Best choice depends on organizational maturity, resources, skills, and specific use case."</p>
+
+                <div class="prof"><strong>Prof. Le's Tip:</strong> "Most organizations over-build and under-buy. We love building things because it feels like we're in control. But that control costs money and focus. Ask yourself: is this a competitive advantage, or is it table stakes? If it's table stakes, buy it."</div>
+
+                <div class="mem"><small>Remember This</small><br><strong>"Strategic = Build, Commodity = Buy or Manage"</strong></div>
             </div>
         </details>
         
         <details>
             <summary>6. Decision-Making Checklist (8 Items)</summary>
             <div class="content">
+                <div class="green"><b>Best Practice:</b> Use this checklist before finalizing ANY architectural decision. These 8 items prevent costly mistakes and ensure you're thinking comprehensively.</div>
+
                 <ol style="margin-left: 30px; margin-bottom: 15px;">
                     <li style="margin-bottom: 10px;">Have I clearly defined the problem and success criteria?</li>
                     <li style="margin-bottom: 10px;">Have I identified at least 3 options including status quo?</li>
@@ -432,151 +580,226 @@
                     <li style="margin-bottom: 10px;">Have I defined metrics to evaluate whether decision is working?</li>
                     <li style="margin-bottom: 10px;">Have I planned for monitoring and adaptation if circumstances change?</li>
                 </ol>
+
+                <div class="red"><strong>KEY IDEA:</strong> If you can't answer "yes" to all 8 items, you're not ready to decide. The checklist forces alignment and prevents surprises later.</div>
             </div>
         </details>
         
         <details>
             <summary>7. Key Takeaways from Week 7</summary>
             <div class="content">
+                <div class="red"><strong>KEY IDEA:</strong> Architecture is not an individual sport. Success depends on understanding organizational context, building stakeholder alignment, and being willing to defend—and change—decisions based on outcomes.</div>
+
                 <ul>
                     <li><strong>Every Decision is Trade-Off:</strong> no perfect solutions. Good architects make trade-offs explicit and defensible.</li>
                     <li><strong>Context is Critical:</strong> right decision depends on resources, maturity, constraints, culture. What works elsewhere may not work for you.</li>
                     <li><strong>Measured Outcomes:</strong> define success metrics upfront. Track whether achieving results. Adapt if not working.</li>
                     <li><strong>Collaborate Don't Dictate:</strong> architecture succeeds through partnership — with stakeholders, vendors, business units. "Ivory tower mandates fail."</li>
-                    <li><strong>KEY:</strong> "Learn from others: study real-world cases, understand WHY decisions were made, adapt lessons to your context."</li>
+                    <li><strong>Learn from Others:</strong> study real-world cases, understand WHY decisions were made, adapt lessons to your context.</li>
                 </ul>
+
+                <div class="prof"><strong>Prof. Le's Tip:</strong> "The best architects I've worked with are humble. They know they'll be wrong sometimes, so they over-communicate their decisions and actively seek feedback. That's how you catch mistakes early."</div>
             </div>
         </details>
         
-        <div class="quiz-section">
-            <div class="quiz-title">QUIZ — 12 Questions</div>
-            
-            <div class="quiz-questions">
-                <div class="question">
-                    <div class="question-text">1. What makes architectural decision-making hard?</div>
-                    <textarea id="q1" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">2. What is Step 1 of the 5-step decision framework?</div>
-                    <textarea id="q2" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">3. Why include status quo as an option when evaluating alternatives?</div>
-                    <textarea id="q3" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">4. When should you choose to build a custom solution rather than buy?</div>
-                    <textarea id="q4" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">5. What is the main advantage of a managed service approach?</div>
-                    <textarea id="q5" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">6. What does "defensibility" mean for architectural decisions?</div>
-                    <textarea id="q6" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">7. How should you handle legacy constraints you cannot remove?</div>
-                    <textarea id="q7" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">8. What are the two main categories of evaluation criteria for architectural decisions?</div>
-                    <textarea id="q8" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">9. How many items are in the decision-making checklist?</div>
-                    <input type="text" id="q9" placeholder="Your answer...">
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">10. Why does context matter in architectural decision-making?</div>
-                    <textarea id="q10" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">11. Give an example of conflicting requirements in architectural decisions.</div>
-                    <textarea id="q11" placeholder="Your answer..."></textarea>
-                </div>
-                
-                <div class="question">
-                    <div class="question-text">12. Why is it important to document decision rationale?</div>
-                    <textarea id="q12" placeholder="Your answer..."></textarea>
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button onclick="checkScore('w7', 12)">Check Score</button>
-                <button onclick="clearQuiz()">Clear Answers</button>
-            </div>
-            
-            <div id="scoreDisplay" class="score-display">
-                <div class="score-text" id="scoreText"></div>
-            </div>
+    <div class="quiz-section">
+      <h2>Week 7 — Test Yourself (12 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">12</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">1</span> What makes architectural decision-making particularly challenging?</p>
+        <div class="options">
+          <div class="opt">Too many vendors to choose from</div>
+          <div class="opt">Decisions are always reversible anyway</div>
+          <div class="opt">Incomplete information, conflicting requirements, long-term consequences, and multiple stakeholders</div>
+          <div class="opt">There's always one clearly correct answer</div>
         </div>
+        <div class="explanation">Architectural decisions are hard because of incomplete information, conflicting stakeholder requirements, irreversible consequences, and rapidly changing technology landscape.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">2</span> What is Step 1 of the 5-step decision-making framework?</p>
+        <div class="options">
+          <div class="opt">Define the problem and success criteria clearly</div>
+          <div class="opt">Evaluate alternatives with scoring matrix</div>
+          <div class="opt">Make the decision and document it</div>
+          <div class="opt">Identify stakeholders</div>
+        </div>
+        <div class="explanation">Step 1 is defining the problem and success criteria. You can't evaluate options without knowing what "good" looks like.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">3</span> Why should you always include "status quo" as an option when evaluating alternatives?</p>
+        <div class="options">
+          <div class="opt">It's cheaper and always the best option</div>
+          <div class="opt">It provides a baseline — if no alternative clearly beats doing nothing, the change may not be justified</div>
+          <div class="opt">Stakeholders always prefer it</div>
+          <div class="opt">It's required by compliance frameworks</div>
+        </div>
+        <div class="explanation">Status quo is the baseline. If no alternative clearly outperforms it when accounting for implementation cost and risk, the change isn't justified.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">4</span> When should you BUILD a custom solution rather than buy?</p>
+        <div class="options">
+          <div class="opt">Highly unique requirements, skilled internal team, long-term strategic capability needed</div>
+          <div class="opt">When it's a commodity capability like EDR or SIEM</div>
+          <div class="opt">When you have a talent shortage</div>
+          <div class="opt">When you need rapid deployment</div>
+        </div>
+        <div class="explanation">Build when requirements are highly unique, your team has the skills and capacity, and you need long-term strategic capability. Buy/manage for commodity capabilities.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">5</span> What is the main advantage of a managed service approach?</p>
+        <div class="options">
+          <div class="opt">Full control over the environment</div>
+          <div class="opt">No vendor dependency</div>
+          <div class="opt">Expertise without hiring, 24/7 coverage, scalable, predictable cost</div>
+          <div class="opt">Perfect fit for unique requirements</div>
+        </div>
+        <div class="explanation">Managed services provide expertise without hiring, 24/7 coverage, scalability, and predictable costs — but trade off control and data sharing.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">6</span> How many items are in the decision-making checklist?</p>
+        <div class="options">
+          <div class="opt">5 items</div>
+          <div class="opt">8 items</div>
+          <div class="opt">10 items</div>
+          <div class="opt">12 items</div>
+        </div>
+        <div class="explanation">The decision-making checklist has 8 items covering problem definition, options identification, trade-off evaluation, stakeholder perspectives, documentation, assumptions, metrics, and monitoring.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">7</span> What are the two main categories of evaluation criteria?</p>
+        <div class="options">
+          <div class="opt">Security effectiveness criteria AND business viability criteria</div>
+          <div class="opt">Technical criteria AND financial criteria</div>
+          <div class="opt">Compliance criteria AND performance criteria</div>
+          <div class="opt">Vendor criteria AND internal criteria</div>
+        </div>
+        <div class="explanation">Good architectural decisions balance BOTH security effectiveness AND business viability — including cost, timeline, operational overhead, and organizational fit.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="3">
+        <p><span class="qnum">8</span> Why is documenting decision rationale important?</p>
+        <div class="options">
+          <div class="opt">It's only needed for compliance audits</div>
+          <div class="opt">It slows down the decision process intentionally</div>
+          <div class="opt">It replaces the need for stakeholder input</div>
+          <div class="opt">It enables future teams to understand WHY decisions were made and adapt when circumstances change</div>
+        </div>
+        <div class="explanation">Documentation preserves the reasoning, alternatives considered, and trade-offs accepted — critical when teams change or circumstances evolve.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">9</span> What does "context is critical" mean for architectural decisions?</p>
+        <div class="options">
+          <div class="opt">Every organization should use the same architecture patterns</div>
+          <div class="opt">The right decision depends on resources, maturity, constraints, and culture — what works elsewhere may not work for you</div>
+          <div class="opt">Context only matters for startups</div>
+          <div class="opt">Always follow industry best practices regardless of context</div>
+        </div>
+        <div class="explanation">Context includes resources, organizational maturity, constraints, and culture. A solution that works for a Fortune 500 may fail at a startup, and vice versa.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">10</span> What is the recommended approach for handling legacy constraints you cannot remove?</p>
+        <div class="options">
+          <div class="opt">Ignore them and build the ideal architecture</div>
+          <div class="opt">Replace all legacy systems immediately</div>
+          <div class="opt">Document them as constraints, design around them, and plan gradual migration where possible</div>
+          <div class="opt">Abandon the architecture project entirely</div>
+        </div>
+        <div class="explanation">Legacy constraints should be documented, designed around, and included in migration plans. Architecture must work with reality, not against it.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">11</span> Give an example of conflicting requirements in architecture decisions.</p>
+        <div class="options">
+          <div class="opt">Maximum security (complex MFA, deep inspection) vs maximum usability (fast, frictionless access)</div>
+          <div class="opt">Two teams wanting the same technology</div>
+          <div class="opt">Budget approval vs budget denial</div>
+          <div class="opt">Hiring more staff vs keeping current staff</div>
+        </div>
+        <div class="explanation">Classic conflict: security wants complex MFA and deep packet inspection (slows things down), while users want fast, frictionless access. The architect must balance both.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">12</span> According to Week 7, what is the key takeaway about architectural success?</p>
+        <div class="options">
+          <div class="opt">Always pick the most secure option regardless of cost</div>
+          <div class="opt">Collaborate don't dictate — architecture succeeds through partnership, not ivory tower mandates</div>
+          <div class="opt">Let vendors make the architectural decisions</div>
+          <div class="opt">Focus only on technology, not people</div>
+        </div>
+        <div class="explanation">"Ivory tower mandates fail." Architecture succeeds through partnership with stakeholders, vendors, and business units. Collaboration and measured outcomes are key.</div>
+      </div>
     </div>
-    
-    <script>
-        function checkScore(week, totalQuestions) {
-            let answered = 0;
-            for (let i = 1; i <= totalQuestions; i++) {
-                const answer = document.getElementById('q' + i).value.trim();
-                if (answer.length > 0) {
-                    answered++;
-                }
-            }
-            
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const scoreText = document.getElementById('scoreText');
-            const percentage = Math.round((answered / totalQuestions) * 100);
-            
-            scoreText.textContent = `Completed: ${answered}/${totalQuestions} questions (${percentage}%)`;
-            scoreDisplay.classList.add('show');
-            scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
-        function clearQuiz() {
-            for (let i = 1; i <= 12; i++) {
-                document.getElementById('q' + i).value = '';
-            }
-            document.getElementById('scoreDisplay').classList.remove('show');
-        }
-    </script>
-</div>
+    </div>
 
 <script>
-        function checkScore(week, totalQuestions) {
-            let answered = 0;
-            for (let i = 1; i <= totalQuestions; i++) {
-                const answer = document.getElementById('q' + i).value.trim();
-                if (answer.length > 0) {
-                    answered++;
-                }
+(function() {
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0;
+    if (totalEl) totalEl.textContent = qs.length;
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+    }
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+          if (idx === correctIdx) { opt.classList.add('selected-correct'); correct++; }
+          else { opt.classList.add('selected-wrong'); opts[correctIdx].classList.add('show-correct'); }
+          if (explanation) {
+              const isRight = idx === correctIdx;
+              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              if (isRight) {
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+              } else {
+                const correctText = opts[correctIdx].textContent.trim();
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+              }
+              explanation.classList.add('show');
             }
-            
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const scoreText = document.getElementById('scoreText');
-            const percentage = Math.round((answered / totalQuestions) * 100);
-            
-            scoreText.textContent = `Completed: ${answered}/${totalQuestions} questions (${percentage}%)`;
-            scoreDisplay.classList.add('show');
-            scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
-        function clearQuiz() {
-            for (let i = 1; i <= 12; i++) {
-                document.getElementById('q' + i).value = '';
-            }
-            document.getElementById('scoreDisplay').classList.remove('show');
-        }
+          updateScore();
+        });
+      });
+    });
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered');
+          q.querySelectorAll('.opt').forEach(o => o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered'));
+          const exp = q.querySelector('.explanation');
+          if (exp) exp.classList.remove('show');
+        });
+        updateScore();
+      });
+    }
+    updateScore();
+  });
+})();
     </script>
 </body>
 </html>

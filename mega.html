@@ -288,6 +288,109 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+
+  /* ═══ MEGA EXAM COMPONENTS ═══ */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-bottom: 8px;
+  }
+  .header a { color: var(--page-color); text-decoration: none; font-weight: 600; }
+  .header a:hover { text-decoration: underline; }
+
+  .timer {
+    font-size: 2em; font-weight: 800; color: var(--accent1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-section { margin: 16px 0 24px; }
+  .progress-bar {
+    background: #333; border-radius: 12px; height: 28px;
+    overflow: hidden; margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent1), #c0392b);
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    text-align: center; font-weight: 600; color: #aaa; font-size: 0.95em;
+  }
+
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .btn-submit {
+    padding: 14px 32px; border-radius: 10px; border: none;
+    background: var(--accent1); color: #fff;
+    font-size: 1.05em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #c0392b; transform: scale(1.03); }
+  .btn-reset {
+    padding: 14px 32px; border-radius: 10px;
+    border: 2px solid var(--accent1); background: transparent;
+    color: var(--accent1); font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent1); color: #fff; }
+
+  .section-header {
+    font-size: 1.15em; font-weight: 800; color: var(--accent1);
+    padding: 14px 20px; margin: 28px 0 12px;
+    background: rgba(233,69,96,0.1); border-radius: 10px;
+    border-left: 5px solid var(--accent1);
+  }
+
+  .mq {
+    margin: 14px 0; padding: 18px 20px;
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s;
+  }
+  .mq p { font-weight: 600; margin-bottom: 14px; font-size: 1em; line-height: 1.6; }
+  .qnum {
+    display: inline-block; min-width: 32px; height: 32px;
+    line-height: 32px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.8em; font-weight: 800; margin-right: 10px;
+  }
+  .mq label {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); font-size: 0.95em;
+    cursor: pointer; transition: all 0.2s;
+    line-height: 1.5; user-select: none;
+  }
+  .mq label:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  #result {
+    display: none; text-align: center;
+    background: rgba(233,69,96,0.12); border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 32px; margin: 32px 0;
+  }
+  .result-label {
+    font-size: 1.2em; font-weight: 700; color: var(--accent1);
+    margin-bottom: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 0; color: #666;
+    border-top: 1px solid rgba(255,255,255,0.06); margin-top: 32px;
+  }
+
+  .mq-feedback {
+    margin-top: 12px; padding: 12px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+    line-height: 1.6;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -326,13 +429,13 @@
 <div class="header">
       <div class="header-left">
         <a href="index.html">← Back to Hub</a>
-        <div style="color: #8b949e; font-size: 0.95em;">Midterm Exam</div>
+        <div style="color: #aaa; font-size: 0.95em;">Midterm Exam</div>
       </div>
       <div class="header-right">
         <div class="timer">
           <span id="timer">00:00</span>
         </div>
-        <div style="font-size: 0.9em; color: #8b949e;">Elapsed Time</div>
+        <div style="font-size: 0.9em; color: #aaa;">Elapsed Time</div>
       </div>
     </div>
     
@@ -1181,77 +1284,19 @@
     
     <div class="footer">
       <p>SEAS8405 Cybersecurity Architectures Midterm Exam</p>
-      <p style="margin-top: 10px; color: #6e7681;">All 100 questions. Good luck!</p>
+      <p style="margin-top: 10px; color: #666;">All 100 questions. Good luck!</p>
     </div>
   </div>
   
-  <script>
-    var answers = {};
-    var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
-    
-    var startTime = Date.now();
-    setInterval(function(){
-      var s = Math.floor((Date.now() - startTime) / 1000);
-      var m = Math.floor(s / 60);
-      s = s % 60;
-      document.getElementById('timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-    }, 1000);
-    
-    function pick(q, c) {
-      answers[q] = c;
-      var labels = document.querySelectorAll('#mq' + q + ' label');
-      labels.forEach(function(l) {
-        l.style.background = 'transparent';
-        l.style.borderColor = '#30363d';
-      });
-      labels[c].style.background = '#1c2333';
-      labels[c].style.borderColor = '#58a6ff';
-      document.getElementById('progress').textContent = Object.keys(answers).length + '/100 answered';
-      document.getElementById('progbar').style.width = (Object.keys(answers).length) + '%';
-    }
-    
-    function gradeExam() {
-      var score = 0;
-      for (var i = 1; i <= 100; i++) {
-        var labels = document.querySelectorAll('#mq' + i + ' label');
-        if (answers[i] === correct[i]) {
-          score++;
-          labels[correct[i]].style.background = '#1c2a1c';
-          labels[correct[i]].style.borderColor = '#56d364';
-        } else {
-          if (answers[i] !== undefined) {
-            labels[answers[i]].style.background = '#2a1c1c';
-            labels[answers[i]].style.borderColor = '#f97583';
-          }
-          labels[correct[i]].style.background = '#1c2a1c';
-          labels[correct[i]].style.borderColor = '#56d364';
-        }
-      }
-      var pct = Math.round(score / 100 * 100);
-      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
-      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:#58a6ff">' + score + '/100</div><div style="font-size:1.5em;color:#8b949e">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? '#56d364' : '#f97583') + '">' + g + '</div>';
-      document.getElementById('result').style.display = 'block';
-      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
-    }
-    
-    function resetExam() {
-      answers = {};
-      document.querySelectorAll('.mq label').forEach(function(l) {
-        l.style.background = 'transparent';
-        l.style.borderColor = '#30363d';
-      });
-      document.getElementById('progress').textContent = '0/100 answered';
-      document.getElementById('progbar').style.width = '0%';
-      document.getElementById('result').style.display = 'none';
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-  </script>
+
 </div>
 
 <script>
     var answers = {};
+    var locked = {};
+    var score = 0;
     var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
-    
+
     var startTime = Date.now();
     setInterval(function(){
       var s = Math.floor((Date.now() - startTime) / 1000);
@@ -1259,51 +1304,82 @@
       s = s % 60;
       document.getElementById('timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
     }, 1000);
-    
+
     function pick(q, c) {
+      if (locked[q]) return;
+      locked[q] = true;
       answers[q] = c;
       var labels = document.querySelectorAll('#mq' + q + ' label');
+      var correctIdx = correct[q];
+      var isRight = (c === correctIdx);
+
+      // Disable all labels for this question
       labels.forEach(function(l) {
-        l.style.background = 'transparent';
-        l.style.borderColor = '#30363d';
+        l.style.pointerEvents = 'none';
+        l.style.opacity = '0.7';
       });
-      labels[c].style.background = '#1c2333';
-      labels[c].style.borderColor = '#58a6ff';
-      document.getElementById('progress').textContent = Object.keys(answers).length + '/100 answered';
-      document.getElementById('progbar').style.width = (Object.keys(answers).length) + '%';
-    }
-    
-    function gradeExam() {
-      var score = 0;
-      for (var i = 1; i <= 100; i++) {
-        var labels = document.querySelectorAll('#mq' + i + ' label');
-        if (answers[i] === correct[i]) {
-          score++;
-          labels[correct[i]].style.background = '#1c2a1c';
-          labels[correct[i]].style.borderColor = '#56d364';
-        } else {
-          if (answers[i] !== undefined) {
-            labels[answers[i]].style.background = '#2a1c1c';
-            labels[answers[i]].style.borderColor = '#f97583';
-          }
-          labels[correct[i]].style.background = '#1c2a1c';
-          labels[correct[i]].style.borderColor = '#56d364';
-        }
+
+      if (isRight) {
+        score++;
+        labels[c].style.background = 'rgba(81,207,102,0.2)';
+        labels[c].style.borderColor = '#51cf66';
+        labels[c].style.color = '#51cf66';
+        labels[c].style.fontWeight = '700';
+        labels[c].style.opacity = '1';
+      } else {
+        // Mark wrong choice
+        labels[c].style.background = 'rgba(255,107,107,0.2)';
+        labels[c].style.borderColor = '#ff6b6b';
+        labels[c].style.color = '#ff6b6b';
+        labels[c].style.opacity = '1';
+        // Highlight correct answer
+        labels[correctIdx].style.background = 'rgba(81,207,102,0.2)';
+        labels[correctIdx].style.borderColor = '#51cf66';
+        labels[correctIdx].style.color = '#51cf66';
+        labels[correctIdx].style.fontWeight = '700';
+        labels[correctIdx].style.opacity = '1';
       }
+
+      // Add feedback text
+      var feedback = document.createElement('div');
+      feedback.className = 'mq-feedback';
+      if (isRight) {
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct!</strong>';
+      } else {
+        var correctText = labels[correctIdx].textContent.trim();
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em>';
+      }
+      document.getElementById('mq' + q).appendChild(feedback);
+
+      // Update progress
+      var answered = Object.keys(answers).length;
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 100 answered';
+      document.getElementById('progbar').style.width = (answered) + '%';
+    }
+
+    function gradeExam() {
       var pct = Math.round(score / 100 * 100);
       var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
-      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:#58a6ff">' + score + '/100</div><div style="font-size:1.5em;color:#8b949e">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? '#56d364' : '#f97583') + '">' + g + '</div>';
+      var answered = Object.keys(answers).length;
+      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="font-size:1.5em;color:#aaa">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? 'var(--correct)' : 'var(--wrong)') + '">' + g + '</div>';
       document.getElementById('result').style.display = 'block';
       window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
     }
-    
+
     function resetExam() {
       answers = {};
+      locked = {};
+      score = 0;
       document.querySelectorAll('.mq label').forEach(function(l) {
-        l.style.background = 'transparent';
-        l.style.borderColor = '#30363d';
+        l.style.background = '';
+        l.style.borderColor = '';
+        l.style.color = '';
+        l.style.fontWeight = '';
+        l.style.pointerEvents = '';
+        l.style.opacity = '';
       });
-      document.getElementById('progress').textContent = '0/100 answered';
+      document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
+      document.getElementById('progress').textContent = '0 correct / 0 of 100 answered';
       document.getElementById('progbar').style.width = '0%';
       document.getElementById('result').style.display = 'none';
       window.scrollTo({top: 0, behavior: 'smooth'});

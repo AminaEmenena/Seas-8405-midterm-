@@ -176,6 +176,72 @@
     color: #ddd;
   }
 
+  
+  /* ═══ ORIGINAL DESIGN CLASSES (callout boxes, mnemonics, flow diagrams) ═══ */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -288,6 +354,13 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -300,6 +373,73 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ QUIZ SECTION ═══ */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text {
+    font-size: 1.05em; font-weight: 700; color: var(--page-color);
+  }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333;
+    border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    user-select: none; line-height: 1.5;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct {
+    background: rgba(81,207,102,0.2); border-color: var(--correct);
+    color: var(--correct); font-weight: 700;
+  }
+  .quiz-q .opt.selected-wrong {
+    background: rgba(255,107,107,0.2); border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct); color: var(--correct);
+  }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
 </style>
 </head>
 <body>
@@ -329,23 +469,26 @@
         <details>
             <summary>1. Three Phases of Technology Projects</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Every tech project has three distinct phases in sequence: Planning, Implementation, then Maintenance. Each requires different skills and focus.</div>
                 <ul>
                     <li><strong>Planning:</strong> assessing requirements, marshaling resources, budget, milestones. This is where architecture happens. "Where we design what we build."</li>
                     <li><strong>Implementation:</strong> making investments, executing tasks, writing code. Where most attention naturally goes — stakeholders push for progress, leadership wants results. "Planning delays results."</li>
                     <li><strong>Maintenance:</strong> continual process of maintaining solution over time. Often de-emphasized.</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> Organizations naturally feel pressure to move directly to implementation, making it harder to see big picture. Support considerations pushed because they don't feel urgent.</p>
+                <div class="blue"><b>KEY:</b> Organizations naturally feel pressure to move directly to implementation, making it harder to see big picture. Support considerations pushed because they don't feel urgent.</div>
             </div>
         </details>
         
         <details>
             <summary>2. Why Organizations De-emphasize Planning</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Pressure for immediate results causes orgs to skip planning phase, creating costly chaos later. "We'll figure it out as we go" always fails.</div>
                 <ul>
                     <li><strong>Implementation Pressure:</strong> new projects = organizational needs, stakeholders push for progress, planning viewed as delaying solutions, "we can't demo a plan"</li>
                     <li><strong>Maintenance Problem:</strong> similar de-emphasis, "we'll cross that bridge when we come to it," focus on getting solution to work first</li>
                     <li><strong>Planned vs Unplanned Cities analogy:</strong> Manhattan/Chandigarh/Dubai (grid, easy to navigate, even non-natives can navigate) vs Boston/London/Chennai (complex patterns, harder to navigate, poor documentation, knowledge lost when original engineers leave)</li>
                 </ul>
+                <div class="mem"><small>Remember This</small><br><strong>"Grid cities scale. Chaos cities crumble."</strong></div>
             </div>
         </details>
         
@@ -358,101 +501,111 @@
                     <li><strong>Maintenance benefits:</strong> easier to support when built with structured approach</li>
                     <li><strong>Integration benefits:</strong> new components deploy more effectively into systematic layout</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "Benefits compound over time. Year 1 may be only 10% better than ad-hoc, but year 5 may be 300% better."</p>
+                <div class="red"><strong>KEY IDEA:</strong> Structured architecture pays exponential dividends. Year 1: +10%. Year 5: +300% vs ad-hoc. Front-load the planning work.</div>
+                <div class="green"><b>Best Practice:</b> Invest in architecture during planning phase. Saves 10x the cost in maintenance and fixes later.</div>
             </div>
         </details>
         
         <details>
             <summary>4. Role of the Security Architect</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Security architect has three core jobs: Vision (goals + constraints), Blueprint (plan + roadmap), Stakeholder collaboration (sell & align).</div>
                 <ul>
                     <li><strong>Create the Vision:</strong> evaluate goals, constraints, requirements, budget, resources. Not just picking technologies — understanding context (risk tolerance, budget, scope). Ex: "transition from perimeter to zero trust in 3 years"</li>
                     <li><strong>Develop the Blueprint:</strong> comprehensive plan guiding entire lifecycle. Tools, how they relate, roadmap, metrics.</li>
                     <li><strong>Work with Stakeholders:</strong> collaborate with engineers (feasibility), business leaders (business goal), other architects (ecosystem fit)</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "collaboration and communication" — architect explains to stakeholders how project meets goals</p>
+                <div class="prof"><strong>Prof. Le's Tip:</strong> An architect who can't communicate is ineffective. You must explain technical decisions in business language to executives.</div>
             </div>
         </details>
         
         <details>
             <summary>5. Scope of Security Architect</summary>
             <div>
+                <div class="box"><h4>Three Levels of Security Architecture</h4>
                 <ul>
                     <li><strong>Infrastructure Focus:</strong> firewalls, anti-malware, IDS/IPS, VPN, network segmentation</li>
                     <li><strong>Application Focus:</strong> participate in sprint planning, review application security, define security testing requirements, help developers design authentication</li>
                     <li><strong>Enterprise Focus:</strong> oversee security across ALL domains — applications, networks, infrastructure. Define enterprise security standards, create reference architecture, strategic planning.</li>
                 </ul>
-                <p style="margin-top: 15px;">A small org may have one person doing all three. Large org may have many specific architects.</p>
+                </div>
+                <div class="blue"><b>KEY:</b> A small org may have one person doing all three. Large org may have many specific architects.</div>
             </div>
         </details>
         
         <details>
             <summary>6. Application Security Architect Role</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Architect role evolves through 4 phases: Requirements (design in security) → Development (implement & test) → Release (deploy safely) → Support (respond & fix).</div>
                 <ul>
                     <li><strong>Four Phases:</strong> Requirements (scope, purpose) → Development (active coding, testing) → Release (deployment, pre/post activities) → Support (post-release, updates, maintenance, bug fixes)</li>
                     <li>DevOps and continuous deployment may have all phases happening simultaneously</li>
                     <li>Architect's role changes per phase: requirements = ensure security designed in, development = heavy design/implementation, release = coordinating deployment, support = responding to issues</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "Security is woven into system, not bolted on at end."</p>
+                <div class="mem"><small>Remember This</small><br><strong>"Security woven in, never bolted on."</strong></div>
             </div>
         </details>
         
         <details>
             <summary>7. Building Security into SDLC</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Security must be embedded at every stage of SDLC via design reviews, automated testing, code review, and developer training.</div>
                 <ul>
                     <li><strong>Security Design Reviews:</strong> incorporate into release process (waterfall gates or agile sprint retrospectives)</li>
                     <li><strong>Security Testing:</strong> manual or automated software security testing in pipeline</li>
                     <li><strong>Code Review:</strong> peer review focused on identifying vulnerabilities before deployment</li>
                     <li><strong>Developer Training:</strong> train on secure coding techniques. Provide reusable security components and libraries. Open Web Application Security Project (OWASP).</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "Cultural shift: security isn't just architect's responsibility — it's responsibility of ALL employees."</p>
+                <div class="green"><b>Best Practice:</b> Make security part of Definition of Done. Every user story should have security acceptance criteria.</div>
             </div>
         </details>
         
         <details>
             <summary>8. Modern Development: DevOps and CI/CD</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> DevOps blurs phases but doesn't change architect's goals—vision, misuse cases, attack resistance. Only execution adapts.</div>
                 <ul>
                     <li>Legacy waterfall had clear phases. DevOps blurs/eliminates boundaries between development, release, support.</li>
                     <li><strong>Goals don't change</strong> — architect still develops clear security vision, ensures misuse cases considered, designs attack resistance</li>
                     <li><strong>Execution changes</strong> — adapts to development model. Automated security testing in pipeline. Integrate security into rapid deployment without slowing it down.</li>
                     <li><strong>Culture and process</strong> — architect influences HOW software gets developed: security design reviews, automated testing, code review, developer training.</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "Building security in means ensuring the development process itself engenders security through systematic practices."</p>
+                <div class="green"><b>Best Practice:</b> Implement security gate checks in CI/CD pipeline. Make failing security tests block deployment, not just warnings.</div>
             </div>
         </details>
         
         <details>
             <summary>9. Security Requirements and Misuse Cases</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Every security requirement must map to a specific misuse case. No security without threat justification.</div>
                 <ul>
                     <li><strong>Use Cases:</strong> how system is used for legitimate purposes</li>
                     <li><strong>Misuse Cases:</strong> how system might be misused by attacker, accidentally, or by circumstance</li>
                     <li><strong>Security corresponds to threat:</strong> every security measure should correspond to a specific misuse case</li>
                     <li><strong>Context determines requirements:</strong> how system can be misused drives security requirements as much as how it will be used</li>
                 </ul>
-                <p style="margin-top: 15px;"><strong>Examples:</strong></p>
+                <div class="box"><h4>Misuse Case Examples</h4>
                 <ul>
-                    <li>Use case: password reset via email → Misuse: attacker intercepts reset link → Solution: expire links in 15 min, additional verification</li>
-                    <li>Use case: profile picture upload → Misuse: upload script disguised as image for remote code execution → Solution: validate file type, scan for malware, store outside webroot</li>
+                    <li><strong>Use case:</strong> password reset via email → <strong>Misuse:</strong> attacker intercepts reset link → <strong>Solution:</strong> expire links in 15 min, additional verification</li>
+                    <li><strong>Use case:</strong> profile picture upload → <strong>Misuse:</strong> upload script disguised as image for RCE → <strong>Solution:</strong> validate file type, scan for malware, store outside webroot</li>
                 </ul>
-                <p style="margin-top: 15px;">Threat modeling: STRIDE methodology, MITRE ATT&CK maps attack trees</p>
+                </div>
+                <div class="blue"><b>KEY:</b> Threat modeling: STRIDE methodology, MITRE ATT&CK maps attack trees. Know your attack surface.</div>
             </div>
         </details>
         
         <details>
             <summary>10. Optimism Bias in Projects</summary>
             <div>
-                <p><strong>Optimism Bias:</strong> The systematic tendency for project teams to be overly optimistic about outcomes — underestimating costs, timelines, and risks while overestimating benefits.</p>
+                <div class="red"><strong>KEY IDEA:</strong> Optimism Bias = #1 killer of security. Teams underestimate costs & timelines, security gets cut first.</div>
+                <p style="margin-top: 10px;"><strong>Optimism Bias:</strong> The systematic tendency for project teams to be overly optimistic about outcomes — underestimating costs, timelines, and risks while overestimating benefits.</p>
                 <ul>
                     <li><strong>Why it happens:</strong> Teams want to succeed. Stakeholders want good news. Nobody wants to be the pessimist. "We'll figure it out as we go."</li>
                     <li><strong>Impact on security:</strong> Security requirements get deprioritized ("we'll add it later"), timelines for hardening get compressed, risk assessments get watered down</li>
                     <li><strong>Mitigation:</strong> Use historical data from similar projects. Build in buffer. Have independent reviewers challenge assumptions. Reference class forecasting (compare to similar past projects, not just this team's estimates).</li>
                 </ul>
-                <div class="highlight-red">
-                    <strong>Prof. Le's Point:</strong> "Optimism bias is the #1 reason security gets cut from project scope. Everyone assumes the timeline will work until it doesn't."
+                <div class="prof">
+                    <strong>Prof. Le's Tip:</strong> "Optimism bias is the #1 reason security gets cut from scope. Everyone assumes the timeline will work until it doesn't. Budget security as non-negotiable."
                 </div>
             </div>
         </details>
@@ -460,22 +613,23 @@
         <details>
             <summary>11. Root Cause Analysis</summary>
             <div>
-                <p><strong>Root Cause Analysis (RCA):</strong> A systematic process for identifying the underlying causes of problems or incidents, rather than just treating symptoms.</p>
+                <div class="red"><strong>KEY IDEA:</strong> Root Cause Analysis finds the REAL problem, not the symptom. Fix symptoms = same bug returns.</div>
+                <p style="margin-top: 10px;"><strong>Root Cause Analysis (RCA):</strong> A systematic process for identifying the underlying causes of problems or incidents, rather than just treating symptoms.</p>
                 <ul>
                     <li><strong>5 Whys Technique:</strong> Keep asking "why" until you reach the root cause. Example: Why did the breach happen? → Credentials were stolen. Why? → Phishing email. Why did it work? → No MFA. Why no MFA? → Budget was cut. Why? → Security wasn't tied to business goals. Root cause = misalignment between security and business strategy.</li>
                     <li><strong>Fishbone (Ishikawa) Diagram:</strong> Categorize causes into People, Process, Technology, Environment</li>
                     <li><strong>For architects:</strong> RCA helps identify whether failures are architectural (design flaws) vs operational (process gaps) vs human (training gaps)</li>
                 </ul>
-                <div class="highlight-blue">
-                    <strong>KEY:</strong> Don't just fix the symptom. If you patch a vulnerability without understanding WHY it was introduced, you'll introduce the same class of vulnerability again.
-                </div>
+                <div class="green"><b>Best Practice:</b> After incident, always conduct RCA. Ask "Why?" at least 5 times. Look beyond the immediate cause.</div>
             </div>
         </details>
 
         <details>
             <summary>12. Four Dimensions of Solution Success</summary>
             <div>
-                <p>A solution isn't successful just because it works technically. It must succeed across <strong>four dimensions</strong>:</p>
+                <div class="red"><strong>KEY IDEA:</strong> Technical success ≠ overall success. Solution must win on Technical, Organizational, Economic, AND Operational dimensions.</div>
+                <p style="margin-top: 10px;">A solution isn't successful just because it works technically. It must succeed across <strong>four dimensions</strong>:</p>
+                <div class="box"><h4>Four Dimensions of Solution Success</h4>
                 <table>
                     <thead>
                         <tr><th>Dimension</th><th>Question</th><th>Example</th></tr>
@@ -503,15 +657,16 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="highlight-green">
-                    <strong>KEY:</strong> A technically perfect solution that nobody uses (organizational failure) or that costs too much to maintain (economic/operational failure) is still a failed solution.
                 </div>
+                <div class="mem"><small>Remember This</small><br><strong>"Tech perfect + org rejects it = failure."</strong></div>
             </div>
         </details>
 
         <details>
             <summary>13. Top-Down vs Bottom-Up Architecture</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Top-Down = strategic vision. Bottom-Up = pragmatic reality. Best architecture uses BOTH together.</div>
+                <div class="box"><h4>Top-Down vs Bottom-Up Architecture</h4>
                 <table>
                     <thead>
                         <tr><th>Approach</th><th>How It Works</th><th>Pros</th><th>Cons</th></tr>
@@ -519,21 +674,22 @@
                     <tbody>
                         <tr>
                             <td><strong>Top-Down</strong></td>
-                            <td>Start from business goals → derive security requirements → select technologies</td>
-                            <td>Aligned with mission, strategic, comprehensive</td>
-                            <td>Slower, requires executive buy-in, can feel abstract</td>
+                            <td>Start from business goals → derive requirements → select tech</td>
+                            <td>Aligned, strategic, comprehensive</td>
+                            <td>Slower, needs buy-in, abstract</td>
                         </tr>
                         <tr>
                             <td><strong>Bottom-Up</strong></td>
-                            <td>Start from existing technologies → identify gaps → build upward</td>
-                            <td>Faster, pragmatic, leverages what you have</td>
-                            <td>Can miss big picture, may not align with business goals, creates patchwork</td>
+                            <td>Start from existing tech → identify gaps → build upward</td>
+                            <td>Fast, pragmatic, uses what exists</td>
+                            <td>Misses big picture, patchwork, no alignment</td>
                         </tr>
                     </tbody>
                 </table>
-                <p style="margin-top: 15px;"><strong>Best practice:</strong> Use BOTH. Top-down sets the vision and strategic direction. Bottom-up validates what's feasible with current capabilities. They meet in the middle.</p>
-                <div class="highlight-red">
-                    <strong>Prof. Le's Point:</strong> "Most organizations default to bottom-up because it's easier. But without top-down guidance, you end up with a collection of tools instead of an architecture."
+                </div>
+                <div class="green"><b>Best Practice:</b> Use BOTH simultaneously. Top-down provides vision, bottom-up validates feasibility. They meet in the middle.</div>
+                <div class="prof">
+                    <strong>Prof. Le's Tip:</strong> "Most orgs go bottom-up because it's easier. But you end up with tools, not architecture. Start with vision."
                 </div>
             </div>
         </details>
@@ -541,205 +697,239 @@
         <details>
             <summary>14. Boehm's Curve — Cost Fixing Defects</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Finding bugs early = cheap. Finding them after deployment = catastrophically expensive (100x+). Plan accordingly.</div>
+                <div class="box"><h4>Boehm's Curve: Cost Multipliers by Phase</h4>
                 <ol>
-                    <li><strong>Requirements:</strong> lowest cost (just update docs)</li>
+                    <li><strong>Requirements:</strong> lowest cost (1x = just update docs)</li>
                     <li><strong>Design:</strong> 5x cost</li>
                     <li><strong>Development:</strong> 10x cost</li>
                     <li><strong>Testing:</strong> 15x cost</li>
-                    <li><strong>Deployment:</strong> 100x+ cost (patch, notify users, support failures, potential exploitation)</li>
+                    <li><strong>Deployment:</strong> 100x+ cost (patch, notify, support, exploitation risk)</li>
                 </ol>
-                <p style="margin-top: 15px;"><strong>Example:</strong> Find bug immediately = 1 hour, modify code, unit test, done. Find bug after shipping 1M units = weeks of work, update source, integration test, schedule release, rebuild, notify users, support patch failures.</p>
-                <p style="margin-top: 15px;"><strong>KEY:</strong> "Do the work upfront when it's cheap."</p>
+                </div>
+                <p style="margin-top: 15px;"><strong>Example:</strong> Find bug immediately = 1 hour fix. Find bug after 1M units shipped = weeks of work, integration test, schedule release, rebuild, notify users, support patch failures.</p>
+                <div class="mem"><small>Remember This</small><br><strong>"Fix early, fix cheap. Fix late, fix in flames."</strong></div>
             </div>
         </details>
         
-        <div class="quiz-section">
-            <h2>QUIZ — 12 Questions</h2>
-            
-            <div class="quiz-question">
-                <label><strong>1. In what order do the three phases of technology projects occur?</strong></label>
-                <label><input type="radio" name="q1" value="a"> Planning, Implementation, Maintenance</label>
-                <label><input type="radio" name="q1" value="b"> Implementation, Planning, Maintenance</label>
-                <label><input type="radio" name="q1" value="c"> Planning, Maintenance, Implementation</label>
-                <label><input type="radio" name="q1" value="d"> Maintenance, Planning, Implementation</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>2. Why do organizations de-emphasize planning according to the course material?</strong></label>
-                <label><input type="radio" name="q2" value="a"> Planning is too expensive</label>
-                <label><input type="radio" name="q2" value="b"> Stakeholders push for progress, planning viewed as delaying solutions</label>
-                <label><input type="radio" name="q2" value="c"> Planning is not necessary for modern development</label>
-                <label><input type="radio" name="q2" value="d"> All of the above</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>3. In the Planned vs Unplanned Cities analogy, what does Manhattan represent?</strong></label>
-                <label><input type="radio" name="q3" value="a"> An unplanned city with complex patterns</label>
-                <label><input type="radio" name="q3" value="b"> A planned city with a grid structure, easy to navigate</label>
-                <label><input type="radio" name="q3" value="c"> A city where knowledge is lost when engineers leave</label>
-                <label><input type="radio" name="q3" value="d"> A city that is difficult to maintain</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>4. What is a misuse case?</strong></label>
-                <label><input type="radio" name="q4" value="a"> How the system is used for legitimate purposes</label>
-                <label><input type="radio" name="q4" value="b"> How the system might be misused by an attacker, accidentally, or by circumstance</label>
-                <label><input type="radio" name="q4" value="c"> A case where the architect makes a mistake</label>
-                <label><input type="radio" name="q4" value="d"> A security testing technique</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>5. According to Boehm's Curve, what is the cost multiplier for fixing a defect in the deployment phase?</strong></label>
-                <label><input type="radio" name="q5" value="a"> 5x</label>
-                <label><input type="radio" name="q5" value="b"> 10x</label>
-                <label><input type="radio" name="q5" value="c"> 15x</label>
-                <label><input type="radio" name="q5" value="d"> 100x+</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>6. How does DevOps impact the role of a security architect?</strong></label>
-                <label><input type="radio" name="q6" value="a"> It eliminates the need for security architects</label>
-                <label><input type="radio" name="q6" value="b"> It blurs boundaries between phases but goals remain the same, execution adapts</label>
-                <label><input type="radio" name="q6" value="c"> It makes security planning unnecessary</label>
-                <label><input type="radio" name="q6" value="d"> It focuses only on deployment security</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>7. OWASP is primarily related to which aspect of security?</strong></label>
-                <label><input type="radio" name="q7" value="a"> Network infrastructure security</label>
-                <label><input type="radio" name="q7" value="b"> Application security and developer training</label>
-                <label><input type="radio" name="q7" value="c"> Physical security</label>
-                <label><input type="radio" name="q7" value="d"> Incident response</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>8. What are the four phases of an application security architect's role?</strong></label>
-                <label><input type="radio" name="q8" value="a"> Design, Code, Test, Deploy</label>
-                <label><input type="radio" name="q8" value="b"> Requirements, Development, Release, Support</label>
-                <label><input type="radio" name="q8" value="c"> Plan, Build, Release, Monitor</label>
-                <label><input type="radio" name="q8" value="d"> Assess, Design, Implement, Review</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>9. According to the course, what is the percentage improvement benefit by year 5 for structured systems compared to ad-hoc?</strong></label>
-                <label><input type="radio" name="q9" value="a"> 50%</label>
-                <label><input type="radio" name="q9" value="b"> 100%</label>
-                <label><input type="radio" name="q9" value="c"> 300%</label>
-                <label><input type="radio" name="q9" value="d"> 500%</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>10. What is the recommended solution for a password reset misuse case where an attacker intercepts the reset link?</strong></label>
-                <label><input type="radio" name="q10" value="a"> Send multiple reset links</label>
-                <label><input type="radio" name="q10" value="b"> Expire links in 15 minutes and add additional verification</label>
-                <label><input type="radio" name="q10" value="c"> Require SMS only</label>
-                <label><input type="radio" name="q10" value="d"> Disable password resets</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>11. What does the phrase "security woven into system" mean?</strong></label>
-                <label><input type="radio" name="q11" value="a"> Security measures are added after development</label>
-                <label><input type="radio" name="q11" value="b"> Security is integrated throughout the development process, not bolted on at the end</label>
-                <label><input type="radio" name="q11" value="c"> Security is only the architect's responsibility</label>
-                <label><input type="radio" name="q11" value="d"> Security is an optional feature</label>
-            </div>
-            
-            <div class="quiz-question">
-                <label><strong>12. Who is responsible for security in an organization?</strong></label>
-                <label><input type="radio" name="q12" value="a"> Only the security architect</label>
-                <label><input type="radio" name="q12" value="b"> Only the development team</label>
-                <label><input type="radio" name="q12" value="c"> All employees - it's a cultural shift</label>
-                <label><input type="radio" name="q12" value="d"> Only the IT department</label>
-            </div>
-            
-            <button class="quiz-button" onclick="checkScore('w5', 12)">Submit Quiz</button>
-            <div class="result-message" id="result-message"></div>
+        
+    <div class="quiz-section">
+      <h2>Week 5 — Test Yourself (12 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">12</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">1</span> 1. In what order do the three phases of technology projects occur?</p>
+        <div class="options">
+          <div class="opt">Planning, Implementation, Maintenance</div>
+          <div class="opt">Implementation, Planning, Maintenance</div>
+          <div class="opt">Planning, Maintenance, Implementation</div>
+          <div class="opt">Maintenance, Planning, Implementation</div>
         </div>
-        
-        
+        <div class="explanation">answer: Planning, Implementation, Maintenance</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">2</span> 2. Why do organizations de-emphasize planning according to the course material?</p>
+        <div class="options">
+          <div class="opt">Planning is too expensive</div>
+          <div class="opt">Stakeholders push for progress, planning viewed as delaying solutions</div>
+          <div class="opt">Planning is not necessary for modern development</div>
+          <div class="opt">All of the above</div>
+        </div>
+        <div class="explanation">answer: Stakeholders push for progress, planning viewed as delaying solutions</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">3</span> 3. In the Planned vs Unplanned Cities analogy, what does Manhattan represent?</p>
+        <div class="options">
+          <div class="opt">An unplanned city with complex patterns</div>
+          <div class="opt">A planned city with a grid structure, easy to navigate</div>
+          <div class="opt">A city where knowledge is lost when engineers leave</div>
+          <div class="opt">A city that is difficult to maintain</div>
+        </div>
+        <div class="explanation">answer: A planned city with a grid structure, easy to navigate</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">4</span> 4. What is a misuse case?</p>
+        <div class="options">
+          <div class="opt">How the system is used for legitimate purposes</div>
+          <div class="opt">How the system might be misused by an attacker, accidentally, or by circumstance</div>
+          <div class="opt">A case where the architect makes a mistake</div>
+          <div class="opt">A security testing technique</div>
+        </div>
+        <div class="explanation">answer: How the system might be misused by an attacker, accidentally, or by circumstance</div>
+      </div>
+
+      <div class="quiz-q" data-correct="3">
+        <p><span class="qnum">5</span> 5. According to Boehm's Curve, what is the cost multiplier for fixing a defect in the deployment phase?</p>
+        <div class="options">
+          <div class="opt">5x</div>
+          <div class="opt">10x</div>
+          <div class="opt">15x</div>
+          <div class="opt">100x+</div>
+        </div>
+        <div class="explanation">answer: 100x+</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">6</span> 6. How does DevOps impact the role of a security architect?</p>
+        <div class="options">
+          <div class="opt">It eliminates the need for security architects</div>
+          <div class="opt">It blurs boundaries between phases but goals remain the same, execution adapts</div>
+          <div class="opt">It makes security planning unnecessary</div>
+          <div class="opt">It focuses only on deployment security</div>
+        </div>
+        <div class="explanation">answer: It blurs boundaries between phases but goals remain the same, execution adapts</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">7</span> 7. OWASP is primarily related to which aspect of security?</p>
+        <div class="options">
+          <div class="opt">Network infrastructure security</div>
+          <div class="opt">Application security and developer training</div>
+          <div class="opt">Physical security</div>
+          <div class="opt">Incident response</div>
+        </div>
+        <div class="explanation">answer: Application security and developer training</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">8</span> 8. What are the four phases of an application security architect's role?</p>
+        <div class="options">
+          <div class="opt">Design, Code, Test, Deploy</div>
+          <div class="opt">Requirements, Development, Release, Support</div>
+          <div class="opt">Plan, Build, Release, Monitor</div>
+          <div class="opt">Assess, Design, Implement, Review</div>
+        </div>
+        <div class="explanation">answer: Requirements, Development, Release, Support</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">9</span> 9. According to the course, what is the percentage improvement benefit by year 5 for structured systems compared to ad-hoc?</p>
+        <div class="options">
+          <div class="opt">50%</div>
+          <div class="opt">100%</div>
+          <div class="opt">300%</div>
+          <div class="opt">500%</div>
+        </div>
+        <div class="explanation">answer: 300%</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">10</span> 10. What is the recommended solution for a password reset misuse case where an attacker intercepts the reset link?</p>
+        <div class="options">
+          <div class="opt">Send multiple reset links</div>
+          <div class="opt">Expire links in 15 minutes and add additional verification</div>
+          <div class="opt">Require SMS only</div>
+          <div class="opt">Disable password resets</div>
+        </div>
+        <div class="explanation">answer: Expire links in 15 minutes and add additional verification</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">11</span> 11. What does the phrase "security woven into system" mean?</p>
+        <div class="options">
+          <div class="opt">Security measures are added after development</div>
+          <div class="opt">Security is integrated throughout the development process, not bolted on at the end</div>
+          <div class="opt">Security is only the architect's responsibility</div>
+          <div class="opt">Security is an optional feature</div>
+        </div>
+        <div class="explanation">answer: Security is integrated throughout the development process, not bolted on at the end</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">12</span> 12. Who is responsible for security in an organization?</p>
+        <div class="options">
+          <div class="opt">Only the security architect</div>
+          <div class="opt">Only the development team</div>
+          <div class="opt">All employees - it's a cultural shift</div>
+          <div class="opt">Only the IT department</div>
+        </div>
+        <div class="explanation">answer: All employees - it's a cultural shift</div>
+      </div>
     </div>
-    
-    <script>
-        function checkScore(week, totalQuestions) {
-            const answers = {
-                'q1': 'a',
-                'q2': 'b',
-                'q3': 'b',
-                'q4': 'b',
-                'q5': 'd',
-                'q6': 'b',
-                'q7': 'b',
-                'q8': 'b',
-                'q9': 'c',
-                'q10': 'b',
-                'q11': 'b',
-                'q12': 'c'
-            };
-            
-            let score = 0;
-            for (let i = 1; i <= totalQuestions; i++) {
-                const question = 'q' + i;
-                const selected = document.querySelector('input[name="' + question + '"]:checked');
-                if (selected && selected.value === answers[question]) {
-                    score++;
-                }
-            }
-            
-            const resultDiv = document.getElementById('result-message');
-            const percentage = Math.round((score / totalQuestions) * 100);
-            
-            if (percentage >= 70) {
-                resultDiv.classList.remove('failure');
-                resultDiv.classList.add('success');
-                resultDiv.textContent = 'Excellent! You scored ' + score + '/' + totalQuestions + ' (' + percentage + '%). Well done!';
-            } else {
-                resultDiv.classList.remove('success');
-                resultDiv.classList.add('failure');
-                resultDiv.textContent = 'You scored ' + score + '/' + totalQuestions + ' (' + percentage + '%). Review the material and try again.';
-            }
-        }
-    </script>
 </div>
 
+
 <script>
-        function checkScore(week, totalQuestions) {
-            const answers = {
-                'q1': 'a',
-                'q2': 'b',
-                'q3': 'b',
-                'q4': 'b',
-                'q5': 'd',
-                'q6': 'b',
-                'q7': 'b',
-                'q8': 'b',
-                'q9': 'c',
-                'q10': 'b',
-                'q11': 'b',
-                'q12': 'c'
-            };
-            
-            let score = 0;
-            for (let i = 1; i <= totalQuestions; i++) {
-                const question = 'q' + i;
-                const selected = document.querySelector('input[name="' + question + '"]:checked');
-                if (selected && selected.value === answers[question]) {
-                    score++;
-                }
+(function() {
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          if (idx === correctIdx) {
+            opt.classList.add('selected-correct');
+            correct++;
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+          }
+          if (explanation) {
+              const isRight = idx === correctIdx;
+              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              if (isRight) {
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+              } else {
+                const correctText = opts[correctIdx].textContent.trim();
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+              }
+              explanation.classList.add('show');
             }
-            
-            const resultDiv = document.getElementById('result-message');
-            const percentage = Math.round((score / totalQuestions) * 100);
-            
-            if (percentage >= 70) {
-                resultDiv.classList.remove('failure');
-                resultDiv.classList.add('success');
-                resultDiv.textContent = 'Excellent! You scored ' + score + '/' + totalQuestions + ' (' + percentage + '%). Well done!';
-            } else {
-                resultDiv.classList.remove('success');
-                resultDiv.classList.add('failure');
-                resultDiv.textContent = 'You scored ' + score + '/' + totalQuestions + ' (' + percentage + '%). Review the material and try again.';
-            }
-        }
-    </script>
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) exp.classList.remove('show');
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
 </body>
 </html>

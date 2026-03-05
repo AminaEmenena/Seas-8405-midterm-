@@ -176,6 +176,72 @@
     color: #ddd;
   }
 
+  
+  /* ═══ ORIGINAL DESIGN CLASSES (callout boxes, mnemonics, flow diagrams) ═══ */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -288,6 +354,13 @@
     border-radius: 4px; font-size: 0.9em;
   }
 
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     body { font-size: 17px; }
@@ -300,6 +373,73 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ QUIZ SECTION ═══ */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text {
+    font-size: 1.05em; font-weight: 700; color: var(--page-color);
+  }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333;
+    border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    user-select: none; line-height: 1.5;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct {
+    background: rgba(81,207,102,0.2); border-color: var(--correct);
+    color: var(--correct); font-weight: 700;
+  }
+  .quiz-q .opt.selected-wrong {
+    background: rgba(255,107,107,0.2); border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct); color: var(--correct);
+  }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
 </style>
 </head>
 <body>
@@ -327,8 +467,12 @@
         <details open>
             <summary>1. Requirements Engineering 8-Step Lifecycle</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Clear, measurable requirements are the blueprint for the entire system. Vague requirements lead to cost overruns, scope creep, and failed implementations.</div>
+
+                <div class="mem"><small>Remember This</small><br><strong>"Requirements = the blueprint before building"</strong></div>
+
                 <p>The requirements engineering lifecycle guides how we gather, document, and manage security and functional requirements across a system's lifetime:</p>
-                
+
                 <table>
                     <thead>
                         <tr>
@@ -736,6 +880,10 @@
         <details open>
             <summary>7. MITRE ATT&CK in Context (Review)</summary>
             <div>
+                <div class="red"><strong>KEY IDEA:</strong> Use STRIDE to systematically identify threats. Map each threat type to security controls and requirements. This ensures you haven't missed any major threat categories.</div>
+
+                <div class="mem"><small>STRIDE Threats</small><br><strong>Spoofing · Tampering · Repudiation · Info Disclosure · DoS · Elevation</strong></div>
+
                 <p>MITRE ATT&CK provides a structured, community-driven knowledge base of adversary tactics and techniques based on real-world observations.</p>
 
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">STRIDE Threat Model (TM)</h3>
@@ -782,6 +930,7 @@
                 </table>
 
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Risk Framework</h3>
+                <div class="mem"><small>Risk Formula</small><br><strong>Risk = Threat × Vulnerability × Impact</strong></div>
                 <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 4px; margin: 15px 0;">
                     <p style="font-size: 20px; color: #f0f6fc; font-weight: 600; text-align: center;">
                         Risk = Threat × Vulnerability × Impact
@@ -1029,423 +1178,257 @@
         </details>
 
         <!-- QUIZ Section -->
-        <div class="quiz-section">
-            <h2 style="color: #f0f6fc; margin-bottom: 20px;">QUIZ — Week 2 (15 Questions)</h2>
+        
+    <div class="quiz-section">
+      <h2>Week 2 — Test Yourself (15 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
 
-            <div class="quiz-question">
-                <div class="quiz-q-text">1. What is the first step in the requirements lifecycle?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q1" value="a"> <span>Elicit requirements from stakeholders</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q1" value="b"> <span>Document requirements in detail</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q1" value="c"> <span>Review requirements with engineering</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q1" value="d"> <span>Implement the system</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q1-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">2. What is the key difference between Functional and Non-Functional Requirements?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q2" value="a"> <span>FR = what system does, NFR = how well it performs</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q2" value="b"> <span>FR = user-facing, NFR = back-end only</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q2" value="c"> <span>FR = required, NFR = optional</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q2" value="d"> <span>FR = security, NFR = performance</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q2-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">3. What does 99.95% availability mean in terms of downtime per month?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q3" value="a"> <span>4.2 minutes</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q3" value="b"> <span>22 minutes</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q3" value="c"> <span>43 minutes</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q3" value="d"> <span>26 seconds</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q3-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">4. What does SMART stand for?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q4" value="a"> <span>Secure, Measurable, Achievable, Relevant, Timely</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q4" value="b"> <span>Specific, Measurable, Achievable, Relevant, Time-bound</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q4" value="c"> <span>Simple, Measurable, Actionable, Required, Time-bound</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q4" value="d"> <span>Scalable, Maintainable, Accessible, Reliable, Testable</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q4-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">5. What is the key difference between Redundancy and Diversity?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q5" value="a"> <span>Redundancy = multiple identical resources; Diversity = different technologies</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q5" value="b"> <span>Redundancy = backup systems; Diversity = primary systems</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q5" value="c"> <span>Redundancy = expensive; Diversity = cheap</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q5" value="d"> <span>Redundancy = security; Diversity = performance</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q5-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">6. What does STRIDE stand for? (Pick the option that lists all 6 components)</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q6" value="a"> <span>Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q6" value="b"> <span>System, Threat, Response, Identification, Detection, Enumeration</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q6" value="c"> <span>Security, Traffic, Routing, Isolation, Defense, Encryption</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q6" value="d"> <span>Scanning, Testing, Risk, Incident, Detection, Evaluation</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q6-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">7. What is the Risk formula?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q7" value="a"> <span>Risk = Threat + Vulnerability + Impact</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q7" value="b"> <span>Risk = Threat × Vulnerability × Impact</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q7" value="c"> <span>Risk = Threat / Vulnerability - Impact</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q7" value="d"> <span>Risk = (Threat - Vulnerability) × Impact</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q7-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">8. Which NFR category includes MFA response time requirements?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q8" value="a"> <span>Reliability</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q8" value="b"> <span>Capability</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q8" value="c"> <span>Availability</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q8" value="d"> <span>Testability</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q8-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">9. What is NOT one of the 8 common pitfalls in requirements definition?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q9" value="a"> <span>Vague requirements</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q9" value="b"> <span>Missing NFR</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q9" value="c"> <span>Comprehensive documentation</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q9" value="d"> <span>Not updating requirements</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q9-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">10. In the Impact vs Effort matrix, which quadrant represents "Quick Wins"?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q10" value="a"> <span>High Impact / Low Effort</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q10" value="b"> <span>High Impact / High Effort</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q10" value="c"> <span>Low Impact / Low Effort</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q10" value="d"> <span>Low Impact / High Effort</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q10-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">11. What is the correct order in the Requirements-to-MITRE mapping chain?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q11" value="a"> <span>Threat Analysis → Control ID → FR → NFR → Architecture</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q11" value="b"> <span>Architecture → FR → NFR → Control ID → Threat Analysis</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q11" value="c"> <span>FR → NFR → Threat Analysis → Control ID → Architecture</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q11" value="d"> <span>Control ID → Threat Analysis → Architecture → FR → NFR</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q11-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">12. Which industry has the LOWEST risk appetite for security decisions?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q12" value="a"> <span>Financial services and government/military</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q12" value="b"> <span>Startups and consumer tech</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q12" value="c"> <span>Healthcare only</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q12" value="d"> <span>All industries have the same appetite</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q12-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">13. Do Functional or Non-Functional Requirements generally drive architecture more?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q13" value="a"> <span>Functional requirements drive architecture</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q13" value="b"> <span>Non-functional requirements drive architecture</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q13" value="c"> <span>They drive it equally</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q13" value="d"> <span>Neither affects architecture significantly</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q13-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">14. What does the Performance vs Security trade-off primarily impact?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q14" value="a"> <span>Cost only</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q14" value="b"> <span>Encryption is CPU-heavy; deep packet inspection slows bandwidth</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q14" value="c"> <span>User authentication speed</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q14" value="d"> <span>Compliance requirements</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q14-answer"></div>
-            </div>
-
-            <div class="quiz-question">
-                <div class="quiz-q-text">15. What is the industry standard MTTD (Mean Time To Detect)?</div>
-                <div class="quiz-options">
-                    <label class="quiz-option">
-                        <input type="radio" name="q15" value="a"> <span>2-5 days</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q15" value="b"> <span>30 days</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q15" value="c"> <span>200+ days</span>
-                    </label>
-                    <label class="quiz-option">
-                        <input type="radio" name="q15" value="d"> <span>1 year</span>
-                    </label>
-                </div>
-                <div class="quiz-answer" id="q15-answer"></div>
-            </div>
-
-            <div class="score-section">
-                <p style="font-size: 20px; font-weight: 600; color: #f0f6fc;">Ready to check your score?</p>
-                <button class="score-btn" onclick="checkScore('w2', 15)">Check My Score</button>
-                <div id="score-result" class="score-result"></div>
-            </div>
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">1</span> 1. What is the first step in the requirements lifecycle?</p>
+        <div class="options">
+          <div class="opt">Elicit requirements from stakeholders</div>
+          <div class="opt">Document requirements in detail</div>
+          <div class="opt">Review requirements with engineering</div>
+          <div class="opt">Implement the system</div>
         </div>
+        <div class="explanation">answer: Elicit requirements from stakeholders</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">2</span> 2. What is the key difference between Functional and Non-Functional Requirements?</p>
+        <div class="options">
+          <div class="opt">FR = what system does, NFR = how well it performs</div>
+          <div class="opt">FR = user-facing, NFR = back-end only</div>
+          <div class="opt">FR = required, NFR = optional</div>
+          <div class="opt">FR = security, NFR = performance</div>
+        </div>
+        <div class="explanation">answer: FR = what system does, NFR = how well it performs</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">3</span> 3. What does 99.95% availability mean in terms of downtime per month?</p>
+        <div class="options">
+          <div class="opt">4.2 minutes</div>
+          <div class="opt">22 minutes</div>
+          <div class="opt">43 minutes</div>
+          <div class="opt">26 seconds</div>
+        </div>
+        <div class="explanation">answer: 22 minutes</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">4</span> 4. What does SMART stand for?</p>
+        <div class="options">
+          <div class="opt">Secure, Measurable, Achievable, Relevant, Timely</div>
+          <div class="opt">Specific, Measurable, Achievable, Relevant, Time-bound</div>
+          <div class="opt">Simple, Measurable, Actionable, Required, Time-bound</div>
+          <div class="opt">Scalable, Maintainable, Accessible, Reliable, Testable</div>
+        </div>
+        <div class="explanation">answer: Specific, Measurable, Achievable, Relevant, Time-bound</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">5</span> 5. What is the key difference between Redundancy and Diversity?</p>
+        <div class="options">
+          <div class="opt">Redundancy = multiple identical resources; Diversity = different technologies</div>
+          <div class="opt">Redundancy = backup systems; Diversity = primary systems</div>
+          <div class="opt">Redundancy = expensive; Diversity = cheap</div>
+          <div class="opt">Redundancy = security; Diversity = performance</div>
+        </div>
+        <div class="explanation">answer: Redundancy = multiple identical resources; Diversity = different technologies</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">6</span> 6. What does STRIDE stand for? (Pick the option that lists all 6 components)</p>
+        <div class="options">
+          <div class="opt">Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</div>
+          <div class="opt">System, Threat, Response, Identification, Detection, Enumeration</div>
+          <div class="opt">Security, Traffic, Routing, Isolation, Defense, Encryption</div>
+          <div class="opt">Scanning, Testing, Risk, Incident, Detection, Evaluation</div>
+        </div>
+        <div class="explanation">answer: Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">7</span> 7. What is the Risk formula?</p>
+        <div class="options">
+          <div class="opt">Risk = Threat + Vulnerability + Impact</div>
+          <div class="opt">Risk = Threat × Vulnerability × Impact</div>
+          <div class="opt">Risk = Threat / Vulnerability - Impact</div>
+          <div class="opt">Risk = (Threat - Vulnerability) × Impact</div>
+        </div>
+        <div class="explanation">answer: Risk = Threat × Vulnerability × Impact</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">8</span> 8. Which NFR category includes MFA response time requirements?</p>
+        <div class="options">
+          <div class="opt">Reliability</div>
+          <div class="opt">Capability</div>
+          <div class="opt">Availability</div>
+          <div class="opt">Testability</div>
+        </div>
+        <div class="explanation">answer: Capability</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">9</span> 9. What is NOT one of the 8 common pitfalls in requirements definition?</p>
+        <div class="options">
+          <div class="opt">Vague requirements</div>
+          <div class="opt">Missing NFR</div>
+          <div class="opt">Comprehensive documentation</div>
+          <div class="opt">Not updating requirements</div>
+        </div>
+        <div class="explanation">answer: Comprehensive documentation</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">10</span> 10. In the Impact vs Effort matrix, which quadrant represents "Quick Wins"?</p>
+        <div class="options">
+          <div class="opt">High Impact / Low Effort</div>
+          <div class="opt">High Impact / High Effort</div>
+          <div class="opt">Low Impact / Low Effort</div>
+          <div class="opt">Low Impact / High Effort</div>
+        </div>
+        <div class="explanation">answer: High Impact / Low Effort</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">11</span> 11. What is the correct order in the Requirements-to-MITRE mapping chain?</p>
+        <div class="options">
+          <div class="opt">Threat Analysis → Control ID → FR → NFR → Architecture</div>
+          <div class="opt">Architecture → FR → NFR → Control ID → Threat Analysis</div>
+          <div class="opt">FR → NFR → Threat Analysis → Control ID → Architecture</div>
+          <div class="opt">Control ID → Threat Analysis → Architecture → FR → NFR</div>
+        </div>
+        <div class="explanation">answer: Threat Analysis → Control ID → FR → NFR → Architecture</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0">
+        <p><span class="qnum">12</span> 12. Which industry has the LOWEST risk appetite for security decisions?</p>
+        <div class="options">
+          <div class="opt">Financial services and government/military</div>
+          <div class="opt">Startups and consumer tech</div>
+          <div class="opt">Healthcare only</div>
+          <div class="opt">All industries have the same appetite</div>
+        </div>
+        <div class="explanation">answer: Financial services and government/military</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">13</span> 13. Do Functional or Non-Functional Requirements generally drive architecture more?</p>
+        <div class="options">
+          <div class="opt">Functional requirements drive architecture</div>
+          <div class="opt">Non-functional requirements drive architecture</div>
+          <div class="opt">They drive it equally</div>
+          <div class="opt">Neither affects architecture significantly</div>
+        </div>
+        <div class="explanation">answer: Non-functional requirements drive architecture</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1">
+        <p><span class="qnum">14</span> 14. What does the Performance vs Security trade-off primarily impact?</p>
+        <div class="options">
+          <div class="opt">Cost only</div>
+          <div class="opt">Encryption is CPU-heavy; deep packet inspection slows bandwidth</div>
+          <div class="opt">User authentication speed</div>
+          <div class="opt">Compliance requirements</div>
+        </div>
+        <div class="explanation">answer: Encryption is CPU-heavy; deep packet inspection slows bandwidth</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2">
+        <p><span class="qnum">15</span> 15. What is the industry standard MTTD (Mean Time To Detect)?</p>
+        <div class="options">
+          <div class="opt">2-5 days</div>
+          <div class="opt">30 days</div>
+          <div class="opt">200+ days</div>
+          <div class="opt">1 year</div>
+        </div>
+        <div class="explanation">answer: 200+ days</div>
+      </div>
     </div>
-
-    <script>
-        const answers = {
-            'q1': 'a',
-            'q2': 'a',
-            'q3': 'b',
-            'q4': 'b',
-            'q5': 'a',
-            'q6': 'a',
-            'q7': 'b',
-            'q8': 'b',
-            'q9': 'c',
-            'q10': 'a',
-            'q11': 'a',
-            'q12': 'a',
-            'q13': 'b',
-            'q14': 'b',
-            'q15': 'c'
-        };
-
-        function showAns(qid, selected) {
-            const answerDiv = document.getElementById(qid + '-answer');
-            const correct = answers[qid];
-            
-            if (selected === correct) {
-                answerDiv.textContent = '✓ Correct!';
-                answerDiv.className = 'quiz-answer correct';
-            } else {
-                answerDiv.textContent = '✗ Incorrect. Correct answer: ' + correct.toUpperCase();
-                answerDiv.className = 'quiz-answer incorrect';
-            }
-            answerDiv.style.display = 'block';
-        }
-
-        function checkScore(week, totalQuestions) {
-            let score = 0;
-            
-            for (let i = 1; i <= totalQuestions; i++) {
-                const qid = 'q' + i;
-                const selected = document.querySelector('input[name="' + qid + '"]:checked');
-                if (selected && selected.value === answers[qid]) {
-                    score++;
-                    showAns(qid, selected.value);
-                } else if (selected) {
-                    showAns(qid, selected.value);
-                }
-            }
-            
-            const percentage = Math.round((score / totalQuestions) * 100);
-            const resultDiv = document.getElementById('score-result');
-            resultDiv.innerHTML = `You scored <strong>${score}/${totalQuestions}</strong> (${percentage}%)`;
-            
-            if (percentage >= 80) {
-                resultDiv.style.color = '#3fb950';
-            } else if (percentage >= 60) {
-                resultDiv.style.color = '#d29922';
-            } else {
-                resultDiv.style.color = '#f85149';
-            }
-        }
-    </script>
 </div>
 
+
 <script>
-        const answers = {
-            'q1': 'a',
-            'q2': 'a',
-            'q3': 'b',
-            'q4': 'b',
-            'q5': 'a',
-            'q6': 'a',
-            'q7': 'b',
-            'q8': 'b',
-            'q9': 'c',
-            'q10': 'a',
-            'q11': 'a',
-            'q12': 'a',
-            'q13': 'b',
-            'q14': 'b',
-            'q15': 'c'
-        };
+(function() {
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0;
 
-        function showAns(qid, selected) {
-            const answerDiv = document.getElementById(qid + '-answer');
-            const correct = answers[qid];
-            
-            if (selected === correct) {
-                answerDiv.textContent = '✓ Correct!';
-                answerDiv.className = 'quiz-answer correct';
-            } else {
-                answerDiv.textContent = '✗ Incorrect. Correct answer: ' + correct.toUpperCase();
-                answerDiv.className = 'quiz-answer incorrect';
-            }
-            answerDiv.style.display = 'block';
-        }
+    if (totalEl) totalEl.textContent = qs.length;
 
-        function checkScore(week, totalQuestions) {
-            let score = 0;
-            
-            for (let i = 1; i <= totalQuestions; i++) {
-                const qid = 'q' + i;
-                const selected = document.querySelector('input[name="' + qid + '"]:checked');
-                if (selected && selected.value === answers[qid]) {
-                    score++;
-                    showAns(qid, selected.value);
-                } else if (selected) {
-                    showAns(qid, selected.value);
-                }
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          if (idx === correctIdx) {
+            opt.classList.add('selected-correct');
+            correct++;
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+          }
+          if (explanation) {
+              const isRight = idx === correctIdx;
+              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              if (isRight) {
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+              } else {
+                const correctText = opts[correctIdx].textContent.trim();
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+              }
+              explanation.classList.add('show');
             }
-            
-            const percentage = Math.round((score / totalQuestions) * 100);
-            const resultDiv = document.getElementById('score-result');
-            resultDiv.innerHTML = `You scored <strong>${score}/${totalQuestions}</strong> (${percentage}%)`;
-            
-            if (percentage >= 80) {
-                resultDiv.style.color = '#3fb950';
-            } else if (percentage >= 60) {
-                resultDiv.style.color = '#d29922';
-            } else {
-                resultDiv.style.color = '#f85149';
-            }
-        }
-    </script>
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) exp.classList.remove('show');
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
 </body>
 </html>
