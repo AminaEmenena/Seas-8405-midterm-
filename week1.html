@@ -110,6 +110,104 @@
     font-size: 0.85em; color: #888; text-align: center;
   }
 
+  /* COLOR LEGEND */
+  .color-legend {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    padding: 14px 18px; margin: 0 0 24px;
+    background: rgba(0,0,0,0.2); border-radius: 12px;
+    font-size: 0.85em;
+  }
+  .color-legend-title {
+    width: 100%; font-weight: 700; color: #aaa;
+    font-size: 0.9em; margin-bottom: 4px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .legend-dot {
+    width: 14px; height: 14px; border-radius: 4px;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 2px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 2px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 2px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 2px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 2px dashed #e94560; }
+
+  /* DIFFICULTY TOGGLE */
+  .difficulty-toggle {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0; padding: 14px 18px;
+    background: rgba(0,0,0,0.2); border-radius: 12px;
+  }
+  .difficulty-toggle label { font-weight: 700; color: #aaa; font-size: 0.95em; }
+  .diff-btn {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid transparent;
+    background: rgba(255,255,255,0.06); color: #aaa;
+    cursor: pointer; font-weight: 600; font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .diff-btn:hover { background: rgba(255,255,255,0.1); }
+  .diff-btn.active { border-color: var(--page-color); color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .diff-btn.easy.active { border-color: var(--correct); color: var(--correct); }
+  .diff-btn.medium.active { border-color: #FFA94D; color: #FFA94D; }
+  .diff-btn.hard.active { border-color: var(--wrong); color: var(--wrong); }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
   /* TOPIC CARDS (details/summary styled like old layout) */
   details {
     margin: 20px 0;
@@ -485,6 +583,16 @@
     <li>📋 <strong>Governance</strong> — Policy → Standards → Procedures → Guidance</li>
   </ul>
   <div class="tldr-footer">💡 Expand sections below for details • Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend">
+  <div class="color-legend-title">🎨 Color Guide — What the boxes mean:</div>
+  <div class="legend-item"><span class="legend-dot red"></span> Key ideas / Must know</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definitions / Terms</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Good practices</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Watch out! / Warnings</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Memory tricks</div>
 </div>
 
 <!-- Section 1: What is Cybersecurity Architecture? -->
@@ -1493,10 +1601,11 @@
         <!-- QUIZ SECTION -->
         
     <div class="quiz-section">
-      <h2>Week 1 — Test Yourself (15 Questions)</h2>
+      <h2>🎯 Week 1 — Test Yourself (15 Questions)</h2>
       <div class="quiz-score-bar">
         <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</span>
         <div class="score-fill-track"><div class="score-fill"></div></div>
+        <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
 
@@ -1670,6 +1779,32 @@
 
 <script>
 (function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
   // Initialize all quiz sections on the page
   document.querySelectorAll('.quiz-section').forEach(section => {
     const qs = section.querySelectorAll('.quiz-q');
@@ -1677,7 +1812,9 @@
     const correctEl = section.querySelector('.score-correct');
     const fillEl = section.querySelector('.score-fill');
     const resetBtn = section.querySelector('.quiz-reset-btn');
-    let answered = 0, correct = 0;
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
 
     if (totalEl) totalEl.textContent = qs.length;
 
@@ -1685,6 +1822,10 @@
       if (correctEl) correctEl.textContent = correct;
       if (fillEl && qs.length > 0) {
         fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
       }
     }
 
@@ -1700,26 +1841,37 @@
           opts.forEach(o => o.classList.add('answered'));
           answered++;
 
-          if (idx === correctIdx) {
+          const isRight = idx === correctIdx;
+          if (isRight) {
             opt.classList.add('selected-correct');
             correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            // Celebrations for streaks!
+            if (streak === 3) showEncouragement('🔥 3 in a row!');
+            else if (streak === 5) { showEncouragement('⚡ FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('🏆 UNSTOPPABLE!'); showConfetti(); }
+            else if (streak === 15) { showEncouragement('👑 PERFECT SCORE!'); showConfetti(); }
           } else {
             opt.classList.add('selected-wrong');
             opts[correctIdx].classList.add('show-correct');
+            streak = 0; // Reset streak on wrong answer
           }
+
           if (explanation) {
-              const isRight = idx === correctIdx;
-              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
-              const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
-              const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-              if (isRight) {
-                explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
-              } else {
-                const correctText = opts[correctIdx].textContent.trim();
-                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
-              }
-              explanation.classList.add('show');
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">✓ Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">✗ Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
             }
+            explanation.classList.add('show');
+          }
           updateScore();
         });
       });
@@ -1727,14 +1879,14 @@
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        answered = 0; correct = 0;
+        answered = 0; correct = 0; streak = 0;
         qs.forEach(q => {
-          q.classList.remove('answered');
+          q.classList.remove('answered', 'just-correct');
           q.querySelectorAll('.opt').forEach(o => {
             o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
           });
           const exp = q.querySelector('.explanation');
-          if (exp) exp.classList.remove('show');
+          if (exp) { exp.classList.remove('show'); }
         });
         updateScore();
       });
