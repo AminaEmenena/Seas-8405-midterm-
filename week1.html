@@ -2693,73 +2693,35 @@
   let currentIndex = 0;
   let isFlipped = false;
 
-  // Extract flashcards from colored concept boxes
-  function extractFlashcards() {
-    const cards = [];
-    const selectors = [
-      { selector: '.red', category: 'red', label: 'Key Idea' },
-      { selector: '.key', category: 'blue', label: 'Definition' },
-      { selector: '.blue', category: 'blue', label: 'Definition' },
-      { selector: '.green', category: 'green', label: 'Best Practice' },
-      { selector: '.highlight-green', category: 'green', label: 'Best Practice' },
-      { selector: '.warn', category: 'orange', label: 'Caution' },
-      { selector: '.mem', category: 'purple', label: 'Memory Aid' },
-      { selector: '.prof', category: 'purple', label: 'Professor Tip' }
+  // Curated flashcard data for Week 1
+  function getFlashcardData() {
+    return [
+      { term: "Cybersecurity Architecture", definition: "A blueprint for how security controls, policies, and technologies work together to protect an organization's assets, data, and operations.", category: "blue", label: "Definition" },
+      { term: "CIA Triad", definition: "The three pillars of security: Confidentiality (keeping data secret), Integrity (keeping data accurate), Availability (keeping systems accessible).", category: "red", label: "Key Idea" },
+      { term: "Confidentiality", definition: "Ensuring information is only accessible to authorized individuals. Implemented via encryption, access controls, and authentication.", category: "blue", label: "Definition" },
+      { term: "Integrity", definition: "Ensuring data remains accurate and unaltered. Implemented via hashing, digital signatures, and checksums.", category: "blue", label: "Definition" },
+      { term: "Availability", definition: "Ensuring systems and data are accessible when needed. Implemented via redundancy, backups, and disaster recovery.", category: "blue", label: "Definition" },
+      { term: "Defense in Depth", definition: "Multiple layers of security controls so if one fails, others still protect. Like castle walls + moat + guards.", category: "red", label: "Key Idea" },
+      { term: "Least Privilege", definition: "Users get only the minimum permissions needed for their job. Reduces blast radius if account is compromised.", category: "green", label: "Best Practice" },
+      { term: "Zero Trust", definition: "Never trust, always verify. No implicit trust based on network location - verify every access request.", category: "red", label: "Key Idea" },
+      { term: "Attack Surface", definition: "All the points where an attacker could try to enter or extract data from a system.", category: "blue", label: "Definition" },
+      { term: "Security Control", definition: "A safeguard or countermeasure to avoid, detect, or minimize security risks (e.g., firewalls, encryption, policies).", category: "blue", label: "Definition" },
+      { term: "Preventive Controls", definition: "Controls that stop attacks before they happen (firewalls, access controls, encryption).", category: "green", label: "Best Practice" },
+      { term: "Detective Controls", definition: "Controls that identify when attacks occur (IDS, logging, monitoring, audits).", category: "green", label: "Best Practice" },
+      { term: "Corrective Controls", definition: "Controls that fix damage after an attack (backups, incident response, patches).", category: "green", label: "Best Practice" },
+      { term: "Threat", definition: "Any potential danger that could exploit a vulnerability and cause harm to assets.", category: "blue", label: "Definition" },
+      { term: "Vulnerability", definition: "A weakness in a system that could be exploited by a threat.", category: "blue", label: "Definition" },
+      { term: "Risk", definition: "The potential for loss when a threat exploits a vulnerability. Risk = Threat × Vulnerability × Impact.", category: "red", label: "Key Idea" },
+      { term: "Security by Design", definition: "Building security into systems from the start, not adding it as an afterthought.", category: "green", label: "Best Practice" },
+      { term: "Separation of Duties", definition: "Dividing critical functions among multiple people so no one person has complete control.", category: "green", label: "Best Practice" },
+      { term: "CISO vs CIO", definition: "CISO focuses on security strategy and risk. CIO focuses on IT operations and technology. They need to collaborate.", category: "orange", label: "Caution" },
+      { term: "'CIA' Memory Trick", definition: "Think of a spy agency (CIA) protecting secrets (Confidential), ensuring accurate intel (Integrity), and being Always available (Availability).", category: "purple", label: "Memory Aid" }
     ];
-
-    selectors.forEach(({ selector, category, label }) => {
-      document.querySelectorAll(selector).forEach(el => {
-        // Skip if inside flashcard mode or quiz
-        if (el.closest('.flashcard-mode') || el.closest('.quiz-section')) return;
-
-        const html = el.innerHTML;
-        const text = el.textContent.trim();
-
-        // Try to extract term and definition
-        let term = '';
-        let definition = '';
-
-        // Check for strong tag as term
-        const strongMatch = html.match(/<strong[^>]*>(.*?)<\/strong>/i);
-        if (strongMatch) {
-          term = strongMatch[1].replace(/<[^>]+>/g, '').trim();
-          // Remove the strong part from definition
-          definition = text.replace(term, '').trim();
-          // Clean up leading colons or dashes
-          definition = definition.replace(/^[:\-–—]\s*/, '').trim();
-        } else {
-          // Use first sentence as term, rest as definition
-          const sentences = text.split(/[.!?]+/);
-          if (sentences.length > 1) {
-            term = sentences[0].trim();
-            definition = sentences.slice(1).join('. ').trim();
-          } else {
-            term = text.substring(0, 80) + (text.length > 80 ? '...' : '');
-            definition = text;
-          }
-        }
-
-        // Skip if too short
-        if (term.length < 5 || definition.length < 10) return;
-
-        // Avoid duplicates
-        if (!cards.some(c => c.term === term)) {
-          cards.push({
-            term: term,
-            definition: definition,
-            category: category,
-            label: label
-          });
-        }
-      });
-    });
-
-    return cards;
   }
 
   // Initialize flashcards
   function initFlashcards() {
-    flashcards = extractFlashcards();
+    flashcards = getFlashcardData();
     document.getElementById('flashcardTotal').textContent = flashcards.length;
     if (flashcards.length > 0) {
       showFlashcard(0);
@@ -3203,6 +3165,363 @@
       }
     } catch (e) {}
   }
+})();
+</script>
+
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">8</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="architecture" data-alt="cybersecurity architecture">
+    <p class="fb-question"><span class="fb-num">1</span> Cybersecurity <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> focuses on strategic planning (WHY/WHAT) over 3-5 years, while engineering focuses on tactical implementation (HOW).</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="bake in" data-alt="bake-in,baked in">
+    <p class="fb-question"><span class="fb-num">2</span> The principle "<span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>, Don't Bolt On" means security must be integrated from the design phase, not added afterward.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="CIA" data-alt="cia triad,confidentiality integrity availability">
+    <p class="fb-question"><span class="fb-num">3</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> Triad consists of Confidentiality, Integrity, and Availability - the three fundamental security objectives.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ASARP" data-alt="as secure as reasonably practicable">
+    <p class="fb-question"><span class="fb-num">4</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> stands for "As Secure As Reasonably Practicable" - the point where additional security investment produces disproportionate negative impact.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="81" data-alt="81%,eighty-one">
+    <p class="fb-question"><span class="fb-num">5</span> According to the course, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>% of successful intrusions involve ZERO malware, using legitimate tools and stolen credentials instead.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ATT&CK" data-alt="attack,mitre attack,mitre att&ck">
+    <p class="fb-question"><span class="fb-num">6</span> MITRE <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> documents 700+ attack techniques across 14+ tactics, providing a common language between defenders and executives.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="D3FEND" data-alt="defend">
+    <p class="fb-question"><span class="fb-num">7</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> stands for "Detection, Denial, and Disruption Framework Empowering Network Defense" and maps defensive countermeasures to ATT&CK attacks.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Policy" data-alt="policies">
+    <p class="fb-question"><span class="fb-num">8</span> In the governance hierarchy, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> is at the top (high-level, executive-approved), followed by Standards, Procedures, and Guidance.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  /* Fill-in-the-Blank Styles */
+  .fill-blank-section {
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 2px solid var(--page-color);
+  }
+  .fill-blank-section h2 {
+    color: var(--page-color);
+    margin-bottom: 8px;
+    font-size: 1.3em;
+  }
+  .fill-blank-intro {
+    color: #aaa;
+    font-size: 0.95em;
+    margin-bottom: 16px;
+  }
+  .fill-blank-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+  }
+  .fb-score-text {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: var(--page-color);
+  }
+  .fb-score-fill-track {
+    flex: 1;
+    min-width: 120px;
+    height: 18px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .fb-score-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .fb-check-all-btn, .fb-reset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .fb-check-all-btn:hover {
+    background: var(--page-color);
+    color: #000;
+  }
+  .fb-reset-btn {
+    border-color: #666;
+    color: #aaa;
+  }
+  .fb-reset-btn:hover {
+    border-color: #888;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .fill-blank-item {
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    border-left: 4px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .fill-blank-item.correct {
+    border-left-color: var(--correct);
+    background: rgba(81,207,102,0.1);
+  }
+  .fill-blank-item.wrong {
+    border-left-color: var(--wrong);
+    background: rgba(255,107,107,0.1);
+  }
+  .fb-question {
+    font-size: 1em;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .fb-num {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--page-color);
+    color: #000;
+    border-radius: 50%;
+    font-size: 0.75em;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+  .fb-blank-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .fb-input {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 0.95em;
+    min-width: 120px;
+    max-width: 200px;
+    transition: all 0.2s;
+  }
+  .fb-input:focus {
+    outline: none;
+    border-color: var(--page-color);
+    background: rgba(0,0,0,0.6);
+  }
+  .fb-input.correct {
+    border-color: var(--correct);
+    background: rgba(81,207,102,0.2);
+    color: var(--correct);
+  }
+  .fb-input.wrong {
+    border-color: var(--wrong);
+    background: rgba(255,107,107,0.2);
+  }
+  .fb-input:disabled {
+    opacity: 0.8;
+  }
+  .fb-hint-btn, .fb-check-btn {
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fb-hint-btn:hover {
+    background: rgba(255,212,59,0.2);
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .fb-check-btn:hover {
+    background: rgba(77,171,247,0.2);
+    border-color: var(--w5);
+    color: var(--w5);
+  }
+  .fb-feedback {
+    margin-top: 8px;
+    font-size: 0.9em;
+    min-height: 20px;
+  }
+  .fb-feedback.correct {
+    color: var(--correct);
+  }
+  .fb-feedback.wrong {
+    color: var(--wrong);
+  }
+  @media (max-width: 768px) {
+    .fill-blank-score-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .fb-score-fill-track {
+      width: 100%;
+    }
+    .fb-blank-wrapper {
+      display: flex;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .fb-input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+
+  function updateFbScore() {
+    const scoreEl = document.querySelector('.fb-score-correct');
+    const fillEl = document.querySelector('.fb-score-fill');
+    const totalEl = document.querySelector('.fb-score-total');
+    if (scoreEl) scoreEl.textContent = fbCorrect;
+    if (totalEl) totalEl.textContent = fbTotal;
+    if (fillEl && fbTotal > 0) {
+      fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%';
+    }
+  }
+
+  window.showHint = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const answer = item.dataset.answer.toLowerCase();
+
+    // Show first letter + underscores for rest
+    if (input.value.length === 0) {
+      const hint = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1));
+      input.placeholder = hint;
+      input.focus();
+    } else {
+      // Show more letters progressively
+      const currentLen = input.value.length;
+      if (currentLen < answer.length) {
+        input.value = answer.substring(0, currentLen + 1);
+        input.focus();
+      }
+    }
+  };
+
+  window.checkBlank = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const feedback = item.querySelector('.fb-feedback');
+    const answer = item.dataset.answer.toLowerCase();
+    const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : [];
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if (item.classList.contains('checked')) return;
+
+    // Check if answer matches
+    const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer);
+
+    item.classList.add('checked');
+    input.disabled = true;
+
+    if (isCorrect) {
+      item.classList.add('correct');
+      input.classList.add('correct');
+      feedback.classList.add('correct');
+      feedback.innerHTML = '<strong>Correct!</strong>';
+      fbCorrect++;
+    } else {
+      item.classList.add('wrong');
+      input.classList.add('wrong');
+      feedback.classList.add('wrong');
+      feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer;
+    }
+
+    updateFbScore();
+  };
+
+  window.checkAllBlanks = function() {
+    fbItems.forEach(item => {
+      if (!item.classList.contains('checked')) {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  };
+
+  window.resetAllBlanks = function() {
+    fbCorrect = 0;
+    fbItems.forEach(item => {
+      item.classList.remove('checked', 'correct', 'wrong');
+      const input = item.querySelector('.fb-input');
+      const feedback = item.querySelector('.fb-feedback');
+      input.value = '';
+      input.disabled = false;
+      input.classList.remove('correct', 'wrong');
+      input.placeholder = '________';
+      feedback.innerHTML = '';
+      feedback.classList.remove('correct', 'wrong');
+    });
+    updateFbScore();
+  };
+
+  // Allow Enter key to check answer
+  fbItems.forEach(item => {
+    const input = item.querySelector('.fb-input');
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  });
+
+  updateFbScore();
 })();
 </script>
 

@@ -1719,5 +1719,102 @@
 })();
 </script>
 
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">7</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="3-2-1" data-alt="321,3 2 1">
+    <p class="fb-question"><span class="fb-num">1</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> backup rule means: 3 copies of data, 2 types of media, 1 copy offsite.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="IPS" data-alt="intrusion prevention system">
+    <p class="fb-question"><span class="fb-num">2</span> While IDS only monitors and alerts, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> monitors AND actively blocks malicious traffic.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Defense in Depth" data-alt="defense-in-depth,did">
+    <p class="fb-question"><span class="fb-num">3</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> uses multiple security layers so that breaching one doesn't mean total loss - others contain the attack.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="100" data-alt="100x,hundred">
+    <p class="fb-question"><span class="fb-num">4</span> According to Boehm's Curve, fixing a bug at deployment costs approximately <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>x more than fixing it during the requirements phase.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="VLAN" data-alt="virtual lan,virtual local area network">
+    <p class="fb-question"><span class="fb-num">5</span> A <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> segments networks logically for security and organization without requiring physical separation.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Presentation" data-alt="layer 6">
+    <p class="fb-question"><span class="fb-num">6</span> Encryption is typically applied at the <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> Layer (Layer 6) of the OSI model.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Diversity" data-alt="diverse">
+    <p class="fb-question"><span class="fb-num">7</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> (using different vendors/implementations) handles zero-day vulnerabilities better than redundancy.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  .fill-blank-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .fill-blank-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .fill-blank-intro { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .fill-blank-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+  .fb-score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .fb-score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .fb-score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .fb-check-all-btn, .fb-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--page-color); background: transparent; color: var(--page-color); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .fb-check-all-btn:hover { background: var(--page-color); color: #000; }
+  .fb-reset-btn { border-color: #666; color: #aaa; }
+  .fb-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .fill-blank-item { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; border-left: 4px solid rgba(255,255,255,0.2); transition: all 0.3s; }
+  .fill-blank-item.correct { border-left-color: var(--correct); background: rgba(81,207,102,0.1); }
+  .fill-blank-item.wrong { border-left-color: var(--wrong); background: rgba(255,107,107,0.1); }
+  .fb-question { font-size: 1em; line-height: 1.8; margin: 0; }
+  .fb-num { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--page-color); color: #000; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+  .fb-blank-wrapper { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .fb-input { padding: 6px 12px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); color: #fff; font-size: 0.95em; min-width: 120px; max-width: 200px; transition: all 0.2s; }
+  .fb-input:focus { outline: none; border-color: var(--page-color); background: rgba(0,0,0,0.6); }
+  .fb-input.correct { border-color: var(--correct); background: rgba(81,207,102,0.2); color: var(--correct); }
+  .fb-input.wrong { border-color: var(--wrong); background: rgba(255,107,107,0.2); }
+  .fb-input:disabled { opacity: 0.8; }
+  .fb-hint-btn, .fb-check-btn { padding: 4px 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); color: #aaa; font-size: 0.8em; cursor: pointer; transition: all 0.2s; }
+  .fb-hint-btn:hover { background: rgba(255,212,59,0.2); border-color: var(--w3); color: var(--w3); }
+  .fb-check-btn:hover { background: rgba(77,171,247,0.2); border-color: var(--w5); color: var(--w5); }
+  .fb-feedback { margin-top: 8px; font-size: 0.9em; min-height: 20px; }
+  .fb-feedback.correct { color: var(--correct); }
+  .fb-feedback.wrong { color: var(--wrong); }
+  @media (max-width: 768px) { .fill-blank-score-bar { flex-direction: column; align-items: stretch; gap: 10px; } .fb-score-fill-track { width: 100%; } .fb-blank-wrapper { display: flex; width: 100%; margin-top: 8px; } .fb-input { flex: 1; min-width: 0; } }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+  function updateFbScore() { const scoreEl = document.querySelector('.fb-score-correct'); const fillEl = document.querySelector('.fb-score-fill'); const totalEl = document.querySelector('.fb-score-total'); if (scoreEl) scoreEl.textContent = fbCorrect; if (totalEl) totalEl.textContent = fbTotal; if (fillEl && fbTotal > 0) fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%'; }
+  window.showHint = function(btn) { const item = btn.closest('.fill-blank-item'); const input = item.querySelector('.fb-input'); const answer = item.dataset.answer.toLowerCase(); if (input.value.length === 0) { input.placeholder = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1)); input.focus(); } else { const currentLen = input.value.length; if (currentLen < answer.length) { input.value = answer.substring(0, currentLen + 1); input.focus(); } } };
+  window.checkBlank = function(btn) { const item = btn.closest('.fill-blank-item'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); const answer = item.dataset.answer.toLowerCase(); const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : []; const userAnswer = input.value.trim().toLowerCase(); if (item.classList.contains('checked')) return; const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer); item.classList.add('checked'); input.disabled = true; if (isCorrect) { item.classList.add('correct'); input.classList.add('correct'); feedback.classList.add('correct'); feedback.innerHTML = '<strong>Correct!</strong>'; fbCorrect++; } else { item.classList.add('wrong'); input.classList.add('wrong'); feedback.classList.add('wrong'); feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer; } updateFbScore(); };
+  window.checkAllBlanks = function() { fbItems.forEach(item => { if (!item.classList.contains('checked')) { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); };
+  window.resetAllBlanks = function() { fbCorrect = 0; fbItems.forEach(item => { item.classList.remove('checked', 'correct', 'wrong'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); input.value = ''; input.disabled = false; input.classList.remove('correct', 'wrong'); input.placeholder = '________'; feedback.innerHTML = ''; feedback.classList.remove('correct', 'wrong'); }); updateFbScore(); };
+  fbItems.forEach(item => { const input = item.querySelector('.fb-input'); input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); });
+  updateFbScore();
+})();
+</script>
+
 </body>
 </html>
