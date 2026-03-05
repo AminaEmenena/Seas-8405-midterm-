@@ -26,6 +26,10 @@
     font-size: 19px;
     line-height: 1.7;
     padding: 0;
+    padding-right: 70px; /* Room for floating color legend */
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
   }
 
   /* STICKY NAV */
@@ -110,28 +114,64 @@
     font-size: 0.85em; color: #888; text-align: center;
   }
 
-  /* COLOR LEGEND */
+  /* COLOR LEGEND - Floating Sidebar (Compact) */
   .color-legend {
-    display: flex; flex-wrap: wrap; gap: 12px;
-    padding: 14px 18px; margin: 0 0 24px;
-    background: rgba(0,0,0,0.2); border-radius: 12px;
-    font-size: 0.85em;
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
   }
   .color-legend-title {
-    width: 100%; font-weight: 700; color: #aaa;
-    font-size: 0.9em; margin-bottom: 4px;
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
   }
+  .color-legend-title:hover { opacity: 0.8; }
   .legend-item {
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
   }
   .legend-dot {
-    width: 14px; height: 14px; border-radius: 4px;
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
   }
-  .legend-dot.red { background: rgba(233,69,96,0.6); border: 2px solid #e94560; }
-  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 2px solid #4DABF7; }
-  .legend-dot.green { background: rgba(105,219,124,0.6); border: 2px solid #69DB7C; }
-  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 2px solid #FFA94D; }
-  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 2px dashed #e94560; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
 
   /* DIFFICULTY TOGGLE */
   .difficulty-toggle {
@@ -585,14 +625,14 @@
   <div class="tldr-footer">💡 Expand sections below for details • Quiz at the bottom to test yourself</div>
 </div>
 
-<!-- COLOR LEGEND -->
-<div class="color-legend">
-  <div class="color-legend-title">🎨 Color Guide — What the boxes mean:</div>
-  <div class="legend-item"><span class="legend-dot red"></span> Key ideas / Must know</div>
-  <div class="legend-item"><span class="legend-dot blue"></span> Definitions / Terms</div>
-  <div class="legend-item"><span class="legend-dot green"></span> Good practices</div>
-  <div class="legend-item"><span class="legend-dot orange"></span> Watch out! / Warnings</div>
-  <div class="legend-item"><span class="legend-dot purple"></span> Memory tricks</div>
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">🎨 <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
 </div>
 
 <!-- Section 1: What is Cybersecurity Architecture? -->
