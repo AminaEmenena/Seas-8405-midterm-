@@ -1636,11 +1636,13 @@
           if (explanation) {
               const isRight = idx === correctIdx;
               if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+              const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+              const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
               if (isRight) {
-                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
+                explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
               } else {
                 const correctText = opts[correctIdx].textContent.trim();
-                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
+                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
               }
               explanation.classList.add('show');
             }
