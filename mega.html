@@ -1297,6 +1297,110 @@
     var score = 0;
     var correct = {1:1,2:0,3:2,4:0,5:1,6:2,7:0,8:1,9:3,10:2,11:0,12:1,13:2,14:0,15:1,16:1,17:2,18:0,19:1,20:2,21:2,22:1,23:2,24:3,25:0,26:1,27:2,28:0,29:1,30:2,31:0,32:1,33:2,34:1,35:2,36:2,37:1,38:0,39:2,40:3,41:0,42:1,43:2,44:0,45:1,46:2,47:0,48:1,49:2,50:3,51:1,52:0,53:2,54:1,55:0,56:2,57:1,58:2,59:2,60:1,61:0,62:2,63:1,64:1,65:1,66:1,67:2,68:2,69:1,70:2,71:1,72:1,73:0,74:1,75:1,76:2,77:1,78:1,79:1,80:1,81:1,82:0,83:1,84:1,85:2,86:2,87:1,88:1,89:2,90:1,91:2,92:2,93:1,94:0,95:2,96:1,97:2,98:1,99:2,100:3};
 
+    // Explanations to help retain information
+    var explanations = {
+      1: "Architecture = strategic (WHY/WHAT, 3-5 years). Engineering = tactical (HOW, short sprints). Remember: Architects draw blueprints, engineers build them.",
+      2: "Security integrated from design is 10-100x cheaper than retrofitting. The healthcare example: $2M and 9 months to bolt on HIPAA compliance vs 15% added cost if designed in.",
+      3: "81% use legitimate tools and stolen credentials — no malware needed. This is why antivirus alone fails. Behavioral detection and credential security are critical.",
+      4: "D3FEND = Detection, Denial, and Disruption Framework Empowering Network Defense. It maps defensive countermeasures to ATT&CK attack techniques.",
+      5: "ATT&CK has 700+ techniques across 14+ tactics. It's evidence-based from real incidents, not theoretical. Used for gap analysis and common language.",
+      6: "ASARP = As Secure As Reasonably Practicable (NIST SP 800-160). The sweet spot where more security hurts cost/schedule/performance disproportionately.",
+      7: "Governance hierarchy: Policy (executives) → Standards (SMEs) → Procedures (process owners) → Guidance (advisors). Policy sets the 'what', others define 'how'.",
+      8: "Optimism bias = 'It won't happen to us.' Combat with: assume-breach mentality, threat modeling, red team exercises. Everyone thinks they're special. Everyone is wrong.",
+      9: "Four Dimensions: Effectiveness (does it work?), Maturity (CMMI levels), Efficiency (cost-effective?), Alignment (fits team/culture?). All four must succeed.",
+      10: "Air gap = NO automatic network connections. Data transfer is manual only (USB, sneakernet). If it syncs automatically at night, it's NOT air-gapped.",
+      11: "MITRE Engage = active defense through deception. Honeypots, canary tokens, fake systems. Goal: detect attackers, impose costs, gather intelligence on TTPs.",
+      12: "Implementation order: Assessment (gap analysis) → Telemetry (visibility) → Detection Engineering (automated alerts) → Operationalization (SOC integration).",
+      13: "Inside-Out = what security features to build (auth, logging). Outside-In = what attacks to defend against (injection, session hijacking). Need BOTH perspectives.",
+      14: "7 Whys traces surface requirements to core mission. Background checks → trustworthiness → liability → reputation → customer confidence → revenue → survival.",
+      15: "ATT&CK Navigator: RED = no coverage (gap), YELLOW = partial, GREEN = good coverage. Use it to visualize and prioritize defensive gaps.",
+      16: "Requirements lifecycle has 8 steps: Elicit → Analyze → Specify → Validate → Prioritize → Trace → Manage → Communicate.",
+      17: "NFRs = HOW WELL (performance, security, scalability). FRs = WHAT it does (features). NFRs often drive architecture MORE than functional requirements.",
+      18: "99.95% availability = ~22 minutes downtime/month. Each 9 costs exponentially more. Know your SLA math: 99.9% = 43 min, 99.99% = 4 min.",
+      19: "SMART = Specific, Measurable, Achievable, Relevant, Time-bound. Achievable ensures requirements are actually possible given constraints.",
+      20: "Redundancy = same resources (backup server identical to primary). Diversity = different resources (Linux + Windows). Both needed for critical systems.",
+      21: "STRIDE = Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege. No 'R' for Reconnaissance — that's ATT&CK.",
+      22: "Risk = Threat × Vulnerability × Impact. All three factors matter. High threat + no vulnerability = low risk. High vulnerability + no threat = low risk.",
+      23: "Quick Wins = High Impact / Low Effort. Prioritize these first! Low Impact / High Effort = 'Thankless Tasks' (avoid). Use this matrix for prioritization.",
+      24: "The 8 pitfalls include: Vague requirements, Missing NFRs, Ignoring trade-offs, Scope creep, Gold plating, Analysis paralysis, Missing stakeholders, No traceability.",
+      25: "Mapping chain: Threat Analysis → Control ID → Functional Req → Non-Functional Req → Architecture Decision. Threats drive controls drive requirements.",
+      26: "HIPAA = 60 days for breach notification. GDPR = 72 hours. Know your regulatory timelines — they drive incident response architecture.",
+      27: "GDPR = up to 4% of global annual revenue. This makes it one of the most severe penalties. Privacy by design becomes an architectural requirement.",
+      28: "Maintainability = how easily we patch and fix. Think: Can we update without breaking things? Modularity and documentation support maintainability.",
+      29: "Usability matters for security adoption. If security is too hard, users bypass it. 'A secure system no one uses correctly is useless.'",
+      30: "NFRs drive architecture MORE than FRs. A feature is just code, but scaling to 1M users or 99.99% uptime shapes the entire system design.",
+      31: "3-2-1 backup: 3 copies, 2 different media types, 1 offsite. Protects against ransomware, hardware failure, and site disasters simultaneously.",
+      32: "IDS = monitors and alerts (passive). IPS = monitors, alerts, AND blocks (active). IPS sits inline; IDS can be out-of-band.",
+      33: "NGFW = traditional firewall + IPS + threat intelligence + application awareness + SSL inspection. It's the 'all-in-one' security appliance.",
+      34: "Boehm's Curve: Deployment phase = ~100x cost vs requirements phase. 'Shift left' means finding issues early when they're cheap to fix.",
+      35: "Protected mechanisms = security controls themselves must be resilient. If your firewall fails, does it fail-open (bad) or fail-closed (better)?",
+      36: "Segmentation supports Confidentiality by containing breaches. If attackers compromise one segment, they can't easily reach others.",
+      37: "OSI = 7 layers. Remember: Please Do Not Throw Sausage Pizza Away (Physical, Data Link, Network, Transport, Session, Presentation, Application).",
+      38: "Presentation layer (Layer 6) handles encryption, compression, and data formatting. Think: presenting data in a usable format.",
+      39: "Defense in Depth = multiple overlapping layers. If one fails, others catch it. Like an onion with multiple protective layers.",
+      40: "Redundancy handles individual failures (one server dies). Diversity handles systematic failures (all Windows servers hit by same vulnerability).",
+      41: "Password reset mitigation: expire links in 15 minutes + require additional verification. Prevents email compromise from leading to account takeover.",
+      42: "Boehm's Curve lesson: fix issues early. A $1 fix in requirements becomes $100+ in production. Security requirements upfront save massive costs later.",
+      43: "AAA: Authentication (who are you?), Authorization (what can you do?), Accounting (logging what you did). Accounting enables audit and forensics.",
+      44: "True MFA requires different factor TYPES: something you know + have + are. Password + security question = two 'knows' = NOT MFA.",
+      45: "RBAC (Role-Based Access Control) dominates enterprise. Users get roles; roles have permissions. Scales better than managing individual user permissions.",
+      46: "MAC (Mandatory Access Control) = clearance levels (Top Secret, Secret, etc.). System enforces access; users can't override. Government/military standard.",
+      47: "OAuth 2.0 = authorization only (delegated access). 'Can this app access my photos?' NOT 'Who is this person?' OIDC adds authentication.",
+      48: "OIDC = OAuth 2.0 + identity layer. Adds ID tokens with user info (name, email). 'Sign in with Google' uses OIDC.",
+      49: "Goals cascade: Enterprise → Technology → Security. Business objectives drive tech strategy, which drives security requirements. Never backwards.",
+      50: "PAM is critical because admin accounts = 'keys to the kingdom.' Compromise of privileged accounts gives attackers full control.",
+      51: "JIT access = temporary elevated privileges, auto-revoked after task. Reduces standing privilege exposure. No permanent admins = smaller attack window.",
+      52: "Mission Alignment: every architectural decision should enable business mission. If a security control doesn't serve the mission, question its value.",
+      53: "LDAP/Active Directory = centralized user directory. Single source of truth for user accounts, groups, permissions across the enterprise.",
+      54: "SAML = XML-based, enterprise SSO (older). OIDC = JSON-based, built on OAuth (modern, mobile-friendly). Both enable federated identity.",
+      55: "Startups accept higher risk for speed-to-market. Financial services accept low risk due to massive penalties. Context determines risk appetite.",
+      56: "Three project phases: Planning (requirements, design), Implementation (build, test), Maintenance (support, evolve). Most skip planning under pressure.",
+      57: "Planning gets de-emphasized because stakeholders want visible progress. 'Writing code feels productive; planning feels like delay.' But planning saves more time later.",
+      58: "Manhattan = planned grid, easy to navigate. Tokyo grew organically, harder to navigate. Good architecture = maintainable, navigable systems.",
+      59: "Misuse cases describe how attackers might abuse legitimate features. Profile picture upload → malware upload. Password reset → account takeover.",
+      60: "DevOps doesn't change security GOALS (CIA, compliance). It changes execution: automated testing, security as code, pipeline integration.",
+      61: "OWASP = Open Web Application Security Project. Non-profit providing free resources: Top 10, ASVS, testing guides. Industry standard reference.",
+      62: "App security lifecycle: Requirements (security needs), Development (secure coding), Release (testing, review), Support (patching, monitoring).",
+      63: "Boehm's Curve design phase = ~5x cost vs requirements. Still cheap compared to deployment (100x). Catching issues in design = major savings.",
+      64: "Requirements/design phase = cheapest place to fix security issues. 'Do the work upfront when it's cheap' — proactive beats reactive.",
+      65: "Security Design Reviews belong in EVERY methodology. Waterfall: before development. Agile: each sprint. Never skip the review gate.",
+      66: "File upload security: validate type (magic bytes, not extension), scan for malware, store outside webroot (no direct execution), rename files.",
+      67: "Security is everyone's responsibility. Developers, ops, business — all must understand their security role. Can't be siloed to one team.",
+      68: "Scope creep = uncontrolled expansion kills projects. Each 'small addition' compounds. Active scope management prevents death by a thousand cuts.",
+      69: "Scope process: (1) Consider high-level goals → (2) Review constraints → (3) Set initial scope → (4) Validate with stakeholders. Goals FIRST.",
+      70: "Microservices = maximum scope flexibility. Each service can be scoped, secured, updated independently. Monoliths require all-or-nothing changes.",
+      71: "Catch-22: Need stakeholder input to validate scope, but need initial scope to have stakeholder conversations. Solution: accept initial scope will have errors.",
+      72: "Enterprise security architecture = controls and constraints around existing infrastructure. Not building new apps; protecting what already exists.",
+      73: "Validate with stakeholders: they catch blind spots you missed. Also builds trust and buy-in. Architecture succeeds through collaboration.",
+      74: "Waterfall = get scope right upfront (changes expensive). Agile = scope can flex each sprint. Know your methodology's scope implications.",
+      75: "Enterprise scope factors: Existing Capability (what do we have?), Risk Management (what's priority?), Strategic Planning (where are we going?).",
+      76: "Empty scope = organizational constraints reduce changeable items to zero. The project is blocked before it starts. Surface this early.",
+      77: "Scope is a tool to delegate. 'Authentication is out of scope — the IAM team owns that.' Strategic use of scope manages complexity.",
+      78: "Amazon deploys every minute (continuous deployment). Traditional 'release' concepts don't apply. Security must be automated and continuous too.",
+      79: "Risk frameworks (ISO 31000, NIST RMF) provide standard scope boundaries and prioritization criteria. Don't reinvent the wheel.",
+      80: "Catch-22 solution: two-phase approach. Phase 1: initial scope (accept errors). Phase 2: refine with stakeholder feedback. Iterate.",
+      81: "Decision framework has 5 steps: Define Problem → Identify Options → Evaluate Options → Make Decision → Document Rationale.",
+      82: "Status quo as an option forces evaluation: Is change actually better than doing nothing? Sometimes current state is optimal. Always compare.",
+      83: "Four challenges: Incomplete information (never 100% data), Conflicting requirements (security vs usability), Legacy constraints, Resource limitations.",
+      84: "Defensibility = document your rationale. When auditors or executives ask 'why?', you can explain the decision logic. CYA with documentation.",
+      85: "BUILD when: unique requirements, skilled team available, long-term strategic capability, competitive advantage. Build for differentiation.",
+      86: "BUY when: commodity capability, talent scarce, rapid deployment needed, not a differentiator. Don't build what you can buy cheaply.",
+      87: "Decision checklist has 8 items: Mission alignment, Risk assessment, Resource availability, Stakeholder impact, Integration complexity, Compliance, Reversibility, Timeline.",
+      88: "Ivory tower mandates fail because people resist top-down dictation. Architecture succeeds through collaboration, partnership, and demonstrated value.",
+      89: "Evaluation criteria: Security/Risk (threat coverage, compliance) AND Business/Operational (cost, timeline, maintainability). Balance both categories.",
+      90: "Resource limitations mean perfect solutions are unaffordable. ASARP applies — find the practical optimum within real constraints.",
+      91: "Healthcare case: talent shortage + need for immediate 24/7 coverage = managed services made sense. Context drove the decision.",
+      92: "Healthcare achieved 50%+ detection increase through managed SOC services. Measurable outcomes justified the approach.",
+      93: "Cimpress: 'Lead by example, not mandate.' Demonstrated Zero Trust value to business units; adoption followed voluntarily. Collaboration beats dictation.",
+      94: "SOAR = Security Orchestration, Automation and Response. Automates playbooks, integrates tools, speeds incident response. Force multiplier for SOC.",
+      95: "Policy Engine (PE) = the brain making access decisions. Based on identity, device health, context, risk signals. The decision-maker in Zero Trust.",
+      96: "CISA Zero Trust pillars: Identity, Devices, Networks, Applications & Workloads, Data. Plus cross-cutting: Visibility, Automation, Governance.",
+      97: "Zero Trust = no implicit trust from network location. 'Never trust, always verify.' Being on the corporate network doesn't mean trusted.",
+      98: "PEP = Policy Enforcement Point. The bouncer that enforces PE decisions. Sits in the data path, allows/denies access in real-time.",
+      99: "Phased implementation = deploy incrementally, prove value at each stage. Reduces risk, builds confidence, allows course correction. Don't boil the ocean.",
+      100: "Key lesson: Context drives decisions. No universal 'right' answer. Use phased approaches with measurable outcomes. What works in one org may fail in another."
+    };
+
     var startTime = Date.now();
     setInterval(function(){
       var s = Math.floor((Date.now() - startTime) / 1000);
@@ -1340,14 +1444,17 @@
         labels[correctIdx].style.opacity = '1';
       }
 
-      // Add feedback text
+      // Add feedback text with educational explanation
       var feedback = document.createElement('div');
       feedback.className = 'mq-feedback';
+      var explanation = explanations[q] || '';
+      var encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+      var encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
       if (isRight) {
-        feedback.innerHTML = '<strong style="color:#51cf66">Correct!</strong>';
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation;
       } else {
         var correctText = labels[correctIdx].textContent.trim();
-        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em>';
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation;
       }
       document.getElementById('mq' + q).appendChild(feedback);
 

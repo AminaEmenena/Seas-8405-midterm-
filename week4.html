@@ -26,6 +26,10 @@
     font-size: 19px;
     line-height: 1.7;
     padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
   }
 
   /* STICKY NAV */
@@ -71,42 +75,200 @@
 
   .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
-  /* DETAILS / SUMMARY — replaces old topic cards */
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  /* COLOR LEGEND - Floating Sidebar (Compact) */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary styled like old layout) */
   details {
-    margin: 16px 0;
+    margin: 20px 0;
     border-radius: 12px;
     overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.08);
+    border: 2px solid var(--page-color);
     background: var(--card);
-    transition: border-color 0.2s;
+    transition: all 0.2s;
   }
   details[open] {
-    border-color: var(--page-color);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
   summary {
     cursor: pointer;
-    font-size: 1.1em; font-weight: 700;
+    font-size: 1.15em; font-weight: 700;
     color: #fff;
     padding: 16px 20px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.06);
     border-left: 5px solid var(--page-color);
     user-select: none;
-    transition: background 0.2s;
+    transition: all 0.2s;
     list-style: none;
     display: flex; justify-content: space-between; align-items: center;
   }
   summary::-webkit-details-marker { display: none; }
   summary::after {
-    content: '▶'; font-size: 0.8em; color: var(--page-color);
-    transition: transform 0.2s;
+    content: '▶'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
   }
   details[open] > summary::after {
     transform: rotate(90deg);
+    color: #000;
   }
-  summary:hover { background: rgba(255,255,255,0.08); }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
   details > div, details > p, details > ul, details > ol, details > table,
   details > section {
     padding: 16px 20px;
+    background: var(--page-tint);
   }
 
   /* CONTENT INSIDE DETAILS */
@@ -163,9 +325,11 @@
   .mnemonic {
     background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
     border: 2px dashed var(--accent1);
-    border-radius: 12px; padding: 16px; margin: 16px 0;
+    border-radius: 12px; padding: 20px; margin: 16px 0;
     text-align: center;
   }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
 
   /* DIAGRAM BOXES */
   .diagram-box, pre {
@@ -463,8 +627,32 @@
 </div>
 
 <div class="container">
+
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">🎯</span> TL;DR — Week 4 Essentials</div>
+  <ul>
+    <li>🔐 <strong>AAA:</strong> Authentication (who) → Authorization (what) → Accounting (logging)</li>
+    <li>📊 <strong>MFA requires DIFFERENT factor types</strong> (know + have + are)</li>
+    <li>🏰 <strong>RBAC most common in enterprise;</strong> MAC for government/military</li>
+    <li>🔄 <strong>OAuth = authorization only;</strong> OIDC adds identity/authentication</li>
+    <li>⚡ <strong>PAM critical:</strong> privileged accounts = keys to the kingdom</li>
+    <li>💡 <strong>JIT access:</strong> temporary elevated privileges, auto-revoked</li>
+  </ul>
+  <div class="tldr-footer">💡 Expand sections below for details • Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">🎨 <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
 <details open>
-        <summary>Architecture's Primary Purpose</summary>
+        <summary>🎯 Architecture's Primary Purpose</summary>
         <div>
             <p>The fundamental purpose of security architecture is to <strong>SUPPORT THE MISSION</strong> and enable business goals. Security is not an end in itself — it exists to protect and enable.</p>
 
@@ -485,7 +673,7 @@
     </details>
 
     <details>
-        <summary>Understanding Organizational Goals — The Cascade</summary>
+        <summary>📊 Understanding Organizational Goals — The Cascade</summary>
         <div>
             <p>Organizational goals flow through multiple levels, each supporting the one above:</p>
 
@@ -500,7 +688,7 @@
     </details>
 
     <details>
-        <summary>AAA Framework</summary>
+        <summary>🔐 AAA Framework</summary>
         <div>
             <div class="red"><strong>KEY IDEA:</strong> IAM (Identity and Access Management) is built on three pillars working in concert. Missing even one creates security gaps and compliance failures.</div>
 
@@ -530,7 +718,7 @@
     </details>
 
     <details>
-        <summary>Authentication Factors</summary>
+        <summary>🔐 Authentication Factors</summary>
         <div>
             <div class="mem"><small>Three Factors</small><br><strong>Something you KNOW · Something you HAVE · Something you ARE</strong></div>
 
@@ -583,7 +771,7 @@
     </details>
 
     <details>
-        <summary>Access Control Models</summary>
+        <summary>📊 Access Control Models</summary>
         <div>
             <table>
                 <thead>
@@ -633,7 +821,7 @@
     </details>
 
     <details>
-        <summary>Least Privilege Principle</summary>
+        <summary>🏰 Least Privilege Principle</summary>
         <div>
             <div class="red"><strong>KEY IDEA:</strong> Least privilege is foundational to defense in depth. A single compromised account with minimal permissions limits lateral movement and reduces the blast radius of a breach.</div>
 
@@ -659,7 +847,7 @@
     </details>
 
     <details>
-        <summary>Federation and SSO</summary>
+        <summary>🔄 Federation and SSO</summary>
         <div>
             <h3>Federation</h3>
             <p>A trust relationship between organizations. Users authenticate once in their home organization and access resources across multiple federated organizations.</p>
@@ -713,7 +901,7 @@
     </details>
 
     <details>
-        <summary>Privileged Access Management (PAM)</summary>
+        <summary>⚡ Privileged Access Management (PAM)</summary>
         <div>
             <p>Managing and securing accounts with elevated privileges (admin accounts, service accounts, root).</p>
 
@@ -737,7 +925,7 @@
     </details>
 
     <details>
-        <summary>Impossible Travel and Behavioral Detection</summary>
+        <summary>💡 Impossible Travel and Behavioral Detection</summary>
         <div>
             <p><strong>Impossible Travel Detection:</strong> A behavioral analytics technique that flags when a user authenticates from two geographically distant locations in a timeframe that makes physical travel impossible.</p>
             <ul>
@@ -753,7 +941,7 @@
     </details>
 
     <details>
-        <summary>Scattered Spider Attack Case Study</summary>
+        <summary>⚠️ Scattered Spider Attack Case Study</summary>
         <div>
             <p><strong>Scattered Spider (UNC3944):</strong> A threat group that targeted major organizations (MGM Resorts, Caesars Entertainment, 2023) using social engineering against identity systems.</p>
             <ul>
@@ -775,7 +963,7 @@
     </details>
 
     <details>
-        <summary>Risk Appetite Drives Design</summary>
+        <summary>⚖️ Risk Appetite Drives Design</summary>
         <div>
             <p><strong>Risk appetite:</strong> The amount and type of risk an organization is willing to accept to achieve its business objectives.</p>
 
@@ -820,7 +1008,7 @@
     </details>
 
     <details>
-        <summary>Alignment: Fit with Organization</summary>
+        <summary>🎯 Alignment: Fit with Organization</summary>
         <div>
             <p>A "perfect" security architecture that doesn't fit your organization is worse than a simpler one that works. Consider these dimensions:</p>
 
@@ -843,7 +1031,7 @@
     </details>
 
     <details>
-        <summary>Efficiency: Opportunity Cost</summary>
+        <summary>⚖️ Efficiency: Opportunity Cost</summary>
         <div>
             <p>Every choice has a cost. <strong>Opportunity cost</strong> = what you give up by choosing one option over another.</p>
 
@@ -874,10 +1062,11 @@
 
     
     <div class="quiz-section">
-      <h2>Week 4 — Test Yourself (12 Questions)</h2>
+      <h2>🎯 Week 4 — Test Yourself (12 Questions)</h2>
       <div class="quiz-score-bar">
         <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">12</span> correct</span>
         <div class="score-fill-track"><div class="score-fill"></div></div>
+        <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
 
@@ -1018,6 +1207,32 @@
 
 <script>
 (function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
   // Initialize all quiz sections on the page
   document.querySelectorAll('.quiz-section').forEach(section => {
     const qs = section.querySelectorAll('.quiz-q');
@@ -1025,7 +1240,9 @@
     const correctEl = section.querySelector('.score-correct');
     const fillEl = section.querySelector('.score-fill');
     const resetBtn = section.querySelector('.quiz-reset-btn');
-    let answered = 0, correct = 0;
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
 
     if (totalEl) totalEl.textContent = qs.length;
 
@@ -1033,6 +1250,10 @@
       if (correctEl) correctEl.textContent = correct;
       if (fillEl && qs.length > 0) {
         fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
       }
     }
 
@@ -1048,24 +1269,37 @@
           opts.forEach(o => o.classList.add('answered'));
           answered++;
 
-          if (idx === correctIdx) {
+          const isRight = idx === correctIdx;
+          if (isRight) {
             opt.classList.add('selected-correct');
             correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            // Celebrations for streaks!
+            if (streak === 3) showEncouragement('🔥 3 in a row!');
+            else if (streak === 5) { showEncouragement('⚡ FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('🏆 UNSTOPPABLE!'); showConfetti(); }
+            else if (streak === 12) { showEncouragement('👑 PERFECT SCORE!'); showConfetti(); }
           } else {
             opt.classList.add('selected-wrong');
             opts[correctIdx].classList.add('show-correct');
+            streak = 0; // Reset streak on wrong answer
           }
+
           if (explanation) {
-              const isRight = idx === correctIdx;
-              if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
-              if (isRight) {
-                explanation.innerHTML = '<strong style="color:var(--correct)">Correct!</strong> ' + explanation.dataset.original;
-              } else {
-                const correctText = opts[correctIdx].textContent.trim();
-                explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br>' + explanation.dataset.original;
-              }
-              explanation.classList.add('show');
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">✓ Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">✗ Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
             }
+            explanation.classList.add('show');
+          }
           updateScore();
         });
       });
@@ -1073,14 +1307,14 @@
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        answered = 0; correct = 0;
+        answered = 0; correct = 0; streak = 0;
         qs.forEach(q => {
-          q.classList.remove('answered');
+          q.classList.remove('answered', 'just-correct');
           q.querySelectorAll('.opt').forEach(o => {
             o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
           });
           const exp = q.querySelector('.explanation');
-          if (exp) exp.classList.remove('show');
+          if (exp) { exp.classList.remove('show'); }
         });
         updateScore();
       });
