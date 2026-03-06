@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8405 - Complete Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0d1b2a;
+      color: #e0e0e0;
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00d4ff;
+      font-size: 18px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #00d4ff;
+      padding-bottom: 5px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+        font-size: 9px;
+        padding: 5px;
+      }
+      .section {
+        border-color: #333 !important;
+        background: white !important;
+        break-inside: avoid;
+      }
+      h1 { color: black; border-color: black; }
+      h2 { color: black !important; }
+      h3 { color: #333 !important; }
+      .new-tag { background: #333 !important; }
+      .container { gap: 5px; }
+    }
+
+    @media (max-width: 1200px) {
+      .container { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 800px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .section {
+      background: rgba(30, 40, 60, 0.8);
+      border: 1px solid #1e3a5f;
+      border-radius: 6px;
+      padding: 8px;
+      break-inside: avoid;
+    }
+
+    h2 {
+      color: #00d4ff;
+      font-size: 12px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #1e3a5f;
+      padding-bottom: 3px;
+    }
+
+    h3 {
+      color: #ffd700;
+      font-size: 10px;
+      margin: 6px 0 4px 0;
+    }
+
+    ul {
+      margin-left: 12px;
+      margin-bottom: 4px;
+    }
+
+    li {
+      margin-bottom: 2px;
+    }
+
+    strong {
+      color: #ff6b6b;
+    }
+
+    .highlight {
+      background: rgba(255, 215, 0, 0.15);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4px 0;
+      font-size: 10px;
+    }
+
+    th, td {
+      border: 1px solid #1e3a5f;
+      padding: 3px 5px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+    }
+
+    .formula {
+      background: rgba(255, 107, 107, 0.2);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 4px 0;
+      text-align: center;
+    }
+
+    .mnemonic {
+      background: rgba(0, 255, 136, 0.15);
+      border-left: 3px solid #00ff88;
+      padding: 4px 8px;
+      margin: 4px 0;
+    }
+
+    .new-tag {
+      background: #ff6b6b;
+      color: white;
+      font-size: 8px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+
+    .exam-trap {
+      background: rgba(255, 107, 107, 0.15);
+      border-left: 3px solid #ff6b6b;
+      padding: 4px 8px;
+      margin: 4px 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #00d4ff;
+      color: #0d1b2a;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 100;
+    }
+
+    .print-btn:hover {
+      background: #00a8cc;
+    }
+
+    @media print {
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">Print Cheat Sheet</button>
+
+  <h1>SEAS 8405 - Cybersecurity Architectures - Complete Cheat Sheet</h1>
+
+  <div class="container">
+
+    <!-- WEEK 1: INTRO & MITRE -->
+    <div class="section">
+      <h2>WEEK 1: Intro & MITRE Frameworks</h2>
+
+      <h3>Architect vs Engineer vs Ops</h3>
+      <table>
+        <tr><th>Role</th><th>Focus</th><th>Output</th></tr>
+        <tr><td><strong>Architect</strong></td><td>WHAT & WHY (strategic)</td><td>Blueprints, standards</td></tr>
+        <tr><td><strong>Engineer</strong></td><td>HOW (implement)</td><td>Code, configs</td></tr>
+        <tr><td><strong>Operations</strong></td><td>RUN & MAINTAIN</td><td>Uptime, response</td></tr>
+      </table>
+
+      <h3>CIA Triad</h3>
+      <ul>
+        <li><strong>C</strong>onfidentiality - only authorized access</li>
+        <li><strong>I</strong>ntegrity - data accurate & unmodified</li>
+        <li><strong>A</strong>vailability - accessible when needed</li>
+      </ul>
+      <div class="mnemonic">IT priority: C→I→A | OT/ICS priority: A→I→C (safety first)</div>
+
+      <h3>Six Critical Questions <span class="new-tag">NEW</span></h3>
+      <ol>
+        <li>What are we protecting?</li>
+        <li>Who are we protecting from?</li>
+        <li>What are the risks?</li>
+        <li>How much security is enough?</li>
+        <li>What are constraints?</li>
+        <li>How do we measure success?</li>
+      </ol>
+
+      <h3>Five-Zone Security Model <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic">Core Assets → Trusted → Selective → Partner → Untrusted</div>
+
+      <h3>MITRE ATT&CK (14 Tactics)</h3>
+      <div class="two-col">
+        <div>
+          <ol>
+            <li>Reconnaissance</li>
+            <li>Resource Dev</li>
+            <li>Initial Access</li>
+            <li>Execution</li>
+            <li>Persistence</li>
+            <li>Priv Escalation</li>
+            <li>Defense Evasion</li>
+          </ol>
+        </div>
+        <div>
+          <ol start="8">
+            <li>Cred Access</li>
+            <li>Discovery</li>
+            <li>Lateral Move</li>
+            <li>Collection</li>
+            <li>C2</li>
+            <li>Exfiltration</li>
+            <li>Impact</li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>D3FEND (5 Categories)</h3>
+      <table>
+        <tr><th>Category</th><th>Purpose</th></tr>
+        <tr><td><strong>Harden</strong></td><td>Proactive prevention</td></tr>
+        <tr><td><strong>Detect</strong></td><td>Identify attacks</td></tr>
+        <tr><td><strong>Isolate</strong></td><td>Contain threats</td></tr>
+        <tr><td><strong>Deceive</strong></td><td>Mislead attackers (honeypots)</td></tr>
+        <tr><td><strong>Evict</strong></td><td>Remove threats</td></tr>
+      </table>
+
+      <h3>Engage vs D3FEND</h3>
+      <ul>
+        <li><strong>Engage</strong> = ACTIVE/OFFENSIVE (impose costs, deceive)</li>
+        <li><strong>D3FEND</strong> = PASSIVE/DEFENSIVE (map countermeasures)</li>
+      </ul>
+
+      <h3>ATLAS (AI Threats)</h3>
+      <ul>
+        <li>Model evasion, Data poisoning, Model theft</li>
+        <li>Model inversion, Supply chain, Prompt injection</li>
+      </ul>
+    </div>
+
+    <!-- WEEK 2: REQUIREMENTS -->
+    <div class="section">
+      <h2>WEEK 2: Requirements</h2>
+
+      <h3>Functional vs Non-Functional</h3>
+      <table>
+        <tr><th>Type</th><th>Describes</th><th>Example</th></tr>
+        <tr><td><strong>FR</strong></td><td>WHAT system does</td><td>"System must authenticate users"</td></tr>
+        <tr><td><strong>NFR</strong></td><td>HOW WELL it does</td><td>"MFA in &lt;5s 99.9% of time"</td></tr>
+      </table>
+      <div class="exam-trap"><strong>EXAM TRAP:</strong> Performance/latency requirements = NFR, not FR!</div>
+
+      <h3>8-Step Requirements Lifecycle <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic">Elicit → Document → Review → Communicate → Implement → Validate → Monitor → Update</div>
+
+      <h3>SMART Requirements</h3>
+      <ul>
+        <li><strong>S</strong>pecific - Clear, unambiguous</li>
+        <li><strong>M</strong>easurable - Quantifiable criteria</li>
+        <li><strong>A</strong>chievable - Realistic to implement</li>
+        <li><strong>R</strong>elevant - Tied to business need</li>
+        <li><strong>T</strong>ime-bound - Has deadline</li>
+      </ul>
+
+      <h3>MoSCoW Prioritization</h3>
+      <ul>
+        <li><strong>Must Have</strong> - Critical, non-negotiable</li>
+        <li><strong>Should Have</strong> - Important, workarounds exist</li>
+        <li><strong>Could Have</strong> - Nice-to-have</li>
+        <li><strong>Won't Have</strong> - Explicitly excluded</li>
+      </ul>
+
+      <h3>Elicitation Techniques <span class="new-tag">NEW</span></h3>
+      <ul>
+        <li>Interviews, Workshops/JAD</li>
+        <li>Surveys, Document Analysis</li>
+        <li>Observation, Use Case Analysis</li>
+      </ul>
+
+      <h3>Key Principles</h3>
+      <ul>
+        <li><strong>"Bake In, Don't Bolt On"</strong> - Security from start (retrofitting 10-100x more expensive)</li>
+        <li><strong>Inside-Out</strong> = Start from assets → build security</li>
+        <li><strong>Outside-In</strong> = Start from threats → work inward</li>
+      </ul>
+
+      <h3>Uptime Table</h3>
+      <table>
+        <tr><th>Nines</th><th>Uptime</th><th>Downtime/Yr</th></tr>
+        <tr><td>Two 9s</td><td>99%</td><td>3.65 days</td></tr>
+        <tr><td>Three 9s</td><td>99.9%</td><td>8.76 hrs</td></tr>
+        <tr><td>Four 9s</td><td>99.99%</td><td>52.6 min</td></tr>
+        <tr><td>Five 9s</td><td>99.999%</td><td>5.26 min</td></tr>
+      </table>
+    </div>
+
+    <!-- WEEK 3: SECURITY ARCHITECTURE -->
+    <div class="section">
+      <h2>WEEK 3: Security Architecture</h2>
+
+      <h3>Defense in Depth Layers</h3>
+      <div class="mnemonic">Perimeter → Network → Host → Application → Data → Admin → Physical</div>
+
+      <h3>Redundancy vs Diversity</h3>
+      <ul>
+        <li><strong>Redundancy</strong> = Same tech repeated (availability)</li>
+        <li><strong>Diversity</strong> = Different tech each layer (attack resistance)</li>
+      </ul>
+
+      <h3>Network Segmentation</h3>
+      <ul>
+        <li><strong>DMZ</strong> - Buffer between trusted/untrusted</li>
+        <li><strong>VLANs</strong> - Layer 2 segmentation</li>
+        <li><strong>Microsegmentation</strong> - Workload-level isolation</li>
+        <li><strong>SDP</strong> <span class="new-tag">NEW</span> - Software Defined Perimeter (dynamic boundaries, resources invisible to unauthorized)</li>
+      </ul>
+
+      <h3>Firewall Types <span class="new-tag">NEW</span></h3>
+      <table>
+        <tr><th>Type</th><th>Layer</th><th>Speed</th></tr>
+        <tr><td>Packet Filter</td><td>L3-4</td><td>Fast</td></tr>
+        <tr><td>Stateful</td><td>L3-4 + state</td><td>Medium</td></tr>
+        <tr><td>App/Proxy</td><td>L7</td><td>Slow</td></tr>
+        <tr><td>NGFW</td><td>All + AI/TI</td><td>Varies</td></tr>
+      </table>
+
+      <h3>IDS vs IPS <span class="new-tag">NEW</span></h3>
+      <ul>
+        <li><strong>IDS</strong> = Alerts only (passive)</li>
+        <li><strong>IPS</strong> = Alerts + blocks (active)</li>
+      </ul>
+
+      <h3>3-2-1 Backup Rule <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic"><strong>3</strong> copies, <strong>2</strong> media types, <strong>1</strong> offsite</div>
+
+      <h3>Zero Trust (NIST 800-207)</h3>
+      <div class="mnemonic">"Never trust, always verify" - Assumes breach</div>
+      <p><strong>7 Tenets:</strong> All resources protected, all comms secured, per-session access, dynamic policy, monitor all assets, strict auth before access, continuous improvement</p>
+
+      <h3>ZTA Components</h3>
+      <table>
+        <tr><th>Component</th><th>Role</th></tr>
+        <tr><td><strong>PE</strong> (Policy Engine)</td><td>Brain - makes grant/deny decisions</td></tr>
+        <tr><td><strong>PA</strong> (Policy Admin)</td><td>Establishes/shuts comms path</td></tr>
+        <tr><td><strong>PEP</strong> (Policy Enforce)</td><td>Gateway - enables/monitors connections</td></tr>
+      </table>
+
+      <h3>5 Verification Factors <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic"><strong>Who</strong> (identity), <strong>What</strong> (resource), <strong>Where</strong> (location), <strong>When</strong> (time), <strong>How</strong> (device posture)</div>
+    </div>
+
+    <!-- WEEK 4: SOLUTIONING -->
+    <div class="section">
+      <h2>WEEK 4: Solutioning</h2>
+
+      <h3>Seven Whys</h3>
+      <p>Keep asking "why?" to find root cause/true requirement. Prevents premature solutioning.</p>
+
+      <h3>4 Dimensions of Success</h3>
+      <table>
+        <tr><th>Dimension</th><th>Question</th></tr>
+        <tr><td><strong>Effectiveness</strong></td><td>Does it mitigate risk?</td></tr>
+        <tr><td><strong>Maturity</strong></td><td>How proven is it?</td></tr>
+        <tr><td><strong>Efficiency</strong></td><td>Resource consumption?</td></tr>
+        <tr><td><strong>Alignment</strong></td><td>Fits org culture/stack?</td></tr>
+      </table>
+
+      <h3>Build vs Buy vs Managed</h3>
+      <table>
+        <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
+        <tr><td><strong>Build</strong></td><td>Perfect fit, IP owned</td><td>High cost/time</td></tr>
+        <tr><td><strong>Buy</strong></td><td>Fast, vendor support</td><td>Less flexible, lock-in</td></tr>
+        <tr><td><strong>Managed</strong></td><td>Lowest staffing</td><td>Less control</td></tr>
+      </table>
+
+      <h3>Policy Hierarchy</h3>
+      <div class="mnemonic">Policies → Standards → Procedures → Guidelines</div>
+      <ul>
+        <li><strong>Policy</strong> = WHAT (mandatory, exec-approved)</li>
+        <li><strong>Standard</strong> = HOW (technical specifics)</li>
+        <li><strong>Procedure</strong> = Step-by-step instructions</li>
+        <li><strong>Guideline</strong> = Recommendations (not mandatory)</li>
+      </ul>
+
+      <h3>Risk Responses</h3>
+      <ul>
+        <li><strong>Avoid</strong> - Eliminate the activity</li>
+        <li><strong>Transfer</strong> - Insurance, outsource</li>
+        <li><strong>Mitigate</strong> - Reduce likelihood/impact</li>
+        <li><strong>Accept</strong> - Document & proceed</li>
+      </ul>
+      <div class="formula">Risk = Likelihood × Impact</div>
+      <div class="formula">Residual Risk = Risk after controls applied</div>
+
+      <h3>Risk Appetite vs Tolerance</h3>
+      <ul>
+        <li><strong>Appetite</strong> = How much risk org WANTS (strategic)</li>
+        <li><strong>Tolerance</strong> = Acceptable VARIANCE (operational)</li>
+      </ul>
+
+      <h3>JIT Access <span class="new-tag">NEW</span></h3>
+      <p>Just-In-Time privilege elevation with automatic expiration</p>
+
+      <h3>Impossible Travel <span class="new-tag">NEW</span></h3>
+      <p>Behavioral analytics flagging geographically impossible auth patterns</p>
+    </div>
+
+    <!-- WEEK 5: FRAMEWORKS -->
+    <div class="section">
+      <h2>WEEK 5: Frameworks</h2>
+
+      <h3>SABSA (6 Layers)</h3>
+      <table>
+        <tr><th>Layer</th><th>View</th><th>Focus</th></tr>
+        <tr><td>Contextual</td><td>Business</td><td>Requirements, risk, goals</td></tr>
+        <tr><td>Conceptual</td><td>Architect</td><td>Principles, policies</td></tr>
+        <tr><td>Logical</td><td>Designer</td><td>Info flows, services</td></tr>
+        <tr><td>Physical</td><td>Builder</td><td>Mechanisms, products</td></tr>
+        <tr><td>Component</td><td>Tradesman</td><td>Specs, configs</td></tr>
+        <tr><td>Operational</td><td>Service Mgr</td><td>Operations, KPIs</td></tr>
+      </table>
+
+      <h3>TOGAF ADM Phases</h3>
+      <div class="mnemonic">Preliminary → A (Vision) → B (Business) → C (Info Systems) → D (Tech) → E (Opportunities) → F (Migration) → G (Governance) → H (Change)</div>
+      <p><strong>Requirements Management</strong> = CENTER of ALL phases</p>
+
+      <h3>Zachman</h3>
+      <p>6×6 classification matrix (perspectives × interrogatives). <strong>NOT a methodology</strong> - just taxonomy.</p>
+
+      <h3>Framework Comparison</h3>
+      <ul>
+        <li><strong>Zachman</strong> = Taxonomy (no process)</li>
+        <li><strong>SABSA</strong> = Business-driven security</li>
+        <li><strong>TOGAF</strong> = Enterprise arch with ADM process</li>
+      </ul>
+
+      <h3>Boehm's Curve <span class="new-tag">NEW</span></h3>
+      <div class="formula">Requirements ($1) → Design ($5) → Dev ($10) → Test ($15) → Deploy ($100+)</div>
+      <p>Cost multiplier for fixing issues at each stage. <strong>Security changes in production cost 100x more!</strong></p>
+
+      <h3>Security Testing Tools <span class="new-tag">NEW</span></h3>
+      <table>
+        <tr><th>Tool</th><th>What It Does</th></tr>
+        <tr><td><strong>SAST</strong></td><td>Static code scanning (no execution)</td></tr>
+        <tr><td><strong>DAST</strong></td><td>Dynamic/runtime testing</td></tr>
+        <tr><td><strong>SCA</strong></td><td>Dependency vulnerability scanning</td></tr>
+      </table>
+
+      <h3>Risk Frameworks <span class="new-tag">NEW</span></h3>
+      <ul>
+        <li><strong>ISO 31000</strong> - Risk management framework</li>
+        <li><strong>NIST RMF</strong> - Risk Management Framework</li>
+        <li><strong>OCTAVE</strong> - Threat, Asset, Vulnerability Eval</li>
+      </ul>
+    </div>
+
+    <!-- WEEK 6: THREAT MODELING -->
+    <div class="section">
+      <h2>WEEK 6: Threat Modeling</h2>
+
+      <h3>STRIDE</h3>
+      <table>
+        <tr><th>Threat</th><th>Mitigation</th></tr>
+        <tr><td><strong>S</strong>poofing</td><td>Strong auth (MFA)</td></tr>
+        <tr><td><strong>T</strong>ampering</td><td>Integrity checks/hashing</td></tr>
+        <tr><td><strong>R</strong>epudiation</td><td>Audit logs, signatures</td></tr>
+        <tr><td><strong>I</strong>nfo Disclosure</td><td>Encryption, access controls</td></tr>
+        <tr><td><strong>D</strong>oS</td><td>Rate limiting, redundancy</td></tr>
+        <tr><td><strong>E</strong>levation of Priv</td><td>Least privilege, input validation</td></tr>
+      </table>
+
+      <h3>PASTA (7 Stages)</h3>
+      <div class="mnemonic">1.Business Obj → 2.Tech Scope → 3.Decomposition → 4.Threat Analysis → 5.Vuln Analysis → 6.Attack Modeling → 7.Risk/Impact</div>
+
+      <h3>Attack Trees</h3>
+      <p>Hierarchical diagrams: root=goal, branches=approaches, leaves=actions</p>
+
+      <h3>Scope Management</h3>
+      <ul>
+        <li><strong>Empty Scope Problem</strong> - Undefined = everything in scope = paralysis</li>
+        <li><strong>Scope is iterative</strong> - Will evolve as understanding deepens</li>
+      </ul>
+
+      <h3>Four-Step Scope Process <span class="new-tag">NEW</span></h3>
+      <ol>
+        <li>Consider High-Level Goals (ALL stakeholders)</li>
+        <li>Review Contextual Constraints</li>
+        <li>Set Initial Scope (in/out/middle)</li>
+        <li>Validate and Refine</li>
+      </ol>
+
+      <h3>Scope-Setting Catch-22 <span class="new-tag">NEW</span></h3>
+      <p>Can't finalize scope without stakeholders, can't organize without scope. Solution: <strong>Draft. Discuss. Refine. Repeat.</strong></p>
+
+      <h3>Modularity</h3>
+      <p>Design as composable building blocks (ABBs). Loose coupling = flexible scope.</p>
+    </div>
+
+    <!-- WEEK 7: DECISION-MAKING -->
+    <div class="section">
+      <h2>WEEK 7: Decision-Making</h2>
+
+      <h3>Trade-offs</h3>
+      <ul>
+        <li>Security vs Usability</li>
+        <li>Cost vs Coverage</li>
+        <li>Complexity vs Maintainability</li>
+        <li>Speed vs Thoroughness</li>
+        <li>Centralization vs Autonomy</li>
+      </ul>
+
+      <h3>ADRs (Architecture Decision Records)</h3>
+      <p>Format: Title → Status → Context → Decision → Consequences → Alternatives</p>
+
+      <h3>Decision-Making Traps <span class="new-tag">NEW</span></h3>
+      <ul>
+        <li><strong>Premature Convergence</strong> - Jumping to solutions too fast</li>
+        <li><strong>Status Quo Bias</strong> - Baseline must be compared</li>
+        <li><strong>Incomplete Info</strong> - Must decide before all facts known</li>
+      </ul>
+
+      <h3>Weighted Scoring Matrix <span class="new-tag">NEW</span></h3>
+      <p>Systematic evaluation: assign weights to criteria, score each option</p>
+
+      <h3>Framework vs Mandate</h3>
+      <ul>
+        <li><strong>Framework</strong> = Guidance, voluntary adoption (decentralized orgs)</li>
+        <li><strong>Mandate</strong> = Policy enforcement, compliance required (regulated)</li>
+      </ul>
+
+      <h3>Decision Checklist</h3>
+      <ul>
+        <li>✓ Stakeholders consulted?</li>
+        <li>✓ Requirements prioritized (MoSCoW)?</li>
+        <li>✓ Root cause found (Seven Whys)?</li>
+        <li>✓ Options evaluated (4 dimensions)?</li>
+        <li>✓ Trade-offs documented?</li>
+        <li>✓ Decision defensible with evidence?</li>
+        <li>✓ PoC conducted?</li>
+        <li>✓ ADR created?</li>
+        <li>✓ Rollback/exit plan exists?</li>
+        <li>✓ Success metrics defined?</li>
+      </ul>
+    </div>
+
+    <!-- CISA ZT MATURITY MODEL -->
+    <div class="section">
+      <h2>CISA Zero Trust Maturity Model v2</h2>
+
+      <h3>5 Pillars</h3>
+      <ol>
+        <li><strong>Identity</strong> - MFA, phishing-resistant auth, continuous validation</li>
+        <li><strong>Devices</strong> - Complete inventory, compliance enforcement, EDR</li>
+        <li><strong>Networks</strong> - Microsegmentation, encrypted traffic, DNS security</li>
+        <li><strong>Apps/Workloads</strong> - Secure SDLC, API security, code signing</li>
+        <li><strong>Data</strong> - Classification, encryption, DLP, rights mgmt</li>
+      </ol>
+
+      <h3>3 Cross-Cutting Capabilities <span class="new-tag">NEW</span></h3>
+      <ol>
+        <li><strong>Visibility & Analytics</strong> - SIEM/SOAR, UEBA, threat intel</li>
+        <li><strong>Automation & Orchestration</strong> - Automated response, provisioning</li>
+        <li><strong>Governance</strong> - Policies, compliance, risk mgmt</li>
+      </ol>
+
+      <h3>4 Maturity Levels</h3>
+      <table>
+        <tr><th>Level</th><th>Characteristics</th></tr>
+        <tr><td><strong>Traditional</strong></td><td>Perimeter-based, manual, static</td></tr>
+        <tr><td><strong>Initial</strong></td><td>Some automation, basic MFA</td></tr>
+        <tr><td><strong>Advanced</strong></td><td>Centralized visibility, dynamic policies</td></tr>
+        <tr><td><strong>Optimal</strong></td><td>Fully automated, real-time, self-healing</td></tr>
+      </table>
+      <div class="exam-trap"><strong>EXAM TRAP:</strong> Orgs must progress sequentially - can't skip levels!</div>
+
+      <h3>Implementation Sequence <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic">Identity First → Segmentation → SDP</div>
+    </div>
+
+    <!-- CASE STUDY 1: HEALTHCARE -->
+    <div class="section">
+      <h2>Case Study 1: EY Healthcare</h2>
+
+      <h3>Context</h3>
+      <ul>
+        <li>Cancer center + Level 1 trauma</li>
+        <li>2M+ patients/year</li>
+        <li>25,000+ managed devices</li>
+        <li>Extensive IoT medical devices</li>
+        <li>Legacy systems, can't patch (FDA)</li>
+      </ul>
+
+      <h3>Key Stats <span class="new-tag">NEW</span></h3>
+      <ul>
+        <li><strong>$11M</strong> avg healthcare breach cost (2023)</li>
+        <li><strong>53%</strong> increase over 3 years</li>
+        <li><strong>8 months</strong> to detect & resolve</li>
+        <li><strong>12%+</strong> of annual spend on incidents</li>
+        <li><strong>$80M+</strong> revenue protected</li>
+      </ul>
+
+      <h3>Solution</h3>
+      <ul>
+        <li>Managed Threat Detection (EY)</li>
+        <li>Behavior-based EDR</li>
+        <li>Splunk (SIEM)</li>
+        <li>CrowdStrike (threat intel)</li>
+        <li>SOAR - <strong>automates 80% of routine responses</strong> <span class="new-tag">NEW</span></li>
+      </ul>
+
+      <h3>Results</h3>
+      <ul>
+        <li><strong>50%</strong> increase in detection capability</li>
+        <li>Reduced MTTD & MTTR</li>
+        <li>Continuous monitoring of previously unmonitored devices</li>
+      </ul>
+
+      <h3>Lessons</h3>
+      <ul>
+        <li>Availability > Confidentiality in healthcare</li>
+        <li>Segment what you can't patch</li>
+        <li>SOAR essential at scale</li>
+        <li>Managed services solve talent gaps</li>
+        <li>"Partnership not abdication"</li>
+      </ul>
+    </div>
+
+    <!-- CASE STUDY 2: CIMPRESS -->
+    <div class="section">
+      <h2>Case Study 2: Cimpress/Vistaprint</h2>
+
+      <h3>Context</h3>
+      <ul>
+        <li>$2B global company</li>
+        <li>16,000+ employees, 20+ countries</li>
+        <li>30-person security team</li>
+        <li>Decentralized subsidiaries</li>
+        <li>100% cloud-native, NO internal network</li>
+      </ul>
+
+      <h3>Approach: Zero Trust</h3>
+      <div class="mnemonic">"Lead by Example, Not Mandate" <span class="new-tag">NEW</span></div>
+
+      <h3>3-Phase Implementation</h3>
+      <ol>
+        <li><strong>Phase 1</strong> - Deploy at corporate (8-9K users)</li>
+        <li><strong>Phase 2</strong> - Demonstrate value (COVID proof)</li>
+        <li><strong>Phase 3</strong> - Gradual subsidiary rollout</li>
+      </ol>
+
+      <h3>Key Elements</h3>
+      <ul>
+        <li>MFA deployed first (quick win)</li>
+        <li><strong>Security Champions</strong> - 18-month program <span class="new-tag">NEW</span></li>
+        <li>Device-first approach with MDM</li>
+        <li>"SaaS-ify" each business unit</li>
+      </ul>
+
+      <h3>Results</h3>
+      <ul>
+        <li><strong>MTTD: months → hours</strong> <span class="new-tag">NEW</span></li>
+        <li>Seamless COVID WFH ("flip the switch")</li>
+        <li>Centralized visibility across subsidiaries</li>
+        <li>Fewer password tickets post-MFA</li>
+      </ul>
+
+      <h3>Lessons</h3>
+      <ul>
+        <li><strong>ZT is a framework, NOT a product</strong></li>
+        <li>Start with quick wins (MFA first)</li>
+        <li>COVID proved the architecture</li>
+        <li>Identity is the new perimeter</li>
+        <li>Cloud-native eliminates network dependency</li>
+      </ul>
+
+      <h3>4 Success Factors <span class="new-tag">NEW</span></h3>
+      <div class="mnemonic">Context · Phases · Metrics · Partnerships</div>
+    </div>
+
+    <!-- CROWDSTRIKE 2025 -->
+    <div class="section">
+      <h2>CrowdStrike Threat Landscape 2025</h2>
+
+      <h3>Key Stats</h3>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>China-nexus ops</td><td><strong>+150%</strong> surge</td></tr>
+        <tr><td>eCrime breakout time</td><td><strong>48 min</strong> avg (fastest: 51 sec)</td></tr>
+        <tr><td>Vishing attacks</td><td><strong>+442%</strong></td></tr>
+        <tr><td>Malware-free access</td><td><strong>79%</strong> (valid creds, LOTL)</td></tr>
+        <tr><td>Cloud intrusions</td><td><strong>+26%</strong></td></tr>
+        <tr><td>Vulns for initial access</td><td><strong>52%</strong></td></tr>
+        <tr><td>Access brokers</td><td><strong>+50%</strong> in 2024</td></tr>
+      </table>
+
+      <h3>Notable Threats</h3>
+      <ul>
+        <li><strong>FAMOUS CHOLLIMA</strong> (DPRK) - Insider threat via fake employees</li>
+        <li><strong>CURLY SPIDER</strong> - Social engineering/vishing</li>
+        <li><strong>Scattered Spider</strong> <span class="new-tag">NEW</span> - MFA reset attacks, help desk targeting</li>
+      </ul>
+
+      <h3>Implications</h3>
+      <ul>
+        <li>Identity is the new perimeter</li>
+        <li>Assume breach mentality</li>
+        <li>Behavioral detection > signatures</li>
+        <li>CSPM essential</li>
+        <li>ZT mandatory</li>
+        <li>48-min window = automated detection needed</li>
+      </ul>
+    </div>
+
+    <!-- COMPLIANCE FRAMEWORKS -->
+    <div class="section">
+      <h2>Compliance Frameworks</h2>
+
+      <table>
+        <tr><th>Framework</th><th>Scope</th><th>Key Requirement</th></tr>
+        <tr><td><strong>GDPR</strong></td><td>EU data protection</td><td>72hr breach notify, privacy by design</td></tr>
+        <tr><td><strong>HIPAA</strong></td><td>US healthcare</td><td>60-day notify to HHS, PHI protection</td></tr>
+        <tr><td><strong>PCI-DSS</strong></td><td>Payment cards</td><td>12 requirements, quarterly scans</td></tr>
+        <tr><td><strong>SOX</strong></td><td>US financials</td><td>Internal controls, audit trails</td></tr>
+        <tr><td><strong>FISMA</strong></td><td>US federal</td><td>NIST-based, continuous monitoring</td></tr>
+        <tr><td><strong>ISO 27001</strong></td><td>International</td><td>Risk-based, 93 controls</td></tr>
+        <tr><td><strong>NIST CSF</strong></td><td>Voluntary US</td><td>Identify, Protect, Detect, Respond, Recover</td></tr>
+      </table>
+    </div>
+
+    <!-- KEY DEFINITIONS -->
+    <div class="section">
+      <h2>Key Definitions</h2>
+
+      <h3>Core Concepts</h3>
+      <ul>
+        <li><strong>Threat</strong> - Potential cause of unwanted incident</li>
+        <li><strong>Vulnerability</strong> - Weakness that can be exploited</li>
+        <li><strong>Risk</strong> - Likelihood × Impact</li>
+        <li><strong>Control</strong> - Safeguard that reduces risk</li>
+        <li><strong>Attack Surface</strong> - Total entry/exit points</li>
+        <li><strong>Blast Radius</strong> - Scope of damage from breach</li>
+      </ul>
+
+      <h3>Principles</h3>
+      <ul>
+        <li><strong>Least Privilege</strong> - Minimum access needed</li>
+        <li><strong>Separation of Duties</strong> - No single person controls all</li>
+        <li><strong>Need-to-Know</strong> - Access only for job function</li>
+        <li><strong>Defense in Depth</strong> - Layered controls</li>
+        <li><strong>Security by Design</strong> - Integrated from start</li>
+        <li><strong>Assume Breach</strong> - Design for inevitable compromise</li>
+      </ul>
+
+      <h3>Detection & Response</h3>
+      <ul>
+        <li><strong>EDR</strong> - Endpoint Detection & Response</li>
+        <li><strong>XDR</strong> - Extended DR (cross-layer)</li>
+        <li><strong>MDR</strong> - Managed DR (outsourced SOC)</li>
+        <li><strong>SIEM</strong> - Security Info & Event Mgmt</li>
+        <li><strong>SOAR</strong> - Security Orchestration, Automation & Response</li>
+      </ul>
+
+      <h3>Metrics</h3>
+      <ul>
+        <li><strong>MTTD</strong> - Mean Time to Detect</li>
+        <li><strong>MTTR</strong> - Mean Time to Respond/Recover</li>
+        <li><strong>MTBF</strong> - Mean Time Between Failures</li>
+        <li><strong>RPO</strong> - Recovery Point Objective (max data loss)</li>
+        <li><strong>RTO</strong> - Recovery Time Objective (max downtime)</li>
+      </ul>
+
+      <h3>Auth & Access</h3>
+      <ul>
+        <li><strong>RBAC</strong> - Role-Based Access Control</li>
+        <li><strong>ABAC</strong> - Attribute-Based (most flexible)</li>
+        <li><strong>MAC</strong> - Mandatory (gov/military labels)</li>
+        <li><strong>DAC</strong> - Discretionary (owner controls)</li>
+        <li><strong>SSO</strong> - Single Sign-On</li>
+        <li><strong>SAML 2.0</strong> - XML federation</li>
+        <li><strong>OAuth 2.0</strong> - Authorization</li>
+        <li><strong>OIDC</strong> - Identity layer on OAuth</li>
+      </ul>
+    </div>
+
+    <!-- EXAM TRAPS -->
+    <div class="section">
+      <h2>Exam Traps & Distinctions</h2>
+
+      <div class="exam-trap">
+        <strong>FR vs NFR:</strong> "MFA in &lt;5s 99.9%" = NFR (performance). "System must use MFA" = FR.
+      </div>
+
+      <div class="exam-trap">
+        <strong>Zachman vs SABSA vs TOGAF:</strong> Zachman = taxonomy (NO process), SABSA = business-driven, TOGAF = ADM process
+      </div>
+
+      <div class="exam-trap">
+        <strong>Engage vs D3FEND:</strong> Engage = ACTIVE/OFFENSIVE, D3FEND = PASSIVE/DEFENSIVE
+      </div>
+
+      <div class="exam-trap">
+        <strong>ATT&CK vs Kill Chain:</strong> ATT&CK = NON-LINEAR (any tactic), Kill Chain = LINEAR (7 steps)
+      </div>
+
+      <div class="exam-trap">
+        <strong>Redundancy vs Diversity:</strong> Redundancy = same tech (availability), Diversity = different tech (attack resistance)
+      </div>
+
+      <div class="exam-trap">
+        <strong>Risk Appetite vs Tolerance:</strong> Appetite = how much WANTED (strategic), Tolerance = acceptable VARIANCE (operational)
+      </div>
+
+      <div class="exam-trap">
+        <strong>Policy vs Standard vs Procedure:</strong> Policy = WHAT, Standard = HOW, Procedure = step-by-step
+      </div>
+
+      <div class="exam-trap">
+        <strong>CISA ZTMM:</strong> Orgs must progress sequentially through maturity levels
+      </div>
+    </div>
+
+    <!-- QUICK REFERENCE -->
+    <div class="section">
+      <h2>Quick Reference</h2>
+
+      <h3>Learning Objectives</h3>
+      <ul>
+        <li><strong>CLO1:</strong> Risk management processes</li>
+        <li><strong>CLO2:</strong> Align security with mission</li>
+        <li><strong>CLO3:</strong> Explain MITRE ATT&CK</li>
+        <li><strong>CLO4:</strong> Apply security standards</li>
+        <li><strong>CLO5:</strong> Design resilient systems</li>
+      </ul>
+
+      <h3>Key Formulas</h3>
+      <div class="formula">Risk = Likelihood × Impact</div>
+      <div class="formula">Residual Risk = Risk after controls</div>
+      <div class="formula">TCO = License + Implement + Train + Maintain + Decommission</div>
+
+      <h3>Key Numbers</h3>
+      <ul>
+        <li><strong>14</strong> ATT&CK Tactics</li>
+        <li><strong>5</strong> D3FEND Categories</li>
+        <li><strong>6</strong> SABSA Layers</li>
+        <li><strong>7</strong> PASTA Stages</li>
+        <li><strong>7</strong> NIST 800-207 Tenets</li>
+        <li><strong>5</strong> CISA ZT Pillars</li>
+        <li><strong>4</strong> CISA ZT Maturity Levels</li>
+        <li><strong>48 min</strong> avg eCrime breakout</li>
+        <li><strong>79%</strong> malware-free access</li>
+        <li><strong>$11M</strong> healthcare breach cost</li>
+      </ul>
+
+      <h3>Case Comparison</h3>
+      <table>
+        <tr><th></th><th>Healthcare</th><th>Cimpress</th></tr>
+        <tr><td>Approach</td><td>Managed SOC</td><td>Zero Trust</td></tr>
+        <tr><td>Strategy</td><td>Outsource</td><td>Lead by example</td></tr>
+        <tr><td>Key Win</td><td>50% detect ↑</td><td>COVID WFH</td></tr>
+        <tr><td>Lesson</td><td>Behavior-based</td><td>ZT ≠ product</td></tr>
+      </table>
+    </div>
+
+  </div>
+</body>
+</html>

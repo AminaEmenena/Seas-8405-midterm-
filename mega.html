@@ -334,6 +334,20 @@
   }
   .btn-reset:hover { background: var(--accent1); color: #fff; }
 
+  .btn-shuffle {
+    padding: 14px 32px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #9775FA, #a78bfa);
+    color: #fff; font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-shuffle:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(151,117,250,0.4); }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
   .section-header {
     font-size: 1.15em; font-weight: 800; color: var(--accent1);
     padding: 14px 20px; margin: 28px 0 12px;
@@ -451,8 +465,10 @@
     <div class="controls">
       <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
       <button class="btn-reset" onclick="resetExam()">Reset</button>
+      <button class="btn-shuffle" onclick="shuffleAndReset()" style="background: linear-gradient(135deg, #9775FA, #a78bfa); margin-left: 10px;">Shuffle Questions</button>
     </div>
-    
+
+    <div id="questions-container">
     <!-- WEEK 1: Foundations + MITRE -->
     <div class="section-header">Week 1: Foundations & MITRE (Questions 1-15)</div>
     
@@ -1276,7 +1292,8 @@
       <label onclick="pick(100,2)">C) Compliance drives all decisions</label>
       <label onclick="pick(100,3)">D) Context drives decisions — no universal right answer; use phased approaches with measurable outcomes</label>
     </div>
-    
+    </div><!-- end questions-container -->
+
     <div id="result">
       <div class="result-label">Exam Results</div>
       <div style="margin-bottom: 20px;"></div>
@@ -1491,6 +1508,62 @@
       document.getElementById('result').style.display = 'none';
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function shuffleAndReset() {
+      // Reset first
+      resetExam();
+
+      var container = document.getElementById('questions-container');
+      var questions = Array.from(container.querySelectorAll('.mq'));
+      var headers = Array.from(container.querySelectorAll('.section-header'));
+
+      // Remove all questions and headers
+      questions.forEach(function(q) { q.remove(); });
+      headers.forEach(function(h) { h.remove(); });
+
+      // Shuffle questions
+      shuffleArray(questions);
+
+      // Add a single header
+      var newHeader = document.createElement('div');
+      newHeader.className = 'section-header';
+      newHeader.textContent = 'Randomized Questions (1-100)';
+      newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
+      container.insertBefore(newHeader, container.firstChild);
+
+      // Re-add questions with new numbers
+      questions.forEach(function(q, idx) {
+        var num = idx + 1;
+        var qnum = q.querySelector('.qnum');
+        if (qnum) qnum.textContent = num;
+        container.appendChild(q);
+      });
+
+      // Show notification
+      var notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#9775FA;color:#fff;padding:12px 24px;border-radius:25px;font-weight:600;z-index:1000;animation:fadeOut 2s forwards;';
+      notif.textContent = 'Questions shuffled! Good luck!';
+      document.body.appendChild(notif);
+      setTimeout(function() { notif.remove(); }, 2000);
+
+      // Reset timer
+      startTime = Date.now();
+    }
+
+    // Shuffle on page load for fresh experience each time
+    document.addEventListener('DOMContentLoaded', function() {
+      shuffleAndReset();
+    });
   </script>
 </body>
 </html>
