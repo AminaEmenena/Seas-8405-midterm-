@@ -406,6 +406,28 @@
   }
   .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
 
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -1133,10 +1155,30 @@
                 </ul>
                 <p style="margin-top: 15px;">Not about perfection initially — close enough to refine with stakeholders.</p>
                 <div class="blue"><b>KEY:</b> Scope is not a one-time event. It evolves as you learn more about the organization, technology, and constraints. Think of it as a living document.</div>
+
+                <div class="ascii-diagram-title">Scope Development - Iterative Process</div>
+<div class="ascii-diagram">┌────────────────────────────────────────────────────────────────────┐
+│                  SCOPE DEVELOPMENT LIFECYCLE                       │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                    │
+│  1. INITIAL        2. REQUIREMENTS     3. DESIGN        4. FINAL  │
+│     SCOPE             GATHERING        DEVELOPMENT       SCOPE    │
+│                                                                    │
+│  ┌─────────┐       ┌─────────┐       ┌─────────┐      ┌─────────┐│
+│  │ First   │ ────► │Stakeholder│────►│ Adjust  │ ───► │Document │ │
+│  │ Draft   │       │ Input    │      │ for     │      │ & Lock  │ │
+│  │ (rough) │       │          │      │ Reality │      │         │ │
+│  └─────────┘       └─────────┘       └─────────┘      └─────────┘│
+│       │                 │                 │                │      │
+│       └────────────── ITERATE ────────────┘                │      │
+│                                                            │      │
+│                    "If not in SOW, we don't do it" ◄───────┘      │
+└────────────────────────────────────────────────────────────────────┘</div>
+
                 <div class="prof"><strong>Prof. Le's Tip:</strong> The first scope you write will be wrong. Plan for it. Build in buffer and stakeholder time to refine. That's not failure—that's the process.</div>
             </div>
         </details>
-        
+
         <details>
             <summary>💡 3. Advantages of Setting Scope</summary>
             <div class="content">
@@ -1181,9 +1223,33 @@
                     <li><strong>Systematic approach:</strong> Selection, application, operationalization, monitoring of security decisions across enterprise</li>
                 </ul>
                 <div class="blue"><b>KEY:</b> Enterprise Security Architecture is about what surrounds and supports applications, not the applications themselves. Build the secure environment; apps live inside it.</div>
+
+                <div class="ascii-diagram-title">Enterprise Security Architecture Layers</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────┐
+│              ENTERPRISE SECURITY ARCHITECTURE                       │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │  GOVERNANCE & POLICY (Standards, Compliance, Risk Mgmt)     │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                              │                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │  ADMINISTRATIVE CONTROLS (Procedures, Training, Awareness)  │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                              │                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │  TECHNICAL CONTROLS (Firewalls, IDS, Encryption, IAM)       │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                              │                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │  OPERATIONAL SECURITY (Monitoring, Incident Response)       │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                     │
+│   Focus: Environment around apps, not apps themselves               │
+└─────────────────────────────────────────────────────────────────────┘</div>
             </div>
         </details>
-        
+
         <details>
             <summary>📊 6. Organizational and Technology Boundaries</summary>
             <div class="content">
@@ -1232,6 +1298,27 @@
                     <li><strong>Step 3: Set Initial Scope</strong> — Crystallize boundaries. What's in, what's out, what's middle ground. Must include core systems and critical functions.</li>
                     <li><strong>Step 4: Validate and Refine</strong> — Stakeholder feedback loop. Go back to stakeholders. Demonstrates listening, catches blind spots, saves time long-term. <span class="quote">Don't make decisions in isolation.</span></li>
                 </ul>
+                <div class="ascii-diagram-title">Four-Step Scope Setting Process</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────┐
+│             FOUR-STEP SCOPE SETTING PROCESS                     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   STEP 1           STEP 2           STEP 3         STEP 4      │
+│  ┌─────────┐     ┌─────────┐     ┌─────────┐    ┌─────────┐    │
+│  │HIGH-LEVEL│────►│CONTEXTUAL│───►│ INITIAL │───►│VALIDATE │    │
+│  │  GOALS   │     │CONSTRAINTS│    │  SCOPE  │    │& REFINE │    │
+│  ├─────────┤     ├─────────┤     ├─────────┤    ├─────────┤    │
+│  │Review    │     │Technology │    │What's in │    │Stakeholder│   │
+│  │docs,     │     │boundaries │    │What's out│    │feedback   │   │
+│  │talk to   │     │Org limits │    │Core      │    │loop       │   │
+│  │stakeholders│   │Risk scope │    │systems   │    │           │   │
+│  └─────────┘     └─────────┘     └─────────┘    └─────────┘    │
+│       │               │               │              │          │
+│       └───────────── Each step informs the next ────┘          │
+│                                                                 │
+│   Memory: "Goals → Constraints → Boundaries → Validation"       │
+└─────────────────────────────────────────────────────────────────┘</div>
+
                 <div class="blue"><b>KEY:</b> The 4-step process is your roadmap. Follow it in order. Each step informs the next. Skip steps and you'll miss critical stakeholders or constraints.</div>
                 <div class="mem"><small>Remember This</small><br><strong>"Goals → Constraints → Boundaries → Validation"</strong></div>
                 <div class="prof"><strong>Prof. Le's Tip:</strong> Step 4 is where most people cut corners due to time pressure. That's where the real work happens. Invest in validation—it saves rework later.</div>
@@ -1289,8 +1376,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">1</span> Why does scope matter in security architecture?</p>
         <div class="options">
           <div class="opt">It determines the budget for the project</div>
@@ -1301,7 +1395,7 @@
         <div class="explanation">Scope defines what is being protected and against what threats. Security requirements logically flow from scope boundaries.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="easy">
         <p><span class="qnum">2</span> How many phases does the iterative scope-setting process have?</p>
         <div class="options">
           <div class="opt">2 phases</div>
@@ -1312,7 +1406,7 @@
         <div class="explanation">The four phases are: Initial Scope Setting → Requirements Gathering → Design Development → Scope Documentation.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">3</span> What is "empty scope" and what causes it?</p>
         <div class="options">
           <div class="opt">When scope is so constrained by debt, barriers, or constraints that it's effectively zero — need to address foundation first</div>
@@ -1323,7 +1417,7 @@
         <div class="explanation">Empty scope = overwhelming constraints, technical debt, or organizational barriers make architecture impossible. "A house on quicksand — address foundation first."</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">4</span> What does Enterprise Security Architecture focus on?</p>
         <div class="options">
           <div class="opt">Writing application code</div>
@@ -1334,7 +1428,7 @@
         <div class="explanation">Enterprise Security Architecture focuses on controls, countermeasures, and operational constraints around existing applications — not changing the software itself.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
         <p><span class="qnum">5</span> Which architecture style makes it EASIEST to set scope at component/service level?</p>
         <div class="options">
           <div class="opt">Monolithic (tight integration)</div>
@@ -1345,7 +1439,7 @@
         <div class="explanation">Microservices architecture makes it much easier to carve scope at individual service level due to modularity and stateless design.</div>
       </div>
 
-      <div class="quiz-q" data-correct="3">
+      <div class="quiz-q" data-correct="3" data-difficulty="medium">
         <p><span class="qnum">6</span> Which development model allows scope to adjust weekly as new services spin up?</p>
         <div class="options">
           <div class="opt">1970s Waterfall</div>
@@ -1356,7 +1450,7 @@
         <div class="explanation">DevOps enables continuous delivery where scope adjusts weekly. "Amazon deploying every minute."</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">7</span> What are the 4 steps in the scope-setting process?</p>
         <div class="options">
           <div class="opt">Consider Goals → Review Constraints → Set Initial Scope → Validate and Refine</div>
@@ -1367,7 +1461,7 @@
         <div class="explanation">The 4-step process: (1) Consider High-Level Goals, (2) Review Contextual Constraints, (3) Set Initial Scope, (4) Validate and Refine with stakeholders.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
         <p><span class="qnum">8</span> What is the Scope-Setting Catch-22?</p>
         <div class="options">
           <div class="opt">You can't set scope without funding, but can't get funding without scope</div>
@@ -1378,7 +1472,7 @@
         <div class="explanation">The catch-22: until you validate with stakeholders, scope likely falls short — but how do you talk to stakeholders without knowing borders? Solution: two-phase approach with initial scope that allows for refinement.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="hard">
         <p><span class="qnum">9</span> What type of boundary exists when retail banking and brokerage teams handle different parts of the same application?</p>
         <div class="options">
           <div class="opt">Technology boundary</div>
@@ -1389,7 +1483,7 @@
         <div class="explanation">This is an organizational boundary — multiple business units responsible for different portions with different teams and priorities.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">10</span> What risk framework can be directly used as scope input?</p>
         <div class="options">
           <div class="opt">ISO 27001/ISMS scope — directly incorporate or reference existing risk management scope</div>
@@ -1400,7 +1494,7 @@
         <div class="explanation">ISO 27001/ISMS includes formal scope definition. ISO 31000, NIST RMF, OCTAVE all include scope definition that can be incorporated directly.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">11</span> What is the biggest risk to managing scope during execution?</p>
         <div class="options">
           <div class="opt">Stakeholder disagreement</div>
@@ -1411,7 +1505,7 @@
         <div class="explanation">While scope is iterative, uncontrolled scope creep destroys projects. Freeze scope during execution; changes require agreement and re-validation.</div>
       </div>
 
-      <div class="quiz-q" data-correct="3">
+      <div class="quiz-q" data-correct="3" data-difficulty="hard">
         <p><span class="qnum">12</span> What is a technology boundary example that impacts scope?</p>
         <div class="options">
           <div class="opt">Multiple stakeholders with different priorities</div>
@@ -1649,6 +1743,25 @@
   }
 })();
 
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
 // ═══ STUDY TIMER ═══
 (function() {
   let timerState = { studyMinutes: 25, breakMinutes: 5, secondsRemaining: 25 * 60, isRunning: false, isBreak: false, totalStudySeconds: 0, sessionsCompleted: 0, currentStreak: 0, intervalId: null };
@@ -1782,6 +1895,104 @@
   window.resetAllBlanks = function() { fbCorrect = 0; fbItems.forEach(item => { item.classList.remove('checked', 'correct', 'wrong'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); input.value = ''; input.disabled = false; input.classList.remove('correct', 'wrong'); input.placeholder = '________'; feedback.innerHTML = ''; feedback.classList.remove('correct', 'wrong'); }); updateFbScore(); };
   fbItems.forEach(item => { const input = item.querySelector('.fb-input'); input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); });
   updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">Scope</div>
+      <div class="match-term" data-match="2">Empty Scope</div>
+      <div class="match-term" data-match="3">Scope Creep</div>
+      <div class="match-term" data-match="4">Enterprise Security Architecture</div>
+      <div class="match-term" data-match="5">Microservices</div>
+      <div class="match-term" data-match="6">Monolith</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="3">Iterative scope WITHOUT control during execution</div>
+      <div class="match-def" data-match="6">All-or-nothing architecture, harder to scope</div>
+      <div class="match-def" data-match="4">Controls AROUND applications, not the apps themselves</div>
+      <div class="match-def" data-match="1">Foundation from which requirements flow</div>
+      <div class="match-def" data-match="5">Flexible scope, independent component deployment</div>
+      <div class="match-def" data-match="2">Constraints make architecture impossible - fix foundation</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
 })();
 </script>
 

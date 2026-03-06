@@ -1001,8 +1001,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">1</span> 1. Why did healthcare choose managed services over building SOC?</p>
         <div class="options">
           <div class="opt">Managed services were cheaper than building from scratch</div>
@@ -1013,7 +1020,7 @@
         <div class="explanation">answer: Managed services were cheaper than building from scratch</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">2</span> 2. What tools did healthcare deploy? (Select all that apply)</p>
         <div class="options">
           <div class="opt">EDR (Endpoint Detection and Response)</div>
@@ -1024,7 +1031,7 @@
         <div class="explanation">answer: EDR (Endpoint Detection and Response)</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">3</span> 3. What was the percentage increase in healthcare cyber incident detection and remediation?</p>
         <div class="options">
           <div class="opt">25%+ increase</div>
@@ -1035,7 +1042,7 @@
         <div class="explanation">answer: 25%+ increase</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">4</span> 4. What was the primary organizational challenge for Cimpress?</p>
         <div class="options">
           <div class="opt">They had only one technology stack</div>
@@ -1046,7 +1053,7 @@
         <div class="explanation">answer: They had only one technology stack</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">5</span> 5. Why did Zero Trust fit Cimpress's needs?</p>
         <div class="options">
           <div class="opt">It's the cheapest security solution</div>
@@ -1057,7 +1064,7 @@
         <div class="explanation">answer: It's the cheapest security solution</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">6</span> 6. What was Cimpress's Phase 1 of the Zero Trust strategic approach?</p>
         <div class="options">
           <div class="opt">Mandate all subsidiaries to implement immediately</div>
@@ -1068,7 +1075,7 @@
         <div class="explanation">answer: Mandate all subsidiaries to implement immediately</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">7</span> 7. What does SOAR stand for and what does it do?</p>
         <div class="options">
           <div class="opt">Security Operations Alert Response - monitors alerts only</div>
@@ -1079,7 +1086,7 @@
         <div class="explanation">answer: Security Operations Alert Response - monitors alerts only</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">8</span> 8. What is a common cross-case pattern mentioned in both case studies?</p>
         <div class="options">
           <div class="opt">Both required large upfront capital investments</div>
@@ -1090,7 +1097,7 @@
         <div class="explanation">answer: Both required large upfront capital investments</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">9</span> 9. What was the average healthcare breach cost in 2023?</p>
         <div class="options">
           <div class="opt">Approximately $5 million</div>
@@ -1101,7 +1108,7 @@
         <div class="explanation">answer: Approximately $5 million</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">10</span> 10. How did Cimpress's security team approach rolling out Zero Trust to business units?</p>
         <div class="options">
           <div class="opt">Through mandates and command-and-control authority</div>
@@ -1232,6 +1239,25 @@
     updateScore();
   });
 })();
+
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
 
 // ═══ STUDY TIMER ═══
 (function() {

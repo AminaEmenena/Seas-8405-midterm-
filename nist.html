@@ -938,8 +938,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">1</span> What is the core principle of Zero Trust Architecture?</p>
         <div class="options">
           <div class="opt">Trust everything inside the network perimeter</div>
@@ -950,7 +957,7 @@
         <div class="explanation">Zero Trust eliminates implicit trust. Every access request must be verified regardless of network location, device, or previous authentication.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">2</span> What does the Policy Engine (PE) do in Zero Trust?</p>
         <div class="options">
           <div class="opt">Makes the ultimate decision to grant or deny access based on policy and trust algorithm</div>
@@ -961,7 +968,7 @@
         <div class="explanation">The PE is the brain — it evaluates access requests against policy rules and the trust algorithm, then makes grant/deny decisions.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="easy">
         <p><span class="qnum">3</span> What does the Policy Enforcement Point (PEP) do?</p>
         <div class="options">
           <div class="opt">Decides whether to grant access</div>
@@ -972,7 +979,7 @@
         <div class="explanation">The PEP is the gatekeeper — it enables, monitors, and can terminate connections based on PE decisions. It's the enforcement layer.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
         <p><span class="qnum">4</span> What does the Policy Administrator (PA) do?</p>
         <div class="options">
           <div class="opt">Makes access decisions</div>
@@ -983,7 +990,7 @@
         <div class="explanation">The PA is the communicator — it takes PE decisions and instructs the PEP to establish or shut down sessions accordingly.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">5</span> What inputs does the Trust Algorithm use to calculate trust scores?</p>
         <div class="options">
           <div class="opt">User identity, device health, behavior patterns, threat intelligence, and resource sensitivity</div>
@@ -994,7 +1001,7 @@
         <div class="explanation">The Trust Algorithm considers multiple signals: identity strength, device health/compliance, behavioral patterns, threat intel feeds, and resource sensitivity level.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
         <p><span class="qnum">6</span> What are the 5 Pillars of the CISA Zero Trust Maturity Model?</p>
         <div class="options">
           <div class="opt">Authentication, Authorization, Accounting, Auditing, Alerting</div>
@@ -1005,7 +1012,7 @@
         <div class="explanation">CISA's 5 pillars: Identity, Devices, Networks, Applications & Workloads, and Data — each must progress through maturity levels.</div>
       </div>
 
-      <div class="quiz-q" data-correct="3">
+      <div class="quiz-q" data-correct="3" data-difficulty="medium">
         <p><span class="qnum">7</span> What are the 4 maturity levels in the CISA Zero Trust model?</p>
         <div class="options">
           <div class="opt">Basic, Intermediate, Advanced, Expert</div>
@@ -1016,7 +1023,7 @@
         <div class="explanation">The four maturity levels: Traditional (perimeter-based), Initial (starting ZT), Advanced (automated controls), Optimal (fully integrated, continuous).</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">8</span> Which Zero Trust deployment approach focuses primarily on identity?</p>
         <div class="options">
           <div class="opt">Enhanced Identity Governance — uses identity as the primary control plane</div>
@@ -1027,7 +1034,7 @@
         <div class="explanation">Enhanced Identity Governance makes identity the primary control plane for access decisions, focusing on strong authentication, authorization, and continuous verification.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">9</span> Which NIST 800-207 tenet states "access is granted on a per-session basis"?</p>
         <div class="options">
           <div class="opt">All data sources and computing services are considered resources</div>
@@ -1038,7 +1045,7 @@
         <div class="explanation">Per-session access means no persistent trust. Each new session requires re-evaluation of trust — previous authentication doesn't carry forward automatically.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">10</span> What is the recommended first step when implementing Zero Trust?</p>
         <div class="options">
           <div class="opt">Start with identity (MFA, SSO) as the foundation before expanding to other pillars</div>
@@ -1169,6 +1176,25 @@
     updateScore();
   });
 })();
+
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
 
 // ═══ STUDY TIMER ═══
 (function() {

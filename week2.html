@@ -406,6 +406,28 @@
   }
   .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
 
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -1807,6 +1829,24 @@
 
                 <div class="mem"><small>STRIDE Threats</small><br><strong>Spoofing · Tampering · Repudiation · Info Disclosure · DoS · Elevation</strong></div>
 
+                <div class="ascii-diagram-title">STRIDE Threat Model Framework</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────┐
+│                    STRIDE THREAT MODEL                      │
+├─────────────────────────────────────────────────────────────┤
+│  S  │ SPOOFING            │ Impersonating someone/something │
+├─────┼─────────────────────┼─────────────────────────────────┤
+│  T  │ TAMPERING           │ Modifying data or code          │
+├─────┼─────────────────────┼─────────────────────────────────┤
+│  R  │ REPUDIATION         │ Denying actions were taken      │
+├─────┼─────────────────────┼─────────────────────────────────┤
+│  I  │ INFO DISCLOSURE     │ Exposing data to unauthorized   │
+├─────┼─────────────────────┼─────────────────────────────────┤
+│  D  │ DENIAL OF SERVICE   │ Making systems unavailable      │
+├─────┼─────────────────────┼─────────────────────────────────┤
+│  E  │ ELEVATION OF PRIV   │ Gaining unauthorized access     │
+└─────┴─────────────────────┴─────────────────────────────────┘
+  Memory: "Some Thugs Rob Intel During Escapes"</div>
+
                 <p>MITRE ATT&CK provides a structured, community-driven knowledge base of adversary tactics and techniques based on real-world observations.</p>
 
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">STRIDE Threat Model (TM)</h3>
@@ -1864,6 +1904,25 @@
                         <li><strong>Impact:</strong> Damage if threat exploits vulnerability (financial, compliance, reputation)</li>
                     </ul>
                 </div>
+
+                <div class="ascii-diagram-title">Risk Formula Components</div>
+<div class="ascii-diagram">           ┌──────────────────────────────────────┐
+           │     RISK = T x V x I                  │
+           └──────────────────────────────────────┘
+                         │
+        ┌────────────────┼────────────────┐
+        ▼                ▼                ▼
+   ┌─────────┐     ┌─────────────┐   ┌─────────┐
+   │ THREAT  │     │VULNERABILITY│   │ IMPACT  │
+   │(T)      │     │(V)          │   │(I)      │
+   ├─────────┤     ├─────────────┤   ├─────────┤
+   │Who      │     │Weakness we  │   │Damage if│
+   │attacks? │     │can fix      │   │exploited│
+   │Intent + │     │             │   │         │
+   │Capability│    │             │   │$, Legal,│
+   └─────────┘     └─────────────┘   │Reputation│
+                                     └─────────┘
+  If ANY factor = 0, then Risk = 0</div>
 
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Risk Response Options</h3>
                 <ul>
@@ -1927,6 +1986,27 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div class="ascii-diagram-title">Impact vs Effort Matrix (Prioritization)</div>
+<div class="ascii-diagram">                    HIGH IMPACT
+                         │
+     ┌───────────────────┼───────────────────┐
+     │                   │                   │
+     │   MAJOR PROJECTS  │   QUICK WINS      │
+     │   (Plan & Phase)  │   (Do First!)     │
+     │                   │                   │
+     │   Zero Trust,     │   MFA, Patching,  │
+HIGH │   Cloud Migration │   Password Policy │ LOW
+EFFORT├───────────────────┼───────────────────┤EFFORT
+     │                   │                   │
+     │   DISTRACTIONS    │   NICE-TO-HAVE    │
+     │   (Avoid!)        │   (Fill Gaps)     │
+     │                   │                   │
+     │   Custom SIEM,    │   Dashboards,     │
+     │   Niche Features  │   Reports         │
+     └───────────────────┼───────────────────┘
+                         │
+                    LOW IMPACT</div>
 
                 <h3 style="color: #f0f6fc; margin-top: 20px; margin-bottom: 15px;">Prioritization Criteria (in order)</h3>
                 <ol>
@@ -2110,8 +2190,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">1</span> 1. What is the first step in the requirements lifecycle?</p>
         <div class="options">
           <div class="opt">Elicit requirements from stakeholders</div>
@@ -2122,7 +2209,7 @@
         <div class="explanation">answer: Elicit requirements from stakeholders</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">2</span> 2. What is the key difference between Functional and Non-Functional Requirements?</p>
         <div class="options">
           <div class="opt">FR = what system does, NFR = how well it performs</div>
@@ -2133,7 +2220,7 @@
         <div class="explanation">answer: FR = what system does, NFR = how well it performs</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">3</span> 3. What does 99.95% availability mean in terms of downtime per month?</p>
         <div class="options">
           <div class="opt">4.2 minutes</div>
@@ -2144,7 +2231,7 @@
         <div class="explanation">answer: 22 minutes</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">4</span> 4. What does SMART stand for?</p>
         <div class="options">
           <div class="opt">Secure, Measurable, Achievable, Relevant, Timely</div>
@@ -2155,7 +2242,7 @@
         <div class="explanation">answer: Specific, Measurable, Achievable, Relevant, Time-bound</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">5</span> 5. What is the key difference between Redundancy and Diversity?</p>
         <div class="options">
           <div class="opt">Redundancy = multiple identical resources; Diversity = different technologies</div>
@@ -2166,7 +2253,7 @@
         <div class="explanation">answer: Redundancy = multiple identical resources; Diversity = different technologies</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">6</span> 6. What does STRIDE stand for? (Pick the option that lists all 6 components)</p>
         <div class="options">
           <div class="opt">Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</div>
@@ -2177,7 +2264,7 @@
         <div class="explanation">answer: Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Escalation of Privilege</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
         <p><span class="qnum">7</span> 7. What is the Risk formula?</p>
         <div class="options">
           <div class="opt">Risk = Threat + Vulnerability + Impact</div>
@@ -2188,7 +2275,7 @@
         <div class="explanation">answer: Risk = Threat × Vulnerability × Impact</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
         <p><span class="qnum">8</span> 8. Which NFR category includes MFA response time requirements?</p>
         <div class="options">
           <div class="opt">Reliability</div>
@@ -2199,7 +2286,7 @@
         <div class="explanation">answer: Capability</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
         <p><span class="qnum">9</span> 9. What is NOT one of the 8 common pitfalls in requirements definition?</p>
         <div class="options">
           <div class="opt">Vague requirements</div>
@@ -2210,7 +2297,7 @@
         <div class="explanation">answer: Comprehensive documentation</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">10</span> 10. In the Impact vs Effort matrix, which quadrant represents "Quick Wins"?</p>
         <div class="options">
           <div class="opt">High Impact / Low Effort</div>
@@ -2221,7 +2308,7 @@
         <div class="explanation">answer: High Impact / Low Effort</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">11</span> 11. What is the correct order in the Requirements-to-MITRE mapping chain?</p>
         <div class="options">
           <div class="opt">Threat Analysis → Control ID → FR → NFR → Architecture</div>
@@ -2232,7 +2319,7 @@
         <div class="explanation">answer: Threat Analysis → Control ID → FR → NFR → Architecture</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">12</span> 12. Which industry has the LOWEST risk appetite for security decisions?</p>
         <div class="options">
           <div class="opt">Financial services and government/military</div>
@@ -2243,7 +2330,7 @@
         <div class="explanation">answer: Financial services and government/military</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">13</span> 13. Do Functional or Non-Functional Requirements generally drive architecture more?</p>
         <div class="options">
           <div class="opt">Functional requirements drive architecture</div>
@@ -2254,7 +2341,7 @@
         <div class="explanation">answer: Non-functional requirements drive architecture</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">14</span> 14. What does the Performance vs Security trade-off primarily impact?</p>
         <div class="options">
           <div class="opt">Cost only</div>
@@ -2265,7 +2352,7 @@
         <div class="explanation">answer: Encryption is CPU-heavy; deep packet inspection slows bandwidth</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="hard">
         <p><span class="qnum">15</span> 15. What is the industry standard MTTD (Mean Time To Detect)?</p>
         <div class="options">
           <div class="opt">2-5 days</div>
@@ -2506,6 +2593,25 @@
   }
 })();
 
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
 // ═══ STUDY TIMER ═══
 (function() {
   let timerState = {
@@ -2695,6 +2801,104 @@
   window.resetAllBlanks = function() { fbCorrect = 0; fbItems.forEach(item => { item.classList.remove('checked', 'correct', 'wrong'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); input.value = ''; input.disabled = false; input.classList.remove('correct', 'wrong'); input.placeholder = '________'; feedback.innerHTML = ''; feedback.classList.remove('correct', 'wrong'); }); updateFbScore(); };
   fbItems.forEach(item => { const input = item.querySelector('.fb-input'); input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); });
   updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">STRIDE</div>
+      <div class="match-term" data-match="2">SMART Criteria</div>
+      <div class="match-term" data-match="3">Risk Formula</div>
+      <div class="match-term" data-match="4">Functional Requirements</div>
+      <div class="match-term" data-match="5">Non-Functional Requirements</div>
+      <div class="match-term" data-match="6">Quick Wins</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="3">Threat x Vulnerability x Impact</div>
+      <div class="match-def" data-match="5">Define HOW WELL the system performs (quality attributes)</div>
+      <div class="match-def" data-match="1">Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation</div>
+      <div class="match-def" data-match="6">High Impact + Low Effort on the prioritization matrix</div>
+      <div class="match-def" data-match="4">Define WHAT the system must do</div>
+      <div class="match-def" data-match="2">Specific, Measurable, Achievable, Relevant, Time-bound</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
 })();
 </script>
 
