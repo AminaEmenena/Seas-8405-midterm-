@@ -406,6 +406,28 @@
   }
   .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
 
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -592,6 +614,342 @@
     font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct);
   }
   .quiz-q .explanation.show { display: block; }
+
+  /* ═══ FLASHCARD MODE ═══ */
+  .flashcard-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flashcard-toggle-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-toggle-btn:hover {
+    background: var(--page-color);
+    color: #000;
+    transform: scale(1.02);
+  }
+  .flashcard-toggle-btn.active {
+    background: var(--page-color);
+    color: #000;
+  }
+  .flashcard-toggle-label {
+    font-size: 0.95em;
+    color: #aaa;
+  }
+  .flashcard-mode {
+    display: none;
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-mode.active {
+    display: block;
+  }
+  .flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .flashcard-title {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: var(--page-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-progress {
+    font-size: 1em;
+    font-weight: 600;
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .flashcard-progress .current {
+    color: var(--page-color);
+    font-weight: 800;
+  }
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .flashcard-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .flashcard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-btn.shuffle {
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .flashcard-btn.shuffle:hover {
+    background: rgba(255,212,59,0.15);
+  }
+  .flashcard-btn.nav-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  .flashcard-btn.prev { border-color: var(--w5); color: var(--w5); }
+  .flashcard-btn.prev:hover { background: rgba(77,171,247,0.15); }
+  .flashcard-btn.next { border-color: var(--w4); color: var(--w4); }
+  .flashcard-btn.next:hover { background: rgba(105,219,124,0.15); }
+  .flashcard-wrapper {
+    perspective: 1000px;
+    margin: 0 auto 20px;
+    max-width: 700px;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .flashcard-front {
+    background: linear-gradient(145deg, #1e3a5f, #16213e);
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-back {
+    background: linear-gradient(145deg, #1a3a2e, #16213e);
+    border: 2px solid var(--w4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .flashcard-category.red { background: rgba(233,69,96,0.3); color: #e94560; }
+  .flashcard-category.blue { background: rgba(77,171,247,0.3); color: #4DABF7; }
+  .flashcard-category.green { background: rgba(105,219,124,0.3); color: #69DB7C; }
+  .flashcard-category.orange { background: rgba(255,169,77,0.3); color: #FFA94D; }
+  .flashcard-category.purple { background: rgba(151,117,250,0.3); color: #9775FA; }
+  .flashcard-hint {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.8em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-term {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    padding: 20px 0;
+  }
+  .flashcard-definition {
+    font-size: 1.05em;
+    color: #ddd;
+    line-height: 1.7;
+    padding: 20px 0;
+  }
+  .flashcard-label {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .flashcard-front .flashcard-label {
+    background: rgba(233,69,96,0.2);
+    color: var(--accent1);
+  }
+  .flashcard-back .flashcard-label {
+    background: rgba(105,219,124,0.2);
+    color: var(--w4);
+  }
+  .flashcard-progress-bar {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flashcard-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--page-color), var(--w4));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .flashcard-shortcuts {
+    text-align: center;
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 12px;
+  }
+  .flashcard-shortcuts kbd {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+  @media (max-width: 768px) {
+    .flashcard-toggle-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .flashcard-controls {
+      gap: 8px;
+    }
+    .flashcard-btn {
+      padding: 8px 14px;
+      font-size: 0.85em;
+    }
+    .flashcard-btn.nav-btn {
+      padding: 10px 18px;
+    }
+    .flashcard {
+      min-height: 320px;
+    }
+    .flashcard-face {
+      min-height: 320px;
+      padding: 20px;
+    }
+    .flashcard-term {
+      font-size: 1.1em;
+    }
+    .flashcard-definition {
+      font-size: 0.95em;
+    }
+    .flashcard-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* ═══ STUDY TIMER ═══ */
+  .study-timer-wrapper { background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98)); border-bottom: 2px solid var(--page-color); overflow: hidden; transition: max-height 0.3s ease-out; }
+  .study-timer-wrapper.collapsed { max-height: 48px !important; }
+  .study-timer-wrapper.collapsed .timer-content { opacity: 0; pointer-events: none; }
+  .timer-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; cursor: pointer; user-select: none; }
+  .timer-header:hover { background: rgba(255,255,255,0.03); }
+  .timer-header-left { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--page-color); font-size: 0.95em; }
+  .timer-header-left .timer-icon { font-size: 1.2em; }
+  .timer-mini-display { font-family: 'Courier New', monospace; font-size: 1em; color: #fff; background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 6px; display: none; }
+  .study-timer-wrapper.collapsed .timer-mini-display { display: inline-block; }
+  .timer-toggle-btn { background: none; border: none; color: var(--page-color); font-size: 1.2em; cursor: pointer; padding: 5px; transition: transform 0.3s; }
+  .study-timer-wrapper.collapsed .timer-toggle-btn { transform: rotate(180deg); }
+  .timer-content { padding: 0 20px 20px; opacity: 1; transition: opacity 0.2s; }
+  .timer-presets { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .preset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid transparent; background: rgba(255,255,255,0.06); color: #aaa; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: all 0.2s; }
+  .preset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .preset-btn.active { border-color: var(--page-color); color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .timer-custom-inputs { display: none; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .timer-custom-inputs.show { display: flex; }
+  .timer-custom-inputs label { font-size: 0.85em; color: #aaa; }
+  .timer-custom-inputs input { width: 60px; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 0.9em; text-align: center; }
+  .timer-custom-inputs input:focus { outline: none; border-color: var(--page-color); }
+  .timer-display-section { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+  .timer-countdown { font-family: 'Courier New', monospace; font-size: 3em; font-weight: 700; color: #fff; background: rgba(0,0,0,0.4); padding: 10px 30px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); min-width: 200px; text-align: center; transition: all 0.3s; }
+  .timer-countdown.study-mode { border-color: var(--page-color); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+  .timer-countdown.break-mode { border-color: var(--correct); color: var(--correct); box-shadow: 0 0 20px rgba(81,207,102,0.2); }
+  .timer-countdown.paused { opacity: 0.6; }
+  .timer-status { font-size: 0.9em; color: #aaa; text-align: center; min-width: 120px; }
+  .timer-status .status-label { font-weight: 700; color: var(--page-color); font-size: 1.1em; }
+  .timer-status .status-label.break { color: var(--correct); }
+  .timer-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .timer-btn { padding: 10px 24px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.95em; cursor: pointer; transition: all 0.2s; }
+  .timer-btn.start { background: var(--page-color); color: #000; }
+  .timer-btn.start:hover { filter: brightness(1.1); transform: scale(1.02); }
+  .timer-btn.pause { background: rgba(255,169,77,0.8); color: #000; }
+  .timer-btn.pause:hover { background: rgba(255,169,77,1); }
+  .timer-btn.reset { background: rgba(255,255,255,0.1); color: #aaa; border: 1px solid rgba(255,255,255,0.2); }
+  .timer-btn.reset:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .timer-btn.skip { background: rgba(255,255,255,0.06); color: #aaa; border: 1px solid rgba(255,255,255,0.1); font-size: 0.85em; padding: 8px 16px; }
+  .timer-btn.skip:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .timer-stats { display: flex; justify-content: center; gap: 24px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .timer-stat { text-align: center; }
+  .timer-stat .stat-value { font-size: 1.3em; font-weight: 700; color: var(--page-color); font-family: 'Courier New', monospace; }
+  .timer-stat .stat-label { font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .break-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10001; justify-content: center; align-items: center; }
+  .break-overlay.show { display: flex; }
+  .break-message { background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2)); border: 3px solid var(--correct); border-radius: 20px; padding: 40px 60px; text-align: center; max-width: 500px; margin: 20px; }
+  .break-message h2 { color: var(--correct); font-size: 1.8em; margin-bottom: 12px; }
+  .break-message p { color: #ccc; font-size: 1.1em; margin-bottom: 8px; line-height: 1.6; }
+  .break-message .break-tip { background: rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 10px; margin: 16px 0; font-size: 0.95em; color: #aaa; }
+  .break-message .break-countdown { font-family: 'Courier New', monospace; font-size: 2.5em; color: var(--correct); margin: 16px 0; }
+  .break-message button { padding: 12px 30px; border-radius: 10px; border: none; background: var(--correct); color: #000; font-weight: 700; font-size: 1em; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+  .break-message button:hover { filter: brightness(1.1); transform: scale(1.02); }
+  @media (max-width: 768px) { .timer-countdown { font-size: 2.2em; padding: 8px 20px; min-width: 150px; } .timer-display-section { gap: 12px; } .timer-stats { gap: 16px; } .break-message { padding: 30px 24px; } .break-message h2 { font-size: 1.4em; } }
 </style>
 </head>
 <body>
@@ -609,6 +967,70 @@
   <a href="nist.html" class="ni">NIST</a>
   <a href="mega.html" class="mega">MEGA EXAM</a>
 </nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">⏱️</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">▼</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
 <div class="page-hero">
   <h1>Week 7 — Architectural Decision Making</h1>
   <div class="sub">SEAS8405 · Spring 2026 · Prof. Wayne Le · GWU</div>
@@ -636,6 +1058,60 @@
   <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
   <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
   <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- FLASHCARD MODE TOGGLE -->
+<div class="flashcard-toggle-container">
+  <span class="flashcard-toggle-label">Study key concepts with interactive flashcards</span>
+  <button class="flashcard-toggle-btn" id="flashcardToggle" onclick="toggleFlashcardMode()">
+    <span>🎴</span> Flashcard Mode
+  </button>
+</div>
+
+<!-- FLASHCARD MODE CONTAINER -->
+<div class="flashcard-mode" id="flashcardMode">
+  <div class="flashcard-header">
+    <div class="flashcard-title">🎴 Flashcard Mode</div>
+    <div class="flashcard-progress">
+      Card <span class="current" id="flashcardCurrent">1</span> of <span id="flashcardTotal">0</span>
+    </div>
+  </div>
+
+  <div class="flashcard-controls">
+    <button class="flashcard-btn prev nav-btn" id="flashcardPrev" onclick="prevFlashcard()">
+      ← Previous
+    </button>
+    <button class="flashcard-btn shuffle" id="flashcardShuffle" onclick="shuffleFlashcards()">
+      🔀 Shuffle
+    </button>
+    <button class="flashcard-btn next nav-btn" id="flashcardNext" onclick="nextFlashcard()">
+      Next →
+    </button>
+  </div>
+
+  <div class="flashcard-progress-bar">
+    <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+  </div>
+
+  <div class="flashcard-wrapper">
+    <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+      <div class="flashcard-face flashcard-front">
+        <span class="flashcard-category red" id="flashcardCategory">Key Idea</span>
+        <span class="flashcard-label">Term</span>
+        <div class="flashcard-term" id="flashcardTerm">Loading...</div>
+        <div class="flashcard-hint">Click to flip <span>↻</span></div>
+      </div>
+      <div class="flashcard-face flashcard-back">
+        <span class="flashcard-label">Definition</span>
+        <div class="flashcard-definition" id="flashcardDefinition">Loading...</div>
+        <div class="flashcard-hint">Click to flip back <span>↻</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flashcard-shortcuts">
+    <kbd>←</kbd> Previous | <kbd>Space</kbd> Flip | <kbd>→</kbd> Next | <kbd>S</kbd> Shuffle
+  </div>
 </div>
 
 <details>
@@ -688,9 +1164,30 @@
                 </ul>
 
                 <div class="mem"><small>Remember This</small><br><strong>"Define → Identify → Evaluate → Document → Monitor"</strong></div>
+
+                <div class="ascii-diagram-title">5-Step Decision Making Framework</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────┐
+│              5-STEP DECISION MAKING FRAMEWORK                       │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌───────┐│
+│   │ STEP 1  │──►│ STEP 2  │──►│ STEP 3  │──►│ STEP 4  │──►│STEP 5 ││
+│   │ DEFINE  │   │IDENTIFY │   │EVALUATE │   │DOCUMENT │   │MONITOR││
+│   │PROBLEM  │   │OPTIONS  │   │TRADEOFFS│   │DECISION │   │&ADAPT ││
+│   └─────────┘   └─────────┘   └─────────┘   └─────────┘   └───────┘│
+│       │             │             │             │             │     │
+│       ▼             ▼             ▼             ▼             ▼     │
+│   What needs    Generate     Score each    Select &      Track     │
+│   to be         multiple     option on     record        outcomes  │
+│   decided?      options      criteria      rationale     & adapt   │
+│   Why?          (incl.                                             │
+│                 status quo)                                        │
+│                                                                     │
+│   Avoid premature convergence - explore before committing!         │
+└─────────────────────────────────────────────────────────────────────┘</div>
             </div>
         </details>
-        
+
         <details>
             <summary>📊 4. Evaluation Criteria for Architectural Decisions</summary>
             <div class="content">
@@ -748,10 +1245,34 @@
 
                 <div class="prof"><strong>Prof. Le's Tip:</strong> "Most organizations over-build and under-buy. We love building things because it feels like we're in control. But that control costs money and focus. Ask yourself: is this a competitive advantage, or is it table stakes? If it's table stakes, buy it."</div>
 
+                <div class="ascii-diagram-title">Build vs Buy vs Managed Service Decision</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────┐
+│              BUILD vs BUY vs MANAGED SERVICE                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   ┌─────────────┐     ┌─────────────┐     ┌─────────────┐          │
+│   │    BUILD    │     │     BUY     │     │   MANAGED   │          │
+│   │   (Custom)  │     │ (Commercial)│     │  (Service)  │          │
+│   ├─────────────┤     ├─────────────┤     ├─────────────┤          │
+│   │Perfect fit  │     │Fast deploy  │     │No hiring    │          │
+│   │Full control │     │Proven tech  │     │24/7 coverage│          │
+│   │No vendor    │     │Support      │     │Scalable     │          │
+│   │lock-in      │     │             │     │             │          │
+│   ├─────────────┤     ├─────────────┤     ├─────────────┤          │
+│   │High cost    │     │License $$$  │     │Less control │          │
+│   │Long timeline│     │Dependency   │     │Data sharing │          │
+│   │Maintenance  │     │May not fit  │     │Dependency   │          │
+│   └─────────────┘     └─────────────┘     └─────────────┘          │
+│         │                   │                   │                   │
+│         ▼                   ▼                   ▼                   │
+│    STRATEGIC           STANDARD            COMMODITY                │
+│    ADVANTAGE           CAPABILITY          FUNCTION                 │
+└─────────────────────────────────────────────────────────────────────┘</div>
+
                 <div class="mem"><small>Remember This</small><br><strong>"Strategic = Build, Commodity = Buy or Manage"</strong></div>
             </div>
         </details>
-        
+
         <details>
             <summary>📋 6. Decision-Making Checklist (8 Items)</summary>
             <div class="content">
@@ -769,9 +1290,34 @@
                 </ol>
 
                 <div class="red"><strong>KEY IDEA:</strong> If you can't answer "yes" to all 8 items, you're not ready to decide. The checklist forces alignment and prevents surprises later.</div>
+
+                <div class="ascii-diagram-title">Architecture Decision Trade-Off Balance</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────┐
+│            ARCHITECTURAL TRADE-OFF BALANCE                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│                        SECURITY                                     │
+│                           ▲                                         │
+│                          /│\                                        │
+│                         / │ \                                       │
+│                        /  │  \                                      │
+│                       /   │   \                                     │
+│            USABILITY ◄────┼────► COST                               │
+│                       \   │   /                                     │
+│                        \  │  /                                      │
+│                         \ │ /                                       │
+│                          \│/                                        │
+│                           ▼                                         │
+│                      COMPLEXITY                                     │
+│                                                                     │
+│   Max Security + Max Usability + Min Cost + Min Complexity          │
+│   = IMPOSSIBLE (pick your battles!)                                 │
+│                                                                     │
+│   Good Architecture = Defensible Trade-offs                         │
+└─────────────────────────────────────────────────────────────────────┘</div>
             </div>
         </details>
-        
+
         <details>
             <summary>💡 7. Key Takeaways from Week 7</summary>
             <div class="content">
@@ -797,8 +1343,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="easy">
         <p><span class="qnum">1</span> What makes architectural decision-making particularly challenging?</p>
         <div class="options">
           <div class="opt">Too many vendors to choose from</div>
@@ -809,7 +1362,7 @@
         <div class="explanation">Architectural decisions are hard because of incomplete information, conflicting stakeholder requirements, irreversible consequences, and rapidly changing technology landscape.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">2</span> What is Step 1 of the 5-step decision-making framework?</p>
         <div class="options">
           <div class="opt">Define the problem and success criteria clearly</div>
@@ -820,7 +1373,7 @@
         <div class="explanation">Step 1 is defining the problem and success criteria. You can't evaluate options without knowing what "good" looks like.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
         <p><span class="qnum">3</span> Why should you always include "status quo" as an option when evaluating alternatives?</p>
         <div class="options">
           <div class="opt">It's cheaper and always the best option</div>
@@ -831,7 +1384,7 @@
         <div class="explanation">Status quo is the baseline. If no alternative clearly outperforms it when accounting for implementation cost and risk, the change isn't justified.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">4</span> When should you BUILD a custom solution rather than buy?</p>
         <div class="options">
           <div class="opt">Highly unique requirements, skilled internal team, long-term strategic capability needed</div>
@@ -842,7 +1395,7 @@
         <div class="explanation">Build when requirements are highly unique, your team has the skills and capacity, and you need long-term strategic capability. Buy/manage for commodity capabilities.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
         <p><span class="qnum">5</span> What is the main advantage of a managed service approach?</p>
         <div class="options">
           <div class="opt">Full control over the environment</div>
@@ -853,7 +1406,7 @@
         <div class="explanation">Managed services provide expertise without hiring, 24/7 coverage, scalability, and predictable costs — but trade off control and data sharing.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
         <p><span class="qnum">6</span> How many items are in the decision-making checklist?</p>
         <div class="options">
           <div class="opt">5 items</div>
@@ -864,7 +1417,7 @@
         <div class="explanation">The decision-making checklist has 8 items covering problem definition, options identification, trade-off evaluation, stakeholder perspectives, documentation, assumptions, metrics, and monitoring.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
         <p><span class="qnum">7</span> What are the two main categories of evaluation criteria?</p>
         <div class="options">
           <div class="opt">Security effectiveness criteria AND business viability criteria</div>
@@ -875,7 +1428,7 @@
         <div class="explanation">Good architectural decisions balance BOTH security effectiveness AND business viability — including cost, timeline, operational overhead, and organizational fit.</div>
       </div>
 
-      <div class="quiz-q" data-correct="3">
+      <div class="quiz-q" data-correct="3" data-difficulty="medium">
         <p><span class="qnum">8</span> Why is documenting decision rationale important?</p>
         <div class="options">
           <div class="opt">It's only needed for compliance audits</div>
@@ -886,7 +1439,7 @@
         <div class="explanation">Documentation preserves the reasoning, alternatives considered, and trade-offs accepted — critical when teams change or circumstances evolve.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">9</span> What does "context is critical" mean for architectural decisions?</p>
         <div class="options">
           <div class="opt">Every organization should use the same architecture patterns</div>
@@ -897,7 +1450,7 @@
         <div class="explanation">Context includes resources, organizational maturity, constraints, and culture. A solution that works for a Fortune 500 may fail at a startup, and vice versa.</div>
       </div>
 
-      <div class="quiz-q" data-correct="2">
+      <div class="quiz-q" data-correct="2" data-difficulty="hard">
         <p><span class="qnum">10</span> What is the recommended approach for handling legacy constraints you cannot remove?</p>
         <div class="options">
           <div class="opt">Ignore them and build the ideal architecture</div>
@@ -908,7 +1461,7 @@
         <div class="explanation">Legacy constraints should be documented, designed around, and included in migration plans. Architecture must work with reality, not against it.</div>
       </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
         <p><span class="qnum">11</span> Give an example of conflicting requirements in architecture decisions.</p>
         <div class="options">
           <div class="opt">Maximum security (complex MFA, deep inspection) vs maximum usability (fast, frictionless access)</div>
@@ -919,7 +1472,7 @@
         <div class="explanation">Classic conflict: security wants complex MFA and deep packet inspection (slows things down), while users want fast, frictionless access. The architect must balance both.</div>
       </div>
 
-      <div class="quiz-q" data-correct="1">
+      <div class="quiz-q" data-correct="1" data-difficulty="hard">
         <p><span class="qnum">12</span> According to Week 7, what is the key takeaway about architectural success?</p>
         <div class="options">
           <div class="opt">Always pick the most secure option regardless of cost</div>
@@ -1051,5 +1604,364 @@
   });
 })();
 </script>
+
+<!-- FLASHCARD MODE SCRIPT -->
+<script>
+(function() {
+  let flashcards = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+
+  // Curated flashcard data for Week 7
+  function getFlashcardData() {
+    return [
+      { term: "Architectural Decision Making", definition: "Systematic process of evaluating options, weighing trade-offs, and selecting approaches that best serve organizational goals within real-world constraints.", category: "blue", label: "Definition" },
+      { term: "Every Decision is a Trade-off", definition: "No perfect solutions exist. Good architects make trade-offs explicit and defensible, balancing security, cost, performance, usability, complexity, and time.", category: "red", label: "Key Idea" },
+      { term: "5-Step Decision Framework", definition: "1) Define the problem, 2) Identify options (include status quo), 3) Evaluate trade-offs, 4) Make decision and document, 5) Monitor and adapt.", category: "blue", label: "Definition" },
+      { term: "Premature Convergence", definition: "The biggest decision-making trap: jumping to a solution before fully exploring the problem and alternatives. Always consider multiple options first.", category: "orange", label: "Caution" },
+      { term: "Build vs Buy vs Managed Service", definition: "Build for unique, strategic capabilities with skilled team. Buy/Manage for commodity capabilities, talent shortages, or rapid deployment needs.", category: "red", label: "Key Idea" },
+      { term: "8-Item Decision Checklist", definition: "Before any decision: problem defined? 3+ options? trade-offs evaluated? stakeholders considered? rationale documented? assumptions identified? metrics defined? monitoring planned?", category: "green", label: "Best Practice" },
+      { term: "Context is Critical", definition: "The right decision depends on resources, maturity, constraints, and culture. What works for a Fortune 500 may fail at a startup, and vice versa.", category: "red", label: "Key Idea" },
+      { term: "Defensibility of Decisions", definition: "Document rationale so decisions can be defended during audits, after incidents, or when questioned. If you can't explain decisions, you're vulnerable.", category: "red", label: "Key Idea" },
+      { term: "Status Quo as Option", definition: "Always include 'do nothing' when evaluating alternatives. If no option clearly beats status quo accounting for implementation cost and risk, the change isn't justified.", category: "green", label: "Best Practice" },
+      { term: "Security vs Business Criteria", definition: "Good decisions balance BOTH security effectiveness (threat coverage, residual risk, compliance) AND business viability (cost, timeline, maintenance, skills).", category: "red", label: "Key Idea" },
+      { term: "Legacy Constraints", definition: "Document constraints you cannot remove, design around them, and plan gradual migration. Architecture must work with reality, not against it.", category: "green", label: "Best Practice" },
+      { term: "Collaborate Don't Dictate", definition: "Architecture succeeds through partnership with stakeholders, vendors, and business units. Ivory tower mandates fail.", category: "red", label: "Key Idea" },
+      { term: "Weighted Scoring Matrix", definition: "Assign weights to criteria based on organizational priorities, then score each option systematically. Transparency prevents politics from dominating decisions.", category: "green", label: "Best Practice" },
+      { term: "Strategic = Build, Commodity = Buy", definition: "If it's a competitive advantage, consider building. If it's table stakes (EDR, SIEM, SOC), buy it and focus your team on strategic work.", category: "purple", label: "Memory Aid" },
+      { term: "No Perfect Solutions, Only Defensible Trade-offs", definition: "Accept that every choice has downsides. The goal is making trade-offs explicit, documented, and aligned with organizational priorities.", category: "purple", label: "Memory Aid" },
+      { term: "Define, Identify, Evaluate, Document, Monitor", definition: "The 5-step framework mnemonic. Follow these steps as checkpoints before committing to any architectural decision.", category: "purple", label: "Memory Aid" },
+      { term: "Incomplete Information Challenge", definition: "Architects must decide before all facts are known. Requirements unclear, threats evolving, future direction uncertain. Perfect information never exists.", category: "orange", label: "Caution" },
+      { term: "Measured Outcomes", definition: "Define success metrics upfront. Track whether you're achieving results. Be willing to adapt if the decision isn't working as expected.", category: "green", label: "Best Practice" }
+    ];
+  }
+
+  function initFlashcards() {
+    flashcards = getFlashcardData();
+    document.getElementById('flashcardTotal').textContent = flashcards.length;
+    if (flashcards.length > 0) showFlashcard(0);
+  }
+
+  function showFlashcard(index) {
+    if (flashcards.length === 0) return;
+    currentIndex = index;
+    const card = flashcards[index];
+    isFlipped = false;
+    document.getElementById('flashcard').classList.remove('flipped');
+    document.getElementById('flashcardTerm').textContent = card.term;
+    document.getElementById('flashcardDefinition').textContent = card.definition;
+    const categoryEl = document.getElementById('flashcardCategory');
+    categoryEl.textContent = card.label;
+    categoryEl.className = 'flashcard-category ' + card.category;
+    document.getElementById('flashcardCurrent').textContent = index + 1;
+    const progressPercent = ((index + 1) / flashcards.length) * 100;
+    document.getElementById('flashcardProgressFill').style.width = progressPercent + '%';
+    document.getElementById('flashcardPrev').disabled = index === 0;
+    document.getElementById('flashcardNext').disabled = index === flashcards.length - 1;
+  }
+
+  window.flipFlashcard = function() {
+    isFlipped = !isFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  };
+
+  window.prevFlashcard = function() {
+    if (currentIndex > 0) showFlashcard(currentIndex - 1);
+  };
+
+  window.nextFlashcard = function() {
+    if (currentIndex < flashcards.length - 1) showFlashcard(currentIndex + 1);
+  };
+
+  window.shuffleFlashcards = function() {
+    for (let i = flashcards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+    }
+    showFlashcard(0);
+    const btn = document.getElementById('flashcardShuffle');
+    btn.textContent = '✓ Shuffled!';
+    setTimeout(() => { btn.innerHTML = '🔀 Shuffle'; }, 1000);
+  };
+
+  window.toggleFlashcardMode = function() {
+    const mode = document.getElementById('flashcardMode');
+    const btn = document.getElementById('flashcardToggle');
+    const isActive = mode.classList.toggle('active');
+    btn.classList.toggle('active', isActive);
+    if (isActive && flashcards.length === 0) initFlashcards();
+  };
+
+  document.addEventListener('keydown', function(e) {
+    const mode = document.getElementById('flashcardMode');
+    if (!mode.classList.contains('active')) return;
+    switch(e.key) {
+      case 'ArrowLeft': e.preventDefault(); prevFlashcard(); break;
+      case 'ArrowRight': e.preventDefault(); nextFlashcard(); break;
+      case ' ': e.preventDefault(); flipFlashcard(); break;
+      case 's': case 'S': e.preventDefault(); shuffleFlashcards(); break;
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlashcards);
+  } else {
+    initFlashcards();
+  }
+})();
+
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
+// ═══ STUDY TIMER ═══
+(function() {
+  let timerState = { studyMinutes: 25, breakMinutes: 5, secondsRemaining: 25 * 60, isRunning: false, isBreak: false, totalStudySeconds: 0, sessionsCompleted: 0, currentStreak: 0, intervalId: null };
+  const presets = { pomodoro: { study: 25, break: 5 }, short: { study: 15, break: 3 }, custom: { study: 25, break: 5 } };
+  const breakMessages = [{ title: "Time for a Break!", text: "Great focus session! You've earned this rest." }, { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." }, { title: "Break Time!", text: "Step away, stretch, and come back refreshed." }, { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." }, { title: "Rest Up!", text: "A short break now means better focus later." }, { title: "You Did It!", text: "Another session down! Keep up the great work." }];
+  const breakTips = ["Stand up and stretch your legs for a minute.", "Look away from the screen - focus on something 20 feet away.", "Grab a glass of water to stay hydrated.", "Do some shoulder rolls to release tension.", "Take a few deep breaths to reset your focus.", "Walk around the room or do some light movement.", "Close your eyes and rest them for 30 seconds.", "Snack on something healthy if you're hungry."];
+  function formatTime(s) { return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`; }
+  function formatTotalTime(s) { return s >= 3600 ? `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m` : formatTime(s); }
+  function updateDisplay() {
+    const timeStr = formatTime(timerState.secondsRemaining);
+    document.getElementById('timerCountdown').textContent = timeStr;
+    document.getElementById('timerMiniDisplay').textContent = timeStr;
+    document.getElementById('totalStudyTime').textContent = formatTotalTime(timerState.totalStudySeconds);
+    document.getElementById('sessionsCompleted').textContent = timerState.sessionsCompleted;
+    document.getElementById('currentStreak').textContent = timerState.currentStreak;
+    const countdown = document.getElementById('timerCountdown'), statusLabel = document.getElementById('timerStatusLabel'), statusText = document.getElementById('timerStatusText'), startPauseBtn = document.getElementById('startPauseBtn'), skipBtn = document.getElementById('skipBtn');
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) { countdown.classList.add('break-mode'); statusLabel.textContent = 'BREAK'; statusLabel.classList.add('break'); statusText.textContent = 'Relax and recharge'; skipBtn.textContent = 'End Break'; document.getElementById('breakCountdown').textContent = timeStr; }
+    else if (timerState.isRunning) { countdown.classList.add('study-mode'); statusLabel.textContent = 'STUDYING'; statusLabel.classList.remove('break'); statusText.textContent = 'Stay focused!'; skipBtn.textContent = 'Skip to Break'; }
+    else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) { countdown.classList.add('paused'); statusLabel.textContent = 'PAUSED'; statusLabel.classList.remove('break'); statusText.textContent = 'Click Start to resume'; }
+    else { statusLabel.textContent = 'READY'; statusLabel.classList.remove('break'); statusText.textContent = 'Click Start to begin'; }
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start'; startPauseBtn.classList.toggle('pause', timerState.isRunning); startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+  function playNotification() { try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const play = (f,t,d) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value = f; o.type = 'sine'; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.3,t+0.1); g.gain.linearRampToValueAtTime(0,t+d); o.start(t); o.stop(t+d); }; const n = ctx.currentTime; play(523.25,n,0.3); play(659.25,n+0.15,0.3); play(783.99,n+0.3,0.4); } catch(e){} }
+  function showBreakOverlay() { const m = breakMessages[Math.floor(Math.random()*breakMessages.length)], t = breakTips[Math.floor(Math.random()*breakTips.length)]; document.getElementById('breakTitle').textContent = m.title; document.getElementById('breakEncouragement').textContent = m.text; document.getElementById('breakTip').textContent = t; document.getElementById('breakOverlay').classList.add('show'); }
+  function tick() { if (!timerState.isRunning) return; timerState.secondsRemaining--; if (!timerState.isBreak) timerState.totalStudySeconds++; updateDisplay(); if (timerState.secondsRemaining <= 0) { playNotification(); if (timerState.isBreak) { timerState.isBreak = false; timerState.secondsRemaining = timerState.studyMinutes * 60; timerState.currentStreak++; dismissBreak(); } else { timerState.sessionsCompleted++; timerState.isBreak = true; timerState.secondsRemaining = timerState.breakMinutes * 60; showBreakOverlay(); } updateDisplay(); } }
+  window.toggleTimer = function() { if (timerState.isRunning) { timerState.isRunning = false; clearInterval(timerState.intervalId); } else { timerState.isRunning = true; timerState.intervalId = setInterval(tick, 1000); } updateDisplay(); };
+  window.resetTimer = function() { timerState.isRunning = false; timerState.isBreak = false; clearInterval(timerState.intervalId); timerState.secondsRemaining = timerState.studyMinutes * 60; dismissBreak(); updateDisplay(); };
+  window.skipToBreak = function() { if (timerState.isBreak) { timerState.isBreak = false; timerState.secondsRemaining = timerState.studyMinutes * 60; timerState.currentStreak++; dismissBreak(); } else { timerState.sessionsCompleted++; timerState.isBreak = true; timerState.secondsRemaining = timerState.breakMinutes * 60; showBreakOverlay(); } updateDisplay(); };
+  window.dismissBreak = function() { document.getElementById('breakOverlay').classList.remove('show'); };
+  window.setPreset = function(p) { document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === p)); document.getElementById('customInputs').classList.toggle('show', p === 'custom'); if (p !== 'custom') { const pr = presets[p]; timerState.studyMinutes = pr.study; timerState.breakMinutes = pr.break; if (!timerState.isRunning && !timerState.isBreak) timerState.secondsRemaining = timerState.studyMinutes * 60; updateDisplay(); } };
+  window.applyCustom = function() { const s = Math.max(1, Math.min(120, parseInt(document.getElementById('customStudy').value) || 25)), b = Math.max(1, Math.min(30, parseInt(document.getElementById('customBreak').value) || 5)); document.getElementById('customStudy').value = s; document.getElementById('customBreak').value = b; timerState.studyMinutes = s; timerState.breakMinutes = b; presets.custom = { study: s, break: b }; if (!timerState.isRunning && !timerState.isBreak) timerState.secondsRemaining = timerState.studyMinutes * 60; updateDisplay(); };
+  window.toggleStudyTimer = function() { document.getElementById('studyTimerWrapper').classList.toggle('collapsed'); };
+  updateDisplay();
+  setInterval(() => { if (timerState.totalStudySeconds > 0) localStorage.setItem('studyTimerStats', JSON.stringify({ totalStudySeconds: timerState.totalStudySeconds, sessionsCompleted: timerState.sessionsCompleted, date: new Date().toDateString() })); }, 30000);
+  const saved = localStorage.getItem('studyTimerStats'); if (saved) { try { const d = JSON.parse(saved); if (d.date === new Date().toDateString()) { timerState.totalStudySeconds = d.totalStudySeconds || 0; timerState.sessionsCompleted = d.sessionsCompleted || 0; updateDisplay(); } } catch(e){} }
+})();
+</script>
+
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">7</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="8" data-alt="eight">
+    <p class="fb-question"><span class="fb-num">1</span> The decision-making checklist has <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> items covering problem definition, options, trade-offs, stakeholders, documentation, assumptions, metrics, and monitoring.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Context" data-alt="context is critical">
+    <p class="fb-question"><span class="fb-num">2</span> "<span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> is critical" means the right decision depends on your resources, maturity, constraints, and culture - not just best practices.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Opportunity Cost" data-alt="opportunity">
+    <p class="fb-question"><span class="fb-num">3</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> is what you give up by choosing one option over another - ask what else could be done with these resources.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Managed Services" data-alt="managed service,msp">
+    <p class="fb-question"><span class="fb-num">4</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> provide expertise without hiring, 24/7 coverage, scalability, and predictable cost - trading off control.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Security Effectiveness" data-alt="security">
+    <p class="fb-question"><span class="fb-num">5</span> The two main evaluation criteria categories are <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> criteria AND business viability criteria.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Collaborate" data-alt="collaboration,partnership">
+    <p class="fb-question"><span class="fb-num">6</span> "<span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>, don't dictate" - architecture succeeds through partnership, not ivory tower mandates.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Document" data-alt="documentation,documenting">
+    <p class="fb-question"><span class="fb-num">7</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> decision rationale so future teams understand WHY decisions were made and can adapt when circumstances change.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  .fill-blank-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .fill-blank-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .fill-blank-intro { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .fill-blank-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+  .fb-score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .fb-score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .fb-score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .fb-check-all-btn, .fb-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--page-color); background: transparent; color: var(--page-color); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .fb-check-all-btn:hover { background: var(--page-color); color: #000; }
+  .fb-reset-btn { border-color: #666; color: #aaa; }
+  .fb-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .fill-blank-item { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; border-left: 4px solid rgba(255,255,255,0.2); transition: all 0.3s; }
+  .fill-blank-item.correct { border-left-color: var(--correct); background: rgba(81,207,102,0.1); }
+  .fill-blank-item.wrong { border-left-color: var(--wrong); background: rgba(255,107,107,0.1); }
+  .fb-question { font-size: 1em; line-height: 1.8; margin: 0; }
+  .fb-num { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--page-color); color: #000; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+  .fb-blank-wrapper { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .fb-input { padding: 6px 12px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); color: #fff; font-size: 0.95em; min-width: 120px; max-width: 200px; transition: all 0.2s; }
+  .fb-input:focus { outline: none; border-color: var(--page-color); background: rgba(0,0,0,0.6); }
+  .fb-input.correct { border-color: var(--correct); background: rgba(81,207,102,0.2); color: var(--correct); }
+  .fb-input.wrong { border-color: var(--wrong); background: rgba(255,107,107,0.2); }
+  .fb-input:disabled { opacity: 0.8; }
+  .fb-hint-btn, .fb-check-btn { padding: 4px 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); color: #aaa; font-size: 0.8em; cursor: pointer; transition: all 0.2s; }
+  .fb-hint-btn:hover { background: rgba(255,212,59,0.2); border-color: var(--w3); color: var(--w3); }
+  .fb-check-btn:hover { background: rgba(77,171,247,0.2); border-color: var(--w5); color: var(--w5); }
+  .fb-feedback { margin-top: 8px; font-size: 0.9em; min-height: 20px; }
+  .fb-feedback.correct { color: var(--correct); }
+  .fb-feedback.wrong { color: var(--wrong); }
+  @media (max-width: 768px) { .fill-blank-score-bar { flex-direction: column; align-items: stretch; gap: 10px; } .fb-score-fill-track { width: 100%; } .fb-blank-wrapper { display: flex; width: 100%; margin-top: 8px; } .fb-input { flex: 1; min-width: 0; } }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+  function updateFbScore() { const scoreEl = document.querySelector('.fb-score-correct'); const fillEl = document.querySelector('.fb-score-fill'); const totalEl = document.querySelector('.fb-score-total'); if (scoreEl) scoreEl.textContent = fbCorrect; if (totalEl) totalEl.textContent = fbTotal; if (fillEl && fbTotal > 0) fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%'; }
+  window.showHint = function(btn) { const item = btn.closest('.fill-blank-item'); const input = item.querySelector('.fb-input'); const answer = item.dataset.answer.toLowerCase(); if (input.value.length === 0) { input.placeholder = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1)); input.focus(); } else { const currentLen = input.value.length; if (currentLen < answer.length) { input.value = answer.substring(0, currentLen + 1); input.focus(); } } };
+  window.checkBlank = function(btn) { const item = btn.closest('.fill-blank-item'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); const answer = item.dataset.answer.toLowerCase(); const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : []; const userAnswer = input.value.trim().toLowerCase(); if (item.classList.contains('checked')) return; const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer); item.classList.add('checked'); input.disabled = true; if (isCorrect) { item.classList.add('correct'); input.classList.add('correct'); feedback.classList.add('correct'); feedback.innerHTML = '<strong>Correct!</strong>'; fbCorrect++; } else { item.classList.add('wrong'); input.classList.add('wrong'); feedback.classList.add('wrong'); feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer; } updateFbScore(); };
+  window.checkAllBlanks = function() { fbItems.forEach(item => { if (!item.classList.contains('checked')) { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); };
+  window.resetAllBlanks = function() { fbCorrect = 0; fbItems.forEach(item => { item.classList.remove('checked', 'correct', 'wrong'); const input = item.querySelector('.fb-input'); const feedback = item.querySelector('.fb-feedback'); input.value = ''; input.disabled = false; input.classList.remove('correct', 'wrong'); input.placeholder = '________'; feedback.innerHTML = ''; feedback.classList.remove('correct', 'wrong'); }); updateFbScore(); };
+  fbItems.forEach(item => { const input = item.querySelector('.fb-input'); input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { const btn = item.querySelector('.fb-check-btn'); checkBlank(btn); } }); });
+  updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">Decision Trade-offs</div>
+      <div class="match-term" data-match="2">5-Step Framework</div>
+      <div class="match-term" data-match="3">Build vs Buy</div>
+      <div class="match-term" data-match="4">8-Item Checklist</div>
+      <div class="match-term" data-match="5">Context</div>
+      <div class="match-term" data-match="6">Ivory Tower</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="6">Top-down mandates that fail without collaboration</div>
+      <div class="match-def" data-match="3">Strategic = build, Commodity = buy/manage</div>
+      <div class="match-def" data-match="1">Security vs Cost vs Usability vs Time</div>
+      <div class="match-def" data-match="5">What works elsewhere may NOT work for you</div>
+      <div class="match-def" data-match="2">Define, Identify, Evaluate, Document, Monitor</div>
+      <div class="match-def" data-match="4">Questions before ANY architectural decision</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
+})();
+</script>
+
 </body>
 </html>

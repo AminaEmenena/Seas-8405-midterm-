@@ -430,6 +430,28 @@
   }
   .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
 
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
   /* FLOW ARROWS */
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
   .flow-step {
@@ -578,6 +600,636 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+
+  /* ═══ FLASHCARD MODE ═══ */
+  .flashcard-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flashcard-toggle-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-toggle-btn:hover {
+    background: var(--page-color);
+    color: #000;
+    transform: scale(1.02);
+  }
+  .flashcard-toggle-btn.active {
+    background: var(--page-color);
+    color: #000;
+  }
+  .flashcard-toggle-label {
+    font-size: 0.95em;
+    color: #aaa;
+  }
+
+  /* Flashcard Container */
+  .flashcard-mode {
+    display: none;
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-mode.active {
+    display: block;
+  }
+  .flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .flashcard-title {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: var(--page-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-progress {
+    font-size: 1em;
+    font-weight: 600;
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .flashcard-progress .current {
+    color: var(--page-color);
+    font-weight: 800;
+  }
+
+  /* Flashcard Controls */
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .flashcard-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .flashcard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-btn.shuffle {
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .flashcard-btn.shuffle:hover {
+    background: rgba(255,212,59,0.15);
+  }
+  .flashcard-btn.nav-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  .flashcard-btn.prev { border-color: var(--w5); color: var(--w5); }
+  .flashcard-btn.prev:hover { background: rgba(77,171,247,0.15); }
+  .flashcard-btn.next { border-color: var(--w4); color: var(--w4); }
+  .flashcard-btn.next:hover { background: rgba(105,219,124,0.15); }
+
+  /* The Card */
+  .flashcard-wrapper {
+    perspective: 1000px;
+    margin: 0 auto 20px;
+    max-width: 700px;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .flashcard-front {
+    background: linear-gradient(145deg, #1e3a5f, #16213e);
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-back {
+    background: linear-gradient(145deg, #1a3a2e, #16213e);
+    border: 2px solid var(--w4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .flashcard-category.red { background: rgba(233,69,96,0.3); color: #e94560; }
+  .flashcard-category.blue { background: rgba(77,171,247,0.3); color: #4DABF7; }
+  .flashcard-category.green { background: rgba(105,219,124,0.3); color: #69DB7C; }
+  .flashcard-category.orange { background: rgba(255,169,77,0.3); color: #FFA94D; }
+  .flashcard-category.purple { background: rgba(151,117,250,0.3); color: #9775FA; }
+  .flashcard-hint {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.8em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-term {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    padding: 20px 0;
+  }
+  .flashcard-definition {
+    font-size: 1.05em;
+    color: #ddd;
+    line-height: 1.7;
+    padding: 20px 0;
+  }
+  .flashcard-label {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .flashcard-front .flashcard-label {
+    background: rgba(233,69,96,0.2);
+    color: var(--accent1);
+  }
+  .flashcard-back .flashcard-label {
+    background: rgba(105,219,124,0.2);
+    color: var(--w4);
+  }
+
+  /* Progress bar for flashcards */
+  .flashcard-progress-bar {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flashcard-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--page-color), var(--w4));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  /* Keyboard shortcut hints */
+  .flashcard-shortcuts {
+    text-align: center;
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 12px;
+  }
+  .flashcard-shortcuts kbd {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+
+  /* Responsive flashcards */
+  @media (max-width: 768px) {
+    .flashcard-toggle-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .flashcard-controls {
+      gap: 8px;
+    }
+    .flashcard-btn {
+      padding: 8px 14px;
+      font-size: 0.85em;
+    }
+    .flashcard-btn.nav-btn {
+      padding: 10px 18px;
+    }
+    .flashcard {
+      min-height: 320px;
+    }
+    .flashcard-face {
+      min-height: 320px;
+      padding: 20px;
+    }
+    .flashcard-term {
+      font-size: 1.1em;
+    }
+    .flashcard-definition {
+      font-size: 0.95em;
+    }
+    .flashcard-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* ═══ STUDY TIMER ═══ */
+  .study-timer-wrapper {
+    background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98));
+    border-bottom: 2px solid var(--page-color);
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  .study-timer-wrapper.collapsed {
+    max-height: 48px !important;
+  }
+  .study-timer-wrapper.collapsed .timer-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .timer-header:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .timer-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 0.95em;
+  }
+  .timer-header-left .timer-icon {
+    font-size: 1.2em;
+  }
+  .timer-mini-display {
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .study-timer-wrapper.collapsed .timer-mini-display {
+    display: inline-block;
+  }
+  .timer-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--page-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s;
+  }
+  .study-timer-wrapper.collapsed .timer-toggle-btn {
+    transform: rotate(180deg);
+  }
+  .timer-content {
+    padding: 0 20px 20px;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .preset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85em;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .preset-btn.active {
+    border-color: var(--page-color);
+    color: var(--page-color);
+    background: rgba(255,255,255,0.1);
+  }
+  .timer-custom-inputs {
+    display: none;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .timer-custom-inputs.show {
+    display: flex;
+  }
+  .timer-custom-inputs label {
+    font-size: 0.85em;
+    color: #aaa;
+  }
+  .timer-custom-inputs input {
+    width: 60px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .timer-custom-inputs input:focus {
+    outline: none;
+    border-color: var(--page-color);
+  }
+  .timer-display-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .timer-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 3em;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.4);
+    padding: 10px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+    min-width: 200px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .timer-countdown.study-mode {
+    border-color: var(--page-color);
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+  .timer-countdown.break-mode {
+    border-color: var(--correct);
+    color: var(--correct);
+    box-shadow: 0 0 20px rgba(81,207,102,0.2);
+  }
+  .timer-countdown.paused {
+    opacity: 0.6;
+  }
+  .timer-status {
+    font-size: 0.9em;
+    color: #aaa;
+    text-align: center;
+    min-width: 120px;
+  }
+  .timer-status .status-label {
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 1.1em;
+  }
+  .timer-status .status-label.break {
+    color: var(--correct);
+  }
+  .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .timer-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timer-btn.start {
+    background: var(--page-color);
+    color: #000;
+  }
+  .timer-btn.start:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  .timer-btn.pause {
+    background: rgba(255,169,77,0.8);
+    color: #000;
+  }
+  .timer-btn.pause:hover {
+    background: rgba(255,169,77,1);
+  }
+  .timer-btn.reset {
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .timer-btn.reset:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .timer-btn.skip {
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em;
+    padding: 8px 16px;
+  }
+  .timer-btn.skip:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .timer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .timer-stat {
+    text-align: center;
+  }
+  .timer-stat .stat-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--page-color);
+    font-family: 'Courier New', monospace;
+  }
+  .timer-stat .stat-label {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .break-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .break-overlay.show {
+    display: flex;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .break-message {
+    background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2));
+    border: 3px solid var(--correct);
+    border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 500px;
+    margin: 20px;
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .break-message h2 {
+    color: var(--correct);
+    font-size: 1.8em;
+    margin-bottom: 12px;
+  }
+  .break-message p {
+    color: #ccc;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .break-message .break-tip {
+    background: rgba(255,255,255,0.05);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 0.95em;
+    color: #aaa;
+  }
+  .break-message .break-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5em;
+    color: var(--correct);
+    margin: 16px 0;
+  }
+  .break-message button {
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: var(--correct);
+    color: #000;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .break-message button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .timer-countdown {
+      font-size: 2.2em;
+      padding: 8px 20px;
+      min-width: 150px;
+    }
+    .timer-display-section {
+      gap: 12px;
+    }
+    .timer-stats {
+      gap: 16px;
+    }
+    .break-message {
+      padding: 30px 24px;
+    }
+    .break-message h2 {
+      font-size: 1.4em;
+    }
+  }
 </style>
 </head>
 <body>
@@ -595,6 +1247,70 @@
   <a href="nist.html" class="ni">NIST</a>
   <a href="mega.html" class="mega">MEGA EXAM</a>
 </nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">⏱️</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">▼</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
 <div class="page-hero">
   <h1>Week 1 — Foundations + MITRE Frameworks</h1>
   <div class="sub">SEAS8405 · Spring 2026 · Prof. Wayne Le · GWU</div>
@@ -633,6 +1349,60 @@
   <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
   <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
   <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- FLASHCARD MODE TOGGLE -->
+<div class="flashcard-toggle-container">
+  <span class="flashcard-toggle-label">Study key concepts with interactive flashcards</span>
+  <button class="flashcard-toggle-btn" id="flashcardToggle" onclick="toggleFlashcardMode()">
+    <span>🎴</span> Flashcard Mode
+  </button>
+</div>
+
+<!-- FLASHCARD MODE CONTAINER -->
+<div class="flashcard-mode" id="flashcardMode">
+  <div class="flashcard-header">
+    <div class="flashcard-title">🎴 Flashcard Mode</div>
+    <div class="flashcard-progress">
+      Card <span class="current" id="flashcardCurrent">1</span> of <span id="flashcardTotal">0</span>
+    </div>
+  </div>
+
+  <div class="flashcard-controls">
+    <button class="flashcard-btn prev nav-btn" id="flashcardPrev" onclick="prevFlashcard()">
+      ← Previous
+    </button>
+    <button class="flashcard-btn shuffle" id="flashcardShuffle" onclick="shuffleFlashcards()">
+      🔀 Shuffle
+    </button>
+    <button class="flashcard-btn next nav-btn" id="flashcardNext" onclick="nextFlashcard()">
+      Next →
+    </button>
+  </div>
+
+  <div class="flashcard-progress-bar">
+    <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+  </div>
+
+  <div class="flashcard-wrapper">
+    <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+      <div class="flashcard-face flashcard-front">
+        <span class="flashcard-category red" id="flashcardCategory">Key Idea</span>
+        <span class="flashcard-label">Term</span>
+        <div class="flashcard-term" id="flashcardTerm">Loading...</div>
+        <div class="flashcard-hint">Click to flip <span>↻</span></div>
+      </div>
+      <div class="flashcard-face flashcard-back">
+        <span class="flashcard-label">Definition</span>
+        <div class="flashcard-definition" id="flashcardDefinition">Loading...</div>
+        <div class="flashcard-hint">Click to flip back <span>↻</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flashcard-shortcuts">
+    <kbd>←</kbd> Previous | <kbd>Space</kbd> Flip | <kbd>→</kbd> Next | <kbd>S</kbd> Shuffle
+  </div>
 </div>
 
 <!-- Section 1: What is Cybersecurity Architecture? -->
@@ -676,6 +1446,23 @@
                     Engineering without architecture = chaos.<br>
                     Feedback flows BOTH ways.
                 </div>
+
+                <div class="ascii-diagram-title">Architecture vs Engineering Relationship</div>
+<div class="ascii-diagram">┌─────────────────────┐         ┌─────────────────────┐
+│     ARCHITECTURE    │         │     ENGINEERING     │
+│     (Strategic)     │         │     (Tactical)      │
+├─────────────────────┤         ├─────────────────────┤
+│  WHY & WHAT         │         │  HOW                │
+│  3-5 Year Vision    │ ◄─────► │  Sprint-based       │
+│  Org-wide Scope     │         │  System-specific    │
+│  Blueprints         │         │  Implementation     │
+└─────────────────────┘         └─────────────────────┘
+         │                               │
+         │      FEEDBACK LOOP            │
+         └───────────────────────────────┘
+
+  Without Architecture = Chaos (no direction)
+  Without Engineering = Theory (no execution)</div>
 
                 <div class="prof">
                     <strong>Professor's Tip:</strong> Think of an architect as a city planner creating a blueprint. They decide where the roads go, where utilities run, how neighborhoods connect. Engineers then build those roads and utilities according to the plan. One without the other fails.
@@ -747,6 +1534,23 @@
                         <td>ER systems, 911 services, e-commerce sites</td>
                     </tr>
                 </table>
+
+                <div class="ascii-diagram-title">CIA Triad Visualization</div>
+<div class="ascii-diagram">        CONFIDENTIALITY
+              /\
+             /  \
+            /    \
+           /      \
+          /   CIA  \
+         /  TRIAD   \
+        /____________\
+       /              \
+      /                \
+ INTEGRITY ─────── AVAILABILITY
+
+ C = Only authorized access
+ I = Data accurate & unmodified
+ A = Resources accessible when needed</div>
 
                 <h3 style="margin-top: 20px; color: #58a6ff;">Key Insight: Trade-offs Exist</h3>
                 <p>The CIA pillars are complementary, but they create tensions when optimized independently:</p>
@@ -844,6 +1648,30 @@
                         <td>KPIs, metrics — MTTD, MTTR, compliance scores, incident rates</td>
                     </tr>
                 </table>
+
+                <div class="ascii-diagram-title">Six Questions Framework Flow</div>
+<div class="ascii-diagram">┌─────────────────────────────────────────────────────────────┐
+│              SIX CRITICAL QUESTIONS FRAMEWORK               │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   Q1: WHAT?  ──────►  Assets (data, systems, IP)           │
+│        │                                                    │
+│        ▼                                                    │
+│   Q2: WHO?   ──────►  Threat Actors (who attacks us?)      │
+│        │                                                    │
+│        ▼                                                    │
+│   Q3: RISKS? ──────►  Likelihood x Impact                  │
+│        │                                                    │
+│        ▼                                                    │
+│   Q4: HOW MUCH? ───►  Risk Appetite (ASARP)                │
+│        │                                                    │
+│        ▼                                                    │
+│   Q5: CONSTRAINTS? ►  Budget, Time, Staff, Regs            │
+│        │                                                    │
+│        ▼                                                    │
+│   Q6: SUCCESS? ────►  KPIs, Metrics, Compliance            │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</div>
 
                 <div class="highlight-red">
                     <strong>Prof. Le's Point:</strong> "If you can't answer all six questions, you're not ready to start designing. Most failed architectures skip questions 4 and 5."
@@ -1648,8 +2476,15 @@
         <div class="streak-display"><span class="streak-icon">🔥</span> Streak: <span class="streak-count">0</span></div>
         <button class="quiz-reset-btn">Reset Quiz</button>
       </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
 
-      <div class="quiz-q" data-correct="0">
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
         <p><span class="qnum">1</span> What is the primary difference between cybersecurity architecture and cybersecurity engineering?</p>
         <div class="options">
           <div class="opt">Architecture focuses on WHY/WHAT over 3-5 years organization-wide; Engineering focuses on HOW in short-term sprints</div>
@@ -1934,6 +2769,968 @@
 
     updateScore();
   });
+})();
+</script>
+
+<!-- FLASHCARD MODE SCRIPT -->
+<script>
+(function() {
+  // Flashcard data will be populated from page content
+  let flashcards = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+
+  // Curated flashcard data for Week 1
+  function getFlashcardData() {
+    return [
+      { term: "Cybersecurity Architecture", definition: "A blueprint for how security controls, policies, and technologies work together to protect an organization's assets, data, and operations.", category: "blue", label: "Definition" },
+      { term: "CIA Triad", definition: "The three pillars of security: Confidentiality (keeping data secret), Integrity (keeping data accurate), Availability (keeping systems accessible).", category: "red", label: "Key Idea" },
+      { term: "Confidentiality", definition: "Ensuring information is only accessible to authorized individuals. Implemented via encryption, access controls, and authentication.", category: "blue", label: "Definition" },
+      { term: "Integrity", definition: "Ensuring data remains accurate and unaltered. Implemented via hashing, digital signatures, and checksums.", category: "blue", label: "Definition" },
+      { term: "Availability", definition: "Ensuring systems and data are accessible when needed. Implemented via redundancy, backups, and disaster recovery.", category: "blue", label: "Definition" },
+      { term: "Defense in Depth", definition: "Multiple layers of security controls so if one fails, others still protect. Like castle walls + moat + guards.", category: "red", label: "Key Idea" },
+      { term: "Least Privilege", definition: "Users get only the minimum permissions needed for their job. Reduces blast radius if account is compromised.", category: "green", label: "Best Practice" },
+      { term: "Zero Trust", definition: "Never trust, always verify. No implicit trust based on network location - verify every access request.", category: "red", label: "Key Idea" },
+      { term: "Attack Surface", definition: "All the points where an attacker could try to enter or extract data from a system.", category: "blue", label: "Definition" },
+      { term: "Security Control", definition: "A safeguard or countermeasure to avoid, detect, or minimize security risks (e.g., firewalls, encryption, policies).", category: "blue", label: "Definition" },
+      { term: "Preventive Controls", definition: "Controls that stop attacks before they happen (firewalls, access controls, encryption).", category: "green", label: "Best Practice" },
+      { term: "Detective Controls", definition: "Controls that identify when attacks occur (IDS, logging, monitoring, audits).", category: "green", label: "Best Practice" },
+      { term: "Corrective Controls", definition: "Controls that fix damage after an attack (backups, incident response, patches).", category: "green", label: "Best Practice" },
+      { term: "Threat", definition: "Any potential danger that could exploit a vulnerability and cause harm to assets.", category: "blue", label: "Definition" },
+      { term: "Vulnerability", definition: "A weakness in a system that could be exploited by a threat.", category: "blue", label: "Definition" },
+      { term: "Risk", definition: "The potential for loss when a threat exploits a vulnerability. Risk = Threat × Vulnerability × Impact.", category: "red", label: "Key Idea" },
+      { term: "Security by Design", definition: "Building security into systems from the start, not adding it as an afterthought.", category: "green", label: "Best Practice" },
+      { term: "Separation of Duties", definition: "Dividing critical functions among multiple people so no one person has complete control.", category: "green", label: "Best Practice" },
+      { term: "CISO vs CIO", definition: "CISO focuses on security strategy and risk. CIO focuses on IT operations and technology. They need to collaborate.", category: "orange", label: "Caution" },
+      { term: "'CIA' Memory Trick", definition: "Think of a spy agency (CIA) protecting secrets (Confidential), ensuring accurate intel (Integrity), and being Always available (Availability).", category: "purple", label: "Memory Aid" }
+    ];
+  }
+
+  // Initialize flashcards
+  function initFlashcards() {
+    flashcards = getFlashcardData();
+    document.getElementById('flashcardTotal').textContent = flashcards.length;
+    if (flashcards.length > 0) {
+      showFlashcard(0);
+    }
+  }
+
+  // Show specific flashcard
+  function showFlashcard(index) {
+    if (flashcards.length === 0) return;
+
+    currentIndex = index;
+    const card = flashcards[index];
+
+    // Reset flip state
+    isFlipped = false;
+    document.getElementById('flashcard').classList.remove('flipped');
+
+    // Update content
+    document.getElementById('flashcardTerm').textContent = card.term;
+    document.getElementById('flashcardDefinition').textContent = card.definition;
+
+    // Update category badge
+    const categoryEl = document.getElementById('flashcardCategory');
+    categoryEl.textContent = card.label;
+    categoryEl.className = 'flashcard-category ' + card.category;
+
+    // Update progress
+    document.getElementById('flashcardCurrent').textContent = index + 1;
+    const progressPercent = ((index + 1) / flashcards.length) * 100;
+    document.getElementById('flashcardProgressFill').style.width = progressPercent + '%';
+
+    // Update button states
+    document.getElementById('flashcardPrev').disabled = index === 0;
+    document.getElementById('flashcardNext').disabled = index === flashcards.length - 1;
+  }
+
+  // Flip flashcard
+  window.flipFlashcard = function() {
+    isFlipped = !isFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  };
+
+  // Previous flashcard
+  window.prevFlashcard = function() {
+    if (currentIndex > 0) {
+      showFlashcard(currentIndex - 1);
+    }
+  };
+
+  // Next flashcard
+  window.nextFlashcard = function() {
+    if (currentIndex < flashcards.length - 1) {
+      showFlashcard(currentIndex + 1);
+    }
+  };
+
+  // Shuffle flashcards
+  window.shuffleFlashcards = function() {
+    // Fisher-Yates shuffle
+    for (let i = flashcards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+    }
+    showFlashcard(0);
+
+    // Visual feedback
+    const btn = document.getElementById('flashcardShuffle');
+    btn.textContent = '✓ Shuffled!';
+    setTimeout(() => {
+      btn.innerHTML = '🔀 Shuffle';
+    }, 1000);
+  };
+
+  // Toggle flashcard mode
+  window.toggleFlashcardMode = function() {
+    const mode = document.getElementById('flashcardMode');
+    const btn = document.getElementById('flashcardToggle');
+    const isActive = mode.classList.toggle('active');
+    btn.classList.toggle('active', isActive);
+
+    if (isActive && flashcards.length === 0) {
+      initFlashcards();
+    }
+  };
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    const mode = document.getElementById('flashcardMode');
+    if (!mode.classList.contains('active')) return;
+
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        prevFlashcard();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextFlashcard();
+        break;
+      case ' ':
+        e.preventDefault();
+        flipFlashcard();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        shuffleFlashcards();
+        break;
+    }
+  });
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlashcards);
+  } else {
+    initFlashcards();
+  }
+})();
+
+// ═══ DIFFICULTY FILTER ═══
+window.filterDifficulty = function(level) {
+  // Update button states
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+
+  // Filter questions
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+
+  // Update total count
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
+// ═══ STUDY TIMER ═══
+(function() {
+  // Timer state
+  let timerState = {
+    studyMinutes: 25,
+    breakMinutes: 5,
+    secondsRemaining: 25 * 60,
+    isRunning: false,
+    isBreak: false,
+    totalStudySeconds: 0,
+    sessionsCompleted: 0,
+    currentStreak: 0,
+    intervalId: null
+  };
+
+  // Preset configurations
+  const presets = {
+    pomodoro: { study: 25, break: 5 },
+    short: { study: 15, break: 3 },
+    custom: { study: 25, break: 5 }
+  };
+
+  // Encouraging messages for breaks
+  const breakMessages = [
+    { title: "Time for a Break!", text: "Great focus session! You've earned this rest." },
+    { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." },
+    { title: "Break Time!", text: "Step away, stretch, and come back refreshed." },
+    { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." },
+    { title: "Rest Up!", text: "A short break now means better focus later." },
+    { title: "You Did It!", text: "Another session down! Keep up the great work." }
+  ];
+
+  const breakTips = [
+    "Stand up and stretch your legs for a minute.",
+    "Look away from the screen - focus on something 20 feet away.",
+    "Grab a glass of water to stay hydrated.",
+    "Do some shoulder rolls to release tension.",
+    "Take a few deep breaths to reset your focus.",
+    "Walk around the room or do some light movement.",
+    "Close your eyes and rest them for 30 seconds.",
+    "Snack on something healthy if you're hungry."
+  ];
+
+  // Format seconds to MM:SS
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  // Format total time to HH:MM or MM:SS
+  function formatTotalTime(seconds) {
+    if (seconds >= 3600) {
+      const hours = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${mins}m`;
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  // Update display
+  function updateDisplay() {
+    const countdown = document.getElementById('timerCountdown');
+    const miniDisplay = document.getElementById('timerMiniDisplay');
+    const statusLabel = document.getElementById('timerStatusLabel');
+    const statusText = document.getElementById('timerStatusText');
+    const startPauseBtn = document.getElementById('startPauseBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const totalStudyEl = document.getElementById('totalStudyTime');
+    const sessionsEl = document.getElementById('sessionsCompleted');
+    const streakEl = document.getElementById('currentStreak');
+    const breakCountdown = document.getElementById('breakCountdown');
+
+    const timeStr = formatTime(timerState.secondsRemaining);
+    countdown.textContent = timeStr;
+    miniDisplay.textContent = timeStr;
+
+    // Update total study time
+    totalStudyEl.textContent = formatTotalTime(timerState.totalStudySeconds);
+    sessionsEl.textContent = timerState.sessionsCompleted;
+    streakEl.textContent = timerState.currentStreak;
+
+    // Update countdown styling
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) {
+      countdown.classList.add('break-mode');
+      statusLabel.textContent = 'BREAK';
+      statusLabel.classList.add('break');
+      statusText.textContent = 'Relax and recharge';
+      skipBtn.textContent = 'End Break';
+      breakCountdown.textContent = timeStr;
+    } else if (timerState.isRunning) {
+      countdown.classList.add('study-mode');
+      statusLabel.textContent = 'STUDYING';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Stay focused!';
+      skipBtn.textContent = 'Skip to Break';
+    } else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) {
+      countdown.classList.add('paused');
+      statusLabel.textContent = 'PAUSED';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to resume';
+    } else {
+      statusLabel.textContent = 'READY';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to begin';
+    }
+
+    // Update button text
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start';
+    startPauseBtn.classList.toggle('pause', timerState.isRunning);
+    startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+
+  // Play notification sound (gentle, ADHD-friendly)
+  function playNotification() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Create a gentle two-tone chime
+      const playTone = (freq, startTime, duration) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+      };
+
+      const now = audioContext.currentTime;
+      playTone(523.25, now, 0.3);       // C5
+      playTone(659.25, now + 0.15, 0.3); // E5
+      playTone(783.99, now + 0.3, 0.4);  // G5
+    } catch (e) {
+      // Audio not supported, just flash the display
+      const countdown = document.getElementById('timerCountdown');
+      countdown.style.animation = 'none';
+      setTimeout(() => {
+        countdown.style.animation = 'pulse 0.5s ease-in-out 3';
+      }, 10);
+    }
+  }
+
+  // Show break overlay
+  function showBreakOverlay() {
+    const overlay = document.getElementById('breakOverlay');
+    const titleEl = document.getElementById('breakTitle');
+    const textEl = document.getElementById('breakEncouragement');
+    const tipEl = document.getElementById('breakTip');
+
+    const message = breakMessages[Math.floor(Math.random() * breakMessages.length)];
+    const tip = breakTips[Math.floor(Math.random() * breakTips.length)];
+
+    titleEl.textContent = message.title;
+    textEl.textContent = message.text;
+    tipEl.textContent = tip;
+
+    overlay.classList.add('show');
+  }
+
+  // Timer tick
+  function tick() {
+    if (!timerState.isRunning) return;
+
+    timerState.secondsRemaining--;
+
+    // Track study time (not break time)
+    if (!timerState.isBreak) {
+      timerState.totalStudySeconds++;
+    }
+
+    updateDisplay();
+
+    if (timerState.secondsRemaining <= 0) {
+      playNotification();
+
+      if (timerState.isBreak) {
+        // Break ended, start new study session
+        timerState.isBreak = false;
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+        timerState.currentStreak++;
+        dismissBreak();
+      } else {
+        // Study session ended, start break
+        timerState.sessionsCompleted++;
+        timerState.isBreak = true;
+        timerState.secondsRemaining = timerState.breakMinutes * 60;
+        showBreakOverlay();
+      }
+      updateDisplay();
+    }
+  }
+
+  // Toggle timer (start/pause)
+  window.toggleTimer = function() {
+    if (timerState.isRunning) {
+      // Pause
+      timerState.isRunning = false;
+      clearInterval(timerState.intervalId);
+    } else {
+      // Start
+      timerState.isRunning = true;
+      timerState.intervalId = setInterval(tick, 1000);
+    }
+    updateDisplay();
+  };
+
+  // Reset timer
+  window.resetTimer = function() {
+    timerState.isRunning = false;
+    timerState.isBreak = false;
+    clearInterval(timerState.intervalId);
+    timerState.secondsRemaining = timerState.studyMinutes * 60;
+    dismissBreak();
+    updateDisplay();
+  };
+
+  // Skip to break / end break
+  window.skipToBreak = function() {
+    if (timerState.isBreak) {
+      // End break early
+      timerState.isBreak = false;
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+      timerState.currentStreak++;
+      dismissBreak();
+    } else {
+      // Skip study, go to break
+      timerState.sessionsCompleted++;
+      timerState.isBreak = true;
+      timerState.secondsRemaining = timerState.breakMinutes * 60;
+      showBreakOverlay();
+    }
+    updateDisplay();
+  };
+
+  // Dismiss break overlay
+  window.dismissBreak = function() {
+    document.getElementById('breakOverlay').classList.remove('show');
+  };
+
+  // Set preset
+  window.setPreset = function(presetName) {
+    // Update active button
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === presetName);
+    });
+
+    // Show/hide custom inputs
+    document.getElementById('customInputs').classList.toggle('show', presetName === 'custom');
+
+    if (presetName !== 'custom') {
+      const preset = presets[presetName];
+      timerState.studyMinutes = preset.study;
+      timerState.breakMinutes = preset.break;
+      if (!timerState.isRunning && !timerState.isBreak) {
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+      }
+      updateDisplay();
+    }
+  };
+
+  // Apply custom settings
+  window.applyCustom = function() {
+    const studyInput = document.getElementById('customStudy');
+    const breakInput = document.getElementById('customBreak');
+
+    const study = Math.max(1, Math.min(120, parseInt(studyInput.value) || 25));
+    const breakTime = Math.max(1, Math.min(30, parseInt(breakInput.value) || 5));
+
+    studyInput.value = study;
+    breakInput.value = breakTime;
+
+    timerState.studyMinutes = study;
+    timerState.breakMinutes = breakTime;
+    presets.custom = { study, break: breakTime };
+
+    if (!timerState.isRunning && !timerState.isBreak) {
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+    }
+    updateDisplay();
+  };
+
+  // Toggle timer visibility
+  window.toggleStudyTimer = function() {
+    document.getElementById('studyTimerWrapper').classList.toggle('collapsed');
+  };
+
+  // Initialize
+  updateDisplay();
+
+  // Save state to localStorage periodically
+  setInterval(() => {
+    if (timerState.totalStudySeconds > 0) {
+      localStorage.setItem('studyTimerStats', JSON.stringify({
+        totalStudySeconds: timerState.totalStudySeconds,
+        sessionsCompleted: timerState.sessionsCompleted,
+        date: new Date().toDateString()
+      }));
+    }
+  }, 30000);
+
+  // Load saved stats if from today
+  const saved = localStorage.getItem('studyTimerStats');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.date === new Date().toDateString()) {
+        timerState.totalStudySeconds = data.totalStudySeconds || 0;
+        timerState.sessionsCompleted = data.sessionsCompleted || 0;
+        updateDisplay();
+      }
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">8</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="architecture" data-alt="cybersecurity architecture">
+    <p class="fb-question"><span class="fb-num">1</span> Cybersecurity <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> focuses on strategic planning (WHY/WHAT) over 3-5 years, while engineering focuses on tactical implementation (HOW).</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="bake in" data-alt="bake-in,baked in">
+    <p class="fb-question"><span class="fb-num">2</span> The principle "<span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>, Don't Bolt On" means security must be integrated from the design phase, not added afterward.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="CIA" data-alt="cia triad,confidentiality integrity availability">
+    <p class="fb-question"><span class="fb-num">3</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> Triad consists of Confidentiality, Integrity, and Availability - the three fundamental security objectives.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ASARP" data-alt="as secure as reasonably practicable">
+    <p class="fb-question"><span class="fb-num">4</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> stands for "As Secure As Reasonably Practicable" - the point where additional security investment produces disproportionate negative impact.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="81" data-alt="81%,eighty-one">
+    <p class="fb-question"><span class="fb-num">5</span> According to the course, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>% of successful intrusions involve ZERO malware, using legitimate tools and stolen credentials instead.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ATT&CK" data-alt="attack,mitre attack,mitre att&ck">
+    <p class="fb-question"><span class="fb-num">6</span> MITRE <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> documents 700+ attack techniques across 14+ tactics, providing a common language between defenders and executives.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="D3FEND" data-alt="defend">
+    <p class="fb-question"><span class="fb-num">7</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> stands for "Detection, Denial, and Disruption Framework Empowering Network Defense" and maps defensive countermeasures to ATT&CK attacks.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Policy" data-alt="policies">
+    <p class="fb-question"><span class="fb-num">8</span> In the governance hierarchy, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> is at the top (high-level, executive-approved), followed by Standards, Procedures, and Guidance.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  /* Fill-in-the-Blank Styles */
+  .fill-blank-section {
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 2px solid var(--page-color);
+  }
+  .fill-blank-section h2 {
+    color: var(--page-color);
+    margin-bottom: 8px;
+    font-size: 1.3em;
+  }
+  .fill-blank-intro {
+    color: #aaa;
+    font-size: 0.95em;
+    margin-bottom: 16px;
+  }
+  .fill-blank-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+  }
+  .fb-score-text {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: var(--page-color);
+  }
+  .fb-score-fill-track {
+    flex: 1;
+    min-width: 120px;
+    height: 18px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .fb-score-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .fb-check-all-btn, .fb-reset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .fb-check-all-btn:hover {
+    background: var(--page-color);
+    color: #000;
+  }
+  .fb-reset-btn {
+    border-color: #666;
+    color: #aaa;
+  }
+  .fb-reset-btn:hover {
+    border-color: #888;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .fill-blank-item {
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    border-left: 4px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .fill-blank-item.correct {
+    border-left-color: var(--correct);
+    background: rgba(81,207,102,0.1);
+  }
+  .fill-blank-item.wrong {
+    border-left-color: var(--wrong);
+    background: rgba(255,107,107,0.1);
+  }
+  .fb-question {
+    font-size: 1em;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .fb-num {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--page-color);
+    color: #000;
+    border-radius: 50%;
+    font-size: 0.75em;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+  .fb-blank-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .fb-input {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 0.95em;
+    min-width: 120px;
+    max-width: 200px;
+    transition: all 0.2s;
+  }
+  .fb-input:focus {
+    outline: none;
+    border-color: var(--page-color);
+    background: rgba(0,0,0,0.6);
+  }
+  .fb-input.correct {
+    border-color: var(--correct);
+    background: rgba(81,207,102,0.2);
+    color: var(--correct);
+  }
+  .fb-input.wrong {
+    border-color: var(--wrong);
+    background: rgba(255,107,107,0.2);
+  }
+  .fb-input:disabled {
+    opacity: 0.8;
+  }
+  .fb-hint-btn, .fb-check-btn {
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fb-hint-btn:hover {
+    background: rgba(255,212,59,0.2);
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .fb-check-btn:hover {
+    background: rgba(77,171,247,0.2);
+    border-color: var(--w5);
+    color: var(--w5);
+  }
+  .fb-feedback {
+    margin-top: 8px;
+    font-size: 0.9em;
+    min-height: 20px;
+  }
+  .fb-feedback.correct {
+    color: var(--correct);
+  }
+  .fb-feedback.wrong {
+    color: var(--wrong);
+  }
+  @media (max-width: 768px) {
+    .fill-blank-score-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .fb-score-fill-track {
+      width: 100%;
+    }
+    .fb-blank-wrapper {
+      display: flex;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .fb-input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+
+  function updateFbScore() {
+    const scoreEl = document.querySelector('.fb-score-correct');
+    const fillEl = document.querySelector('.fb-score-fill');
+    const totalEl = document.querySelector('.fb-score-total');
+    if (scoreEl) scoreEl.textContent = fbCorrect;
+    if (totalEl) totalEl.textContent = fbTotal;
+    if (fillEl && fbTotal > 0) {
+      fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%';
+    }
+  }
+
+  window.showHint = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const answer = item.dataset.answer.toLowerCase();
+
+    // Show first letter + underscores for rest
+    if (input.value.length === 0) {
+      const hint = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1));
+      input.placeholder = hint;
+      input.focus();
+    } else {
+      // Show more letters progressively
+      const currentLen = input.value.length;
+      if (currentLen < answer.length) {
+        input.value = answer.substring(0, currentLen + 1);
+        input.focus();
+      }
+    }
+  };
+
+  window.checkBlank = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const feedback = item.querySelector('.fb-feedback');
+    const answer = item.dataset.answer.toLowerCase();
+    const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : [];
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if (item.classList.contains('checked')) return;
+
+    // Check if answer matches
+    const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer);
+
+    item.classList.add('checked');
+    input.disabled = true;
+
+    if (isCorrect) {
+      item.classList.add('correct');
+      input.classList.add('correct');
+      feedback.classList.add('correct');
+      feedback.innerHTML = '<strong>Correct!</strong>';
+      fbCorrect++;
+    } else {
+      item.classList.add('wrong');
+      input.classList.add('wrong');
+      feedback.classList.add('wrong');
+      feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer;
+    }
+
+    updateFbScore();
+  };
+
+  window.checkAllBlanks = function() {
+    fbItems.forEach(item => {
+      if (!item.classList.contains('checked')) {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  };
+
+  window.resetAllBlanks = function() {
+    fbCorrect = 0;
+    fbItems.forEach(item => {
+      item.classList.remove('checked', 'correct', 'wrong');
+      const input = item.querySelector('.fb-input');
+      const feedback = item.querySelector('.fb-feedback');
+      input.value = '';
+      input.disabled = false;
+      input.classList.remove('correct', 'wrong');
+      input.placeholder = '________';
+      feedback.innerHTML = '';
+      feedback.classList.remove('correct', 'wrong');
+    });
+    updateFbScore();
+  };
+
+  // Allow Enter key to check answer
+  fbItems.forEach(item => {
+    const input = item.querySelector('.fb-input');
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  });
+
+  updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">CIA Triad</div>
+      <div class="match-term" data-match="2">ASARP</div>
+      <div class="match-term" data-match="3">MITRE ATT&CK</div>
+      <div class="match-term" data-match="4">D3FEND</div>
+      <div class="match-term" data-match="5">Bake In, Don't Bolt On</div>
+      <div class="match-term" data-match="6">Governance Hierarchy</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="4">Defensive countermeasures mapped to attack techniques</div>
+      <div class="match-def" data-match="1">Confidentiality, Integrity, Availability</div>
+      <div class="match-def" data-match="6">Policy, Standards, Procedures, Guidance</div>
+      <div class="match-def" data-match="3">700+ attack techniques across 14 tactics</div>
+      <div class="match-def" data-match="2">As Secure As Reasonably Practicable</div>
+      <div class="match-def" data-match="5">Security must be integrated from the design phase</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
 })();
 </script>
 
