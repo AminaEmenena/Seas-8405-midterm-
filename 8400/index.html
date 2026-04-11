@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8400 Finals Prep — Challenges in Cybersecurity</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --l7: #FF6B6B;
+    --l8: #FFA94D;
+    --l9: #FFD43B;
+    --l10: #69DB7C;
+    --l11: #9775FA;
+    --mega: #e94560;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.l7 { background: var(--l7); color: #000; }
+  .topnav a.l8 { background: var(--l8); color: #000; }
+  .topnav a.l9 { background: var(--l9); color: #000; }
+  .topnav a.l10 { background: var(--l10); color: #000; }
+  .topnav a.l11 { background: var(--l11); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* HERO */
+  .hero {
+    text-align: center; padding: 50px 20px 30px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+  }
+  .hero h1 { font-size: 2.4em; color: var(--accent1); margin-bottom: 10px; }
+  .hero p { font-size: 1.1em; color: #aaa; max-width: 700px; margin: 0 auto; }
+  .hero .course-tag {
+    display: inline-block; margin-top: 14px;
+    padding: 6px 20px; border-radius: 20px;
+    background: rgba(233,69,96,0.2); border: 1px solid var(--accent1);
+    font-size: 0.85em; font-weight: 700; color: var(--accent1);
+    letter-spacing: 1px;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  /* SECTION CARDS */
+  a.card {
+    display: block; text-decoration: none;
+    margin: 16px 0; border-radius: 16px;
+    overflow: hidden; transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+  .card-inner {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 24px;
+    background: var(--card);
+  }
+  .card-icon {
+    font-size: 2em; min-width: 50px; text-align: center;
+  }
+  .card-text h2 { font-size: 1.15em; color: #fff; margin-bottom: 4px; }
+  .card-text p { font-size: 0.85em; color: #aaa; margin: 0; }
+  .card-badge {
+    margin-left: auto; padding: 6px 14px;
+    border-radius: 20px; font-size: 0.75em;
+    font-weight: 700; white-space: nowrap;
+  }
+
+  a.card.l7 { border-color: var(--l7); }
+  a.card.l7 .card-badge { background: rgba(255,107,107,0.2); color: var(--l7); }
+  a.card.l7:hover { border-color: var(--l7); background: rgba(255,107,107,0.05); }
+
+  a.card.l8 { border-color: var(--l8); }
+  a.card.l8 .card-badge { background: rgba(255,169,77,0.2); color: var(--l8); }
+  a.card.l8:hover { border-color: var(--l8); background: rgba(255,169,77,0.05); }
+
+  a.card.l9 { border-color: var(--l9); }
+  a.card.l9 .card-badge { background: rgba(255,212,59,0.2); color: var(--l9); }
+  a.card.l9:hover { border-color: var(--l9); background: rgba(255,212,59,0.05); }
+
+  a.card.l10 { border-color: var(--l10); }
+  a.card.l10 .card-badge { background: rgba(105,219,124,0.2); color: var(--l10); }
+  a.card.l10:hover { border-color: var(--l10); background: rgba(105,219,124,0.05); }
+
+  a.card.l11 { border-color: var(--l11); }
+  a.card.l11 .card-badge { background: rgba(151,117,250,0.2); color: var(--l11); }
+  a.card.l11:hover { border-color: var(--l11); background: rgba(151,117,250,0.05); }
+
+  a.card.mega { border-color: var(--accent1); }
+  a.card.mega .card-badge { background: rgba(233,69,96,0.2); color: var(--accent1); }
+  a.card.mega:hover { border-color: var(--accent1); background: rgba(233,69,96,0.05); }
+  a.card.mega .card-inner { background: linear-gradient(135deg, var(--card), rgba(233,69,96,0.1)); }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 20px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--accent1); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* EXAM INFO */
+  .exam-info {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 20px 24px; margin: 24px 0;
+  }
+  .exam-info h3 { color: var(--accent1); margin-bottom: 12px; font-size: 1.1em; }
+  .exam-info ul { list-style: none; padding: 0; }
+  .exam-info li {
+    padding: 6px 0; font-size: 0.9em;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .exam-info li:last-child { border-bottom: none; }
+  .exam-info li strong { color: #fff; }
+
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .hero h1 { font-size: 1.6em; }
+    .card-inner { flex-direction: column; text-align: center; gap: 10px; }
+    .card-badge { margin-left: 0; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title">8400 FINALS</span>
+  <a href="../index.html" class="home">Course Select</a>
+  <a href="lesson7.html" class="l7">L7</a>
+  <a href="lesson8.html" class="l8">L8</a>
+  <a href="lesson9.html" class="l9">L9</a>
+  <a href="lesson10.html" class="l10">L10</a>
+  <a href="lesson11.html" class="l11">L11</a>
+  <a href="mega.html" class="mega">Mega</a>
+</nav>
+
+<div class="hero">
+  <h1>SEAS 8400 Finals Prep</h1>
+  <p>Challenges in Cybersecurity &mdash; Cybersecurity Analyst (CySA+)</p>
+  <div class="course-tag">GEORGE WASHINGTON UNIVERSITY</div>
+</div>
+
+<div class="container">
+
+  <a href="../index.html" class="back-link">&larr; Back to Course Select</a>
+
+  <div class="exam-info">
+    <h3>Final Exam Format</h3>
+    <ul>
+      <li><strong>Fill-in-the-blank</strong> &mdash; Look for bolded/yellow text in slides</li>
+      <li><strong>Matching</strong> &mdash; IR 6 steps, downtime metrics, SDLC steps, red/blue/white teams, password types, COBIT domains</li>
+      <li><strong>Multiple choice</strong> &mdash; Password types (slides 27-29), legal requirements, control types</li>
+      <li><strong>One page of notes allowed</strong> &mdash; Focus on diamond/yellow content from slides</li>
+      <li><strong>Nothing from the midterm</strong> &mdash; Final covers Lessons 7-11 only</li>
+    </ul>
+  </div>
+
+  <a href="lesson7.html" class="card l7">
+    <div class="card-inner">
+      <div class="card-icon">L7</div>
+      <div class="card-text">
+        <h2>Software Assurance Best Practices</h2>
+        <p>Ch 9 &mdash; SDLC, DevSecOps, platforms, BYOD/COPE, CSRF, maintenance hooks, TOCTOU, firmware, SOAP/REST, microservices</p>
+      </div>
+      <div class="card-badge">20 Questions</div>
+    </div>
+  </a>
+
+  <a href="lesson8.html" class="card l8">
+    <div class="card-inner">
+      <div class="card-icon">L8</div>
+      <div class="card-text">
+        <h2>Incident Response</h2>
+        <p>Ch 15 &amp; 16 &mdash; Communication plans, 6 IR steps, downtime metrics, stakeholder roles, data criticality, PII/PHI/SPI, evidence retention</p>
+      </div>
+      <div class="card-badge">20 Questions</div>
+    </div>
+  </a>
+
+  <a href="lesson9.html" class="card l9">
+    <div class="card-inner">
+      <div class="card-icon">L9</div>
+      <div class="card-text">
+        <h2>Data Privacy &amp; Protection</h2>
+        <p>Legal requirements &mdash; SOX, HIPAA, GLBA, CFAA, FISMA, USA PATRIOT, GDPR, data sovereignty, DLP, DRM, data minimization</p>
+      </div>
+      <div class="card-badge">20 Questions</div>
+    </div>
+  </a>
+
+  <a href="lesson10.html" class="card l10">
+    <div class="card-inner">
+      <div class="card-icon">L10</div>
+      <div class="card-text">
+        <h2>Applying Security Concepts for Risk Mitigation</h2>
+        <p>Ch 20 &mdash; BIA, risk assessment, qualitative vs quantitative, SLE/ALE formulas, red/blue/white teams, supply chain, compensating controls</p>
+      </div>
+      <div class="card-badge">20 Questions</div>
+    </div>
+  </a>
+
+  <a href="lesson11.html" class="card l11">
+    <div class="card-inner">
+      <div class="card-icon">L11</div>
+      <div class="card-text">
+        <h2>Frameworks, Policies, Procedures &amp; Controls</h2>
+        <p>Ch 21 &mdash; COBIT, TOGAF, NIST CSF 2.0, ISO 27000, SABSA, ITIL, CMMI, password policies, control types, SSAE-18/SOC</p>
+      </div>
+      <div class="card-badge">20 Questions</div>
+    </div>
+  </a>
+
+  <a href="mega.html" class="card mega">
+    <div class="card-inner">
+      <div class="card-icon">MEGA</div>
+      <div class="card-text">
+        <h2>Mega Final Exam</h2>
+        <p>Randomized questions from all 5 lessons &mdash; simulate the real final</p>
+      </div>
+      <div class="card-badge">100 Questions</div>
+    </div>
+  </a>
+
+</div>
+
+</body>
+</html>

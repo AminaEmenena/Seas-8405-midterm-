@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 10 — Applying Security Concepts for Risk Mitigation</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #69DB7C;
+    --page-tint: rgba(105,219,124,0.08);
+    --correct: #51cf66;
+    --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.home { background: #444; }
+  .topnav a.l7 { background: #FF6B6B; color: #000; }
+  .topnav a.l8 { background: #FFA94D; color: #000; }
+  .topnav a.l9 { background: #FFD43B; color: #000; }
+  .topnav a.l10 { background: #69DB7C; color: #000; }
+  .topnav a.l11 { background: #4DABF7; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+
+  /* STREAK */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* QUIZ SECTION */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease; width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    text-align: left;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .quiz-q .opt.correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .quiz-q .opt.wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .quiz-q .opt.disabled { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  .difficulty-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 0.7em; font-weight: 700; text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .difficulty-badge.easy { background: rgba(81,207,102,0.2); color: var(--correct); }
+  .difficulty-badge.medium { background: rgba(255,169,77,0.2); color: #FFA94D; }
+  .difficulty-badge.hard { background: rgba(233,69,96,0.2); color: var(--accent1); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="title">SEAS 8400</span>
+  <a href="index.html" class="home">8400 Home</a>
+  <a href="lesson7.html" class="l7">L7</a>
+  <a href="lesson8.html" class="l8">L8</a>
+  <a href="lesson9.html" class="l9">L9</a>
+  <a href="lesson10.html" class="l10 active">L10</a>
+  <a href="lesson11.html" class="l11">L11</a>
+  <a href="mega.html" class="mega">Mega</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Lesson 10 &mdash; Applying Security Concepts for Risk Mitigation</h1>
+  <div class="sub">Chapter 20 | SEAS 8400 Finals</div>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-container">
+    <label>Quiz Progress</label>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 20 answered</div>
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <div class="tldr-header">TL;DR &mdash; Key Concepts</div>
+    <ul>
+      <li><strong>Risk Management</strong> is a formal process (FISMA requires documentation)</li>
+      <li><strong>BIA</strong>: 4 steps &mdash; identify critical processes, outage impacts, resource requirements, recovery priorities</li>
+      <li><strong>Qualitative</strong> = subjective (Delphi, brainstorming); <strong>Quantitative</strong> = monetary values (SLE, ALE)</li>
+      <li><strong>SLE</strong> = AV x EF; <strong>ALE</strong> = SLE x ARO</li>
+      <li><strong>Risk Handling</strong>: Avoidance, Transfer, Mitigation, Acceptance</li>
+      <li><strong>Red Team</strong> = attackers; <strong>Blue Team</strong> = defenders; <strong>White Team</strong> = referees</li>
+      <li><strong>Tabletop Exercise</strong>: most cost-effective way to identify vulnerabilities</li>
+      <li><strong>Compensating Controls</strong>: must be documented with reason primary control was not implemented</li>
+      <li><strong>C-suite</strong> determines what systems are critical, NOT the CISO</li>
+      <li><strong>Communicate risk</strong> in business terms to executives &mdash; never talk technical to non-technical people</li>
+    </ul>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h2>Quiz &mdash; 20 Questions</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text" id="scoreText">Score: 0 / 20</span>
+      <div class="score-fill-track"><div class="score-fill" id="scoreFill"></div></div>
+      <div class="streak-display" id="streakDisplay">Streak: 0</div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">1</span> The risk management process is a _____ method of evaluating vulnerabilities.<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Formal</div>
+        <div class="opt">Informal</div>
+        <div class="opt">Optional</div>
+        <div class="opt">Theoretical</div>
+      </div>
+      <div class="explanation">Slide 3. FISMA makes it formal &mdash; it must be in writing and documented.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q" data-correct="3" data-difficulty="easy">
+      <p><span class="qnum">2</span> Which is NOT one of the four main steps of a Business Impact Analysis (BIA)?<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Identify critical processes and resources</div>
+        <div class="opt">Identify outage impacts and estimate downtime</div>
+        <div class="opt">Identify recovery priorities</div>
+        <div class="opt">Identify threat actors and their motivations</div>
+      </div>
+      <div class="explanation">The 4 BIA steps are: 1) Identify critical processes/resources 2) Identify outage impacts/estimate downtime 3) Identify resource requirements 4) Identify recovery priorities.</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">3</span> A risk assessment is also known as:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Risk identification</div>
+        <div class="opt">Risk tolerance</div>
+        <div class="opt">Risk appetite</div>
+        <div class="opt">Risk avoidance</div>
+      </div>
+      <div class="explanation">From slides and Professor Duke's lecture. Risk assessment/identification is a tool used in risk management to identify vulnerabilities and threats.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">4</span> The four main goals of risk assessment are: 1) Identify assets and asset value, 2) Identify vulnerabilities and threats, 3) Calculate threat probability and business impact, and 4):<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Balance threat impact with countermeasure cost</div>
+        <div class="opt">Eliminate all risks completely</div>
+        <div class="opt">Transfer all risks to insurance</div>
+        <div class="opt">Accept all identified risks</div>
+      </div>
+      <div class="explanation">These four goals guide the entire risk assessment process. Management finalizes the asset list and determines budget.</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">5</span> A qualitative risk analysis does NOT assign:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Monetary and numeric values</div>
+        <div class="opt">High/medium/low ratings</div>
+        <div class="opt">Color-coded priorities</div>
+        <div class="opt">Subjective assessments</div>
+      </div>
+      <div class="explanation">Qualitative uses intuition, experience, best practices. Techniques include brainstorming, focus groups, surveys, Delphi technique. Results are subjective.</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">6</span> The Delphi technique is a method used to:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Estimate the likelihood and outcome of future events</div>
+        <div class="opt">Encrypt sensitive data</div>
+        <div class="opt">Measure network bandwidth</div>
+        <div class="opt">Calculate annual loss expectancy</div>
+      </div>
+      <div class="explanation">Named technique in qualitative risk analysis. Each group member independently ranks threats, then data is combined into a report for management.</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="medium">
+      <p><span class="qnum">7</span> Two advantages of qualitative over quantitative risk analysis are:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Uses equations and provides dollar values</div>
+        <div class="opt">Prioritizes risks AND identifies areas for immediate improvement</div>
+        <div class="opt">Is faster and requires no expertise</div>
+        <div class="opt">Eliminates all subjectivity</div>
+      </div>
+      <div class="explanation">Disadvantages of qualitative: all results are subjective, no dollar value for cost/benefit analysis or budget help.</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">8</span> SLE (Single Loss Expectancy) is calculated as:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Asset Value &times; Exposure Factor</div>
+        <div class="opt">Asset Value &divide; Annual Rate of Occurrence</div>
+        <div class="opt">Exposure Factor &times; Annual Loss Expectancy</div>
+        <div class="opt">Annual Rate of Occurrence &times; Asset Value</div>
+      </div>
+      <div class="explanation">SLE = AV &times; EF. The Exposure Factor is the percentage of value/functionality lost when a threat event occurs.</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="hard">
+      <p><span class="qnum">9</span> An organization has a web server farm valued at $20,000. The exposure factor for a power failure is 25% and the ARO is 50%. What is the ALE?<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">$2,500</div>
+        <div class="opt">$5,000</div>
+        <div class="opt">$10,000</div>
+        <div class="opt">$1,250</div>
+      </div>
+      <div class="explanation">SLE = AV &times; EF = $20,000 &times; 0.25 = $5,000. ALE = SLE &times; ARO = $5,000 &times; 0.50 = $2,500.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">10</span> Which risk handling method involves passing risk to a third party like an insurance company?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Risk avoidance</div>
+        <div class="opt">Risk acceptance</div>
+        <div class="opt">Risk transfer</div>
+        <div class="opt">Risk mitigation</div>
+      </div>
+      <div class="explanation">Four methods: Avoidance (terminate risky activity), Transfer (pass to third party), Mitigation (reduce to acceptable level), Acceptance (understand and accept).</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">11</span> The red team in a security exercise acts as:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">The attacking force conducting penetration tests</div>
+        <div class="opt">The network defense team</div>
+        <div class="opt">The referees enforcing rules of engagement</div>
+        <div class="opt">The management oversight committee</div>
+      </div>
+      <div class="explanation">Red team follows established rules of engagement. Often third-party contractors with no prior network knowledge to simulate outside attacks.</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">12</span> The blue team's role includes:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Accessing log data, using SIEM, performing traffic and data flow analysis</div>
+        <div class="opt">Setting the rules of engagement</div>
+        <div class="opt">Attacking the network to find vulnerabilities</div>
+        <div class="opt">Writing the lessons learned report</div>
+      </div>
+      <div class="explanation">Blue team acts as network defense. Tests ability to respond to red team attacks. Also serves as practice for real-world events.</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">13</span> The white team's primary role is to:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Attack the network</div>
+        <div class="opt">Defend the network</div>
+        <div class="opt">Referee the encounter between red and blue teams</div>
+        <div class="opt">Report to senior management</div>
+      </div>
+      <div class="explanation">White team enforces rules of engagement, monitors responses, and makes notes of approaches employed by both teams.</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">14</span> A tabletop exercise is:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">The most cost-effective and efficient way to identify vulnerabilities</div>
+        <div class="opt">A physical penetration test</div>
+        <div class="opt">A full-scale disaster simulation</div>
+        <div class="opt">A vendor product demonstration</div>
+      </div>
+      <div class="explanation">Tabletop exercise is an informal brainstorming session. Most cost-effective before moving to higher-level testing.</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">15</span> Compensating controls must be:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Recorded along with the reason the primary control was not implemented</div>
+        <div class="opt">Kept secret from management</div>
+        <div class="opt">Implemented without documentation</div>
+        <div class="opt">Replaced every 30 days</div>
+      </div>
+      <div class="explanation">Slide 39. Compensating controls substitute for primary access controls to mitigate risk. Examples: two signatures for sensitive info, two keys for safety deposit box.</div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="medium">
+      <p><span class="qnum">16</span> Who determines what systems are critical in an organization?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">The CISO</div>
+        <div class="opt">The C-suite/stakeholders</div>
+        <div class="opt">The IT help desk</div>
+        <div class="opt">External auditors</div>
+      </div>
+      <div class="explanation">Professor Duke emphasized: the C-suite decides what's critical, NOT the CISO. The cyber champion supports and provides security as a business enabler.</div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">17</span> When communicating risk to executives and board members, you should:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Translate technical risks into business terms they understand</div>
+        <div class="opt">Use as much technical jargon as possible</div>
+        <div class="opt">Only discuss firewall configurations</div>
+        <div class="opt">Avoid mentioning financial impacts</div>
+      </div>
+      <div class="explanation">Slide 24. Focus on business disruption, regulatory issues, and bad press. Never talk technical to non-technical people.</div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">18</span> An advantage of quantitative over qualitative risk analysis is:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">It uses less guesswork</div>
+        <div class="opt">It's faster to complete</div>
+        <div class="opt">It requires no data collection</div>
+        <div class="opt">It eliminates all subjectivity</div>
+      </div>
+      <div class="explanation">Quantitative assigns monetary/numeric values. Disadvantages: difficulty of equations, time/effort, and level of data needed. Purely quantitative analysis is impossible since some subjectivity always exists.</div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">19</span> Fault tolerance is provided when:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">A backup component begins operation when the primary component fails</div>
+        <div class="opt">All systems are shut down simultaneously</div>
+        <div class="opt">Only cloud-based systems are used</div>
+        <div class="opt">Manual processes replace automated ones</div>
+      </div>
+      <div class="explanation">Slide 11. Key aspect: lack of service interruption. Backup may not provide same service level as primary. Varying levels based on budget.</div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="hard">
+      <p><span class="qnum">20</span> OEM documentation helps prevent counterfeit equipment purchases because:<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">It includes anti-counterfeiting features and verifiable identifying numbers</div>
+        <div class="opt">It is always handwritten</div>
+        <div class="opt">It requires biometric verification</div>
+        <div class="opt">It is stored on blockchain</div>
+      </div>
+      <div class="explanation">Original Equipment Manufacturing documentation can be verified via vendor websites. Also check the Common Criteria (NIAP) for EALs and protection profiles for hardware/software authenticity.</div>
+    </div>
+
+  </div><!-- end quiz-section -->
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  const questions = document.querySelectorAll('.quiz-q');
+  const totalQ = questions.length;
+  let score = 0;
+  let answered = 0;
+  let streak = 0;
+
+  function updateProgress() {
+    const pct = (score / totalQ) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = answered + ' / ' + totalQ + ' answered';
+    document.getElementById('scoreText').textContent = 'Score: ' + score + ' / ' + totalQ;
+    document.getElementById('scoreFill').style.width = pct + '%';
+    const streakEl = document.getElementById('streakDisplay');
+    streakEl.textContent = 'Streak: ' + streak;
+    if (streak >= 3) {
+      streakEl.classList.add('on-fire');
+    } else {
+      streakEl.classList.remove('on-fire');
+    }
+  }
+
+  questions.forEach(function(q) {
+    const correctIdx = parseInt(q.getAttribute('data-correct'));
+    const opts = q.querySelectorAll('.opt');
+    const explanation = q.querySelector('.explanation');
+
+    opts.forEach(function(opt, idx) {
+      opt.addEventListener('click', function() {
+        if (q.classList.contains('answered')) return;
+        q.classList.add('answered');
+        answered++;
+
+        opts.forEach(function(o) { o.classList.add('disabled'); });
+
+        if (idx === correctIdx) {
+          opt.classList.add('correct');
+          score++;
+          streak++;
+        } else {
+          opt.classList.add('wrong');
+          opts[correctIdx].classList.add('show-correct');
+          streak = 0;
+        }
+
+        explanation.classList.add('show');
+        updateProgress();
+      });
+    });
+  });
+
+  window.resetQuiz = function() {
+    score = 0;
+    answered = 0;
+    streak = 0;
+    questions.forEach(function(q) {
+      q.classList.remove('answered');
+      const opts = q.querySelectorAll('.opt');
+      opts.forEach(function(o) {
+        o.classList.remove('correct', 'wrong', 'show-correct', 'disabled');
+      });
+      q.querySelector('.explanation').classList.remove('show');
+    });
+    updateProgress();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 9 — Data Privacy and Protection</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #FFD43B;
+    --page-tint: rgba(255,212,59,0.08);
+    --correct: #51cf66;
+    --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.home { background: #444; }
+  .topnav a.l7 { background: #FF6B6B; color: #000; }
+  .topnav a.l8 { background: #FFA94D; color: #000; }
+  .topnav a.l9 { background: var(--page-color); color: #000; }
+  .topnav a.l10 { background: #69DB7C; color: #000; }
+  .topnav a.l11 { background: #4DABF7; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+
+  /* STREAK */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* QUIZ SECTION */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease; width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    text-align: left;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .quiz-q .opt.correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .quiz-q .opt.wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .quiz-q .opt.disabled { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  .difficulty-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 0.7em; font-weight: 700; text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .difficulty-badge.easy { background: rgba(81,207,102,0.2); color: var(--correct); }
+  .difficulty-badge.medium { background: rgba(255,169,77,0.2); color: #FFA94D; }
+  .difficulty-badge.hard { background: rgba(233,69,96,0.2); color: var(--accent1); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="title">SEAS 8400</span>
+  <a href="index.html" class="home">8400 Home</a>
+  <a href="lesson7.html" class="l7">L7</a>
+  <a href="lesson8.html" class="l8">L8</a>
+  <a href="lesson9.html" class="l9 active">L9</a>
+  <a href="lesson10.html" class="l10">L10</a>
+  <a href="lesson11.html" class="l11">L11</a>
+  <a href="mega.html" class="mega">Mega</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Lesson 9 &mdash; Data Privacy and Protection</h1>
+  <div class="sub">SEAS 8400 Finals</div>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-container">
+    <label>Quiz Progress</label>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 20 answered</div>
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <div class="tldr-header">TL;DR &mdash; Key Concepts</div>
+    <ul>
+      <li><strong>FISMA (2002)</strong> = "your bible" for federal agencies; requires agencywide info security program</li>
+      <li><strong>HIPAA</strong> = Kennedy-Kassebaum Act; overrides state laws UNLESS state is stricter</li>
+      <li><strong>GDPR</strong>: 6 lawful purposes, data minimization, purpose limitation</li>
+      <li><strong>Data Sovereignty</strong>: data subject to laws of the country where stored; complicated by cloud</li>
+      <li><strong>4 Questions</strong>: Where stored? Who has access? Where backed up? How encrypted?</li>
+      <li><strong>CFAA (1986)</strong>: any computer affecting interstate commerce = "protected computer"</li>
+      <li><strong>CALEA (1994)</strong>: built-in surveillance capabilities for telecom carriers</li>
+      <li><strong>DLP</strong>: prevents data exfiltration (intentional or unintentional)</li>
+      <li><strong>DRM</strong>: 1st gen = copying; 2nd gen = execute, view, copy, print, alter</li>
+      <li><strong>Data Retention</strong>: advisory role only; reviewed periodically by data owners</li>
+    </ul>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h2>Quiz &mdash; 20 Questions</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text" id="scoreText">Score: 0 / 20</span>
+      <div class="score-fill-track"><div class="score-fill" id="scoreFill"></div></div>
+      <div class="streak-display" id="streakDisplay">Streak: 0</div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">1</span> FISMA (2002) requires federal agencies to:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Develop, document, and implement an agencywide information security program</div>
+        <div class="opt">Only encrypt email</div>
+        <div class="opt">Hire third-party auditors annually</div>
+        <div class="opt">Use only open-source software</div>
+      </div>
+      <div class="explanation">Professor Duke called FISMA "your bible." It affects every federal agency. Update coming in 2027 that will include AI.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="easy">
+      <p><span class="qnum">2</span> HIPAA is also known as the:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Healthcare Privacy Act</div>
+        <div class="opt">Kennedy-Kassebaum Act</div>
+        <div class="opt">Patient Protection Act</div>
+        <div class="opt">Medical Records Security Act</div>
+      </div>
+      <div class="explanation">HIPAA affects healthcare facilities, health insurance companies, and clearinghouses. Enforced by OCR of HHS. Overrides state laws UNLESS state laws are stricter.</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">3</span> The opposite of confidentiality is:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Disclosure</div>
+        <div class="opt">Encryption</div>
+        <div class="opt">Authentication</div>
+        <div class="opt">Authorization</div>
+      </div>
+      <div class="explanation">Slide 13. Confidentiality prevents disclosure to unauthorized entities. Data sensitivity level must be determined before access controls. Controls include encryption, steganography, ACLs, data classification.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">4</span> Under GDPR, which is NOT one of the six lawful purposes for processing personal data?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Data subject gave consent</div>
+        <div class="opt">To fulfill contractual obligations</div>
+        <div class="opt">To maximize corporate revenue</div>
+        <div class="opt">To protect vital interests of a data subject</div>
+      </div>
+      <div class="explanation">The 6 lawful purposes are: consent, contractual obligations, legal obligations, protect vital interests, public interest, and legitimate interests of controller (unless overridden by subject rights).</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q" data-correct="3" data-difficulty="medium">
+      <p><span class="qnum">5</span> Data sovereignty means:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Organizations own all data they create</div>
+        <div class="opt">Data must be stored in encrypted format</div>
+        <div class="opt">Only government agencies can access data</div>
+        <div class="opt">Data stored digitally is subject to the laws of the country where it is located</div>
+      </div>
+      <div class="explanation">Slides 23-24. Complicated by cloud solutions since data may be stored in multiple countries with different privacy laws.</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">6</span> Security professionals should answer four questions about data sovereignty. Which is NOT one of them?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">What is the data's market value?</div>
+        <div class="opt">Where is the data stored?</div>
+        <div class="opt">Who has access to the data?</div>
+        <div class="opt">How is the data encrypted?</div>
+      </div>
+      <div class="explanation">Slide 24 - Professor said "you will probably see this as multiple choice: which is NOT one of the four." The four are: Where stored? Who has access? Where backed up? How encrypted?</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">7</span> The Computer Fraud and Abuse Act (CFAA) of 1986 defines a "protected computer" as:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">A computer used by a financial institution or US government, or affecting interstate/foreign commerce</div>
+        <div class="opt">Any computer with antivirus software installed</div>
+        <div class="opt">Only government-classified systems</div>
+        <div class="opt">Computers with physical locks</div>
+      </div>
+      <div class="explanation">Due to the interstate nature of internet communication, any ordinary computer including cell phones falls under CFAA jurisdiction.</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">8</span> Which law requires telecommunications carriers to have built-in surveillance capabilities?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">CALEA (1994)</div>
+        <div class="opt">ECPA (1986)</div>
+        <div class="opt">FISMA (2002)</div>
+        <div class="opt">SOX (2002)</div>
+      </div>
+      <div class="explanation">Communications Assistance for Law Enforcement Act allows federal agencies to monitor telephone, broadband internet, and VoIP traffic in real time.</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="medium">
+      <p><span class="qnum">9</span> The USA PATRIOT Act's full name is:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Protecting America Through Restrictive Internet Oversight and Tactics</div>
+        <div class="opt">Uniting and Strengthening America by Providing Appropriate Tools Required to Intercept and Obstruct Terrorism</div>
+        <div class="opt">United States Advanced Protection and Tactical Response Initiative</div>
+        <div class="opt">Patriotic Action To Reduce Internet Online Threats</div>
+      </div>
+      <div class="explanation">Enacted 2001. Enhances investigatory tools for law enforcement including email, phone, internet, medical, and financial records. Amended FISA and ECPA.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">10</span> Data minimization under GDPR means:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Organizations should minimize personal data stored to what is necessary</div>
+        <div class="opt">Data should be compressed to save storage</div>
+        <div class="opt">Only numeric data should be stored</div>
+        <div class="opt">Data should be deleted after 30 days</div>
+      </div>
+      <div class="explanation">Slide 25. By reducing personal data stored, the attack surface is also reduced. Important GDPR principle.</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">11</span> Purpose limitation under GDPR means:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Personal data collected for one purpose cannot be repurposed without further consent</div>
+        <div class="opt">Data can only be used for 30 days</div>
+        <div class="opt">Organizations can only store one type of data</div>
+        <div class="opt">Data processing is limited to business hours</div>
+      </div>
+      <div class="explanation">Slide 26. Example: data collected to track a disease outbreak cannot be used to identify individuals.</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">12</span> First-generation DRM software controls _____, while second-generation controls executing, viewing, copying, printing, and altering.<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Copying</div>
+        <div class="opt">Accessing</div>
+        <div class="opt">Downloading</div>
+        <div class="opt">Streaming</div>
+      </div>
+      <div class="explanation">Slides 35-36. DMCA of 1998 imposes criminal penalties for circumventing content protection technologies.</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="hard">
+      <p><span class="qnum">13</span> Which tool can break the Content Scrambling System (CSS) used on DVDs?<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">BitLocker</div>
+        <div class="opt">DeCSS on Linux</div>
+        <div class="opt">Wireshark</div>
+        <div class="opt">Metasploit</div>
+      </div>
+      <div class="explanation">Slide 39. DeCSS was one of the first programs to decrypt commercial DVD content. AACS protects Blu-Ray/HD DVD content.</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">14</span> DLP (Data Loss Prevention) systems are used to prevent:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Data exfiltration - intentional or unintentional loss of sensitive data</div>
+        <div class="opt">Hardware failures</div>
+        <div class="opt">Power outages</div>
+        <div class="opt">Social engineering attacks only</div>
+      </div>
+      <div class="explanation">Slide 30. Professor Duke noted "2027 will be year cryptography and computing moves to quantum."</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">15</span> The Gramm-Leach-Bliley Act (GLBA) of 1999 affects:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">All financial institutions and prohibits sharing financial information with third parties</div>
+        <div class="opt">Only healthcare organizations</div>
+        <div class="opt">Only government agencies</div>
+        <div class="opt">Only educational institutions</div>
+      </div>
+      <div class="explanation">GLBA affects banks, loan companies, insurance companies, investment companies, and credit card providers. Directly affects PII security.</div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">16</span> Which act was the FIRST law to require a formal computer security plan?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">FISMA (2002)</div>
+        <div class="opt">CFAA (1986)</div>
+        <div class="opt">Computer Security Act of 1987</div>
+        <div class="opt">ECPA (1986)</div>
+      </div>
+      <div class="explanation">The Computer Security Act of 1987 was superseded in 2002 by FISMA. It required protection of sensitive info in federal systems and training employees.</div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">17</span> Organizations must give employees proper notice of monitoring and apply it consistently. Many implement a:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">No-expectation-of-privacy policy that the employee must sign</div>
+        <div class="opt">Verbal agreement during orientation</div>
+        <div class="opt">Monitoring opt-out form</div>
+        <div class="opt">Annual privacy audit</div>
+      </div>
+      <div class="explanation">Slide 21. The policy should describe unacceptable behavior. Some actions are protected by the Fourth Amendment. Consult legal counsel when designing monitoring.</div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">18</span> Data masking includes which two primary forms?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Encryption and hashing</div>
+        <div class="opt">Compression and archiving</div>
+        <div class="opt">Tokenization and redaction</div>
+        <div class="opt">Obfuscation and anonymization</div>
+      </div>
+      <div class="explanation">Slide 31. Data masking alters data from its original state to protect it. Also includes substitution and transposition techniques.</div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">19</span> A data retention policy should be reviewed:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Periodically by data owners and processors to determine if changes are needed</div>
+        <div class="opt">Only when a breach occurs</div>
+        <div class="opt">Every 10 years</div>
+        <div class="opt">Never - once created it is permanent</div>
+      </div>
+      <div class="explanation">Slides 36-37. One-size-fits-all is impossible. Security professional acts in ADVISORY ROLE only. Data owners/stakeholders determine best retention.</div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="quiz-q" data-correct="3" data-difficulty="hard">
+      <p><span class="qnum">20</span> Under the Sarbanes-Oxley Act (SOX), which consequence can executives face?<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">Loss of security clearance only</div>
+        <div class="opt">Community service</div>
+        <div class="opt">Mandatory cybersecurity training</div>
+        <div class="opt">Penalties and even jail time</div>
+      </div>
+      <div class="explanation">SOX (2002) affects publicly traded companies. Controls accounting methods and financial reporting. Named the Public Company Accounting Reform and Investor Protection Act.</div>
+    </div>
+
+  </div><!-- end quiz-section -->
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  const questions = document.querySelectorAll('.quiz-q');
+  const totalQ = questions.length;
+  let score = 0;
+  let answered = 0;
+  let streak = 0;
+
+  function updateProgress() {
+    const pct = (score / totalQ) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = answered + ' / ' + totalQ + ' answered';
+    document.getElementById('scoreText').textContent = 'Score: ' + score + ' / ' + totalQ;
+    document.getElementById('scoreFill').style.width = pct + '%';
+    const streakEl = document.getElementById('streakDisplay');
+    streakEl.textContent = 'Streak: ' + streak;
+    if (streak >= 3) {
+      streakEl.classList.add('on-fire');
+    } else {
+      streakEl.classList.remove('on-fire');
+    }
+  }
+
+  questions.forEach(function(q) {
+    const correctIdx = parseInt(q.getAttribute('data-correct'));
+    const opts = q.querySelectorAll('.opt');
+    const explanation = q.querySelector('.explanation');
+
+    opts.forEach(function(opt, idx) {
+      opt.addEventListener('click', function() {
+        if (q.classList.contains('answered')) return;
+        q.classList.add('answered');
+        answered++;
+
+        opts.forEach(function(o) { o.classList.add('disabled'); });
+
+        if (idx === correctIdx) {
+          opt.classList.add('correct');
+          score++;
+          streak++;
+        } else {
+          opt.classList.add('wrong');
+          opts[correctIdx].classList.add('show-correct');
+          streak = 0;
+        }
+
+        explanation.classList.add('show');
+        updateProgress();
+      });
+    });
+  });
+
+  window.resetQuiz = function() {
+    score = 0;
+    answered = 0;
+    streak = 0;
+    questions.forEach(function(q) {
+      q.classList.remove('answered');
+      const opts = q.querySelectorAll('.opt');
+      opts.forEach(function(o) {
+        o.classList.remove('correct', 'wrong', 'show-correct', 'disabled');
+      });
+      q.querySelector('.explanation').classList.remove('show');
+    });
+    updateProgress();
+  };
+})();
+</script>
+
+</body>
+</html>

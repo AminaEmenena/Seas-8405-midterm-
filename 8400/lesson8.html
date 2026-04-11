@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 8 — Incident Response</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #FFA94D;
+    --page-tint: rgba(255,169,77,0.08);
+    --correct: #51cf66;
+    --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.home { background: #444; }
+  .topnav a.l7 { background: #FF6B6B; color: #000; }
+  .topnav a.l8 { background: var(--page-color); color: #000; }
+  .topnav a.l9 { background: #FFD43B; color: #000; }
+  .topnav a.l10 { background: #69DB7C; color: #000; }
+  .topnav a.l11 { background: #4DABF7; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+
+  /* STREAK */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* QUIZ SECTION */
+  .quiz-section {
+    margin: 24px 0; padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden;
+  }
+  .quiz-score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease; width: 0%;
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    text-align: left;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .quiz-q .opt.correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .quiz-q .opt.wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .quiz-q .opt.disabled { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  .difficulty-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 0.7em; font-weight: 700; text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .difficulty-badge.easy { background: rgba(81,207,102,0.2); color: var(--correct); }
+  .difficulty-badge.medium { background: rgba(255,169,77,0.2); color: #FFA94D; }
+  .difficulty-badge.hard { background: rgba(233,69,96,0.2); color: var(--accent1); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="title">SEAS 8400</span>
+  <a href="index.html" class="home">8400 Home</a>
+  <a href="lesson7.html" class="l7">L7</a>
+  <a href="lesson8.html" class="l8 active">L8</a>
+  <a href="lesson9.html" class="l9">L9</a>
+  <a href="lesson10.html" class="l10">L10</a>
+  <a href="lesson11.html" class="l11">L11</a>
+  <a href="mega.html" class="mega">Mega</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Lesson 8 &mdash; Incident Response</h1>
+  <div class="sub">SEAS 8400 Finals</div>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-container">
+    <label>Quiz Progress</label>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 20 answered</div>
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <div class="tldr-header">TL;DR &mdash; Key Concepts</div>
+    <ul>
+      <li><strong>6 Steps of IR</strong>: Detect, Respond, Report, Recover, Remediate, Review</li>
+      <li><strong>3 R's</strong>: Redundancy, Remediation, Resiliency</li>
+      <li><strong>&gt; 24 hours</strong> = disaster (not just an incident)</li>
+      <li><strong>MTD/MPTD</strong>: max tolerable downtime; RTO must be smaller than MTD</li>
+      <li><strong>WRT</strong> = MTD minus RTO</li>
+      <li><strong>MTBF</strong>: calculated by the device vendor, not the org</li>
+      <li><strong>Criticality</strong>: Critical (min/hrs), Urgent (24h), Important (72h), Normal (7d), Nonessential (30d)</li>
+      <li><strong>Comms</strong>: out-of-band with E2E encryption (not corporate email/VoIP)</li>
+      <li><strong>Senior leadership support</strong> is the most important factor for IR success</li>
+      <li><strong>Lessons learned</strong>: first doc after recovery; changes go through change control</li>
+    </ul>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h2>Quiz &mdash; 20 Questions</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text" id="scoreText">Score: 0 / 20</span>
+      <div class="score-fill-track"><div class="score-fill" id="scoreFill"></div></div>
+      <div class="streak-display" id="streakDisplay">Streak: 0</div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">1</span> What are the 6 steps of the incident response process in order?<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Detect, Respond, Report, Recover, Remediate, Review</div>
+        <div class="opt">Identify, Protect, Detect, Respond, Recover, Govern</div>
+        <div class="opt">Plan, Detect, Contain, Eradicate, Recover, Learn</div>
+        <div class="opt">Alert, Triage, Investigate, Resolve, Close, Archive</div>
+      </div>
+      <div class="explanation">Professor Duke said "need to know 6 steps, probably have a matching." The actual investigation occurs during respond, report, and recover steps.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">2</span> The 3 R's of cybersecurity incident response are:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Redundancy, Remediation, Resiliency</div>
+        <div class="opt">Risk, Response, Recovery</div>
+        <div class="opt">Report, Recover, Review</div>
+        <div class="opt">Redundancy, Replication, Restoration</div>
+      </div>
+      <div class="explanation">Professor Duke emphasized these in class. Redundancy (backup systems), Remediation (fix/eliminate threats), Resiliency (recover quickly to normal operations).</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="easy">
+      <p><span class="qnum">3</span> An incident lasting more than ___ hours is considered a disaster.<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">12</div>
+        <div class="opt">48</div>
+        <div class="opt">24</div>
+        <div class="opt">72</div>
+      </div>
+      <div class="explanation">From class notes: "> 24 hours is a disaster." This distinction determines whether to activate the incident response plan vs disaster recovery plan.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">4</span> Maximum Tolerable Downtime (MTD) is also referred to as:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Maximum Period Time of Disruption (MPTD)</div>
+        <div class="opt">Maximum Acceptable Outage (MAO)</div>
+        <div class="opt">Critical Recovery Window (CRW)</div>
+        <div class="opt">Disaster Tolerance Threshold (DTT)</div>
+      </div>
+      <div class="explanation">Slides 44-45 matching content. MTD/MPTD is the maximum time an organization can tolerate a resource being down before unacceptable consequences.</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="medium">
+      <p><span class="qnum">5</span> Which metric is calculated by the device VENDOR, not the organization?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">RTO</div>
+        <div class="opt">MTBF</div>
+        <div class="opt">MTD</div>
+        <div class="opt">RPO</div>
+      </div>
+      <div class="explanation">Mean Time Between Failures is estimated by the device vendor. Higher MTBF + lower MTTR = increased system reliability.</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">6</span> Work Recovery Time (WRT) is calculated as:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">MTD minus RTO</div>
+        <div class="opt">RTO minus RPO</div>
+        <div class="opt">MTBF minus MTTR</div>
+        <div class="opt">ALE minus SLE</div>
+      </div>
+      <div class="explanation">WRT is the remaining time left after the RTO before reaching the MTD. It represents the window for additional recovery work.</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">7</span> RTO should always be _____ than MTD.<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Greater</div>
+        <div class="opt">Equal to</div>
+        <div class="opt">Smaller</div>
+        <div class="opt">Unrelated to</div>
+      </div>
+      <div class="explanation">Recovery Time Objective must be shorter than Maximum Tolerable Downtime. If RTO exceeds MTD, the organization faces unacceptable consequences.</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">8</span> Which criticality level means resources should be restored within 24 hours?<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Urgent</div>
+        <div class="opt">Critical</div>
+        <div class="opt">Important</div>
+        <div class="opt">Normal</div>
+      </div>
+      <div class="explanation">Critical = minutes/hours, Urgent = 24 hours, Important = 72 hours, Normal = 7 days, Nonessential = 30 days.</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">9</span> During an incident, communications should use what type of method?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Out-of-band communication with end-to-end encryption</div>
+        <div class="opt">Standard corporate email</div>
+        <div class="opt">Public social media channels</div>
+        <div class="opt">Unencrypted phone calls</div>
+      </div>
+      <div class="explanation">Slide 7. Use secure methods like OTR Messaging. Don't use regular corporate email or VoIP as they may be compromised.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">10</span> Which department's role includes reviewing NDAs and assessing site liability during incident response?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Human Resources</div>
+        <div class="opt">Public Relations</div>
+        <div class="opt">Legal</div>
+        <div class="opt">IT Operations</div>
+      </div>
+      <div class="explanation">Slide 10. Legal reviews NDAs, develops document wording for contacting affected parties, and assesses liability for illegal computer activity.</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">11</span> The MOST important factor in the success of an incident response plan is:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Support of senior leadership, both verbal and financial</div>
+        <div class="opt">Having the latest technology</div>
+        <div class="opt">Hiring external consultants</div>
+        <div class="opt">Frequent penetration testing</div>
+      </div>
+      <div class="explanation">Senior leadership must communicate importance of IR plan, create agreements for IR team authority, and create decision systems for removing key systems from network.</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="medium">
+      <p><span class="qnum">12</span> PII must be:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Encrypted, archived, and deleted</div>
+        <div class="opt">Understood, identified, and protected</div>
+        <div class="opt">Classified, transmitted, and stored</div>
+        <div class="opt">Monitored, logged, and reported</div>
+      </div>
+      <div class="explanation">Slide 18. PII includes full name, ID numbers, DOB, biometric data, financial account numbers, and digital identities.</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">13</span> The Payment Card Industry Data Security Standard (PCI DSS) protects which type of data?<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Sensitive Personal Information (SPI) - credit card data</div>
+        <div class="opt">Protected Health Information (PHI)</div>
+        <div class="opt">Personally Identifiable Information (PII) only</div>
+        <div class="opt">Classified government data</div>
+      </div>
+      <div class="explanation">Slide 21. SPI should receive special treatment. PCI DSS affects any organization handling cardholder information for major credit card companies.</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">14</span> Five common factors used to measure the SCOPE of an incident are:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Downtime/recovery time, Data integrity, Economic, System process criticality, Reverse engineering</div>
+        <div class="opt">Confidentiality, Integrity, Availability, Authentication, Non-repudiation</div>
+        <div class="opt">People, Process, Technology, Policy, Training</div>
+        <div class="opt">Detection, Analysis, Containment, Eradication, Recovery</div>
+      </div>
+      <div class="explanation">Slide 43. Scope determines impact. These five factors help classify incident severity and prioritize response.</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-q" data-correct="2" data-difficulty="medium">
+      <p><span class="qnum">15</span> Which of the three data remanence countermeasures makes data unrecoverable even with advanced forensic techniques?<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">Clearing</div>
+        <div class="opt">Destruction</div>
+        <div class="opt">Purging (Sanitization)</div>
+        <div class="opt">Formatting</div>
+      </div>
+      <div class="explanation">Slide 61. Clearing = not recoverable with normal tools but recoverable with forensics. Purging/Sanitization = unrecoverable even with forensics. Destruction = physically destroying the media.</div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="hard">
+      <p><span class="qnum">16</span> The three ways a binary malware file can be made readable are:<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">Disassembly, Decompiling, Debugging</div>
+        <div class="opt">Encryption, Decryption, Hashing</div>
+        <div class="opt">Scanning, Filtering, Blocking</div>
+        <div class="opt">Parsing, Compiling, Executing</div>
+      </div>
+      <div class="explanation">Slide 50. Disassembly reads machine code as text. Decompiling reconstructs high-level source. Debugging steps through code interactively (kernel mode at ring 0, or usermode).</div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">17</span> Segmentation at Layer 2 can be achieved through:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">VLANs, private VLANs, or port security</div>
+        <div class="opt">IP subnets and ACLs only</div>
+        <div class="opt">Firewalls and IDS only</div>
+        <div class="opt">Physical air gaps only</div>
+      </div>
+      <div class="explanation">Slide 53. Layer 3 segmentation uses IP subnets/ACLs on routers. Layer 2 uses VLANs, private VLANs, or port security to isolate devices.</div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="easy">
+      <p><span class="qnum">18</span> The first document drafted after incident recovery should be:<span class="difficulty-badge easy">Easy</span></p>
+      <div class="options">
+        <div class="opt">Lessons learned report</div>
+        <div class="opt">Budget request</div>
+        <div class="opt">Press release</div>
+        <div class="opt">Insurance claim</div>
+      </div>
+      <div class="explanation">Slide 71. The lessons learned report discusses what was learned about how/why the incident occurred and how to prevent recurrence. Questions: What went right/wrong? How improve? Cost?</div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="quiz-q" data-correct="0" data-difficulty="medium">
+      <p><span class="qnum">19</span> All changes from a lessons learned report should go through:<span class="difficulty-badge medium">Medium</span></p>
+      <div class="options">
+        <div class="opt">The standard change control process</div>
+        <div class="opt">Immediate implementation</div>
+        <div class="opt">External audit review</div>
+        <div class="opt">Board of directors approval</div>
+      </div>
+      <div class="explanation">Slide 72. Changes must be submitted to the change control board, examined for unforeseen consequences, and only implemented after gaining approval. It's a formal process.</div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="quiz-q" data-correct="1" data-difficulty="hard">
+      <p><span class="qnum">20</span> When the FBI was unable to break the encryption on the San Bernardino terrorist's iPhone, which country assisted?<span class="difficulty-badge hard">Hard</span></p>
+      <div class="options">
+        <div class="opt">United Kingdom</div>
+        <div class="opt">Israel</div>
+        <div class="opt">Germany</div>
+        <div class="opt">Australia</div>
+      </div>
+      <div class="explanation">The US called Israel for help. They bought many iPhones, cloned the original, and kept attempting to break the code on clones while preserving the original for chain of custody/evidence in court.</div>
+    </div>
+
+  </div><!-- end quiz-section -->
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  const questions = document.querySelectorAll('.quiz-q');
+  const totalQ = questions.length;
+  let score = 0;
+  let answered = 0;
+  let streak = 0;
+
+  function updateProgress() {
+    const pct = (score / totalQ) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = answered + ' / ' + totalQ + ' answered';
+    document.getElementById('scoreText').textContent = 'Score: ' + score + ' / ' + totalQ;
+    document.getElementById('scoreFill').style.width = pct + '%';
+    const streakEl = document.getElementById('streakDisplay');
+    streakEl.textContent = 'Streak: ' + streak;
+    if (streak >= 3) {
+      streakEl.classList.add('on-fire');
+    } else {
+      streakEl.classList.remove('on-fire');
+    }
+  }
+
+  questions.forEach(function(q) {
+    const correctIdx = parseInt(q.getAttribute('data-correct'));
+    const opts = q.querySelectorAll('.opt');
+    const explanation = q.querySelector('.explanation');
+
+    opts.forEach(function(opt, idx) {
+      opt.addEventListener('click', function() {
+        if (q.classList.contains('answered')) return;
+        q.classList.add('answered');
+        answered++;
+
+        opts.forEach(function(o) { o.classList.add('disabled'); });
+
+        if (idx === correctIdx) {
+          opt.classList.add('correct');
+          score++;
+          streak++;
+        } else {
+          opt.classList.add('wrong');
+          opts[correctIdx].classList.add('show-correct');
+          streak = 0;
+        }
+
+        explanation.classList.add('show');
+        updateProgress();
+      });
+    });
+  });
+
+  window.resetQuiz = function() {
+    score = 0;
+    answered = 0;
+    streak = 0;
+    questions.forEach(function(q) {
+      q.classList.remove('answered');
+      const opts = q.querySelectorAll('.opt');
+      opts.forEach(function(o) {
+        o.classList.remove('correct', 'wrong', 'show-correct', 'disabled');
+      });
+      q.querySelector('.explanation').classList.remove('show');
+    });
+    updateProgress();
+  };
+})();
+</script>
+
+</body>
+</html>
