@@ -254,6 +254,55 @@
     </ul>
   </div>
 
+  <!-- STUDY CONTENT -->
+  <details><summary style="border-left-color:var(--page-color);">1. CIA Triad</summary><div style="padding:16px 20px;">
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Fact</small><strong style="color:#e94560;font-size:1.1em;">The OPPOSITE of confidentiality = DISCLOSURE</strong></div>
+    <ul><li><strong>Confidentiality:</strong> Prevent disclosure. Controls: encryption, steganography, ACLs, data classification. Sensitivity level determined BEFORE access controls.</li><li><strong>Integrity:</strong> Correctness and completeness of data</li><li><strong>Availability:</strong> Systems accessible when needed</li></ul>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">2. Legal Requirements — US Laws</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "FISMA is your bible."</div>
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.85em;"><tr><th>Law</th><th>Year</th><th>Affects</th><th>Key Points</th></tr>
+    <tr><td><strong>SOX</strong></td><td>2002</td><td>Publicly traded companies</td><td>Accounting/financial reporting. Penalties + jail for execs.</td></tr>
+    <tr><td><strong>HIPAA</strong></td><td>1996</td><td>Healthcare facilities/insurance</td><td>Kennedy-Kassebaum Act. OCR of HHS enforces. Overrides state laws unless stricter.</td></tr>
+    <tr><td><strong>GLBA</strong></td><td>1999</td><td>All financial institutions</td><td>Prohibits sharing financial info with 3rd parties.</td></tr>
+    <tr><td><strong>CFAA</strong></td><td>1986</td><td>"Protected computers"</td><td>Financial/govt or interstate commerce. Any computer incl. cell phones.</td></tr>
+    <tr><td><strong>FISA</strong></td><td>1978</td><td>Law enforcement/intel</td><td>Foreign surveillance. Amended by PATRIOT Act.</td></tr>
+    <tr><td><strong>ECPA</strong></td><td>1986</td><td>Law enforcement/intel</td><td>Extended wiretap to electronic data. Amended by CALEA.</td></tr>
+    <tr><td><strong>Comp Security Act</strong></td><td>1987</td><td>Federal govt</td><td>SUPERSEDED BY FISMA 2002. First formal security plan law.</td></tr>
+    <tr><td><strong>CALEA</strong></td><td>1994</td><td>Telecom carriers</td><td>Built-in surveillance. Real-time monitoring phone/broadband/VoIP.</td></tr>
+    <tr><td><strong>FISMA</strong></td><td>2002</td><td>Every federal agency</td><td>Agencywide infosec program. "YOUR BIBLE." 2027 update w/ AI.</td></tr>
+    <tr><td><strong>USA PATRIOT</strong></td><td>2001</td><td>Law enforcement/intel</td><td>Full name: Uniting and Strengthening America... Amended FISA + ECPA.</td></tr>
+    <tr><td><strong>Econ Espionage</strong></td><td>1996</td><td>Companies w/ trade secrets</td><td>Trade secret theft = federal crime.</td></tr></table>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">3. GDPR &amp; International</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "I suspect this will be a matching question."</div>
+    <p><strong>GDPR 6 Lawful Purposes for Processing Data:</strong></p>
+    <ol><li>Data subject gave consent</li><li>Fulfill contractual obligations</li><li>Comply with data controller's legal obligations</li><li>Protect vital interests of data subject</li><li>Perform task in public interest</li><li>Legitimate interests of controller (unless overridden by subject rights)</li></ol>
+    <h3 style="color:var(--page-color);margin:16px 0 8px;">Data Sovereignty (Slides 23-24)</h3>
+    <p>Data stored digitally is subject to laws of country where located. Complicated by cloud.</p>
+    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Exam tip:</strong> "Which is NOT one of the four?" — 4 questions: Where stored? Who has access? Where backed up? How encrypted?</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">4. Data Privacy Principles</summary><div style="padding:16px 20px;">
+    <ul><li><strong>Data Minimization:</strong> Minimize personal data to what's necessary. Reduces attack surface. GDPR principle.</li><li><strong>Purpose Limitation:</strong> Data for one purpose can't be repurposed without consent. (Disease data can't identify individuals.)</li><li><strong>Employee Privacy:</strong> No-expectation-of-privacy policy — employee must SIGN. Fourth Amendment protections apply.</li><li><strong>NDA:</strong> Signed by anyone with access to trade secrets. Legal consequences if violated.</li></ul>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">5. Data Retention</summary><div style="padding:16px 20px;">
+    <ul><li>Varies by: data type, data age, legal/regulatory requirements</li><li>Data types: HR, accounts payable/receivable, sales, customer, email</li><li>Review periodically. Train personnel to comply.</li><li>One-size-fits-all = <strong>impossible</strong></li></ul>
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Security professional = ADVISORY ROLE only.</strong> Data owners/stakeholders determine best retention policy.</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">6. Technical Controls — DLP, DRM, Data Masking</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Control</th><th>Purpose</th><th>Details</th></tr>
+    <tr><td><strong>DLP</strong></td><td>Prevent data exfiltration</td><td>Intentional or unintentional loss. "2027 = quantum crypto year."</td></tr>
+    <tr><td><strong>Data Masking</strong></td><td>Alter data to protect it</td><td>Forms: encryption, hashing, substitution, transposition</td></tr>
+    <tr><td><strong>DRM (1st gen)</strong></td><td>Control copying</td><td>DMCA 1998 criminal penalties for circumvention</td></tr>
+    <tr><td><strong>DRM (2nd gen)</strong></td><td>Control executing, viewing, copying, printing, altering</td><td>Enterprise: open/edit/print/copy restrictions</td></tr></table>
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Movie DRM:</strong> CSS (DVDs) — broken by DeCSS on Linux. AACS (Blu-Ray/HD DVD) — encryption keys obtained by hackers.</div>
+  </div></details>
+
   <!-- QUIZ -->
   <div class="quiz-section">
     <h2>Quiz &mdash; 20 Questions</h2>

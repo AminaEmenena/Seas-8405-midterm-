@@ -254,6 +254,50 @@
     </ul>
   </div>
 
+  <!-- STUDY CONTENT -->
+  <details><summary style="border-left-color:var(--page-color);">1. Platform Topics — BYOD, COPE &amp; Containerization</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Model</th><th>Who Owns</th><th>Status</th></tr><tr><td><strong>BYOD</strong></td><td>Employee</td><td>Never had good policy. "Hanging on by thin thread."</td></tr><tr><td><strong>POCE</strong></td><td>Employee (corp enabled)</td><td>Government getting away from this</td></tr><tr><td><strong>COPE</strong></td><td>Company (personally enabled)</td><td>Where more companies are going. More control.</td></tr></table>
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Containerization (Slide 5):</strong> Newer MDM feature — encrypted container separating corporate/personal data. Requires skilled personnel.</div>
+    <ul><li><strong>Application Wrapping:</strong> Policies for safe downloads from internal store</li><li><strong>Remote Wiping:</strong> Apple wipes only corporate side. Consent required.</li><li><strong>SCEP:</strong> Two auth mechanisms: Manual and Pre-shared secret (challenge password, out-of-band)</li></ul>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">2. NIST SP 800-163 &amp; App Vetting</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "NIST SP 800-163 is a GUIDELINE, not a standard. Remember that for the final."</div>
+    <p><strong>5 Guidelines:</strong></p><ol><li>Understand vetting process</li><li>Plan implementation</li><li>Develop app security requirements</li><li>Understand app vulnerabilities/testing</li><li>Determine if acceptable for deployment</li></ol>
+    <p><strong>Flow:</strong> Intake &rarr; Testing &rarr; Approval/Rejection &rarr; Results Submission &rarr; Re-vetting</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">3. Web Application Attacks</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Attack</th><th>Description</th><th>Defense</th></tr><tr><td><strong>Maintenance Hooks</strong></td><td>Backdoor in code</td><td>Remove before production. IDS, encryption, auditing.</td></tr><tr><td><strong>TOCTOU</strong></td><td>Exploits event sequences</td><td>Make instructions ATOMIC</td></tr><tr><td><strong>CSRF</strong></td><td>Exploits site trust of browser (opposite XSS)</td><td>Web apps from an IMAGE</td></tr><tr><td><strong>Clickjacking</strong></td><td>Transparent page overlay</td><td>CHECK THE URL!</td></tr></table>
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank</small><strong style="color:#e94560;font-size:1.2em;">TOCTOU = Race Condition</strong></div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">4. Firmware vs Operating Ware</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Firmware</th><th>Operating Ware</th></tr><tr><td>Legally protected, proprietary</td><td>Meant to be changed</td></tr><tr><td>Breaking voids warranty</td><td>Open for your environment</td></tr><tr><td>Stored on EPROM / exists as BIOS</td><td>Installed on top of firmware</td></tr></table>
+    <ul><li><strong>Embedded System:</strong> Dedicated function, placed WITHOUT security professional input</li><li><strong>Firmware attacks</strong> = new frontier — vulns copy-pasted between manufacturers</li></ul>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">5. SDLC &amp; DevSecOps</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "Know the 8 SDLC steps — MATCHING question on the exam."</div>
+    <p>State of application checked at every phase. If insecure: <strong>STOP</strong>. Zero-day vulns: <strong>isolate and segregate</strong>.</p>
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Difference</small><strong style="color:#e94560;font-size:1.1em;">DevOps = Dev + QA + Ops | DevSecOps = Adds SECURITY. Bakes it in.</strong></div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">6. Code Review, Input Validation &amp; Session Management</summary><div style="padding:16px 20px;">
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank</small><strong style="color:#e94560;font-size:1.1em;">CODE REVIEW = systematic investigation of code<br>SESSION MANAGEMENT = manages ID &amp; auth instances</strong></div>
+    <p><strong>Code Review Types:</strong> Formal (line-by-line, most time-consuming) vs Lightweight (pair programming, email, over-the-shoulder, tool-assisted).</p>
+    <p><strong>Input Validation Tools:</strong> Cloud-based, open source, proprietary commercial. Uses blacklisting or whitelisting.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">7. Authentication &amp; Behavioral Analysis</summary><div style="padding:16px 20px;">
+    <p><strong>Context-based Auth (Slide 59):</strong> Prevents account takeovers, attacks via personal devices, attacks via user location.</p>
+    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Behavioral Analysis (Slide 63):</strong> Snowden example — NSA wasn't practicing what they preached. 32 people fired.</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">8. SOAP, REST &amp; Microservices</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Tech</th><th>Key Detail</th></tr><tr><td><strong>SOAP</strong></td><td>Disadvantage: VERBOSITY &rarr; led to REST</td></tr><tr><td><strong>REST</strong></td><td>Representational State Transfer (FILL IN BLANK). No specific message format.</td></tr><tr><td><strong>Microservices</strong></td><td>Geographically dispersed orgs (State Dept embassies)</td></tr><tr><td><strong>Monolithic</strong></td><td>Centralized systems</td></tr></table>
+  </div></details>
+
   <!-- QUIZ -->
   <div class="quiz-section">
     <h2>Quiz &mdash; 20 Questions</h2>

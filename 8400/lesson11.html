@@ -254,6 +254,78 @@
     </ul>
   </div>
 
+  <!-- STUDY CONTENT -->
+  <details><summary style="border-left-color:var(--page-color);">1. Policies, Procedures &amp; Controls</summary><div style="padding:16px 20px;">
+    <ul><li><strong>Policies:</strong> Broad statements defining the AIM of security measures</li><li><strong>Procedures:</strong> Define HOW to carry out the measures</li><li><strong>Controls:</strong> Countermeasures/mitigations to prevent breaches</li></ul>
+    <p>Security frameworks help create all of these. They provide templates, examples, and guidance.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">2. COBIT 2019 — 5 Domains</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>#</th><th>Domain</th><th>Acronym</th></tr>
+    <tr><td>1</td><td>Evaluate, Direct, and Monitor</td><td><strong>EDM</strong></td></tr>
+    <tr><td>2</td><td>Align, Plan, and Organize</td><td><strong>APO</strong></td></tr>
+    <tr><td>3</td><td>Build, Acquire, and Implement</td><td><strong>BAI</strong></td></tr>
+    <tr><td>4</td><td>Deliver, Service, and Support</td><td><strong>DSS</strong></td></tr>
+    <tr><td>5</td><td>Monitor, Evaluate, and Assess</td><td><strong>MEA</strong></td></tr></table>
+    <p style="margin-top:8px;">Goals Cascade translates enterprise goals into alignment goals.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">3. NIST Cybersecurity Framework 2.0</summary><div style="padding:16px 20px;">
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">New in CSF 2.0</small><strong style="color:#e94560;font-size:1.2em;">GOVERN is the NEW 6th function!</strong></div>
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Function</th><th>Purpose</th></tr>
+    <tr><td><strong>Identify</strong></td><td>Determine current cybersecurity risk</td></tr>
+    <tr><td><strong>Protect</strong></td><td>Use safeguards to prevent/reduce risk</td></tr>
+    <tr><td><strong>Detect</strong></td><td>Find and analyze possible attacks</td></tr>
+    <tr><td><strong>Respond</strong></td><td>Take action on detected incidents</td></tr>
+    <tr><td><strong>Recover</strong></td><td>Restore impacted assets and operations</td></tr>
+    <tr><td style="color:#e94560;font-weight:700;">Govern (NEW!)</td><td>Establish and monitor org's cybersecurity risk management strategy, expectations, and policy</td></tr></table>
+    <p style="margin-top:8px;">Supply chain risk management <strong>moved from Identify to Govern</strong>. Released Feb 2024. Now for ALL organizations, not just critical infrastructure.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">4. ISO 27000, SABSA, ITIL, CMMI</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Framework</th><th>Key Details</th></tr>
+    <tr><td><strong>ISO/IEC 27000</strong></td><td>Standardized BS7799. ISMS standard. ISO 27001 = general standard (on CISSP exam).</td></tr>
+    <tr><td><strong>SABSA</strong></td><td>Sherwood Applied Business Security Architecture. 6 questions &times; 6 layers. Risk-driven. Open-use methodology.</td></tr>
+    <tr><td><strong>ITIL</strong></td><td>Information Technology Infrastructure Library. Primarily manages <strong>SLAs</strong>. 5 publications, 26 processes. Independent review every 3 years.</td></tr>
+    <tr><td><strong>CMMI</strong></td><td>Capability Maturity Model Integration. All phases of SDLC. Maturity levels. <strong>NOT the same as CMMC!</strong></td></tr></table>
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Certification</strong> evaluates technical components. <strong>Accreditation</strong> evaluates overall security adequacy. Certify first, then accredit.</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">5. Password Types (Slides 27-29 — BIG MULTIPLE CHOICE)</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "Slides 27-29 will be big multiple choice on the final exam."</div>
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.85em;"><tr><th>Type</th><th>Description</th><th>Pro/Con</th></tr>
+    <tr><td><strong>Standard word</strong></td><td>Single words, upper/lowercase</td><td>Easy to remember / easy to crack</td></tr>
+    <tr><td><strong>Combination</strong></td><td>Two unrelated dictionary words</td><td>Harder to break / harder to remember</td></tr>
+    <tr><td><strong>Static</strong></td><td>Same for each login</td><td>Minimum security. Peer-to-peer networks.</td></tr>
+    <tr><td><strong>Complex</strong></td><td>Upper/lower + numbers + special chars</td><td>Very hard to crack / hard to remember</td></tr>
+    <tr><td><strong>Passphrase</strong></td><td>Long phrase</td><td>Easier to remember / much harder to attack</td></tr>
+    <tr><td><strong>Cognitive</strong></td><td>Life questions (pet name, fav color)</td><td>Easy to remember / intimate knowledge risk</td></tr>
+    <tr><td style="color:#e94560;font-weight:700;">One-time (OTP)</td><td>Used once, then discarded</td><td><strong>HIGHEST security</strong></td></tr>
+    <tr><td><strong>Graphical (CAPTCHA)</strong></td><td>Graphics for authentication</td><td>Ensures human not machine</td></tr>
+    <tr><td><strong>Numeric</strong></td><td>Numbers only</td><td>4 digits = max 10,000 possibilities</td></tr></table>
+    <p style="margin-top:8px;"><strong>Password life:</strong> NIST standard = 90 days. <strong>Linux passwords:</strong> stored in SHADOW FILE.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">6. Control Categories &amp; Types</summary><div style="padding:16px 20px;">
+    <p><strong>3 Categories:</strong> Managerial (admin/soft), Operational, Technical (logical)</p>
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Type</th><th>Purpose</th><th>Examples</th></tr>
+    <tr><td><strong>Preventive</strong></td><td>Stop attacks before happening</td><td>Locks, encryption, IPS, antivirus, biometrics</td></tr>
+    <tr><td><strong>Detective</strong></td><td>Detect attacks occurring</td><td>IDS, logs, guards, investigators</td></tr>
+    <tr><td><strong>Corrective</strong></td><td>Fix/restore after attack</td><td>Fire extinguishers, patching, CERT team</td></tr>
+    <tr><td><strong>Deterrent</strong></td><td>Deter/discourage</td><td>Fences, lighting, NDA, user auth</td></tr>
+    <tr><td style="color:#e94560;font-weight:700;">Directive</td><td>Specify acceptable practices</td><td>AUP (most popular). Must have stated consequences!</td></tr>
+    <tr><td><strong>Physical</strong></td><td>Protect facilities/personnel</td><td>Perimeter, badges, guard dogs, biometrics</td></tr></table>
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Slide 56 — Important:</strong> Directive controls are efficient ONLY if there is a stated consequence for not following the organization's directions.</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">7. Audits, Compliance &amp; Monitoring</summary><div style="padding:16px 20px;">
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Critical Distinction</small><strong style="color:#e94560;font-size:1.1em;">Compliance = THE LAW (non-negotiable)<br>Risk Management = Countermeasures, controls, safeguards</strong></div>
+    <ul><li><strong>SSAE-18</strong> replaced SAS-70 in 2011. Written assertion on design and operational effectiveness.</li><li><strong>SOC 1 Type 1:</strong> Auditor opinion on design of controls</li><li><strong>SOC 1 Type 2:</strong> Type 1 + effectiveness over a time period</li></ul>
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "Don't muddy the waters! A printer going down is NOT a compliance issue — it's a risk management issue."</div>
+    <h3 style="color:var(--page-color);margin:16px 0 8px;">Continuous Monitoring</h3>
+    <ul><li>Must capture <strong>operational baselines</strong> first (can't detect abnormal without knowing normal)</li><li><strong>SCT</strong> (Security Compliance Toolkit) works with Group Policy and MS Endpoint Configuration Manager</li><li>Performance metrics compared to baselines for stability</li></ul>
+  </div></details>
+
   <!-- QUIZ -->
   <div class="quiz-section">
     <h2>Quiz &mdash; 20 Questions</h2>

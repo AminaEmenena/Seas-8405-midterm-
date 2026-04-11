@@ -254,6 +254,67 @@
     </ul>
   </div>
 
+  <!-- STUDY CONTENT -->
+  <details><summary style="border-left-color:var(--page-color);">1. Risk Management &amp; BIA</summary><div style="padding:16px 20px;">
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Risk management = FORMAL method</strong> of evaluating vulnerabilities. FISMA makes it formal — must be in writing.</div>
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Exam tip:</strong> "Which is NOT one of the 4 BIA steps?"</div>
+    <p><strong>4 BIA Steps:</strong></p><ol><li>Identify critical processes and resources</li><li>Identify outage impacts and estimate downtime</li><li>Identify resource requirements</li><li>Identify recovery priorities</li></ol>
+    <p>BIA relies on vulnerability analysis and risk assessment. Performed by BCP committee or separate team.</p>
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Term</small><strong style="color:#e94560;font-size:1.1em;">Risk Assessment = Risk Identification (same thing)</strong></div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">2. Identifying Critical Systems</summary><div style="padding:16px 20px;">
+    <ul><li>BCP committee identifies all business units/functional areas</li><li>Document processes, functions, resources, dependencies</li><li>Include physical, financial, and competitive advantage assets</li><li>Resource requirements include HUMAN resources</li><li>Recovery priorities: High, Medium, Low</li><li>BIA stipulates priorities but NOT solutions (those are in DRP)</li></ul>
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "C-suite decides what's critical, NOT the CISO. Cyber is a business enabler. Don't stick your neck out where it doesn't belong."</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">3. Recoverability &amp; Fault Tolerance</summary><div style="padding:16px 20px;">
+    <ul><li><strong>Recoverability:</strong> Ability to recover from disaster. Minimize downtime. Emphasis on personnel + resources.</li><li><strong>Fault Tolerance:</strong> Backup begins when primary fails. Key: <strong>lack of service interruption</strong>. Backup may not match primary service level. Varying levels based on budget.</li></ul>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">4. Qualitative vs Quantitative Risk Analysis</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th></th><th>Qualitative</th><th>Quantitative</th></tr>
+    <tr><td><strong>Values</strong></td><td>Subjective (H/M/L, R/Y/G)</td><td>Monetary and numeric</td></tr>
+    <tr><td><strong>Techniques</strong></td><td>Brainstorming, Delphi, surveys</td><td>Equations (SLE, ALE)</td></tr>
+    <tr><td><strong>Advantages</strong></td><td>Prioritizes risks, identifies immediate improvements</td><td>Less guesswork</td></tr>
+    <tr><td><strong>Disadvantages</strong></td><td>Subjective, no dollar values for budgets</td><td>Complex equations, time-consuming, data-heavy</td></tr>
+    <tr><td><strong>Best For</strong></td><td>Intangible assets</td><td>Tangible assets</td></tr></table>
+    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Delphi Technique:</strong> Method to estimate likelihood and outcome of future events. Each member independently ranks threats, data combined into report.</div>
+    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "I used a hybrid approach my whole career. Give Colin Powell the red/yellow/green and give the bean counters the numbers."</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">5. Risk Equations — SLE &amp; ALE</summary><div style="padding:16px 20px;">
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Formulas</small><strong style="color:#e94560;font-size:1.1em;">SLE = AV &times; EF &nbsp;&nbsp;|&nbsp;&nbsp; ALE = SLE &times; ARO</strong></div>
+    <p><strong>Example:</strong> Web server farm AV = $20,000. Power failure EF = 25%, ARO = 50%.</p>
+    <p>SLE = $20,000 &times; 0.25 = <strong>$5,000</strong>. ALE = $5,000 &times; 0.50 = <strong>$2,500</strong>.</p>
+    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Warning:</strong> These equations are for YOUR risk team. Don't show them to the C-suite — financial people will twist them and take you down a rabbit hole.</div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">6. Communication of Risk &amp; Risk Handling</summary><div style="padding:16px 20px;">
+    <p><strong>Audience matters:</strong> Translate technical risks to BUSINESS terms. Focus on disruption, regulatory issues, bad press. Never talk technical to non-technical people.</p>
+    <h3 style="color:var(--page-color);margin:16px 0 8px;">4 Methods to Handle Risk</h3>
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Method</th><th>Description</th></tr>
+    <tr><td><strong>Avoidance</strong></td><td>Terminate risky activity or choose less risky alternative</td></tr>
+    <tr><td><strong>Transfer</strong></td><td>Pass to third party (insurance)</td></tr>
+    <tr><td><strong>Mitigation</strong></td><td>Reduce risk to acceptable level</td></tr>
+    <tr><td><strong>Acceptance</strong></td><td>Understand and accept risk and cost</td></tr></table>
+    <p style="margin-top:12px;"><strong>Compensating controls:</strong> Substitute for primary controls. Must be DOCUMENTED with reason primary wasn't implemented. Examples: two signatures, two keys.</p>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">7. Red / Blue / White Teams (MATCHING)</summary><div style="padding:16px 20px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Team</th><th>Role</th><th>Key Details</th></tr>
+    <tr><td style="color:#FF6B6B;font-weight:700;">Red</td><td>Attackers</td><td>Pen tests, rules of engagement, often third-party with no prior network knowledge</td></tr>
+    <tr><td style="color:#4DABF7;font-weight:700;">Blue</td><td>Defenders</td><td>Access logs, use SIEM, traffic/data flow analysis</td></tr>
+    <tr><td style="color:#e8e8e8;font-weight:700;">White</td><td>Referees</td><td>Enforce rules of engagement, monitor responses, take notes</td></tr></table>
+    <p style="margin-top:12px;"><strong>Tabletop Exercise:</strong> Most cost-effective and efficient. Informal brainstorming session.</p>
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Risk Formula</small><strong style="color:#e94560;font-size:1.1em;">Risk = Threat &times; Vulnerability &times; Impact / Countermeasures</strong></div>
+  </div></details>
+
+  <details><summary style="border-left-color:var(--page-color);">8. Supply Chain &amp; Hardware Authenticity</summary><div style="padding:16px 20px;">
+    <ul><li><strong>Vendor due diligence:</strong> Assess vendor products/services for innate security</li><li><strong>OEM documentation:</strong> Anti-counterfeiting features, verifiable ID numbers. Verify via vendor website.</li><li><strong>Common Criteria (NIAP):</strong> NSA-managed. EALs (Evaluation Assurance Levels) and Protection Profiles for hardware/software authenticity.</li><li><strong>Counterfeit gear</strong> contains backdoors — Pentagon had incidents with vendors buying non-OEM equipment.</li></ul>
+    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">3 Terms in Cyber</small><strong style="color:#e94560;font-size:1.1em;">Timely &bull; Relevant &bull; Accurate</strong></div>
+  </div></details>
+
   <!-- QUIZ -->
   <div class="quiz-section">
     <h2>Quiz &mdash; 20 Questions</h2>
