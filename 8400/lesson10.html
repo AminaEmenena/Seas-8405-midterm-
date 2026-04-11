@@ -255,65 +255,259 @@
   </div>
 
   <!-- STUDY CONTENT -->
-  <details><summary style="border-left-color:var(--page-color);">1. Risk Management &amp; BIA</summary><div style="padding:16px 20px;">
-    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Risk management = FORMAL method</strong> of evaluating vulnerabilities. FISMA makes it formal — must be in writing.</div>
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Exam tip:</strong> "Which is NOT one of the 4 BIA steps?"</div>
-    <p><strong>4 BIA Steps:</strong></p><ol><li>Identify critical processes and resources</li><li>Identify outage impacts and estimate downtime</li><li>Identify resource requirements</li><li>Identify recovery priorities</li></ol>
-    <p>BIA relies on vulnerability analysis and risk assessment. Performed by BCP committee or separate team.</p>
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Term</small><strong style="color:#e94560;font-size:1.1em;">Risk Assessment = Risk Identification (same thing)</strong></div>
-  </div></details>
+  <!-- ═══ SECTION 1 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">📊 1. Risk Management &amp; Business Impact Analysis</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Definition:</strong> The risk management process is a <em style="color:var(--page-color);font-style:normal;font-weight:600;">formal</em> method of evaluating vulnerabilities. What makes it formal is <strong>FISMA</strong> — it must be documented and in writing. A robust process identifies vulnerabilities, assesses impact and likelihood, and generates a formal assessment of possible mitigations.
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">2. Identifying Critical Systems</summary><div style="padding:16px 20px;">
-    <ul><li>BCP committee identifies all business units/functional areas</li><li>Document processes, functions, resources, dependencies</li><li>Include physical, financial, and competitive advantage assets</li><li>Resource requirements include HUMAN resources</li><li>Recovery priorities: High, Medium, Low</li><li>BIA stipulates priorities but NOT solutions (those are in DRP)</li></ul>
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "C-suite decides what's critical, NOT the CISO. Cyber is a business enabler. Don't stick your neck out where it doesn't belong."</div>
-  </div></details>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Term — Know This</small>
+        <strong style="color:#e94560;font-size:1.2em;">Risk Assessment = Risk Identification (they are the same thing)</strong>
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">3. Recoverability &amp; Fault Tolerance</summary><div style="padding:16px 20px;">
-    <ul><li><strong>Recoverability:</strong> Ability to recover from disaster. Minimize downtime. Emphasis on personnel + resources.</li><li><strong>Fault Tolerance:</strong> Backup begins when primary fails. Key: <strong>lack of service interruption</strong>. Backup may not match primary service level. Varying levels based on budget.</li></ul>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">Business Impact Analysis (BIA)</h3>
+      <p>A BIA is a functional analysis that occurs as part of business continuity and planning for disaster recovery. It helps the organization understand what impact a disruptive event would have. The resulting document lists critical business functions, their resource dependencies, and their level of criticality.</p>
 
-  <details><summary style="border-left-color:var(--page-color);">4. Qualitative vs Quantitative Risk Analysis</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th></th><th>Qualitative</th><th>Quantitative</th></tr>
-    <tr><td><strong>Values</strong></td><td>Subjective (H/M/L, R/Y/G)</td><td>Monetary and numeric</td></tr>
-    <tr><td><strong>Techniques</strong></td><td>Brainstorming, Delphi, surveys</td><td>Equations (SLE, ALE)</td></tr>
-    <tr><td><strong>Advantages</strong></td><td>Prioritizes risks, identifies immediate improvements</td><td>Less guesswork</td></tr>
-    <tr><td><strong>Disadvantages</strong></td><td>Subjective, no dollar values for budgets</td><td>Complex equations, time-consuming, data-heavy</td></tr>
-    <tr><td><strong>Best For</strong></td><td>Intangible assets</td><td>Tangible assets</td></tr></table>
-    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Delphi Technique:</strong> Method to estimate likelihood and outcome of future events. Each member independently ranks threats, data combined into report.</div>
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "I used a hybrid approach my whole career. Give Colin Powell the red/yellow/green and give the bean counters the numbers."</div>
-  </div></details>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Exam Format:</strong> "Which of the following is NOT one of the 4 BIA steps?"
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">5. Risk Equations — SLE &amp; ALE</summary><div style="padding:16px 20px;">
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Formulas</small><strong style="color:#e94560;font-size:1.1em;">SLE = AV &times; EF &nbsp;&nbsp;|&nbsp;&nbsp; ALE = SLE &times; ARO</strong></div>
-    <p><strong>Example:</strong> Web server farm AV = $20,000. Power failure EF = 25%, ARO = 50%.</p>
-    <p>SLE = $20,000 &times; 0.25 = <strong>$5,000</strong>. ALE = $5,000 &times; 0.50 = <strong>$2,500</strong>.</p>
-    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Warning:</strong> These equations are for YOUR risk team. Don't show them to the C-suite — financial people will twist them and take you down a rabbit hole.</div>
-  </div></details>
+      <table>
+        <tr><th>Step</th><th>Action</th><th>What You Do</th></tr>
+        <tr><td><strong>1</strong></td><td>Identify critical processes and resources</td><td>BCP committee identifies all business units. Gather data via questionnaires, interviews, surveys. Document all business assets including physical, financial, and competitive advantage.</td></tr>
+        <tr><td><strong>2</strong></td><td>Identify outage impacts and estimate downtime</td><td>Analyze the impact of losing each resource on ability to do business. Provides raw material for redundancy metrics.</td></tr>
+        <tr><td><strong>3</strong></td><td>Identify resource requirements</td><td>Determine all resources needed for each process — includes device name, OS, hardware specs, and <strong>HUMAN resources</strong> (people are just as critical as technology).</td></tr>
+        <tr><td><strong>4</strong></td><td>Identify recovery priorities</td><td>Establish priorities based on process criticality, outage impacts, tolerable downtime, and system resources. Three levels: High, Medium, Low.</td></tr>
+      </table>
 
-  <details><summary style="border-left-color:var(--page-color);">6. Communication of Risk &amp; Risk Handling</summary><div style="padding:16px 20px;">
-    <p><strong>Audience matters:</strong> Translate technical risks to BUSINESS terms. Focus on disruption, regulatory issues, bad press. Never talk technical to non-technical people.</p>
-    <h3 style="color:var(--page-color);margin:16px 0 8px;">4 Methods to Handle Risk</h3>
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Method</th><th>Description</th></tr>
-    <tr><td><strong>Avoidance</strong></td><td>Terminate risky activity or choose less risky alternative</td></tr>
-    <tr><td><strong>Transfer</strong></td><td>Pass to third party (insurance)</td></tr>
-    <tr><td><strong>Mitigation</strong></td><td>Reduce risk to acceptable level</td></tr>
-    <tr><td><strong>Acceptance</strong></td><td>Understand and accept risk and cost</td></tr></table>
-    <p style="margin-top:12px;"><strong>Compensating controls:</strong> Substitute for primary controls. Must be DOCUMENTED with reason primary wasn't implemented. Examples: two signatures, two keys.</p>
-  </div></details>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Important Distinction:</strong> The BIA stipulates <strong>recovery priorities</strong> but does NOT provide recovery solutions. Those solutions are given in the <strong>Disaster Recovery Plan (DRP)</strong>. The BIA relies heavily on any vulnerability analysis and risk assessment performed by the BCP committee or a separately appointed risk assessment team.
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">7. Red / Blue / White Teams (MATCHING)</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Team</th><th>Role</th><th>Key Details</th></tr>
-    <tr><td style="color:#FF6B6B;font-weight:700;">Red</td><td>Attackers</td><td>Pen tests, rules of engagement, often third-party with no prior network knowledge</td></tr>
-    <tr><td style="color:#4DABF7;font-weight:700;">Blue</td><td>Defenders</td><td>Access logs, use SIEM, traffic/data flow analysis</td></tr>
-    <tr><td style="color:#e8e8e8;font-weight:700;">White</td><td>Referees</td><td>Enforce rules of engagement, monitor responses, take notes</td></tr></table>
-    <p style="margin-top:12px;"><strong>Tabletop Exercise:</strong> Most cost-effective and efficient. Informal brainstorming session.</p>
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Risk Formula</small><strong style="color:#e94560;font-size:1.1em;">Risk = Threat &times; Vulnerability &times; Impact / Countermeasures</strong></div>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">Risk Assessment — 4 Main Goals</h3>
+      <ol>
+        <li><strong>Identify assets and asset value</strong> — start with an asset inventory</li>
+        <li><strong>Identify vulnerabilities and threats</strong> — what could go wrong?</li>
+        <li><strong>Calculate threat probability and business impact</strong> — how likely and how bad?</li>
+        <li><strong>Balance threat impact with countermeasure cost</strong> — don't deploy a $10,000 hammer if a $5 one works</li>
+      </ol>
+      <p>Risk assessment should be carried out <strong>before</strong> any mergers, acquisitions, or new technology deployments. If not supported and directed by <strong>senior management</strong>, it will not be successful.</p>
+    </div>
+  </details>
 
-  <details><summary style="border-left-color:var(--page-color);">8. Supply Chain &amp; Hardware Authenticity</summary><div style="padding:16px 20px;">
-    <ul><li><strong>Vendor due diligence:</strong> Assess vendor products/services for innate security</li><li><strong>OEM documentation:</strong> Anti-counterfeiting features, verifiable ID numbers. Verify via vendor website.</li><li><strong>Common Criteria (NIAP):</strong> NSA-managed. EALs (Evaluation Assurance Levels) and Protection Profiles for hardware/software authenticity.</li><li><strong>Counterfeit gear</strong> contains backdoors — Pentagon had incidents with vendors buying non-OEM equipment.</li></ul>
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">3 Terms in Cyber</small><strong style="color:#e94560;font-size:1.1em;">Timely &bull; Relevant &bull; Accurate</strong></div>
-  </div></details>
+  <!-- ═══ SECTION 2 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🎯 2. Identifying Critical Systems</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>When identifying critical processes and resources, the BCP committee must first identify all business units or functional areas. After identification, the team selects individuals responsible for gathering needed data using techniques like questionnaires, interviews, and surveys.</p>
+
+      <p>During data gathering, document all business processes, functions, resources they depend on, and all business assets — including physical assets, financial assets, and any assets providing competitive advantage or credibility. Then determine the <strong>criticality level</strong> by analyzing the impact that losing each resource would have on the capability to continue doing business.</p>
+
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "Who determines what's critical? The <strong>C-suite</strong> — not the CISO. Your job as a cyber champion is to support and provide good cyber means as a <strong>business enabler</strong> to critical systems. Don't stick your neck out where it doesn't belong. I've seen a couple of cyber champions put their nose where it didn't belong and they got their head cut off."
+      </div>
+
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Don't play favorites:</strong> Professor Duke told a story about a cyber chief who prioritized his golf buddy's logistics systems over HR's critical systems. "Put your money where your mouth is — fix critical systems first and don't play favoritism."
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔄 3. Recoverability &amp; Fault Tolerance</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <table>
+        <tr><th>Concept</th><th>Definition</th><th>Focus</th><th>Key Point</th></tr>
+        <tr><td><strong>Recoverability</strong></td><td>The ability of a function or system to be recovered in the event of a disaster or disruptive event</td><td>Personnel and resources used for recovery</td><td>Downtime must be minimized</td></tr>
+        <tr><td><strong>Fault Tolerance</strong></td><td>A backup component begins operation when the primary component fails</td><td>Lack of service interruption — should be seamless and transparent</td><td>Backup often does NOT provide same service level as primary</td></tr>
+      </table>
+
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Real-World Example:</strong> An organization might implement a high-speed OC1 connection to the Internet. The backup connection used in the event of failure might be much slower — but at a much lower cost. Varying levels of fault tolerance can be achieved based on <strong>how much the organization is willing to spend</strong>.
+      </div>
+
+<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:20px;margin:16px 0;text-align:center;font-family:monospace;font-size:0.9em;line-height:1.5;overflow-x:auto;white-space:pre;color:#ddd;">
+  FAULT TOLERANCE FLOW
+
+  ┌──────────────┐    FAILS    ┌──────────────┐
+  │   PRIMARY    │ ──────────► │   BACKUP     │
+  │   Component  │             │   Component  │
+  │  (Full Speed)│             │ (May be slower│
+  └──────────────┘             │  but works)  │
+                               └──────────────┘
+        KEY: No service interruption to users
+             (seamless/transparent failover)</div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">⚖️ 4. Qualitative vs Quantitative Risk Analysis</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>To make a risk determination, an organization must perform a formal risk analysis asking: What corporate <strong>critical</strong> assets need protection? What are the business needs? What outside threats are most likely?</p>
+
+      <table>
+        <tr><th>Aspect</th><th>Qualitative</th><th>Quantitative</th></tr>
+        <tr><td><strong>Values Used</strong></td><td>Subjective — High/Medium/Low, Red/Yellow/Green</td><td>Monetary and numeric values assigned to all facets</td></tr>
+        <tr><td><strong>Techniques</strong></td><td>Intuition, experience, brainstorming, focus groups, surveys, questionnaires, Delphi technique</td><td>Equations — SLE, ALE, ARO calculations</td></tr>
+        <tr><td><strong>Advantages</strong></td><td><strong>1)</strong> Prioritizes risks <strong>2)</strong> Identifies areas for immediate improvement</td><td>Uses <strong>less guesswork</strong> than qualitative</td></tr>
+        <tr><td><strong>Disadvantages</strong></td><td>All results are subjective. No dollar value for cost/benefit or budget help.</td><td>Difficulty of equations. Time and effort needed. Level of data required.</td></tr>
+        <tr><td><strong>Best For</strong></td><td><strong>Intangible</strong> assets</td><td><strong>Tangible</strong> assets</td></tr>
+        <tr><td><strong>Output</strong></td><td>Risk ranking report for management</td><td>Total and residual risk calculations</td></tr>
+      </table>
+
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Delphi Technique:</strong> A method used to estimate the likelihood and outcome of future events. Each group member independently uses their experience to rank the likelihood of each threat and the damage that might result. After ranking, data is combined into a report for management. Requires a risk assessment team with experience and education related to assessing threats.
+      </div>
+
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "I used a hybrid approach my whole career and it kept everybody happy. I gave Colin Powell the red, yellow, and green (qualitative). I gave the bean counters the numbers (quantitative). Most risk analysis includes some hybrid of both. Keep it simple — if you make quantitative too complex, it will backfire."
+      </div>
+
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Important:</strong> Even though quantitative uses numeric values, a <strong>purely quantitative analysis cannot be achieved</strong> because some level of subjectivity is always part of the data. Estimates should be based on historical data, industry experience, and expert opinion.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔢 5. Risk Equations — SLE &amp; ALE</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Formulas</small>
+        <strong style="color:#e94560;font-size:1.3em;">SLE = AV &times; EF &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ALE = SLE &times; ARO</strong>
+      </div>
+
+      <table>
+        <tr><th>Variable</th><th>Full Name</th><th>Definition</th></tr>
+        <tr><td><strong>AV</strong></td><td>Asset Value</td><td>The monetary value of the asset</td></tr>
+        <tr><td><strong>EF</strong></td><td>Exposure Factor</td><td>The percentage of value or functionality that will be lost when a threat event occurs</td></tr>
+        <tr><td><strong>SLE</strong></td><td>Single Loss Expectancy</td><td>The monetary impact of <strong>each</strong> threat occurrence</td></tr>
+        <tr><td><strong>ARO</strong></td><td>Annualized Rate of Occurrence</td><td>The estimate of how often a given threat might occur annually</td></tr>
+        <tr><td><strong>ALE</strong></td><td>Annual Loss Expectancy</td><td>The expected risk factor of an <strong>annual</strong> threat event</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Worked Example</h3>
+      <p>An organization has a web server farm with an <strong>Asset Value (AV) of $20,000</strong>. The risk assessment determined that a power failure is a threat agent. The <strong>Exposure Factor (EF)</strong> for a power failure is <strong>25%</strong>.</p>
+      <p style="text-align:center;font-size:1.1em;"><strong>SLE</strong> = $20,000 &times; 0.25 = <strong style="color:var(--page-color);">$5,000</strong></p>
+      <p>If the <strong>ARO</strong> for the power failure is <strong>50%</strong> (occurs once every two years):</p>
+      <p style="text-align:center;font-size:1.1em;"><strong>ALE</strong> = $5,000 &times; 0.50 = <strong style="color:var(--page-color);">$2,500</strong></p>
+
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke's Warning:</strong> "These equations are for <strong>you and your risk management team</strong>. They're NOT for exposure to the C-suite. The minute you brief these to the C-suite, they're going to chew you up. Good bean counters like to get their hands on equations and they'll twist them — before you know it, you went in thinking you were going to gain something and you're 10 steps behind. Keep these internal."
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🗣️ 6. Communication of Risk &amp; Risk Handling</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>Technical cybersecurity risk is largely <strong>misunderstood by non-technical people</strong>. As a security professional, you must bridge the knowledge gap by translating risks into business terms the audience understands.</p>
+
+      <table>
+        <tr><th>Audience</th><th>What They Need</th><th>How to Present</th></tr>
+        <tr><td><strong>Semi-technical</strong></td><td>Data-driven, high-level message</td><td>Context with their responsibilities, not deep technical detail</td></tr>
+        <tr><td><strong>Non-technical leadership</strong></td><td>Cost tied to business performance</td><td>Business disruption, regulatory issues, bad press — NOT firewall configurations</td></tr>
+        <tr><td><strong>Board / Executives</strong></td><td>Business risks and ROI</td><td>Translate technical risks into common business terms</td></tr>
+        <tr><td><strong>Regulators</strong></td><td>Thoroughness and transparency</td><td>Consider engaging a third party for a GAP assessment</td></tr>
+      </table>
+
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "Don't throw buzzwords. Don't show off. Keep it simple. I've seen way too many people lose their positions because they tied security to <strong>cyber performance</strong> instead of <strong>business performance</strong>. Cyber is a business enabler — never forget that."
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">4 Methods to Handle Risk</h3>
+      <table>
+        <tr><th>Method</th><th>Definition</th><th>Example</th><th>When to Use</th></tr>
+        <tr><td><strong>Avoidance</strong></td><td>Terminate the activity that causes risk or choose a less risky alternative</td><td>Turning off a vulnerable service</td><td>When cost of risk exceeds benefit</td></tr>
+        <tr><td><strong>Transfer</strong></td><td>Pass the risk to a third party</td><td>Buying cyber insurance</td><td>When others can absorb risk better</td></tr>
+        <tr><td><strong>Mitigation</strong></td><td>Define acceptable risk level and reduce to that level</td><td>Deploying countermeasures/controls</td><td>Most common approach</td></tr>
+        <tr><td><strong>Acceptance</strong></td><td>Understand and accept the risk and cost of damages</td><td>Military commanders assuming risk of outgoing commander</td><td>When risk is low or mitigation cost too high</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">MOU vs SLA</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>MOU (Memorandum of Understanding):</strong> <strong>NOT legally binding.</strong> Indicates a general agreement between parties to work together. May contain security requirements.<br><br>
+        <strong>SLA (Service Level Agreement):</strong> Specifies a service to be provided by a certain party. May include specifications that inhibit or prevent deployment of certain measures. Whoever frames the most risk usually starts the SLA.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Compensating Controls</h3>
+      <p>Compensating controls are put in place to <strong>substitute for a primary access control</strong> and mainly act to mitigate risks. By using them, you can reduce risk to a more manageable level.</p>
+      <ul>
+        <li><strong>Examples:</strong> Requiring two authorized signatures to release sensitive info. Requiring two keys owned by different personnel to open a safety deposit box.</li>
+        <li><strong>Requirement:</strong> Must be <strong>recorded along with the reason</strong> the primary control was not implemented. This is part of the formal risk management process.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🏴 7. Red / Blue / White Teams &amp; Exercises (MATCHING)</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "You will see this on the exam as a matching question."
+      </div>
+
+      <table>
+        <tr><th>Team</th><th>Role</th><th>Activities</th><th>Who They Are</th></tr>
+        <tr><td style="color:#FF6B6B;font-weight:700;">Red Team</td><td><strong>Attacking force</strong></td><td>Carries out penetration tests following established rules of engagement. Gathers info, scans for vulnerabilities, attempts exploitation.</td><td>Often <strong>third-party contractors</strong> with no prior network knowledge — helps simulate outside attacks, not insider jobs.</td></tr>
+        <tr><td style="color:#4DABF7;font-weight:700;">Blue Team</td><td><strong>Network defense</strong></td><td>Responds to the red team's attack. Accesses log data, uses SIEM system, gathers intelligence, performs traffic and data flow analysis.</td><td>Internal security team. Tests ability to respond. Also serves as practice for real-world events.</td></tr>
+        <tr><td style="color:#e8e8e8;font-weight:700;">White Team</td><td><strong>Referees</strong></td><td>Enforces rules of engagement. Monitors responses of the blue team. Makes notes of approaches employed by the red team.</td><td>Technicians who observe both sides. Does all the documentation and analysis.</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Tabletop Exercises</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> A tabletop exercise is an <strong>informal brainstorming session</strong> — the most <strong>cost-effective and efficient</strong> way of identifying areas of vulnerability before moving on to higher-level testing. Participants discuss scenarios to determine if there are gaps in their response plans.
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Risk Formula</small>
+        <strong style="color:#e94560;font-size:1.2em;">Risk = Threat &times; Vulnerability &times; Impact / Countermeasures</strong>
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔗 8. Supply Chain Assessment &amp; Hardware Authenticity</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>Organizational risk mitigation requires assessing the safety and integrity of hardware and software in the supply chain. Stories about counterfeit gear containing backdoors have circulated for years — and they're real.</p>
+
+      <h3 style="color:#58a6ff;">Vendor Due Diligence</h3>
+      <p>When performing due diligence with a vendor, you are assessing their products and services for <strong>innate security</strong>. While functionality and value matter, security professionals are even more concerned about whether products contain hidden vulnerabilities or backdoors.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">OEM Documentation</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> One way to reduce likelihood of counterfeit equipment is to insist on verifiable <em style="color:var(--page-color);font-style:normal;font-weight:600;">Original Equipment Manufacturing (OEM)</em> documentation. This paperwork often includes <strong>anti-counterfeiting features</strong>. Use the vendor's website to verify all identifying numbers.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Common Criteria (NIAP)</h3>
+      <p>The <strong>Common Criteria</strong> is a website maintained by NSA's department called <strong>NIAP</strong> (National Information Assurance Partnership). It provides:</p>
+      <ul>
+        <li><strong>EALs (Evaluation Assurance Levels):</strong> Confidence rating that a product has been properly tested and vetted</li>
+        <li><strong>Protection Profiles:</strong> Sets of security requirements for a category of products</li>
+      </ul>
+
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "At a conference in Nashville, I saw vendors with signs saying 'Pentagon Approved' and 'NSA Approved.' The Pentagon doesn't approve technology — that's not their business. And NSA doesn't approve things either — the Common Criteria does through NIAP. Perform your due care and due diligence. Don't just buy it and check a box."
+      </div>
+
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Real-World Warning:</strong> The Pentagon renovation had vendors who bought non-OEM devices with backdoors. Millions wasted, people fired — both civilian and military. DISA posted a warning about Chinese-manufactured computers arriving pre-infected with firmware-level viruses: "5 out of 20 came infected."
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">3 Terms in Cyber</small>
+        <strong style="color:#e94560;font-size:1.2em;">Timely &bull; Relevant &bull; Accurate</strong>
+      </div>
+    </div>
+  </details>
 
   <!-- QUIZ -->
   <div class="quiz-section">
