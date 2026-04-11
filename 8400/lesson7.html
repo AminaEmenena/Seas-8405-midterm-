@@ -255,48 +255,288 @@
   </div>
 
   <!-- STUDY CONTENT -->
-  <details><summary style="border-left-color:var(--page-color);">1. Platform Topics — BYOD, COPE &amp; Containerization</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Model</th><th>Who Owns</th><th>Status</th></tr><tr><td><strong>BYOD</strong></td><td>Employee</td><td>Never had good policy. "Hanging on by thin thread."</td></tr><tr><td><strong>POCE</strong></td><td>Employee (corp enabled)</td><td>Government getting away from this</td></tr><tr><td><strong>COPE</strong></td><td>Company (personally enabled)</td><td>Where more companies are going. More control.</td></tr></table>
-    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Containerization (Slide 5):</strong> Newer MDM feature — encrypted container separating corporate/personal data. Requires skilled personnel.</div>
-    <ul><li><strong>Application Wrapping:</strong> Policies for safe downloads from internal store</li><li><strong>Remote Wiping:</strong> Apple wipes only corporate side. Consent required.</li><li><strong>SCEP:</strong> Two auth mechanisms: Manual and Pre-shared secret (challenge password, out-of-band)</li></ul>
-  </div></details>
+  <!-- ═══ SECTION 1 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">📱 1. Platform Topics — BYOD, COPE &amp; Containerization</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>KEY IDEA:</strong> One of the biggest challenges in cybersecurity is managing personal devices that access corporate data. The mixing of sensitive corporate data with personal data on employee-owned devices has never been properly solved.
+      </div>
+      <p>Organizations have tried several models for managing mobile devices, each with trade-offs between employee convenience and security control. The government in particular is moving away from employee-owned models due to persistent security issues.</p>
 
-  <details><summary style="border-left-color:var(--page-color);">2. NIST SP 800-163 &amp; App Vetting</summary><div style="padding:16px 20px;">
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "NIST SP 800-163 is a GUIDELINE, not a standard. Remember that for the final."</div>
-    <p><strong>5 Guidelines:</strong></p><ol><li>Understand vetting process</li><li>Plan implementation</li><li>Develop app security requirements</li><li>Understand app vulnerabilities/testing</li><li>Determine if acceptable for deployment</li></ol>
-    <p><strong>Flow:</strong> Intake &rarr; Testing &rarr; Approval/Rejection &rarr; Results Submission &rarr; Re-vetting</p>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">Device Ownership Models</h3>
+      <table>
+        <tr><th>Model</th><th>Who Owns</th><th>Who Controls</th><th>Status</th></tr>
+        <tr><td><strong>BYOD</strong></td><td>Employee</td><td>Employee (some MDM)</td><td>Never had a good policy. "Hanging on by thin thread."</td></tr>
+        <tr><td><strong>POCE</strong></td><td>Employee</td><td>Corporate tools (MDM)</td><td>Government getting away from this entirely</td></tr>
+        <tr><td><strong>COPE</strong></td><td>Company</td><td>Company (allows personal use)</td><td>Where more companies are going — more control</td></tr>
+      </table>
 
-  <details><summary style="border-left-color:var(--page-color);">3. Web Application Attacks</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Attack</th><th>Description</th><th>Defense</th></tr><tr><td><strong>Maintenance Hooks</strong></td><td>Backdoor in code</td><td>Remove before production. IDS, encryption, auditing.</td></tr><tr><td><strong>TOCTOU</strong></td><td>Exploits event sequences</td><td>Make instructions ATOMIC</td></tr><tr><td><strong>CSRF</strong></td><td>Exploits site trust of browser (opposite XSS)</td><td>Web apps from an IMAGE</td></tr><tr><td><strong>Clickjacking</strong></td><td>Transparent page overlay</td><td>CHECK THE URL!</td></tr></table>
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank</small><strong style="color:#e94560;font-size:1.2em;">TOCTOU = Race Condition</strong></div>
-  </div></details>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "There was never a good BYOD policy to start with. Everybody thought it was going to make things more efficient and cost effective — it was a bunch of garbage. COPE works better because the company has more power in terms of policing and protecting devices."
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">4. Firmware vs Operating Ware</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Firmware</th><th>Operating Ware</th></tr><tr><td>Legally protected, proprietary</td><td>Meant to be changed</td></tr><tr><td>Breaking voids warranty</td><td>Open for your environment</td></tr><tr><td>Stored on EPROM / exists as BIOS</td><td>Installed on top of firmware</td></tr></table>
-    <ul><li><strong>Embedded System:</strong> Dedicated function, placed WITHOUT security professional input</li><li><strong>Firmware attacks</strong> = new frontier — vulns copy-pasted between manufacturers</li></ul>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">Containerization (Slide 5)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> <em style="color:var(--page-color);font-style:normal;font-weight:600;">Containerization</em> is a newer feature of most MDM software that creates an <strong>encrypted "container"</strong> to hold and quarantine corporate data separately from the user's personal data. MDM policies apply only to that container and not the rest of the device.
+      </div>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Caution:</strong> You need <strong>skilled personnel</strong> to implement containerization properly. Without expertise, you get bleed-over, spillage, and an even bigger nightmare than BYOD alone.
+      </div>
 
-  <details><summary style="border-left-color:var(--page-color);">5. SDLC &amp; DevSecOps</summary><div style="padding:16px 20px;">
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "Know the 8 SDLC steps — MATCHING question on the exam."</div>
-    <p>State of application checked at every phase. If insecure: <strong>STOP</strong>. Zero-day vulns: <strong>isolate and segregate</strong>.</p>
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Difference</small><strong style="color:#e94560;font-size:1.1em;">DevOps = Dev + QA + Ops | DevSecOps = Adds SECURITY. Bakes it in.</strong></div>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">Other MDM Capabilities</h3>
+      <ul>
+        <li><strong>Application Wrapping:</strong> Policies that allow employees to safely download apps, typically from an <em>internal store</em>. Can control authentication requirements and whether app data can be stored on the device.</li>
+        <li><strong>Remote Wiping:</strong> Instructions sent remotely to erase data on a lost/stolen device. Apple devices have two sides (personal and corporate) — a remote wipe <strong>only erases the corporate side</strong>. Consent to remote wipe should be required for all BYOD/COPE users.</li>
+        <li><strong>Configuration Profiles &amp; Payloads:</strong> Control device settings (passcode, Wi-Fi passwords, VPN configs). Individual settings called <em style="color:var(--page-color);font-style:normal;font-weight:600;">payloads</em> can be organized into categories.</li>
+        <li><strong>Conditional Access:</strong> Policies that control access to corporate data based on user, location, device state, application sensitivity, and real-time risk assessment.</li>
+      </ul>
 
-  <details><summary style="border-left-color:var(--page-color);">6. Code Review, Input Validation &amp; Session Management</summary><div style="padding:16px 20px;">
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank</small><strong style="color:#e94560;font-size:1.1em;">CODE REVIEW = systematic investigation of code<br>SESSION MANAGEMENT = manages ID &amp; auth instances</strong></div>
-    <p><strong>Code Review Types:</strong> Formal (line-by-line, most time-consuming) vs Lightweight (pair programming, email, over-the-shoulder, tool-assisted).</p>
-    <p><strong>Input Validation Tools:</strong> Cloud-based, open source, proprietary commercial. Uses blacklisting or whitelisting.</p>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">SCEP (Simple Certificate Enrollment Protocol)</h3>
+      <p>SCEP provisions certificates to network and mobile devices. Since it has no built-in authentication of the requester, two authorization mechanisms exist:</p>
+      <table>
+        <tr><th>Method</th><th>How It Works</th><th>Security Note</th></tr>
+        <tr><td><strong>Manual</strong></td><td>Requester waits for CA operator to approve</td><td>More secure but slower</td></tr>
+        <tr><td><strong>Pre-shared Secret</strong></td><td>Challenge password delivered out-of-band</td><td>Used for <em>authorization</em> to submit request, NOT device authentication</td></tr>
+      </table>
+    </div>
+  </details>
 
-  <details><summary style="border-left-color:var(--page-color);">7. Authentication &amp; Behavioral Analysis</summary><div style="padding:16px 20px;">
-    <p><strong>Context-based Auth (Slide 59):</strong> Prevents account takeovers, attacks via personal devices, attacks via user location.</p>
-    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Behavioral Analysis (Slide 63):</strong> Snowden example — NSA wasn't practicing what they preached. 32 people fired.</div>
-  </div></details>
+  <!-- ═══ SECTION 2 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">📋 2. NIST SP 800-163 — Mobile App Vetting</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "NIST SP 800-163 is a <strong>GUIDELINE</strong>, not a standard. You might want to remember that for the final."
+      </div>
+      <p>NIST SP 800-163 Rev 1, <em>Vetting the Security of Mobile Applications</em>, helps organizations ensure that mobile apps deployed on organizational devices meet security requirements. Not every app works the same with all devices, so organizations must have a formal vetting process.</p>
 
-  <details><summary style="border-left-color:var(--page-color);">8. SOAP, REST &amp; Microservices</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Tech</th><th>Key Detail</th></tr><tr><td><strong>SOAP</strong></td><td>Disadvantage: VERBOSITY &rarr; led to REST</td></tr><tr><td><strong>REST</strong></td><td>Representational State Transfer (FILL IN BLANK). No specific message format.</td></tr><tr><td><strong>Microservices</strong></td><td>Geographically dispersed orgs (State Dept embassies)</td></tr><tr><td><strong>Monolithic</strong></td><td>Centralized systems</td></tr></table>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">The 5 Guidelines</h3>
+      <ol>
+        <li><strong>Understand the process</strong> for vetting the security of mobile applications</li>
+        <li><strong>Plan for the implementation</strong> of an app vetting process</li>
+        <li><strong>Develop app security requirements</strong> — specify how data should be secured, the deployment environment, and acceptable risk levels</li>
+        <li><strong>Understand the types of app vulnerabilities</strong> and the testing methods used to detect them</li>
+        <li><strong>Determine whether an app is acceptable</strong> for deployment on the organization's mobile devices</li>
+      </ol>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">App Vetting Process Flow</h3>
+<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:20px;margin:16px 0;text-align:center;font-family:monospace;font-size:0.9em;line-height:1.5;overflow-x:auto;white-space:pre;color:#ddd;">
+  App Security Requirements
+         │
+         ▼
+  ┌─────────────┐
+  │  App Intake  │ ◄── App + previous vetting results
+  └──────┬──────┘
+         ▼
+  ┌─────────────┐
+  │  App Testing │ ◄── Test tools check for vulnerabilities
+  └──────┬──────┘
+         ▼
+  ┌──────────────────┐
+  │ Approval/Reject  │──► Accept ──► Deploy App
+  └──────┬───────────┘
+         │ Reject
+         ▼
+  Vendor Feedback ──► Remediate ──► or ──► Reject permanently</div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🕸️ 3. Web Application Attacks</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>Despite all efforts to design secure web architectures, attacks against web-based systems still occur. Understanding these attack types is critical for both prevention and incident response.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Maintenance Hooks (Slide 17)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> A <em style="color:var(--page-color);font-style:normal;font-weight:600;">maintenance hook</em> is a set of instructions built into code that allows someone who knows about the backdoor to connect, view, and edit the code <strong>without using normal access controls</strong>. Often placed by vendors for customer support and never removed.
+      </div>
+      <p><strong>Countermeasures:</strong> Use host-based IDS to record access attempts, encrypt all sensitive information, implement auditing. <strong>Best solution:</strong> vendor removes ALL hooks before production. Code reviews should identify and remove them.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">TOCTOU — Time-of-Check/Time-of-Use (Slide 19)</h3>
+      <p>TOCTOU attacks exploit the <strong>sequence of events</strong> that occurs as a system completes common tasks. The attacker inserts themselves between events in multiprocessing systems to introduce changes and alter outcomes.</p>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank — Will Be on the Exam</small>
+        <strong style="color:#e94560;font-size:1.3em;">TOCTOU = Race Condition</strong>
+      </div>
+      <p><strong>Countermeasure:</strong> Make critical sets of instructions <em style="color:var(--page-color);font-style:normal;font-weight:600;">atomic</em> — they either execute in order and in entirety, or the changes are rolled back.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Cross-Site Request Forgery — CSRF (Slide 20)</h3>
+      <p>CSRF causes an end user to execute unwanted actions on a web application in which they are currently authenticated. Unlike XSS, in CSRF <strong>the attacker exploits the website's trust of the browser</strong>, rather than the other way around. The website thinks the request came from the user's browser and was actually made by the user.</p>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Distinction:</strong> XSS exploits user's trust of website. CSRF exploits website's trust of browser. They are <strong>opposite</strong> attack directions.
+      </div>
+      <p><strong>Prevention:</strong> Web applications should come from a vetted <strong>image</strong> — one solid image before deploying across systems.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Clickjacking (Slide 22)</h3>
+      <p>A clickjacking attack places a <strong>transparent page or frame over a legitimate-looking page</strong>. When users click, they think they're clicking on the real site, but they're actually interacting with the attacker's invisible layer.</p>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Caution:</strong> Eastern Europe was historically known for clickjacking campaigns. USAA insurance and even the White House website were victims. Social engineering tactics entice users to click. The attacks are being <strong>recycled</strong> — old attacks come back.
+      </div>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "What should you be paying attention to instead of caught up in the graphics? <strong>THE URL.</strong> Always check the URL. My wife and kids, I have to correct them all the time."
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔧 4. Firmware vs Operating Ware</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>Understanding the distinction between firmware and operating ware is critical — Professor Duke emphasized this as a key exam concept.</p>
+      <table>
+        <tr><th>Aspect</th><th>Firmware</th><th>Operating Ware</th></tr>
+        <tr><td><strong>Legal Status</strong></td><td>Legally protected, proprietary</td><td>Meant to be manipulated and changed</td></tr>
+        <tr><td><strong>Warranty</strong></td><td>Breaking it <strong>voids warranty</strong></td><td>Changing it is expected and normal</td></tr>
+        <tr><td><strong>Storage</strong></td><td>Stored on EPROM (Erasable Programmable Read Only Memory)</td><td>Installed on top of firmware</td></tr>
+        <tr><td><strong>Purpose</strong></td><td>Can exist as BIOS — controls the hardware at the lowest level</td><td>Controls the functionality of equipment for your environment</td></tr>
+        <tr><td><strong>Modification</strong></td><td>Manufacturer designs specs — "it will work this way"</td><td>Open for you to change and manipulate</td></tr>
+      </table>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "People buy new phones and jailbreak them — they manipulate the firmware. Then they turn their phones in and don't get any money back because they broke the warranty."
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Embedded Systems (Slide 25)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> An <em style="color:var(--page-color);font-style:normal;font-weight:600;">embedded system</em> is a computer system with a dedicated function within a larger device. Because they are placed <strong>without input from a security professional</strong>, security is typically not built in.
+      </div>
+      <p><strong>Example:</strong> Your smartphone has an embedded identity chip placed by Apple or Android — they don't ask you. The government plans to eventually turn your phone into an ID card using these chips.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Firmware Attacks — A New Frontier</h3>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Warning:</strong> Firmware vulnerabilities were <strong>copy-pasted between manufacturers</strong>, creating known vulnerabilities across many router brands. Companies cut and pasted firmware coding from other manufacturers, which spread vulnerabilities. Register your router with the manufacturer for push notifications about firmware updates.
+      </div>
+      <p><strong>System on Chip (SoC):</strong> An integrated circuit that includes all components. If designed properly, SoCs allow for stronger battery life and more efficient operation.</p>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔄 5. SDLC &amp; DevSecOps</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "Know the 8 SDLC steps. You will see a MATCHING question on the exam."
+      </div>
+      <p>The Software Development Life Cycle is a formal process that ensures security is considered at every phase. When software is developed, the earlier security is considered, the less it will cost. Secure coding standards reduce the attack surface of an application.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">SDLC Integration (Slide 37)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Concept:</strong> The <strong>state of the application</strong> is determined in every phase of its lifecycle. All possible operations must be identified to ensure the software <strong>never enters an insecure state</strong>. If it fails security checks at any phase — <strong>STOP. Do not proceed.</strong>
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Zero-Day Vulnerabilities (Slide 40)</h3>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> A vulnerability discovered in a live environment for which <strong>no current fix or patch exists</strong>. Response: <strong>isolate and segregate</strong> the affected systems immediately.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">DevOps vs DevSecOps (Slide 45)</h3>
+      <table>
+        <tr><th>Aspect</th><th>DevOps</th><th>DevSecOps</th></tr>
+        <tr><td><strong>Teams</strong></td><td>Development + QA + Operations</td><td>Development + QA + Operations + <strong>Security</strong></td></tr>
+        <tr><td><strong>Security</strong></td><td>Often added at the end</td><td>Baked in from the start</td></tr>
+        <tr><td><strong>Goal</strong></td><td>Better working relationship between dev/QA/ops</td><td>Shared sense of <strong>security responsibility</strong></td></tr>
+      </table>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Remember This</small>
+        <strong style="color:#e94560;font-size:1.2em;">DevSecOps = Security BAKED IN, not slapped on at the end</strong>
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔍 6. Code Review &amp; Secure Coding Practices</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank (Slide 50)</small>
+        <strong style="color:#e94560;font-size:1.3em;">"_____ is the systematic investigation of the code" = CODE REVIEW</strong>
+      </div>
+      <p>Code review is one of the most critical activities in software assurance. It can take many forms and helps identify both security vulnerabilities and functional issues before software reaches production.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Two Types of Code Review</h3>
+      <table>
+        <tr><th>Type</th><th>Description</th><th>Sub-Types</th><th>Trade-off</th></tr>
+        <tr><td><strong>Formal Review</strong></td><td>Line-by-line inspection by multiple people in multiple phases</td><td>—</td><td>Most thorough but <strong>most time-consuming</strong></td></tr>
+        <tr><td><strong>Lightweight Review</strong></td><td>More cursory, done as part of normal development</td><td>Pair programming, email review, over-the-shoulder, <strong>tool-assisted</strong> (most efficient)</td><td>Faster but less thorough</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Input Validation (Slide 55)</h3>
+      <p>Input validation checks all input for issues such as proper format and proper length. It is one of the most important defenses against web application attacks.</p>
+      <table>
+        <tr><th>Method</th><th>How It Works</th><th>Risk</th></tr>
+        <tr><td><strong>Blacklisting</strong></td><td>Blocks known bad characters or patterns</td><td>Can accidentally block legitimate requests</td></tr>
+        <tr><td><strong>Whitelisting</strong></td><td>Allows only approved characters or patterns</td><td>More restrictive but more secure</td></tr>
+      </table>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Tool Categories:</strong> Cloud-based tools, open source tools, and proprietary commercial products. Know these three categories for the exam.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Session Management (Slide 57)</h3>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank (Slide 57)</small>
+        <strong style="color:#e94560;font-size:1.3em;">"_____ ensures that any instance of identification and authentication to a resource is managed properly" = SESSION MANAGEMENT</strong>
+      </div>
+      <p>This includes managing desktop sessions, remote sessions, cloud sessions, and VLAN sessions. The answer is given to you in the question — "managing" and "sessions" tells you it's session management.</p>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔐 7. Authentication — Context-Based &amp; Behavioral</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <h3 style="color:#58a6ff;">Context-Based Authentication (Slide 59)</h3>
+      <p>Context-based authentication takes <strong>multiple factors or attributes</strong> into consideration before authenticating and authorizing an entity. It goes beyond simple passwords to evaluate the full context of each access attempt.</p>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Three Key Benefits:</strong>
+        <ol style="margin:8px 0 0 20px;">
+          <li>Helps prevent <strong>account takeovers</strong> made possible by simple password systems</li>
+          <li>Helps prevent attacks made possible by <strong>personal mobile devices</strong> lacking security</li>
+          <li>Helps prevent attacks made possible by the <strong>user's location</strong></li>
+        </ol>
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Behavioral Analysis (Slide 63)</h3>
+      <p>Authentication systems can track the <strong>behavior of an individual over time</strong> and use this information to detect when an entity performs actions that differ from their normal activity — even if those actions are within the entity's rights.</p>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>The Snowden Story:</strong> Edward Snowden exploited NSA's failure to practice what they preached. Had NSA implemented behavioral analysis, they would have caught Snowden's abnormal data access patterns much sooner. <strong>32 people were fired</strong> as a result of the security failures that enabled Snowden.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🌐 8. Service Architecture — SOAP, REST &amp; Microservices</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <table>
+        <tr><th>Technology</th><th>Full Name</th><th>Key Characteristic</th><th>Exam Note</th></tr>
+        <tr><td><strong>SOAP</strong></td><td>Simple Object Access Protocol</td><td>Protocol for exchanging structured info in web services</td><td>Disadvantage: <strong>VERBOSITY</strong> led developers to REST</td></tr>
+        <tr><td><strong>REST</strong></td><td>Representational State Transfer</td><td>Client-server model. Does NOT require specific message format.</td><td><strong>Fill-in-the-blank</strong> (bolded white text on slide 67)</td></tr>
+        <tr><td><strong>SOA Microservices</strong></td><td>Service-Oriented Architecture</td><td>Self-contained piece of business functionality with clear interface</td><td>Best for <strong>geographically dispersed</strong> orgs</td></tr>
+        <tr><td><strong>Monolithic</strong></td><td>—</td><td>Everything in a centralized feature point</td><td>Best for <strong>centralized</strong> systems</td></tr>
+      </table>
+
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Fill-in-the-Blank (Slide 67 — Bolded White = Exam)</small>
+        <strong style="color:#e94560;font-size:1.3em;">REST = Representational State Transfer</strong>
+      </div>
+
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "The U.S. State Department has embassies all over the world — they use a <strong>microservices</strong> architecture because they are geographically dispersed. If you're working in centralized systems, a <strong>monolithic</strong> architecture might work well for you."
+      </div>
+
+<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:20px;margin:16px 0;text-align:center;font-family:monospace;font-size:0.9em;line-height:1.5;overflow-x:auto;white-space:pre;color:#ddd;">
+  MONOLITHIC                      MICROSERVICES
+  ┌──────────────┐       ┌─────┐ ┌─────┐ ┌─────┐
+  │              │       │ Svc │ │ Svc │ │ Svc │
+  │   All-in-One │       │  A  │ │  B  │ │  C  │
+  │   Feature    │       └──┬──┘ └──┬──┘ └──┬──┘
+  │   Point      │          │      │      │
+  └──────────────┘          └──────┴──────┘
+  Best: Centralized         Best: Geographically
+  systems                   dispersed orgs</div>
+    </div>
+  </details>
 
   <!-- QUIZ -->
   <div class="quiz-section">
