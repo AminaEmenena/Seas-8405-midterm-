@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8400 — Mega Final Exam</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --page-color: #e94560;
+    --correct: #51cf66;
+    --wrong: #ff6b6b;
+    --l7: #FF6B6B;
+    --l8: #FFA94D;
+    --l9: #FFD43B;
+    --l10: #69DB7C;
+    --l11: #9775FA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.home { background: #444; }
+  .topnav a.l7 { background: var(--l7); color: #000; }
+  .topnav a.l8 { background: var(--l8); color: #000; }
+  .topnav a.l9 { background: var(--l9); color: #000; }
+  .topnav a.l10 { background: var(--l10); color: #000; }
+  .topnav a.l11 { background: var(--l11); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 0 0 20px; padding: 16px;
+    background: #0d1b2a; border-radius: 12px;
+    border: 1px solid #333;
+    align-items: center;
+  }
+  .filter-bar label { font-weight: 700; margin-right: 8px; color: #aaa; }
+  .filter-btn {
+    padding: 8px 18px; border-radius: 8px; border: 2px solid #555;
+    background: transparent; color: #ccc; font-weight: 700;
+    cursor: pointer; font-size: 0.85em; transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: #999; color: #fff; }
+  .filter-btn.active { color: #fff; border-color: transparent; }
+  .filter-btn[data-filter="all"].active { background: var(--accent1); }
+  .filter-btn[data-filter="L7"].active { background: var(--l7); color: #000; }
+  .filter-btn[data-filter="L8"].active { background: var(--l8); color: #000; }
+  .filter-btn[data-filter="L9"].active { background: var(--l9); color: #000; }
+  .filter-btn[data-filter="L10"].active { background: var(--l10); color: #000; }
+  .filter-btn[data-filter="L11"].active { background: var(--l11); color: #000; }
+
+  /* SCORE BAR */
+  .score-bar {
+    display: flex; align-items: center; gap: 16px; margin: 0 0 24px;
+    padding: 16px 20px; background: #0d1b2a; border-radius: 12px;
+    border: 1px solid #333; flex-wrap: wrap;
+  }
+  .score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .score-bar .score-fill-track {
+    flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden;
+  }
+  .score-bar .score-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease; width: 0%;
+  }
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+  .quiz-reset-btn {
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1);
+    background: transparent; color: var(--accent1); font-weight: 700;
+    cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+
+  /* QUIZ QUESTIONS */
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q.hidden { display: none; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; font-size: 1em; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt {
+    padding: 12px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent; font-size: 0.95em;
+    text-align: left;
+  }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .quiz-q .opt.correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .quiz-q .opt.wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .quiz-q .opt.show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .quiz-q .opt.disabled { pointer-events: none; }
+  .quiz-q .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .quiz-q .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  .lesson-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 0.7em; font-weight: 700; text-transform: uppercase;
+    margin-left: 6px; color: #000;
+  }
+  .lesson-badge.lb-l7 { background: var(--l7); }
+  .lesson-badge.lb-l8 { background: var(--l8); }
+  .lesson-badge.lb-l9 { background: var(--l9); }
+  .lesson-badge.lb-l10 { background: var(--l10); }
+  .lesson-badge.lb-l11 { background: var(--l11); }
+
+  .difficulty-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 0.7em; font-weight: 700; text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .difficulty-badge.easy { background: rgba(81,207,102,0.2); color: var(--correct); }
+  .difficulty-badge.medium { background: rgba(255,169,77,0.2); color: #FFA94D; }
+  .difficulty-badge.hard { background: rgba(233,69,96,0.2); color: var(--accent1); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    .topnav { padding: 8px 12px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .filter-bar { padding: 12px; }
+    .filter-btn { padding: 6px 12px; font-size: 0.8em; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title">8400</span>
+  <a href="index.html" class="home">Home</a>
+  <a href="lesson7.html" class="l7">L7</a>
+  <a href="lesson8.html" class="l8">L8</a>
+  <a href="lesson9.html" class="l9">L9</a>
+  <a href="lesson10.html" class="l10">L10</a>
+  <a href="lesson11.html" class="l11">L11</a>
+  <a href="mega.html" class="mega active">Mega</a>
+</nav>
+
+<div class="page-hero">
+  <h1>SEAS 8400 — Mega Final Exam</h1>
+  <p class="sub">100 Questions — Randomized</p>
+</div>
+
+<div class="container">
+
+  <div class="filter-bar">
+    <label>Filter:</label>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="L7">L7</button>
+    <button class="filter-btn" data-filter="L8">L8</button>
+    <button class="filter-btn" data-filter="L9">L9</button>
+    <button class="filter-btn" data-filter="L10">L10</button>
+    <button class="filter-btn" data-filter="L11">L11</button>
+  </div>
+
+  <div class="score-bar">
+    <span class="score-text" id="scoreText">0 / 0</span>
+    <div class="score-fill-track"><div class="score-fill" id="scoreFill"></div></div>
+    <div class="streak-display" id="streakDisplay">Streak: 0</div>
+    <button class="quiz-reset-btn" id="resetBtn">Reset</button>
+  </div>
+
+  <div id="quizContainer">
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">1</span><span class="lesson-badge lb-l7">L7</span> A TOCTOU attack is also known as a _____.</p>
+  <div class="options">
+    <div class="opt">Race condition</div><div class="opt">Buffer overflow</div><div class="opt">SQL injection</div><div class="opt">MITM</div>
+  </div>
+  <div class="explanation">Synonym for time-of-check/time-of-use. Countermeasure: make instructions atomic.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">2</span><span class="lesson-badge lb-l7">L7</span> _____ is the systematic investigation of code.</p>
+  <div class="options">
+    <div class="opt">Code review</div><div class="opt">Pen testing</div><div class="opt">Vuln scanning</div><div class="opt">Risk assessment</div>
+  </div>
+  <div class="explanation">Fill-in-the-blank. Types: Formal and Lightweight.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">3</span><span class="lesson-badge lb-l7">L7</span> _____ ensures identification and authentication to a resource is managed properly.</p>
+  <div class="options">
+    <div class="opt">Session management</div><div class="opt">Access control</div><div class="opt">Identity governance</div><div class="opt">Token validation</div>
+  </div>
+  <div class="explanation">Includes desktop, remote, cloud, VLAN sessions.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">4</span><span class="lesson-badge lb-l7">L7</span> REST stands for _____.</p>
+  <div class="options">
+    <div class="opt">Remote Execution State Transfer</div><div class="opt">Reliable Enterprise Service Technology</div><div class="opt">Representational State Transfer</div><div class="opt">Resource Endpoint Security Token</div>
+  </div>
+  <div class="explanation">Bolded white text = fill-in-the-blank. No specific message format required.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">5</span><span class="lesson-badge lb-l7">L7</span> PRIMARY difference between firmware and operating ware?</p>
+  <div class="options">
+    <div class="opt">Firmware is legally protected/proprietary; operating ware is meant to be changed</div><div class="opt">Firmware is free; operating ware needs license</div><div class="opt">Firmware runs apps; operating ware manages hardware</div><div class="opt">They are interchangeable</div>
+  </div>
+  <div class="explanation">Breaking firmware voids warranty. Stored on EPROM.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">6</span><span class="lesson-badge lb-l7">L7</span> Key difference between DevOps and DevSecOps?</p>
+  <div class="options">
+    <div class="opt">DevSecOps adds security, baking it in not slapping on</div><div class="opt">DevSecOps removes QA</div><div class="opt">DevOps is more secure</div><div class="opt">DevSecOps only for cloud</div>
+  </div>
+  <div class="explanation">DevSecOps brings security into the tent.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">7</span><span class="lesson-badge lb-l7">L7</span> NIST SP 800-163 Rev 1 is a _____.</p>
+  <div class="options">
+    <div class="opt">Mandatory standard</div><div class="opt">Guideline for vetting mobile app security</div><div class="opt">Law requiring testing</div><div class="opt">Certification framework</div>
+  </div>
+  <div class="explanation">It's a GUIDELINE, not a standard.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">8</span><span class="lesson-badge lb-l7">L7</span> Primary purpose of containerization in MDM?</p>
+  <div class="options">
+    <div class="opt">Creating encrypted container separating corporate/personal data</div><div class="opt">Shipping apps in Docker</div><div class="opt">Compressing data</div><div class="opt">Backing up to cloud</div>
+  </div>
+  <div class="explanation">Newer MDM feature. Requires skilled personnel.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">9</span><span class="lesson-badge lb-l7">L7</span> Which ownership model gives company MORE control?</p>
+  <div class="options">
+    <div class="opt">BYOD</div><div class="opt">COPE (Corporate Owned, Personally Enabled)</div><div class="opt">POCE</div><div class="opt">Shadow IT</div>
+  </div>
+  <div class="explanation">Government getting away from POCE. COPE has strict policies.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">10</span><span class="lesson-badge lb-l7">L7</span> What is a maintenance hook?</p>
+  <div class="options">
+    <div class="opt">Backdoor instructions allowing access without normal controls</div><div class="opt">Scheduled maintenance window</div><div class="opt">Code comment for updates</div><div class="opt">Testing framework</div>
+  </div>
+  <div class="explanation">Remove before production. Use code reviews to find them.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">11</span><span class="lesson-badge lb-l7">L7</span> How does CSRF differ from XSS?</p>
+  <div class="options">
+    <div class="opt">CSRF attacks server; XSS attacks database</div><div class="opt">CSRF exploits website's trust of browser; XSS is opposite</div><div class="opt">CSRF only mobile</div><div class="opt">XSS needs physical access</div>
+  </div>
+  <div class="explanation">Website thinks request came from user's browser.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">12</span><span class="lesson-badge lb-l7">L7</span> When prefer microservices over monolithic?</p>
+  <div class="options">
+    <div class="opt">Very small org</div><div class="opt">Centralized systems</div><div class="opt">Geographically dispersed</div><div class="opt">Limited budget</div>
+  </div>
+  <div class="explanation">US State Department uses microservices for global embassies.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">13</span><span class="lesson-badge lb-l7">L7</span> Input validation tool categories?</p>
+  <div class="options">
+    <div class="opt">Cloud-based, open source, proprietary commercial</div><div class="opt">Hardware, software, firmware</div><div class="opt">Free, freemium, enterprise</div><div class="opt">Local, remote, hybrid</div>
+  </div>
+  <div class="explanation">Checks format/length using blacklisting or whitelisting.</div>
+</div>
+
+<div class="quiz-q" data-correct="3" data-difficulty="easy" data-lesson="L7">
+  <p><span class="qnum">14</span><span class="lesson-badge lb-l7">L7</span> BEST defense against clickjacking?</p>
+  <div class="options">
+    <div class="opt">Antivirus</div><div class="opt">VPN</div><div class="opt">Disabling JavaScript</div><div class="opt">Always checking the URL</div>
+  </div>
+  <div class="explanation">Professor Duke: "Check the URL!" Eastern Europe known for this.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">15</span><span class="lesson-badge lb-l7">L7</span> What is a zero-day vulnerability?</p>
+  <div class="options">
+    <div class="opt">Vulnerability with no fix or patch available</div><div class="opt">Fixed same day</div><div class="opt">Existed zero days</div><div class="opt">In backup software</div>
+  </div>
+  <div class="explanation">Response: isolate and segregate.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="hard" data-lesson="L7">
+  <p><span class="qnum">16</span><span class="lesson-badge lb-l7">L7</span> Embedded systems placed without input from?</p>
+  <div class="options">
+    <div class="opt">Security professional</div><div class="opt">Hardware engineer</div><div class="opt">Project manager</div><div class="opt">DBA</div>
+  </div>
+  <div class="explanation">Security not built in. Example: smartphone identity chips.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">17</span><span class="lesson-badge lb-l7">L7</span> NOT one of NIST SP 800-163's 5 guidelines?</p>
+  <div class="options">
+    <div class="opt">Understand vetting process</div><div class="opt">Develop app security requirements</div><div class="opt">Mandate app store monopoly</div><div class="opt">Determine if acceptable for deployment</div>
+  </div>
+  <div class="explanation">5 guidelines for mobile app security vetting.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="hard" data-lesson="L7">
+  <p><span class="qnum">18</span><span class="lesson-badge lb-l7">L7</span> Primary SOAP disadvantage leading to REST?</p>
+  <div class="options">
+    <div class="opt">Too secure</div><div class="opt">Verbosity of operation</div><div class="opt">No XML support</div><div class="opt">Paid licenses</div>
+  </div>
+  <div class="explanation">REST doesn't require specific message format.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L7">
+  <p><span class="qnum">19</span><span class="lesson-badge lb-l7">L7</span> In SDLC, what if app enters insecure state?</p>
+  <div class="options">
+    <div class="opt">Stop and do not proceed</div><div class="opt">Document and continue</div><div class="opt">Skip to deployment</div><div class="opt">Roll back</div>
+  </div>
+  <div class="explanation">Security checked at every phase.</div>
+</div>
+
+<div class="quiz-q" data-correct="3" data-difficulty="hard" data-lesson="L7">
+  <p><span class="qnum">20</span><span class="lesson-badge lb-l7">L7</span> SCEP pre-shared secret uses what?</p>
+  <div class="options">
+    <div class="opt">Biometric</div><div class="opt">Digital certificate</div><div class="opt">Hardware token</div><div class="opt">Challenge password delivered out-of-band</div>
+  </div>
+  <div class="explanation">For authorization only, not device authentication.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">21</span><span class="lesson-badge lb-l8">L8</span> 6 IR steps in order:</p>
+  <div class="options">
+    <div class="opt">Detect, Respond, Report, Recover, Remediate, Review</div><div class="opt">Identify, Protect, Detect, Respond, Recover, Govern</div><div class="opt">Plan, Detect, Contain, Eradicate, Recover, Learn</div><div class="opt">Alert, Triage, Investigate, Resolve, Close, Archive</div>
+  </div>
+  <div class="explanation">Matching question. Investigation during respond, report, recover.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">22</span><span class="lesson-badge lb-l8">L8</span> 3 R's of cybersecurity IR:</p>
+  <div class="options">
+    <div class="opt">Redundancy, Remediation, Resiliency</div><div class="opt">Risk, Response, Recovery</div><div class="opt">Report, Recover, Review</div><div class="opt">Redundancy, Replication, Restoration</div>
+  </div>
+  <div class="explanation">Professor Duke emphasized these repeatedly.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">23</span><span class="lesson-badge lb-l8">L8</span> Incident > ___ hours = disaster.</p>
+  <div class="options">
+    <div class="opt">12</div><div class="opt">48</div><div class="opt">24</div><div class="opt">72</div>
+  </div>
+  <div class="explanation">Determines IR plan vs DRP activation.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">24</span><span class="lesson-badge lb-l8">L8</span> MTD is also called:</p>
+  <div class="options">
+    <div class="opt">MPTD (Maximum Period Time of Disruption)</div><div class="opt">MAO</div><div class="opt">CRW</div><div class="opt">DTT</div>
+  </div>
+  <div class="explanation">Slides 44-45 matching content.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">25</span><span class="lesson-badge lb-l8">L8</span> Which metric calculated by device VENDOR?</p>
+  <div class="options">
+    <div class="opt">RTO</div><div class="opt">MTBF</div><div class="opt">MTD</div><div class="opt">RPO</div>
+  </div>
+  <div class="explanation">Higher MTBF + lower MTTR = more reliable.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">26</span><span class="lesson-badge lb-l8">L8</span> WRT equals:</p>
+  <div class="options">
+    <div class="opt">MTD minus RTO</div><div class="opt">RTO minus RPO</div><div class="opt">MTBF minus MTTR</div><div class="opt">ALE minus SLE</div>
+  </div>
+  <div class="explanation">Remaining time after RTO before reaching MTD.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">27</span><span class="lesson-badge lb-l8">L8</span> RTO should be _____ than MTD.</p>
+  <div class="options">
+    <div class="opt">Greater</div><div class="opt">Equal</div><div class="opt">Smaller</div><div class="opt">Unrelated</div>
+  </div>
+  <div class="explanation">If RTO exceeds MTD, unacceptable consequences.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">28</span><span class="lesson-badge lb-l8">L8</span> Criticality level restored within 24 hours?</p>
+  <div class="options">
+    <div class="opt">Urgent</div><div class="opt">Critical</div><div class="opt">Important</div><div class="opt">Normal</div>
+  </div>
+  <div class="explanation">Critical=min/hrs, Important=72h, Normal=7d, Nonessential=30d.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">29</span><span class="lesson-badge lb-l8">L8</span> IR communications should use:</p>
+  <div class="options">
+    <div class="opt">Out-of-band with end-to-end encryption</div><div class="opt">Corporate email</div><div class="opt">Social media</div><div class="opt">Unencrypted phone</div>
+  </div>
+  <div class="explanation">Use OTR Messaging.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">30</span><span class="lesson-badge lb-l8">L8</span> Which dept reviews NDAs during IR?</p>
+  <div class="options">
+    <div class="opt">HR</div><div class="opt">PR</div><div class="opt">Legal</div><div class="opt">IT Ops</div>
+  </div>
+  <div class="explanation">Legal develops docs and assesses liability.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">31</span><span class="lesson-badge lb-l8">L8</span> Most important IR plan success factor:</p>
+  <div class="options">
+    <div class="opt">Senior leadership support, verbal AND financial</div><div class="opt">Latest technology</div><div class="opt">External consultants</div><div class="opt">Frequent pen testing</div>
+  </div>
+  <div class="explanation">Leadership creates authority agreements.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">32</span><span class="lesson-badge lb-l8">L8</span> PII must be:</p>
+  <div class="options">
+    <div class="opt">Encrypted, archived, deleted</div><div class="opt">Understood, identified, protected</div><div class="opt">Classified, transmitted, stored</div><div class="opt">Monitored, logged, reported</div>
+  </div>
+  <div class="explanation">Includes name, IDs, DOB, biometrics, financial accounts.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">33</span><span class="lesson-badge lb-l8">L8</span> PCI DSS protects which data?</p>
+  <div class="options">
+    <div class="opt">SPI - credit card data</div><div class="opt">PHI</div><div class="opt">PII only</div><div class="opt">Classified data</div>
+  </div>
+  <div class="explanation">Affects any org with cardholder info.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">34</span><span class="lesson-badge lb-l8">L8</span> Five scope factors for severity:</p>
+  <div class="options">
+    <div class="opt">Downtime, Data integrity, Economic, System criticality, Reverse engineering</div><div class="opt">CIA, Auth, Non-repudiation</div><div class="opt">People, Process, Tech, Policy, Training</div><div class="opt">Detection, Analysis, Containment, Eradication, Recovery</div>
+  </div>
+  <div class="explanation">Scope determines impact.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">35</span><span class="lesson-badge lb-l8">L8</span> Which data remanence method defeats forensics?</p>
+  <div class="options">
+    <div class="opt">Clearing</div><div class="opt">Destruction</div><div class="opt">Purging (Sanitization)</div><div class="opt">Formatting</div>
+  </div>
+  <div class="explanation">Clearing = forensics possible. Purging = impossible. Destruction = physical.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="hard" data-lesson="L8">
+  <p><span class="qnum">36</span><span class="lesson-badge lb-l8">L8</span> Three ways to read binary malware:</p>
+  <div class="options">
+    <div class="opt">Disassembly, Decompiling, Debugging</div><div class="opt">Encryption, Decryption, Hashing</div><div class="opt">Scanning, Filtering, Blocking</div><div class="opt">Parsing, Compiling, Executing</div>
+  </div>
+  <div class="explanation">Kernel debug at ring 0. Usermode for most cases.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">37</span><span class="lesson-badge lb-l8">L8</span> Layer 2 segmentation uses:</p>
+  <div class="options">
+    <div class="opt">VLANs, private VLANs, port security</div><div class="opt">IP subnets and ACLs only</div><div class="opt">Firewalls and IDS only</div><div class="opt">Physical air gaps only</div>
+  </div>
+  <div class="explanation">Layer 3 uses IP subnets/ACLs on routers.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L8">
+  <p><span class="qnum">38</span><span class="lesson-badge lb-l8">L8</span> First document after IR recovery:</p>
+  <div class="options">
+    <div class="opt">Lessons learned report</div><div class="opt">Budget request</div><div class="opt">Press release</div><div class="opt">Insurance claim</div>
+  </div>
+  <div class="explanation">What went right/wrong? How improve? Cost?</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L8">
+  <p><span class="qnum">39</span><span class="lesson-badge lb-l8">L8</span> Lessons learned changes must go through:</p>
+  <div class="options">
+    <div class="opt">Standard change control process</div><div class="opt">Immediate implementation</div><div class="opt">External audit</div><div class="opt">Board approval</div>
+  </div>
+  <div class="explanation">Formal process via change control board.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="hard" data-lesson="L8">
+  <p><span class="qnum">40</span><span class="lesson-badge lb-l8">L8</span> Country that helped break San Bernardino iPhone:</p>
+  <div class="options">
+    <div class="opt">UK</div><div class="opt">Israel</div><div class="opt">Germany</div><div class="opt">Australia</div>
+  </div>
+  <div class="explanation">Cloned phones; preserved original for chain of custody.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">41</span><span class="lesson-badge lb-l9">L9</span> FISMA requires federal agencies to:</p>
+  <div class="options">
+    <div class="opt">Develop, document, implement agencywide infosec program</div><div class="opt">Only encrypt email</div><div class="opt">Hire auditors annually</div><div class="opt">Use open-source only</div>
+  </div>
+  <div class="explanation">"Your bible." 2027 update with AI.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">42</span><span class="lesson-badge lb-l9">L9</span> HIPAA is also known as:</p>
+  <div class="options">
+    <div class="opt">Healthcare Privacy Act</div><div class="opt">Kennedy-Kassebaum Act</div><div class="opt">Patient Protection Act</div><div class="opt">Medical Records Security Act</div>
+  </div>
+  <div class="explanation">Enforced by OCR of HHS. Overrides state laws unless stricter.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">43</span><span class="lesson-badge lb-l9">L9</span> Opposite of confidentiality:</p>
+  <div class="options">
+    <div class="opt">Disclosure</div><div class="opt">Encryption</div><div class="opt">Authentication</div><div class="opt">Authorization</div>
+  </div>
+  <div class="explanation">Controls: encryption, steganography, ACLs, data classification.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">44</span><span class="lesson-badge lb-l9">L9</span> NOT a GDPR lawful purpose for data processing?</p>
+  <div class="options">
+    <div class="opt">Data subject gave consent</div><div class="opt">Fulfill contractual obligations</div><div class="opt">Maximize corporate revenue</div><div class="opt">Protect vital interests</div>
+  </div>
+  <div class="explanation">6 lawful purposes under GDPR Article 6.</div>
+</div>
+
+<div class="quiz-q" data-correct="3" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">45</span><span class="lesson-badge lb-l9">L9</span> Data sovereignty means:</p>
+  <div class="options">
+    <div class="opt">Orgs own all data</div><div class="opt">Data must be encrypted</div><div class="opt">Only govt can access</div><div class="opt">Data subject to laws of country where located</div>
+  </div>
+  <div class="explanation">Complicated by cloud solutions.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">46</span><span class="lesson-badge lb-l9">L9</span> NOT one of 4 data sovereignty questions?</p>
+  <div class="options">
+    <div class="opt">What is data's market value?</div><div class="opt">Where is data stored?</div><div class="opt">Who has access?</div><div class="opt">How is data encrypted?</div>
+  </div>
+  <div class="explanation">Four: Where stored? Who has access? Where backed up? How encrypted?</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">47</span><span class="lesson-badge lb-l9">L9</span> CFAA "protected computer" means:</p>
+  <div class="options">
+    <div class="opt">Used by financial/US govt or affecting interstate commerce</div><div class="opt">Any with antivirus</div><div class="opt">Only classified systems</div><div class="opt">With physical locks</div>
+  </div>
+  <div class="explanation">Any computer including cell phones.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">48</span><span class="lesson-badge lb-l9">L9</span> Which law requires telecom surveillance capability?</p>
+  <div class="options">
+    <div class="opt">CALEA (1994)</div><div class="opt">ECPA (1986)</div><div class="opt">FISMA (2002)</div><div class="opt">SOX (2002)</div>
+  </div>
+  <div class="explanation">Real-time monitoring telephone/broadband/VoIP.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">49</span><span class="lesson-badge lb-l9">L9</span> USA PATRIOT Act full name:</p>
+  <div class="options">
+    <div class="opt">Protecting America Through Restrictive Internet Oversight</div><div class="opt">Uniting and Strengthening America by Providing Appropriate Tools Required to Intercept and Obstruct Terrorism</div><div class="opt">United States Advanced Protection and Tactical Response</div><div class="opt">Patriotic Action To Reduce Internet Threats</div>
+  </div>
+  <div class="explanation">2001. Amended FISA and ECPA.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">50</span><span class="lesson-badge lb-l9">L9</span> GDPR data minimization:</p>
+  <div class="options">
+    <div class="opt">Minimize personal data to what's necessary</div><div class="opt">Compress to save storage</div><div class="opt">Only numeric data</div><div class="opt">Delete after 30 days</div>
+  </div>
+  <div class="explanation">Reduces attack surface.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">51</span><span class="lesson-badge lb-l9">L9</span> GDPR purpose limitation:</p>
+  <div class="options">
+    <div class="opt">Data for one purpose can't be repurposed without consent</div><div class="opt">Data used only 30 days</div><div class="opt">Only one data type</div><div class="opt">Processing limited to business hours</div>
+  </div>
+  <div class="explanation">Disease data can't identify individuals.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">52</span><span class="lesson-badge lb-l9">L9</span> First-gen DRM controls _____:</p>
+  <div class="options">
+    <div class="opt">Copying</div><div class="opt">Accessing</div><div class="opt">Downloading</div><div class="opt">Streaming</div>
+  </div>
+  <div class="explanation">Second-gen: executing, viewing, copying, printing, altering.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="hard" data-lesson="L9">
+  <p><span class="qnum">53</span><span class="lesson-badge lb-l9">L9</span> Which breaks DVD CSS encryption?</p>
+  <div class="options">
+    <div class="opt">BitLocker</div><div class="opt">DeCSS on Linux</div><div class="opt">Wireshark</div><div class="opt">Metasploit</div>
+  </div>
+  <div class="explanation">AACS protects Blu-Ray/HD DVD.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">54</span><span class="lesson-badge lb-l9">L9</span> DLP prevents:</p>
+  <div class="options">
+    <div class="opt">Data exfiltration - intentional or unintentional</div><div class="opt">Hardware failures</div><div class="opt">Power outages</div><div class="opt">Social engineering only</div>
+  </div>
+  <div class="explanation">"2027 = quantum crypto year."</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">55</span><span class="lesson-badge lb-l9">L9</span> GLBA (1999) affects:</p>
+  <div class="options">
+    <div class="opt">All financial institutions; prohibits sharing financial info</div><div class="opt">Only healthcare</div><div class="opt">Only government</div><div class="opt">Only education</div>
+  </div>
+  <div class="explanation">Banks, loans, insurance, investment, credit cards.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">56</span><span class="lesson-badge lb-l9">L9</span> First law requiring formal computer security plan:</p>
+  <div class="options">
+    <div class="opt">FISMA (2002)</div><div class="opt">CFAA (1986)</div><div class="opt">Computer Security Act of 1987</div><div class="opt">ECPA (1986)</div>
+  </div>
+  <div class="explanation">Superseded by FISMA in 2002.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">57</span><span class="lesson-badge lb-l9">L9</span> No-expectation-of-privacy policy:</p>
+  <div class="options">
+    <div class="opt">Employee must sign after training</div><div class="opt">Verbal agreement only</div><div class="opt">Opt-out form</div><div class="opt">Annual audit</div>
+  </div>
+  <div class="explanation">Fourth Amendment protections apply.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L9">
+  <p><span class="qnum">58</span><span class="lesson-badge lb-l9">L9</span> Data masking primary forms:</p>
+  <div class="options">
+    <div class="opt">Encryption and hashing</div><div class="opt">Compression and archiving</div><div class="opt">Tokenization and redaction</div><div class="opt">Obfuscation and anonymization</div>
+  </div>
+  <div class="explanation">Also substitution and transposition.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L9">
+  <p><span class="qnum">59</span><span class="lesson-badge lb-l9">L9</span> Data retention policy reviewed:</p>
+  <div class="options">
+    <div class="opt">Periodically by data owners/processors</div><div class="opt">Only after breach</div><div class="opt">Every 10 years</div><div class="opt">Never</div>
+  </div>
+  <div class="explanation">Security pro = ADVISORY ROLE. One-size impossible.</div>
+</div>
+
+<div class="quiz-q" data-correct="3" data-difficulty="hard" data-lesson="L9">
+  <p><span class="qnum">60</span><span class="lesson-badge lb-l9">L9</span> Under SOX, executives face:</p>
+  <div class="options">
+    <div class="opt">Loss of clearance</div><div class="opt">Community service</div><div class="opt">Mandatory training</div><div class="opt">Penalties and jail time</div>
+  </div>
+  <div class="explanation">2002. Public Company Accounting Reform Act.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L10">
+  <p><span class="qnum">61</span><span class="lesson-badge lb-l10">L10</span> Risk management is a _____ method.</p>
+  <div class="options">
+    <div class="opt">Formal</div><div class="opt">Informal</div><div class="opt">Optional</div><div class="opt">Theoretical</div>
+  </div>
+  <div class="explanation">FISMA makes it formal - must be in writing.</div>
+</div>
+
+<div class="quiz-q" data-correct="3" data-difficulty="easy" data-lesson="L10">
+  <p><span class="qnum">62</span><span class="lesson-badge lb-l10">L10</span> NOT a BIA step?</p>
+  <div class="options">
+    <div class="opt">Identify critical processes</div><div class="opt">Identify outage impacts</div><div class="opt">Identify recovery priorities</div><div class="opt">Identify threat actors and motivations</div>
+  </div>
+  <div class="explanation">4 steps: processes, outages, resources, recovery priorities.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L10">
+  <p><span class="qnum">63</span><span class="lesson-badge lb-l10">L10</span> Risk assessment also known as:</p>
+  <div class="options">
+    <div class="opt">Risk identification</div><div class="opt">Risk tolerance</div><div class="opt">Risk appetite</div><div class="opt">Risk avoidance</div>
+  </div>
+  <div class="explanation">Tool in risk management.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">64</span><span class="lesson-badge lb-l10">L10</span> Fourth risk assessment goal:</p>
+  <div class="options">
+    <div class="opt">Balance threat impact with countermeasure cost</div><div class="opt">Eliminate all risks</div><div class="opt">Transfer all risks</div><div class="opt">Accept all risks</div>
+  </div>
+  <div class="explanation">Four goals guide the process.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">65</span><span class="lesson-badge lb-l10">L10</span> Qualitative does NOT assign:</p>
+  <div class="options">
+    <div class="opt">Monetary and numeric values</div><div class="opt">High/medium/low</div><div class="opt">Color-coded priorities</div><div class="opt">Subjective assessments</div>
+  </div>
+  <div class="explanation">Uses intuition, experience, Delphi technique.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">66</span><span class="lesson-badge lb-l10">L10</span> Delphi technique estimates:</p>
+  <div class="options">
+    <div class="opt">Likelihood and outcome of future events</div><div class="opt">Network bandwidth</div><div class="opt">Annual loss expectancy</div><div class="opt">Encryption strength</div>
+  </div>
+  <div class="explanation">Named qualitative technique.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">67</span><span class="lesson-badge lb-l10">L10</span> Two qualitative advantages over quantitative:</p>
+  <div class="options">
+    <div class="opt">Uses equations and dollars</div><div class="opt">Prioritizes risks AND identifies immediate improvements</div><div class="opt">Faster, no expertise</div><div class="opt">Eliminates subjectivity</div>
+  </div>
+  <div class="explanation">Disadvantage: no dollar values for budgets.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">68</span><span class="lesson-badge lb-l10">L10</span> SLE equals:</p>
+  <div class="options">
+    <div class="opt">AV x EF</div><div class="opt">AV / ARO</div><div class="opt">EF x ALE</div><div class="opt">ARO x AV</div>
+  </div>
+  <div class="explanation">EF = percentage lost when threat occurs.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="hard" data-lesson="L10">
+  <p><span class="qnum">69</span><span class="lesson-badge lb-l10">L10</span> AV=$20K, EF=25%, ARO=50%. ALE=?</p>
+  <div class="options">
+    <div class="opt">$2,500</div><div class="opt">$5,000</div><div class="opt">$10,000</div><div class="opt">$1,250</div>
+  </div>
+  <div class="explanation">SLE=$5K. ALE=$5K x 0.50=$2,500.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">70</span><span class="lesson-badge lb-l10">L10</span> Passing risk to insurance is:</p>
+  <div class="options">
+    <div class="opt">Avoidance</div><div class="opt">Acceptance</div><div class="opt">Transfer</div><div class="opt">Mitigation</div>
+  </div>
+  <div class="explanation">Four: Avoidance, Transfer, Mitigation, Acceptance.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">71</span><span class="lesson-badge lb-l10">L10</span> Red team acts as:</p>
+  <div class="options">
+    <div class="opt">Attacking force with pen tests</div><div class="opt">Network defense</div><div class="opt">Referees</div><div class="opt">Management oversight</div>
+  </div>
+  <div class="explanation">Third-party, no prior network knowledge.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">72</span><span class="lesson-badge lb-l10">L10</span> Blue team role includes:</p>
+  <div class="options">
+    <div class="opt">Logs, SIEM, traffic analysis</div><div class="opt">Setting rules of engagement</div><div class="opt">Attacking network</div><div class="opt">Writing lessons learned</div>
+  </div>
+  <div class="explanation">Tests ability to respond.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">73</span><span class="lesson-badge lb-l10">L10</span> White team's primary role:</p>
+  <div class="options">
+    <div class="opt">Attack network</div><div class="opt">Defend network</div><div class="opt">Referee between red and blue</div><div class="opt">Report to management</div>
+  </div>
+  <div class="explanation">Enforces rules, monitors, takes notes.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L10">
+  <p><span class="qnum">74</span><span class="lesson-badge lb-l10">L10</span> Tabletop exercise is:</p>
+  <div class="options">
+    <div class="opt">Most cost-effective vulnerability identification</div><div class="opt">Physical pen test</div><div class="opt">Full disaster simulation</div><div class="opt">Vendor demo</div>
+  </div>
+  <div class="explanation">Informal brainstorming session.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">75</span><span class="lesson-badge lb-l10">L10</span> Compensating controls must be:</p>
+  <div class="options">
+    <div class="opt">Recorded with reason primary wasn't implemented</div><div class="opt">Kept secret</div><div class="opt">Undocumented</div><div class="opt">Replaced every 30 days</div>
+  </div>
+  <div class="explanation">Substitute for primary to mitigate risk.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">76</span><span class="lesson-badge lb-l10">L10</span> Who determines what's critical?</p>
+  <div class="options">
+    <div class="opt">CISO</div><div class="opt">C-suite/stakeholders</div><div class="opt">Help desk</div><div class="opt">External auditors</div>
+  </div>
+  <div class="explanation">CISO supports; doesn't decide.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">77</span><span class="lesson-badge lb-l10">L10</span> Communicating risk to executives:</p>
+  <div class="options">
+    <div class="opt">Translate to business terms</div><div class="opt">Use technical jargon</div><div class="opt">Discuss firewall configs</div><div class="opt">Avoid financial impacts</div>
+  </div>
+  <div class="explanation">Focus: disruption, regulatory, bad press.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">78</span><span class="lesson-badge lb-l10">L10</span> Quantitative advantage over qualitative:</p>
+  <div class="options">
+    <div class="opt">Uses less guesswork</div><div class="opt">Faster</div><div class="opt">No data needed</div><div class="opt">Eliminates subjectivity</div>
+  </div>
+  <div class="explanation">Purely quantitative impossible.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L10">
+  <p><span class="qnum">79</span><span class="lesson-badge lb-l10">L10</span> Fault tolerance is when:</p>
+  <div class="options">
+    <div class="opt">Backup begins when primary fails</div><div class="opt">All systems shut down</div><div class="opt">Only cloud used</div><div class="opt">Manual replaces automated</div>
+  </div>
+  <div class="explanation">Key: lack of service interruption.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="hard" data-lesson="L10">
+  <p><span class="qnum">80</span><span class="lesson-badge lb-l10">L10</span> OEM documentation prevents counterfeit because:</p>
+  <div class="options">
+    <div class="opt">Includes anti-counterfeiting features and verifiable numbers</div><div class="opt">Always handwritten</div><div class="opt">Requires biometrics</div><div class="opt">Stored on blockchain</div>
+  </div>
+  <div class="explanation">Check Common Criteria (NIAP) for EALs.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">81</span><span class="lesson-badge lb-l11">L11</span> COBIT 2019 fifth domain:</p>
+  <div class="options">
+    <div class="opt">MEA (Monitor, Evaluate, Assess)</div><div class="opt">MCA</div><div class="opt">RGC</div><div class="opt">SRM</div>
+  </div>
+  <div class="explanation">Five: EDM, APO, BAI, DSS, MEA.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">82</span><span class="lesson-badge lb-l11">L11</span> NIST CSF 2.0 added which function?</p>
+  <div class="options">
+    <div class="opt">Identify</div><div class="opt">Govern</div><div class="opt">Monitor</div><div class="opt">Assess</div>
+  </div>
+  <div class="explanation">6 functions including new Govern.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">83</span><span class="lesson-badge lb-l11">L11</span> Supply chain moved from _____ to Govern.</p>
+  <div class="options">
+    <div class="opt">Identify</div><div class="opt">Protect</div><div class="opt">Detect</div><div class="opt">Respond</div>
+  </div>
+  <div class="explanation">Emphasizes supplier due diligence.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">84</span><span class="lesson-badge lb-l11">L11</span> SABSA stands for:</p>
+  <div class="options">
+    <div class="opt">Sherwood Applied Business Security Architecture</div><div class="opt">Standard Applied Business Security Assessment</div><div class="opt">Security Architecture for Business Systems</div><div class="opt">Structured Analysis of Business Security</div>
+  </div>
+  <div class="explanation">6 questions x 6 layers. Risk-driven.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">85</span><span class="lesson-badge lb-l11">L11</span> ITIL primarily manages:</p>
+  <div class="options">
+    <div class="opt">SLAs</div><div class="opt">Firewalls</div><div class="opt">Pen testing</div><div class="opt">Clearances</div>
+  </div>
+  <div class="explanation">Independent review every 3 years.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">86</span><span class="lesson-badge lb-l11">L11</span> Highest security password type:</p>
+  <div class="options">
+    <div class="opt">Standard word</div><div class="opt">Complex</div><div class="opt">One-time password (OTP)</div><div class="opt">Cognitive</div>
+  </div>
+  <div class="explanation">Used once then discarded.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">87</span><span class="lesson-badge lb-l11">L11</span> Static password:</p>
+  <div class="options">
+    <div class="opt">Same each login, minimum security</div><div class="opt">Changes every 90 days</div><div class="opt">Uses biometrics</div><div class="opt">Requires 2FA</div>
+  </div>
+  <div class="explanation">Most often peer-to-peer.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">88</span><span class="lesson-badge lb-l11">L11</span> Passphrase advantages:</p>
+  <div class="options">
+    <div class="opt">Easier to remember, harder to attack</div><div class="opt">Shorter and faster</div><div class="opt">Uses only numbers</div><div class="opt">No special chars needed</div>
+  </div>
+  <div class="explanation">Length makes them hard to crack.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">89</span><span class="lesson-badge lb-l11">L11</span> Cognitive passwords verify by:</p>
+  <div class="options">
+    <div class="opt">Life questions (favorite color, pet name)</div><div class="opt">Fingerprints</div><div class="opt">One-time codes</div><div class="opt">Typing patterns</div>
+  </div>
+  <div class="explanation">Disadvantage: intimate knowledge holders may answer.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">90</span><span class="lesson-badge lb-l11">L11</span> 4-digit numeric password max possibilities:</p>
+  <div class="options">
+    <div class="opt">1,000</div><div class="opt">10,000</div><div class="opt">100,000</div><div class="opt">1,000,000</div>
+  </div>
+  <div class="explanation">0000-9999. Easy to crack once numeric-only known.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">91</span><span class="lesson-badge lb-l11">L11</span> Three control categories:</p>
+  <div class="options">
+    <div class="opt">Managerial, Operational, Technical</div><div class="opt">Physical, Digital, Human</div><div class="opt">Preventive, Detective, Corrective</div><div class="opt">Internal, External, Hybrid</div>
+  </div>
+  <div class="explanation">Managerial = soft. Technical = logical.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">92</span><span class="lesson-badge lb-l11">L11</span> Most popular directive control:</p>
+  <div class="options">
+    <div class="opt">AUP (Acceptable Use Policy)</div><div class="opt">Firewall rules</div><div class="opt">Biometrics</div><div class="opt">Security cameras</div>
+  </div>
+  <div class="explanation">Efficient ONLY with stated consequences.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">93</span><span class="lesson-badge lb-l11">L11</span> NOT a deterrent control?</p>
+  <div class="options">
+    <div class="opt">Restoring from backup</div><div class="opt">User ID/auth</div><div class="opt">Fences/lighting</div><div class="opt">NDAs</div>
+  </div>
+  <div class="explanation">Restoring = corrective control.</div>
+</div>
+
+<div class="quiz-q" data-correct="2" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">94</span><span class="lesson-badge lb-l11">L11</span> SSAE-18 replaced:</p>
+  <div class="options">
+    <div class="opt">ISO 27001</div><div class="opt">NIST 800-53</div><div class="opt">SAS 70</div><div class="opt">PCI DSS</div>
+  </div>
+  <div class="explanation">Written assertion on design and effectiveness.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">95</span><span class="lesson-badge lb-l11">L11</span> SOC 1 Type 2 includes:</p>
+  <div class="options">
+    <div class="opt">Type 1 PLUS effectiveness over time</div><div class="opt">Only pen test results</div><div class="opt">Employee surveys</div><div class="opt">Financial statements</div>
+  </div>
+  <div class="explanation">Both types provide benchmarks.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="easy" data-lesson="L11">
+  <p><span class="qnum">96</span><span class="lesson-badge lb-l11">L11</span> Compliance is:</p>
+  <div class="options">
+    <div class="opt">The law - non-negotiable</div><div class="opt">Optional</div><div class="opt">Government-only</div><div class="opt">Vendor suggestion</div>
+  </div>
+  <div class="explanation">Don't muddy waters. Compliance first.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">97</span><span class="lesson-badge lb-l11">L11</span> Continuous monitoring needs _____ first:</p>
+  <div class="options">
+    <div class="opt">Operational baselines</div><div class="opt">Threat intel</div><div class="opt">Employee schedules</div><div class="opt">Budget reports</div>
+  </div>
+  <div class="explanation">SCT + Group Policy + MS Endpoint Config Manager.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">98</span><span class="lesson-badge lb-l11">L11</span> ISO/IEC 27000 standardized:</p>
+  <div class="options">
+    <div class="opt">BS7799</div><div class="opt">BS5750</div><div class="opt">BS8800</div><div class="opt">BS25999</div>
+  </div>
+  <div class="explanation">For developing/maintaining ISMS.</div>
+</div>
+
+<div class="quiz-q" data-correct="1" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">99</span><span class="lesson-badge lb-l11">L11</span> CMMI addresses:</p>
+  <div class="options">
+    <div class="opt">Defense contractor certification</div><div class="opt">All phases of SDLC</div><div class="opt">Cloud only</div><div class="opt">DOD management</div>
+  </div>
+  <div class="explanation">CMMI does not equal CMMC.</div>
+</div>
+
+<div class="quiz-q" data-correct="0" data-difficulty="medium" data-lesson="L11">
+  <p><span class="qnum">100</span><span class="lesson-badge lb-l11">L11</span> Certification evaluates _____; accreditation evaluates _____:</p>
+  <div class="options">
+    <div class="opt">Technical components; overall security adequacy</div><div class="opt">Skills; approval</div><div class="opt">Speed; reliability</div><div class="opt">HW costs; SW costs</div>
+  </div>
+  <div class="explanation">Certify first, then accredit.</div>
+</div>
+
+  </div><!-- end quizContainer -->
+</div><!-- end container -->
+
+<script>
+(function() {
+  // Fisher-Yates shuffle
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  const container = document.getElementById('quizContainer');
+  const questions = Array.from(container.querySelectorAll('.quiz-q'));
+
+  // Shuffle and re-append
+  shuffle(questions);
+  questions.forEach((q, i) => {
+    container.appendChild(q);
+    q.querySelector('.qnum').textContent = i + 1;
+  });
+
+  // Score tracking
+  let correct = 0;
+  let answered = 0;
+  let streak = 0;
+  let maxStreak = 0;
+
+  const scoreText = document.getElementById('scoreText');
+  const scoreFill = document.getElementById('scoreFill');
+  const streakDisplay = document.getElementById('streakDisplay');
+
+  function updateScore() {
+    const visible = document.querySelectorAll('.quiz-q:not(.hidden) .opt.disabled').length > 0
+      ? document.querySelectorAll('.quiz-q:not(.hidden)').length : answered;
+    scoreText.textContent = correct + ' / ' + answered;
+    const pct = answered > 0 ? (correct / answered * 100) : 0;
+    scoreFill.style.width = pct + '%';
+    streakDisplay.textContent = 'Streak: ' + streak;
+    if (streak >= 3) {
+      streakDisplay.classList.add('on-fire');
+    } else {
+      streakDisplay.classList.remove('on-fire');
+    }
+  }
+
+  // Click handling
+  container.addEventListener('click', function(e) {
+    const opt = e.target.closest('.opt');
+    if (!opt) return;
+    const q = opt.closest('.quiz-q');
+    if (q.classList.contains('answered')) return;
+
+    q.classList.add('answered');
+    const options = Array.from(q.querySelectorAll('.opt'));
+    const correctIdx = parseInt(q.dataset.correct);
+    const clickedIdx = options.indexOf(opt);
+
+    options.forEach(o => o.classList.add('disabled'));
+
+    if (clickedIdx === correctIdx) {
+      opt.classList.add('correct');
+      correct++;
+      streak++;
+    } else {
+      opt.classList.add('wrong');
+      options[correctIdx].classList.add('show-correct');
+      streak = 0;
+    }
+    answered++;
+
+    // Show explanation
+    const exp = q.querySelector('.explanation');
+    if (exp) exp.classList.add('show');
+
+    updateScore();
+  });
+
+  // Filter buttons
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const filter = this.dataset.filter;
+
+      questions.forEach(q => {
+        if (filter === 'all' || q.dataset.lesson === filter) {
+          q.classList.remove('hidden');
+        } else {
+          q.classList.add('hidden');
+        }
+      });
+
+      // Renumber visible questions
+      let num = 1;
+      questions.forEach(q => {
+        if (!q.classList.contains('hidden')) {
+          q.querySelector('.qnum').textContent = num++;
+        }
+      });
+    });
+  });
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    correct = 0;
+    answered = 0;
+    streak = 0;
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      q.querySelectorAll('.opt').forEach(o => {
+        o.classList.remove('disabled', 'correct', 'wrong', 'show-correct');
+      });
+      const exp = q.querySelector('.explanation');
+      if (exp) exp.classList.remove('show');
+    });
+
+    // Re-shuffle
+    shuffle(questions);
+    questions.forEach((q, i) => {
+      container.appendChild(q);
+    });
+
+    // Renumber visible
+    let num = 1;
+    questions.forEach(q => {
+      if (!q.classList.contains('hidden')) {
+        q.querySelector('.qnum').textContent = num++;
+      }
+    });
+
+    updateScore();
+  });
+})();
+</script>
+</body>
+</html>
