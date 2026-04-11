@@ -255,53 +255,189 @@
   </div>
 
   <!-- STUDY CONTENT -->
-  <details><summary style="border-left-color:var(--page-color);">1. CIA Triad</summary><div style="padding:16px 20px;">
-    <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;"><small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Fact</small><strong style="color:#e94560;font-size:1.1em;">The OPPOSITE of confidentiality = DISCLOSURE</strong></div>
-    <ul><li><strong>Confidentiality:</strong> Prevent disclosure. Controls: encryption, steganography, ACLs, data classification. Sensitivity level determined BEFORE access controls.</li><li><strong>Integrity:</strong> Correctness and completeness of data</li><li><strong>Availability:</strong> Systems accessible when needed</li></ul>
-  </div></details>
+  <!-- ═══ SECTION 1 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔐 1. CIA Triad — Foundation of Security</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>The three fundamentals of security are confidentiality, integrity, and availability (CIA). Most security issues result in a violation of at least one facet of the CIA triad. Understanding these principles helps ensure that security controls protect at least one of them.</p>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Exam Fact</small>
+        <strong style="color:#e94560;font-size:1.3em;">The OPPOSITE of confidentiality = DISCLOSURE</strong>
+      </div>
+      <table>
+        <tr><th>Component</th><th>Definition</th><th>Opposite</th><th>Controls</th></tr>
+        <tr><td><strong>Confidentiality</strong></td><td>Prevent disclosure of data to unauthorized entities. Sensitivity level must be determined <strong>before</strong> access controls are put in place.</td><td>Disclosure</td><td>Encryption, steganography, ACLs, data classification</td></tr>
+        <tr><td><strong>Integrity</strong></td><td>Correctness, completeness, and soundness of data. Data cannot be modified except by authorized parties.</td><td>Alteration</td><td>Hashing, digital signatures, version control</td></tr>
+        <tr><td><strong>Availability</strong></td><td>Resources must be accessible when needed by authorized users.</td><td>Destruction/Disruption</td><td>Redundancy, backups, disaster recovery</td></tr>
+      </table>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Don't Forget:</strong> Data can also exist in <strong>printed format</strong>. Appropriate controls should protect data on the network, but printed data also needs protection through data disposal policies. Higher sensitivity = more access controls.
+      </div>
+    </div>
+  </details>
 
-  <details><summary style="border-left-color:var(--page-color);">2. Legal Requirements — US Laws</summary><div style="padding:16px 20px;">
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "FISMA is your bible."</div>
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.85em;"><tr><th>Law</th><th>Year</th><th>Affects</th><th>Key Points</th></tr>
-    <tr><td><strong>SOX</strong></td><td>2002</td><td>Publicly traded companies</td><td>Accounting/financial reporting. Penalties + jail for execs.</td></tr>
-    <tr><td><strong>HIPAA</strong></td><td>1996</td><td>Healthcare facilities/insurance</td><td>Kennedy-Kassebaum Act. OCR of HHS enforces. Overrides state laws unless stricter.</td></tr>
-    <tr><td><strong>GLBA</strong></td><td>1999</td><td>All financial institutions</td><td>Prohibits sharing financial info with 3rd parties.</td></tr>
-    <tr><td><strong>CFAA</strong></td><td>1986</td><td>"Protected computers"</td><td>Financial/govt or interstate commerce. Any computer incl. cell phones.</td></tr>
-    <tr><td><strong>FISA</strong></td><td>1978</td><td>Law enforcement/intel</td><td>Foreign surveillance. Amended by PATRIOT Act.</td></tr>
-    <tr><td><strong>ECPA</strong></td><td>1986</td><td>Law enforcement/intel</td><td>Extended wiretap to electronic data. Amended by CALEA.</td></tr>
-    <tr><td><strong>Comp Security Act</strong></td><td>1987</td><td>Federal govt</td><td>SUPERSEDED BY FISMA 2002. First formal security plan law.</td></tr>
-    <tr><td><strong>CALEA</strong></td><td>1994</td><td>Telecom carriers</td><td>Built-in surveillance. Real-time monitoring phone/broadband/VoIP.</td></tr>
-    <tr><td><strong>FISMA</strong></td><td>2002</td><td>Every federal agency</td><td>Agencywide infosec program. "YOUR BIBLE." 2027 update w/ AI.</td></tr>
-    <tr><td><strong>USA PATRIOT</strong></td><td>2001</td><td>Law enforcement/intel</td><td>Full name: Uniting and Strengthening America... Amended FISA + ECPA.</td></tr>
-    <tr><td><strong>Econ Espionage</strong></td><td>1996</td><td>Companies w/ trade secrets</td><td>Trade secret theft = federal crime.</td></tr></table>
-  </div></details>
+  <!-- ═══ SECTION 2 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">⚖️ 2. Legal Requirements — US Laws</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>Security analysts must be aware of laws and understand how they affect operations. Legal requirements are a form of non-technical controls that can mandate technical controls. When unsure, work with <strong>legal counsel</strong> for interpretation.</p>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "FISMA is your bible. An update is coming in 2027 that will include AI."
+      </div>
+      <table>
+        <tr><th>Law</th><th>Year</th><th>Who It Affects</th><th>Key Points</th></tr>
+        <tr><td><strong>Federal Privacy Act</strong></td><td>1974</td><td>Federal agency computers</td><td>Guidelines on collection, maintenance, use, and dissemination of PII</td></tr>
+        <tr><td><strong>FISA</strong></td><td>1978</td><td>Law enforcement &amp; intelligence</td><td>First act for physical/electronic surveillance of foreign intelligence. Amended by USA PATRIOT Act 2001 and FISA Amendments Act 2008.</td></tr>
+        <tr><td><strong>CFAA</strong></td><td>1986</td><td>Entities hacking "protected computers"</td><td>"Protected computer" = used by financial institution/US govt OR affects interstate/foreign commerce. Due to internet, <strong>any computer including cell phones</strong> falls under jurisdiction. Amended multiple times including by USA PATRIOT Act.</td></tr>
+        <tr><td><strong>ECPA</strong></td><td>1986</td><td>Law enforcement &amp; intelligence</td><td>Extended government wiretap restrictions from telephone to electronic data transmissions. Amended by CALEA 1994, USA PATRIOT 2001, FISA Amendments 2008.</td></tr>
+        <tr><td><strong>Computer Security Act</strong></td><td>1987</td><td>Federal government</td><td><strong>SUPERSEDED IN 2002 BY FISMA.</strong> First law requiring a formal computer security plan. Required training employees and identifying sensitive systems.</td></tr>
+        <tr><td><strong>US Federal Sentencing Guidelines</strong></td><td>1991</td><td>Convicted individuals/orgs</td><td>Affects felonies and serious (Class A) misdemeanors. Prevents sentencing disparities.</td></tr>
+        <tr><td><strong>CALEA</strong></td><td>1994</td><td>Telecom carriers &amp; manufacturers</td><td>Requires <strong>built-in surveillance capabilities</strong>. Allows federal agencies to monitor all telephone, broadband Internet, and VoIP traffic in <strong>real time</strong>.</td></tr>
+        <tr><td><strong>Economic Espionage Act</strong></td><td>1996</td><td>Companies with trade secrets</td><td>Theft of trade secret = <strong>federal crime</strong>. Trade secret doesn't need to be tangible.</td></tr>
+        <tr><td><strong>HIPAA</strong></td><td>1996</td><td>Healthcare facilities, insurance, clearinghouses</td><td>Also known as <strong>Kennedy-Kassebaum Act</strong>. Enforced by OCR of HHS. Provides standards for storing/using/transmitting medical data. <strong>Overrides state laws UNLESS state laws are stricter.</strong> Amends PPACA (Obamacare).</td></tr>
+        <tr><td><strong>GLBA</strong></td><td>1999</td><td>All financial institutions</td><td>Banks, loans, insurance, investment, credit cards. Provides guidelines for securing financial info. <strong>Prohibits sharing financial information with third parties.</strong> Directly affects PII security.</td></tr>
+        <tr><td><strong>USA PATRIOT Act</strong></td><td>2001</td><td>Law enforcement &amp; intelligence</td><td><strong>Full name:</strong> Uniting and Strengthening America by Providing Appropriate Tools Required to Intercept and Obstruct Terrorism. Enhances investigatory tools (email, phone, internet, medical, financial records). Amended FISA and ECPA. Does <strong>NOT</strong> restrict private citizens' use (with exceptions).</td></tr>
+        <tr><td><strong>SOX</strong></td><td>2002</td><td>Publicly traded companies</td><td>Public Company Accounting Reform and Investor Protection Act. Controls accounting/financial reporting. Stipulates <strong>penalties and jail time</strong> for executive officers.</td></tr>
+        <tr><td><strong>FISMA</strong></td><td>2002</td><td><strong>Every federal agency</strong></td><td>Requires agencies to develop, document, and implement agencywide information security program. <strong>"This is your bible."</strong> Superseded Computer Security Act of 1987.</td></tr>
+      </table>
 
-  <details><summary style="border-left-color:var(--page-color);">3. GDPR &amp; International</summary><div style="padding:16px 20px;">
-    <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Professor Duke:</strong> "I suspect this will be a matching question."</div>
-    <p><strong>GDPR 6 Lawful Purposes for Processing Data:</strong></p>
-    <ol><li>Data subject gave consent</li><li>Fulfill contractual obligations</li><li>Comply with data controller's legal obligations</li><li>Protect vital interests of data subject</li><li>Perform task in public interest</li><li>Legitimate interests of controller (unless overridden by subject rights)</li></ol>
-    <h3 style="color:var(--page-color);margin:16px 0 8px;">Data Sovereignty (Slides 23-24)</h3>
-    <p>Data stored digitally is subject to laws of country where located. Complicated by cloud.</p>
-    <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Exam tip:</strong> "Which is NOT one of the four?" — 4 questions: Where stored? Who has access? Where backed up? How encrypted?</div>
-  </div></details>
+      <h3 style="margin-top:20px;color:#58a6ff;">International Laws</h3>
+      <table>
+        <tr><th>Law/Standard</th><th>Scope</th><th>Key Points</th></tr>
+        <tr><td><strong>PIPEDA</strong></td><td>Canada (private sector)</td><td>Written to address EU concerns about PII in Canada. Requires consent when collecting/using/disclosing personal information.</td></tr>
+        <tr><td><strong>Basel II</strong></td><td>Financial institutions (global)</td><td>Minimum capital requirements, supervisory review, and market discipline.</td></tr>
+      </table>
 
-  <details><summary style="border-left-color:var(--page-color);">4. Data Privacy Principles</summary><div style="padding:16px 20px;">
-    <ul><li><strong>Data Minimization:</strong> Minimize personal data to what's necessary. Reduces attack surface. GDPR principle.</li><li><strong>Purpose Limitation:</strong> Data for one purpose can't be repurposed without consent. (Disease data can't identify individuals.)</li><li><strong>Employee Privacy:</strong> No-expectation-of-privacy policy — employee must SIGN. Fourth Amendment protections apply.</li><li><strong>NDA:</strong> Signed by anyone with access to trade secrets. Legal consequences if violated.</li></ul>
-  </div></details>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:20px;margin:16px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Remember This Full Name</small>
+        <strong style="color:#e94560;font-size:1em;">USA PATRIOT = <em>Uniting and Strengthening America by Providing Appropriate Tools Required to Intercept and Obstruct Terrorism</em></strong>
+      </div>
+    </div>
+  </details>
 
-  <details><summary style="border-left-color:var(--page-color);">5. Data Retention</summary><div style="padding:16px 20px;">
-    <ul><li>Varies by: data type, data age, legal/regulatory requirements</li><li>Data types: HR, accounts payable/receivable, sales, customer, email</li><li>Review periodically. Train personnel to comply.</li><li>One-size-fits-all = <strong>impossible</strong></li></ul>
-    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Security professional = ADVISORY ROLE only.</strong> Data owners/stakeholders determine best retention policy.</div>
-  </div></details>
+  <!-- ═══ SECTION 3 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🌍 3. GDPR &amp; Data Sovereignty</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>The EU's General Data Protection Regulation (GDPR) aims primarily to give individuals control over their personal data and to simplify the regulatory environment for international business by unifying regulation within the EU.</p>
 
-  <details><summary style="border-left-color:var(--page-color);">6. Technical Controls — DLP, DRM, Data Masking</summary><div style="padding:16px 20px;">
-    <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;"><tr><th>Control</th><th>Purpose</th><th>Details</th></tr>
-    <tr><td><strong>DLP</strong></td><td>Prevent data exfiltration</td><td>Intentional or unintentional loss. "2027 = quantum crypto year."</td></tr>
-    <tr><td><strong>Data Masking</strong></td><td>Alter data to protect it</td><td>Forms: encryption, hashing, substitution, transposition</td></tr>
-    <tr><td><strong>DRM (1st gen)</strong></td><td>Control copying</td><td>DMCA 1998 criminal penalties for circumvention</td></tr>
-    <tr><td><strong>DRM (2nd gen)</strong></td><td>Control executing, viewing, copying, printing, altering</td><td>Enterprise: open/edit/print/copy restrictions</td></tr></table>
-    <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;"><strong>Movie DRM:</strong> CSS (DVDs) — broken by DeCSS on Linux. AACS (Blu-Ray/HD DVD) — encryption keys obtained by hackers.</div>
-  </div></details>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "I suspect that this will be a matching question."
+      </div>
+
+      <h3 style="color:#58a6ff;">GDPR — 6 Lawful Purposes for Processing Personal Data (Article 6)</h3>
+      <p>Personal data may <strong>not</strong> be processed unless there is at least one legal basis to do so:</p>
+      <ol>
+        <li><strong>Consent:</strong> The data subject has given consent to processing of their personal data</li>
+        <li><strong>Contractual obligations:</strong> To fulfill contractual obligations with a data subject, or for tasks at the request of a data subject entering a contract</li>
+        <li><strong>Legal obligations:</strong> To comply with a data controller's legal obligations</li>
+        <li><strong>Vital interests:</strong> To protect the vital interests of a data subject or another individual</li>
+        <li><strong>Public interest:</strong> To perform a task in the public interest or in official authority</li>
+        <li><strong>Legitimate interests:</strong> For the legitimate interests of a data controller or third party, unless overridden by interests/rights of the data subject (especially children)</li>
+      </ol>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>EU Electronic Security Directive:</strong> Defines electronic signature principles. A signature must be uniquely linked to the signer and to the data, so any subsequent data change is detectable.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Data Sovereignty (Slides 23-24)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> <em style="color:var(--page-color);font-style:normal;font-weight:600;">Data sovereignty</em> is the concept that data stored in digital format is subject to the laws of the country in which the data is located. This is further complicated by cloud solutions, where data may reside in multiple countries.
+      </div>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Exam Format:</strong> "Which one of these is NOT one of the four questions?" Security professionals should answer:<br>
+        <strong>1.</strong> Where is the data stored?<br>
+        <strong>2.</strong> Who has access to the data?<br>
+        <strong>3.</strong> Where is the data backed up?<br>
+        <strong>4.</strong> How is the data encrypted?
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🛡️ 4. Data Privacy Principles</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <h3 style="color:#58a6ff;">Data Minimization (Slide 25)</h3>
+      <p>Organizations should minimize the amount of personal data they store to <strong>what is necessary</strong>. This is an important GDPR principle. By reducing personal data, the <strong>attack surface is also reduced</strong>. Data processing should only use as much data as required to accomplish a given task.</p>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Purpose Limitation (Slide 26)</h3>
+      <p>Personal data collected for one purpose <strong>cannot be repurposed without further consent</strong> from the individual. This is another key GDPR principle finding wide adoption globally.</p>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Example:</strong> Data collected to track a disease outbreak <strong>cannot</strong> be used to identify individuals. The purpose was disease tracking, not individual identification.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Employee Privacy (Slide 21)</h3>
+      <p>Employee privacy issues must be addressed to protect organizations from costly legal penalties. Organizations must give employees <strong>proper notice</strong> of any monitoring and apply monitoring <strong>consistently</strong>.</p>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>No-Expectation-of-Privacy Policy:</strong> Many organizations implement this policy, which the employee <strong>must sign</strong> after receiving appropriate training. It should specifically describe unacceptable behavior. Keep in mind that some actions are still protected by the <strong>Fourth Amendment</strong>. Consult legal counsel when designing monitoring solutions.
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Non-Disclosure Agreements (Slide 27)</h3>
+      <p>An NDA must be signed by any entity that has access to information that is part of a <strong>trade secret</strong>. Anyone who signs an NDA will suffer <strong>legal consequences</strong> if the organization proves they violated it. NDAs are a critical tool for protecting intellectual property including patents, copyrights, and trade secrets.</p>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">📁 5. Data Retention</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <p>A data retention policy outlines how various data types must be retained and may rely on the data classifications described in the organization's data classification policy. Retention requirements vary based on <strong>data type, data age, and legal/regulatory requirements</strong>.</p>
+
+      <h3 style="color:#58a6ff;">What a Data Retention Policy Covers</h3>
+      <ul>
+        <li>Purpose of the policy and portions of the org affected</li>
+        <li>Any exclusions to the policy</li>
+        <li>Personnel responsible for overseeing the policy and for data destruction</li>
+        <li>Data types covered: HR data, accounts payable/receivable, sales data, customer data, email</li>
+        <li>Retention schedule for each data type</li>
+      </ul>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Implementation (Slide 36)</h3>
+      <p>The organization must consider the <strong>media and hardware</strong> used to retain data. Once drafted, the policy must be <strong>formally adopted</strong>. Personnel must be <strong>trained to comply</strong>. Auditing and monitoring should be configured to ensure compliance. Data owners should <strong>review periodically</strong> to determine if changes are needed.</p>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Principle:</strong> For most organizations, a <strong>one-size-fits-all solution is impossible</strong> because of different data types. Only those most familiar with each data type (data owner or stakeholder) can determine the best retention policy. The security professional should be involved in design but acts in an <strong>ADVISORY ROLE only</strong> — providing expertise, not decisions.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">🔒 6. Technical Controls — DLP, DRM &amp; Data Masking</summary>
+    <div class="content-section" style="padding:16px 20px;">
+      <h3 style="color:#58a6ff;">Data Loss Prevention — DLP (Slide 30)</h3>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Definition:</strong> DLP systems are used to prevent <em style="color:var(--page-color);font-style:normal;font-weight:600;">data exfiltration</em>, which is the intentional or unintentional loss of sensitive data from the network. DLP monitors data in motion, at rest, and in use.
+      </div>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "2027 will be the year cryptography and computing moves to quantum."
+      </div>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Data Masking (Slide 31)</h3>
+      <p>Data masking means altering data from its original state to protect it. There are several techniques:</p>
+      <table>
+        <tr><th>Technique</th><th>Description</th><th>Example</th></tr>
+        <tr><td><strong>Encryption</strong></td><td>Storing data in encrypted form</td><td>AES-256 encrypted database</td></tr>
+        <tr><td><strong>Hashing</strong></td><td>Storing a hash value instead of original data</td><td>Password stored as SHA-256 hash</td></tr>
+        <tr><td><strong>Substitution</strong></td><td>Replacing data with realistic but fake values</td><td>Replacing real SSN with fake one</td></tr>
+        <tr><td><strong>Transposition</strong></td><td>Rearranging data elements</td><td>Shuffling character positions</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Digital Rights Management — DRM (Slides 35-39)</h3>
+      <p>Hardware manufacturers, publishers, and copyright holders use DRM to control the use of digital content. The U.S. <strong>Digital Millennium Copyright Act (DMCA) of 1998</strong> imposes criminal penalties on those who make available technologies to circumvent content protection.</p>
+      <table>
+        <tr><th>Generation</th><th>Controls</th><th>Enterprise Use</th></tr>
+        <tr><td><strong>1st Generation</strong></td><td>Copying only</td><td>Basic copy protection</td></tr>
+        <tr><td><strong>2nd Generation</strong></td><td>Executing, viewing, copying, printing, and altering</td><td>Open/edit/print/copy restrictions on documents, permanent or temporary basis</td></tr>
+      </table>
+
+      <h3 style="margin-top:20px;color:#58a6ff;">Movie DRM (Slide 39)</h3>
+      <table>
+        <tr><th>Technology</th><th>Protects</th><th>How It Was Broken</th></tr>
+        <tr><td><strong>CSS</strong> (Content Scrambling System)</td><td>DVDs — encryption for playback and region restrictions</td><td><strong>DeCSS tool on Linux</strong> — one of the first programs to decrypt commercial DVDs</td></tr>
+        <tr><td><strong>AACS</strong> (Advanced Access Content System)</td><td>Blu-Ray and HD DVD content</td><td>Hackers obtained the encryption keys</td></tr>
+      </table>
+    </div>
+  </details>
 
   <!-- QUIZ -->
   <div class="quiz-section">
