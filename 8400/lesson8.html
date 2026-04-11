@@ -254,6 +254,171 @@
     </ul>
   </div>
 
+  <!-- STUDY CONTENT -->
+  <details>
+    <summary style="border-left-color:var(--page-color);">1. Communication Plan &amp; Secure Comms</summary>
+    <div style="padding:16px 20px;">
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Principle:</strong> All IR communications must use <em style="color:var(--page-color);font-style:normal;font-weight:600;">out-of-band</em> methods with <em style="color:var(--page-color);font-style:normal;font-weight:600;">end-to-end encryption</em> (e.g., OTR Messaging). Do NOT use corporate email or VoIP — they may be compromised.
+      </div>
+      <ul>
+        <li><strong>Limit communication</strong> to designated trusted parties only</li>
+        <li><strong>Disclose</strong> based on regulatory/legislative requirements (HIPAA Breach Notification Rule, state laws)</li>
+        <li><strong>Prevent inadvertent release</strong> — all public/press info handled by PR (one person, consistent message)</li>
+        <li><strong>Timing</strong> of all communications should be specified in the plan</li>
+      </ul>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "When I see two or three people start to speak for the company, that's a red flag — disjointed capabilities. Remember Al Haig — he stood up and said 'I'm in charge' when the VP should have spoken. He was fired that day."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">2. Stakeholder Roles in IR</summary>
+    <div style="padding:16px 20px;">
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Stakeholder</th><th>Responsibilities</th></tr>
+        <tr><td><strong>Legal</strong> (Slide 10)</td><td>Review NDAs, develop document wording, assess site liability</td></tr>
+        <tr><td><strong>HR</strong> (Slide 11)</td><td>Develop IR job descriptions, create policies for removal of improper employees</td></tr>
+        <tr><td><strong>PR</strong> (Slide 12)</td><td>Handle press conferences, develop ALL written responses (one person = consistent message)</td></tr>
+        <tr><td><strong>Law Enforcement</strong> (Slide 14)</td><td>Objective view; USA PATRIOT Act tools; rule out other causes first; felonies = immediate LE</td></tr>
+        <tr><td><strong>Senior Leadership</strong></td><td>MOST important factor. Verbal AND financial support. Create authority agreements for IR team.</td></tr>
+      </table>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "Everyone on the IR team should SIGN a memorandum of duties and responsibilities. Otherwise it's 'he said, she said.'"
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">3. Data Criticality — PII, PHI, SPI</summary>
+    <div style="padding:16px 20px;">
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Type</th><th>What It Is</th><th>Key Detail</th></tr>
+        <tr><td><strong>PII</strong></td><td>Personally Identifiable Information</td><td>Must be understood, identified, protected. Includes name, ID#, DOB, biometrics, financial accounts, digital identities.</td></tr>
+        <tr><td><strong>PHI</strong></td><td>Protected Health Information</td><td>HIPAA (Kennedy-Kassebaum Act). Enforced by OCR of HHS. Overrides state laws unless stricter.</td></tr>
+        <tr><td><strong>SPI</strong></td><td>Sensitive Personal Information</td><td>Credit card data. PCI DSS affects any org handling cardholder info.</td></tr>
+        <tr><td><strong>High Value Assets</strong></td><td>Critical systems</td><td>Systems providing access to data needed for business continuity.</td></tr>
+        <tr><td><strong>IP</strong></td><td>Intellectual Property</td><td>Patents, trade secrets, trademarks, copyrights. Protect with NDAs, encryption, insider threat countermeasures.</td></tr>
+      </table>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Note:</strong> No copyright law government-to-government (Government Purpose Rights).
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">4. 6 Steps of Incident Response (MATCHING)</summary>
+    <div style="padding:16px 20px;">
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Memory Aid</small>
+        <strong style="color:#e94560;font-size:1.2em;">Detect &rarr; Respond &rarr; Report &rarr; Recover &rarr; Remediate &rarr; Review</strong>
+      </div>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>#</th><th>Step</th><th>Description</th></tr>
+        <tr><td>1</td><td><strong>Detect</strong></td><td>Detect the incident. Worst incident = one that goes unnoticed.</td></tr>
+        <tr><td>2</td><td><strong>Respond</strong></td><td>Response appropriate for type of attack. Establish standard responses ahead of time.</td></tr>
+        <tr><td>3</td><td><strong>Report</strong></td><td>Report within time frame reflecting seriousness. Attention to detail while info is fresh.</td></tr>
+        <tr><td>4</td><td><strong>Recover</strong></td><td>Make network/system functional again. Failover, restore from backup.</td></tr>
+        <tr><td>5</td><td><strong>Remediate</strong></td><td>Eliminate residual danger/damage. Isolation, segregation.</td></tr>
+        <tr><td>6</td><td><strong>Review</strong></td><td>Discover what can be learned. Share lessons learned. Complete documentation.</td></tr>
+      </table>
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "You will see this on the exam as a matching question. Know all 6 steps." Investigation occurs during Respond, Report, and Recover.
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">5. Downtime Metrics (MATCHING — IMPORTANT)</summary>
+    <div style="padding:16px 20px;">
+      <div style="background:rgba(233,69,96,0.15);border-left:4px solid #e94560;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Professor Duke:</strong> "Slides 44, 45, 46 are IMPORTANT. Put on your one page of notes. Slides 44-45 are matching."
+      </div>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Metric</th><th>Full Name</th><th>Definition</th></tr>
+        <tr><td><strong>MTD</strong></td><td>Maximum Tolerable Downtime (also MPTD)</td><td>Max time org can tolerate resource being down</td></tr>
+        <tr><td><strong>MTTR</strong></td><td>Mean Time to Repair</td><td>Average time to repair a single resource</td></tr>
+        <tr><td><strong>MTBF</strong></td><td>Mean Time Between Failures</td><td>Estimated time before failure (calculated by VENDOR)</td></tr>
+        <tr><td><strong>RTO</strong></td><td>Recovery Time Objective</td><td>Shortest time to restore resource. Must be &lt; MTD</td></tr>
+        <tr><td><strong>WRT</strong></td><td>Work Recovery Time</td><td>= MTD minus RTO (remaining time)</td></tr>
+        <tr><td><strong>RPO</strong></td><td>Recovery Point Objective</td><td>Point in time resource must be returned to</td></tr>
+      </table>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">Key Relationships</small>
+        <strong style="color:#e94560;font-size:1.1em;">RTO &lt; MTD always! &bull; WRT = MTD - RTO &bull; Higher MTBF + Lower MTTR = More Reliable</strong>
+      </div>
+      <h3 style="color:var(--page-color);margin:16px 0 8px;">Criticality Levels</h3>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Level</th><th>Restore Within</th></tr>
+        <tr><td><strong>Critical</strong></td><td>Minutes to hours</td></tr>
+        <tr><td><strong>Urgent</strong></td><td>24 hours</td></tr>
+        <tr><td><strong>Important</strong></td><td>72 hours</td></tr>
+        <tr><td><strong>Normal</strong></td><td>7 days</td></tr>
+        <tr><td><strong>Nonessential</strong></td><td>30 days</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">6. Containment &amp; Eradication</summary>
+    <div style="padding:16px 20px;">
+      <h3 style="color:var(--page-color);margin:0 0 8px;">Segmentation</h3>
+      <ul>
+        <li><strong>Layer 3:</strong> Barriers based on IP subnets (physical LANs or VLANs), using ACLs on routers</li>
+        <li><strong>Layer 2:</strong> VLAN, private VLAN, port security</li>
+        <li><strong>Process isolation:</strong> Prevents buffer overflow by dedicating memory per process</li>
+        <li><strong>DMZ:</strong> For most vulnerable devices (Wi-Fi devices at home)</li>
+      </ul>
+      <h3 style="color:var(--page-color);margin:16px 0 8px;">Secure Disposal (Slide 61)</h3>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Method</th><th>Result</th></tr>
+        <tr><td><strong>Clearing</strong></td><td>Normal recovery impossible, but forensic recovery possible</td></tr>
+        <tr><td><strong>Purging (Sanitization)</strong></td><td>Unrecoverable even with advanced forensics</td></tr>
+        <tr><td><strong>Destruction</strong></td><td>Physical destruction or degaussing (magnetic randomization)</td></tr>
+      </table>
+      <div style="background:rgba(255,169,77,0.15);border-left:4px solid #FFA94D;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Caution:</strong> SSDs/flash drives cannot always be overwritten. Research vendor sanitation commands. NSA and the Navy both got embarrassed by improper disposal — classified data found on auctioned systems.
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">7. Post-Incident Activities</summary>
+    <div style="padding:16px 20px;">
+      <ul>
+        <li><strong>Lessons Learned Report (Slide 71):</strong> FIRST document drafted. What went right/wrong? How improve? What change? What was cost?</li>
+        <li><strong>Change Control Process (Slide 72):</strong> All changes go through change control board. FORMAL process — examined for unforeseen consequences.</li>
+        <li><strong>Incident Summary Report (Slide 74):</strong> Each stakeholder gets their own version. Includes: when detected, scope, containment, recovery work, effective areas, improvements needed.</li>
+        <li><strong>Evidence Retention:</strong> Store securely until presented in court. Protect chain of custody. (San Bernardino: cloned iPhones, called Israel, preserved original for court.)</li>
+      </ul>
+      <div style="background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(15,52,96,0.15));border:2px dashed #e94560;border-radius:12px;padding:14px;margin:14px 0;text-align:center;">
+        <small style="color:#aaa;text-transform:uppercase;letter-spacing:2px;font-size:0.75em;display:block;margin-bottom:4px;">The 3 R's</small>
+        <strong style="color:#e94560;font-size:1.2em;">Redundancy &bull; Remediation &bull; Resiliency</strong>
+      </div>
+      <div style="background:rgba(77,171,247,0.15);border-left:4px solid #4DABF7;padding:12px 16px;border-radius:8px;margin:10px 0;">
+        <strong>Key Distinction:</strong> Incident &lt; 24 hours. Disaster &gt; 24 hours. Review IR plan every 12 months.
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="border-left-color:var(--page-color);">8. Reverse Engineering</summary>
+    <div style="padding:16px 20px;">
+      <p>Three ways binary malware can be made readable:</p>
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;font-size:0.95em;">
+        <tr><th>Method</th><th>Description</th></tr>
+        <tr><td><strong>Disassembly</strong></td><td>Reading machine code into memory, outputting each instruction as text</td></tr>
+        <tr><td><strong>Decompiling</strong></td><td>Reconstructing high-level language source code</td></tr>
+        <tr><td><strong>Debugging</strong></td><td>Stepping through code interactively</td></tr>
+      </table>
+      <ul style="margin-top:12px;">
+        <li><strong>Kernel debugger:</strong> Operates at ring 0 — direct kernel access. Must inspect from OUTSIDE the operating system.</li>
+        <li><strong>Usermode debugger:</strong> Access only to usermode space. Sufficient most of the time, but not for rootkits or advanced threats.</li>
+      </ul>
+    </div>
+  </details>
+
   <!-- QUIZ -->
   <div class="quiz-section">
     <h2>Quiz &mdash; 20 Questions</h2>
