@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8405 Finals Mega Exam</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #e94560;
+    --page-tint: rgba(233,69,96,0.12);
+    --w9: #FF6B6B; --w10: #FFA94D; --w12: #69DB7C; --w13: #4DABF7;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w9 { background: var(--w9); color: #000; }
+  .topnav a.w10 { background: var(--w10); color: #000; }
+  .topnav a.w12 { background: var(--w12); color: #000; }
+  .topnav a.w13 { background: var(--w13); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* DETAILS / SUMMARY */
+  details {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: var(--card);
+    transition: border-color 0.2s;
+  }
+  details[open] {
+    border-color: var(--page-color);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.1em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: background 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.8em; color: var(--page-color);
+    transition: transform 0.2s;
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+  }
+  summary:hover { background: rgba(255,255,255,0.08); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w13);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w12);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 16px; margin: 16px 0;
+    text-align: center;
+  }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar (mega exam) */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle / sub-headers */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+
+  /* ═══ MEGA EXAM COMPONENTS ═══ */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-bottom: 8px;
+  }
+  .header a { color: var(--page-color); text-decoration: none; font-weight: 600; }
+  .header a:hover { text-decoration: underline; }
+
+  .timer {
+    font-size: 2em; font-weight: 800; color: var(--accent1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-section { margin: 16px 0 24px; }
+  .progress-bar {
+    background: #333; border-radius: 12px; height: 28px;
+    overflow: hidden; margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent1), #c0392b);
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    text-align: center; font-weight: 600; color: #aaa; font-size: 0.95em;
+  }
+
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .btn-submit {
+    padding: 14px 32px; border-radius: 10px; border: none;
+    background: var(--accent1); color: #fff;
+    font-size: 1.05em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #c0392b; transform: scale(1.03); }
+  .btn-reset {
+    padding: 14px 32px; border-radius: 10px;
+    border: 2px solid var(--accent1); background: transparent;
+    color: var(--accent1); font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent1); color: #fff; }
+
+  .btn-shuffle {
+    padding: 14px 32px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #9775FA, #a78bfa);
+    color: #fff; font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-shuffle:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(151,117,250,0.4); }
+
+  /* Filter buttons */
+  .filter-bar {
+    display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 10px 20px; border-radius: 8px; border: 2px solid transparent;
+    font-size: 0.95em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; color: #000;
+  }
+  .filter-btn:hover { transform: scale(1.05); }
+  .filter-btn.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .filter-btn[data-week="all"] { background: var(--accent1); color: #fff; }
+  .filter-btn[data-week="W9"] { background: var(--w9); }
+  .filter-btn[data-week="W10"] { background: var(--w10); }
+  .filter-btn[data-week="W12"] { background: var(--w12); }
+  .filter-btn[data-week="W13"] { background: var(--w13); }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .section-header {
+    font-size: 1.15em; font-weight: 800; color: var(--accent1);
+    padding: 14px 20px; margin: 28px 0 12px;
+    background: rgba(233,69,96,0.1); border-radius: 10px;
+    border-left: 5px solid var(--accent1);
+  }
+
+  .mq {
+    margin: 14px 0; padding: 18px 20px;
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s;
+  }
+  .mq p { font-weight: 600; margin-bottom: 14px; font-size: 1em; line-height: 1.6; }
+  .qnum {
+    display: inline-block; min-width: 32px; height: 32px;
+    line-height: 32px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.8em; font-weight: 800; margin-right: 10px;
+  }
+  .mq label {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); font-size: 0.95em;
+    cursor: pointer; transition: all 0.2s;
+    line-height: 1.5; user-select: none;
+  }
+  .mq label:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  #result {
+    display: none; text-align: center;
+    background: rgba(233,69,96,0.12); border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 32px; margin: 32px 0;
+  }
+  .result-label {
+    font-size: 1.2em; font-weight: 700; color: var(--accent1);
+    margin-bottom: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 0; color: #666;
+    border-top: 1px solid rgba(255,255,255,0.06); margin-top: 32px;
+  }
+
+  .mq-feedback {
+    margin-top: 12px; padding: 12px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+    line-height: 1.6;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title">8405 Finals</span>
+  <a href="week9.html" class="w9">W9</a>
+  <a href="week10.html" class="w10">W10</a>
+  <a href="week12.html" class="w12">W12</a>
+  <a href="week13.html" class="w13">W13</a>
+  <a href="mega.html" class="mega active">Mega</a>
+  <a href="../index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+<div class="page-hero">
+  <h1>8405 Finals Mega Exam</h1>
+  <div class="sub">100 randomized questions — Weeks 9, 10–11, 12, 13</div>
+</div>
+
+<div class="container">
+<div class="header">
+      <div class="header-left">
+        <a href="../index.html">&larr; Back to Hub</a>
+        <div style="color: #aaa; font-size: 0.95em;">Finals Mega Exam</div>
+      </div>
+      <div class="header-right">
+        <div class="timer">
+          <span id="timer">00:00</span>
+        </div>
+        <div style="font-size: 0.9em; color: #aaa;">Elapsed Time</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progbar" style="width: 0%"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progress">0/100 answered</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
+      <button class="btn-reset" onclick="resetExam()">Reset</button>
+      <button class="btn-shuffle" onclick="shuffleAndReset()" style="background: linear-gradient(135deg, #9775FA, #a78bfa); margin-left: 10px;">Shuffle Questions</button>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-week="all" onclick="filterWeek('all')">All (100)</button>
+      <button class="filter-btn" data-week="W9" onclick="filterWeek('W9')">W9 (25)</button>
+      <button class="filter-btn" data-week="W10" onclick="filterWeek('W10')">W10 (25)</button>
+      <button class="filter-btn" data-week="W12" onclick="filterWeek('W12')">W12 (25)</button>
+      <button class="filter-btn" data-week="W13" onclick="filterWeek('W13')">W13 (25)</button>
+    </div>
+
+    <div id="questions-container">
+    <!-- WEEK 9: Security Architecture Blueprints & Roadmaps -->
+    <div class="section-header" style="border-left-color: var(--w9); background: rgba(255,107,107,0.1);">Week 9: Security Architecture Blueprints &amp; Roadmaps (Questions 1-25)</div>
+
+    <div class="mq" id="mq1" data-week="W9">
+      <p><span class="qnum">1</span> A blueprint records and formalizes what?</p>
+      <label onclick="pick(1,0)">A) Employee schedules</label>
+      <label onclick="pick(1,1)">B) Design elements</label>
+      <label onclick="pick(1,2)">C) Financial projections</label>
+      <label onclick="pick(1,3)">D) Marketing strategies</label>
+    </div>
+
+    <div class="mq" id="mq2" data-week="W9">
+      <p><span class="qnum">2</span> Which framework is free for internal, non-commercial use?</p>
+      <label onclick="pick(2,0)">A) SABSA</label>
+      <label onclick="pick(2,1)">B) COBIT</label>
+      <label onclick="pick(2,2)">C) TOGAF</label>
+      <label onclick="pick(2,3)">D) ISO 27001</label>
+    </div>
+
+    <div class="mq" id="mq3" data-week="W9">
+      <p><span class="qnum">3</span> The kill chain's first phase is:</p>
+      <label onclick="pick(3,0)">A) Weaponization</label>
+      <label onclick="pick(3,1)">B) Delivery</label>
+      <label onclick="pick(3,2)">C) Reconnaissance</label>
+      <label onclick="pick(3,3)">D) Exploitation</label>
+    </div>
+
+    <div class="mq" id="mq4" data-week="W9">
+      <p><span class="qnum">4</span> Assets include all EXCEPT:</p>
+      <label onclick="pick(4,0)">A) Customer trust</label>
+      <label onclick="pick(4,1)">B) Intellectual property</label>
+      <label onclick="pick(4,2)">C) Competitor strategies</label>
+      <label onclick="pick(4,3)">D) Business processes</label>
+    </div>
+
+    <div class="mq" id="mq5" data-week="W9">
+      <p><span class="qnum">5</span> Phase A of TOGAF ADM focuses on:</p>
+      <label onclick="pick(5,0)">A) Technology decisions</label>
+      <label onclick="pick(5,1)">B) Architecture vision</label>
+      <label onclick="pick(5,2)">C) Business alignment</label>
+      <label onclick="pick(5,3)">D) Information systems</label>
+    </div>
+
+    <div class="mq" id="mq6" data-week="W9">
+      <p><span class="qnum">6</span> A roadmap's "Charter/Goal Statement" should be:</p>
+      <label onclick="pick(6,0)">A) 10+ pages of detail</label>
+      <label onclick="pick(6,1)">B) 1-2 sentences, business-focused elevator pitch</label>
+      <label onclick="pick(6,2)">C) A technical specification</label>
+      <label onclick="pick(6,3)">D) A legal document</label>
+    </div>
+
+    <div class="mq" id="mq7" data-week="W9">
+      <p><span class="qnum">7</span> What approach starts by demonstrating value to build executive support?</p>
+      <label onclick="pick(7,0)">A) Top-down</label>
+      <label onclick="pick(7,1)">B) Waterfall</label>
+      <label onclick="pick(7,2)">C) Bottom-up</label>
+      <label onclick="pick(7,3)">D) Agile</label>
+    </div>
+
+    <div class="mq" id="mq8" data-week="W9">
+      <p><span class="qnum">8</span> Risk is calculated as:</p>
+      <label onclick="pick(8,0)">A) Assets + Threats</label>
+      <label onclick="pick(8,1)">B) Vulnerability - Controls</label>
+      <label onclick="pick(8,2)">C) Impact &times; Likelihood</label>
+      <label onclick="pick(8,3)">D) Budget / Timeline</label>
+    </div>
+
+    <div class="mq" id="mq9" data-week="W9">
+      <p><span class="qnum">9</span> The Phase 2 document in two-phase documentation is called:</p>
+      <label onclick="pick(9,0)">A) Executive Summary</label>
+      <label onclick="pick(9,1)">B) ADD (Architectural Definition Document)</label>
+      <label onclick="pick(9,2)">C) Risk Register</label>
+      <label onclick="pick(9,3)">D) Project Charter</label>
+    </div>
+
+    <div class="mq" id="mq10" data-week="W9">
+      <p><span class="qnum">10</span> SABSA refers to the blueprint equivalent as:</p>
+      <label onclick="pick(10,0)">A) Enterprise Framework</label>
+      <label onclick="pick(10,1)">B) Conceptual Security Architecture</label>
+      <label onclick="pick(10,2)">C) Security Roadmap</label>
+      <label onclick="pick(10,3)">D) Threat Model</label>
+    </div>
+
+    <div class="mq" id="mq11" data-week="W9">
+      <p><span class="qnum">11</span> Kill chain phase where attacker establishes persistence:</p>
+      <label onclick="pick(11,0)">A) Reconnaissance</label>
+      <label onclick="pick(11,1)">B) Exploitation</label>
+      <label onclick="pick(11,2)">C) Installation</label>
+      <label onclick="pick(11,3)">D) Actions on Objectives</label>
+    </div>
+
+    <div class="mq" id="mq12" data-week="W9">
+      <p><span class="qnum">12</span> Documenting assets helps verify:</p>
+      <label onclick="pick(12,0)">A) Employee salaries</label>
+      <label onclick="pick(12,1)">B) What's important to the organization</label>
+      <label onclick="pick(12,2)">C) Vendor contracts</label>
+      <label onclick="pick(12,3)">D) Office locations</label>
+    </div>
+
+    <div class="mq" id="mq13" data-week="W9">
+      <p><span class="qnum">13</span> What should be validated BEFORE creating the detailed ADD?</p>
+      <label onclick="pick(13,0)">A) The high-level roadmap</label>
+      <label onclick="pick(13,1)">B) All vendor contracts</label>
+      <label onclick="pick(13,2)">C) Employee training</label>
+      <label onclick="pick(13,3)">D) Hardware procurement</label>
+    </div>
+
+    <div class="mq" id="mq14" data-week="W9">
+      <p><span class="qnum">14</span> How many components does the roadmap include?</p>
+      <label onclick="pick(14,0)">A) 3</label>
+      <label onclick="pick(14,1)">B) 5</label>
+      <label onclick="pick(14,2)">C) 7</label>
+      <label onclick="pick(14,3)">D) 10</label>
+    </div>
+
+    <div class="mq" id="mq15" data-week="W9">
+      <p><span class="qnum">15</span> The capability view in architecture answers:</p>
+      <label onclick="pick(15,0)">A) What outcomes do we want?</label>
+      <label onclick="pick(15,1)">B) How might we achieve those goals?</label>
+      <label onclick="pick(15,2)">C) Who approves the budget?</label>
+      <label onclick="pick(15,3)">D) When is the deadline?</label>
+    </div>
+
+    <div class="mq" id="mq16" data-week="W9">
+      <p><span class="qnum">16</span> A key documentation principle is:</p>
+      <label onclick="pick(16,0)">A) Document everything exhaustively</label>
+      <label onclick="pick(16,1)">B) Minimize documentation — only what's practical and used</label>
+      <label onclick="pick(16,2)">C) Let vendors handle all documentation</label>
+      <label onclick="pick(16,3)">D) Documentation is optional</label>
+    </div>
+
+    <div class="mq" id="mq17" data-week="W9">
+      <p><span class="qnum">17</span> What analogy is used for enterprise blueprints?</p>
+      <label onclick="pick(17,0)">A) A recipe book</label>
+      <label onclick="pick(17,1)">B) Building a house — floor plan, electrical, plumbing</label>
+      <label onclick="pick(17,2)">C) A road map</label>
+      <label onclick="pick(17,3)">D) A shopping list</label>
+    </div>
+
+    <div class="mq" id="mq18" data-week="W9">
+      <p><span class="qnum">18</span> In the hybrid approach, organizations typically:</p>
+      <label onclick="pick(18,0)">A) Start top-down then switch to bottom-up</label>
+      <label onclick="pick(18,1)">B) Start bottom-up then scale top-down with executive backing</label>
+      <label onclick="pick(18,2)">C) Use only external consultants</label>
+      <label onclick="pick(18,3)">D) Skip both approaches</label>
+    </div>
+
+    <div class="mq" id="mq19" data-week="W9">
+      <p><span class="qnum">19</span> "Actions on Objectives" is which kill chain phase?</p>
+      <label onclick="pick(19,0)">A) Phase 3</label>
+      <label onclick="pick(19,1)">B) Phase 5</label>
+      <label onclick="pick(19,2)">C) Phase 6</label>
+      <label onclick="pick(19,3)">D) Phase 7</label>
+    </div>
+
+    <div class="mq" id="mq20" data-week="W9">
+      <p><span class="qnum">20</span> An architectural principle's "Rationale" links:</p>
+      <label onclick="pick(20,0)">A) Technical measures to business goals using business language</label>
+      <label onclick="pick(20,1)">B) Budget to timeline</label>
+      <label onclick="pick(20,2)">C) Vendors to products</label>
+      <label onclick="pick(20,3)">D) Teams to projects</label>
+    </div>
+
+    <div class="mq" id="mq21" data-week="W9">
+      <p><span class="qnum">21</span> Personnel continuity in documentation addresses:</p>
+      <label onclick="pick(21,0)">A) Employee vacation schedules</label>
+      <label onclick="pick(21,1)">B) The risk of people leaving and new staff needing to continue</label>
+      <label onclick="pick(21,2)">C) Hiring freezes</label>
+      <label onclick="pick(21,3)">D) Retirement planning</label>
+    </div>
+
+    <div class="mq" id="mq22" data-week="W9">
+      <p><span class="qnum">22</span> Phase D of TOGAF ADM covers:</p>
+      <label onclick="pick(22,0)">A) Architecture Vision</label>
+      <label onclick="pick(22,1)">B) Business Architecture</label>
+      <label onclick="pick(22,2)">C) Information Systems</label>
+      <label onclick="pick(22,3)">D) Technology Architecture</label>
+    </div>
+
+    <div class="mq" id="mq23" data-week="W9">
+      <p><span class="qnum">23</span> The three fundamental security architecture questions are about:</p>
+      <label onclick="pick(23,0)">A) Budget, timeline, scope</label>
+      <label onclick="pick(23,1)">B) Assets, threats, risk</label>
+      <label onclick="pick(23,2)">C) People, process, technology</label>
+      <label onclick="pick(23,3)">D) Confidentiality, integrity, availability</label>
+    </div>
+
+    <div class="mq" id="mq24" data-week="W9">
+      <p><span class="qnum">24</span> Transition milestones in a roadmap show:</p>
+      <label onclick="pick(24,0)">A) Employee promotions</label>
+      <label onclick="pick(24,1)">B) Phased stages from current state to desired future state</label>
+      <label onclick="pick(24,2)">C) Vendor selection criteria</label>
+      <label onclick="pick(24,3)">D) Audit schedules</label>
+    </div>
+
+    <div class="mq" id="mq25" data-week="W9">
+      <p><span class="qnum">25</span> John Tannehill's approach to architecture is:</p>
+      <label onclick="pick(25,0)">A) Compliance-first</label>
+      <label onclick="pick(25,1)">B) Risk-based</label>
+      <label onclick="pick(25,2)">C) Technology-driven</label>
+      <label onclick="pick(25,3)">D) Budget-constrained</label>
+    </div>
+
+    <!-- WEEK 10: Telemetry, Metrics & Continuous Improvement -->
+    <div class="section-header" style="border-left-color: var(--w10); background: rgba(255,169,77,0.1);">Week 10: Telemetry, Metrics &amp; Continuous Improvement (Questions 26-50)</div>
+
+    <div class="mq" id="mq26" data-week="W10">
+      <p><span class="qnum">26</span> Telemetry transforms architecture from:</p>
+      <label onclick="pick(26,0)">A) Static document to living system</label>
+      <label onclick="pick(26,1)">B) Budget item to revenue source</label>
+      <label onclick="pick(26,2)">C) Simple to complex</label>
+      <label onclick="pick(26,3)">D) Local to global</label>
+    </div>
+
+    <div class="mq" id="mq27" data-week="W10">
+      <p><span class="qnum">27</span> Operational monitoring audience primarily includes:</p>
+      <label onclick="pick(27,0)">A) Board of directors</label>
+      <label onclick="pick(27,1)">B) Marketing team</label>
+      <label onclick="pick(27,2)">C) Operations teams and SOC analysts</label>
+      <label onclick="pick(27,3)">D) External auditors only</label>
+    </div>
+
+    <div class="mq" id="mq28" data-week="W10">
+      <p><span class="qnum">28</span> "Percentage of attacks detected and blocked" is which metric type?</p>
+      <label onclick="pick(28,0)">A) Business Value</label>
+      <label onclick="pick(28,1)">B) Operational Health</label>
+      <label onclick="pick(28,2)">C) Security Effectiveness</label>
+      <label onclick="pick(28,3)">D) Vanity</label>
+    </div>
+
+    <div class="mq" id="mq29" data-week="W10">
+      <p><span class="qnum">29</span> The feedback loop's third stage is:</p>
+      <label onclick="pick(29,0)">A) Collect Data</label>
+      <label onclick="pick(29,1)">B) Validate Results</label>
+      <label onclick="pick(29,2)">C) Identify Issues</label>
+      <label onclick="pick(29,3)">D) Take Action</label>
+    </div>
+
+    <div class="mq" id="mq30" data-week="W10">
+      <p><span class="qnum">30</span> Phishing simulation click rates are what type of indicator?</p>
+      <label onclick="pick(30,0)">A) Lagging</label>
+      <label onclick="pick(30,1)">B) Vanity</label>
+      <label onclick="pick(30,2)">C) Static</label>
+      <label onclick="pick(30,3)">D) Leading</label>
+    </div>
+
+    <div class="mq" id="mq31" data-week="W10">
+      <p><span class="qnum">31</span> Monthly strategic reviews are typically attended by:</p>
+      <label onclick="pick(31,0)">A) Help desk staff</label>
+      <label onclick="pick(31,1)">B) CISO and security managers</label>
+      <label onclick="pick(31,2)">C) Board of directors</label>
+      <label onclick="pick(31,3)">D) End users</label>
+    </div>
+
+    <div class="mq" id="mq32" data-week="W10">
+      <p><span class="qnum">32</span> "Number of successful breaches" is what type of indicator?</p>
+      <label onclick="pick(32,0)">A) Leading</label>
+      <label onclick="pick(32,1)">B) Actionable</label>
+      <label onclick="pick(32,2)">C) Lagging</label>
+      <label onclick="pick(32,3)">D) Vanity</label>
+    </div>
+
+    <div class="mq" id="mq33" data-week="W10">
+      <p><span class="qnum">33</span> The virtuous cycle begins with:</p>
+      <label onclick="pick(33,0)">A) Collect metrics</label>
+      <label onclick="pick(33,1)">B) Design architecture</label>
+      <label onclick="pick(33,2)">C) Validate improvement</label>
+      <label onclick="pick(33,3)">D) Analyze and learn</label>
+    </div>
+
+    <div class="mq" id="mq34" data-week="W10">
+      <p><span class="qnum">34</span> Board of directors want security reports showing:</p>
+      <label onclick="pick(34,0)">A) Packet-level analysis</label>
+      <label onclick="pick(34,1)">B) Enterprise risk posture and heat maps</label>
+      <label onclick="pick(34,2)">C) Firewall rule details</label>
+      <label onclick="pick(34,3)">D) Individual incident logs</label>
+    </div>
+
+    <div class="mq" id="mq35" data-week="W10">
+      <p><span class="qnum">35</span> What makes a metric "actionable"?</p>
+      <label onclick="pick(35,0)">A) It looks impressive in presentations</label>
+      <label onclick="pick(35,1)">B) It has a high number</label>
+      <label onclick="pick(35,2)">C) It informs specific decisions and triggers concrete actions</label>
+      <label onclick="pick(35,3)">D) It was expensive to implement</label>
+    </div>
+
+    <div class="mq" id="mq36" data-week="W10">
+      <p><span class="qnum">36</span> CPU and memory utilization metrics fall under:</p>
+      <label onclick="pick(36,0)">A) Security Effectiveness</label>
+      <label onclick="pick(36,1)">B) Business Value</label>
+      <label onclick="pick(36,2)">C) Operational Health</label>
+      <label onclick="pick(36,3)">D) Vanity metrics</label>
+    </div>
+
+    <div class="mq" id="mq37" data-week="W10">
+      <p><span class="qnum">37</span> How many drivers of architectural change are identified?</p>
+      <label onclick="pick(37,0)">A) 2</label>
+      <label onclick="pick(37,1)">B) 3</label>
+      <label onclick="pick(37,2)">C) 4</label>
+      <label onclick="pick(37,3)">D) 5</label>
+    </div>
+
+    <div class="mq" id="mq38" data-week="W10">
+      <p><span class="qnum">38</span> Distributed ownership of metrics means:</p>
+      <label onclick="pick(38,0)">A) One person owns all metrics</label>
+      <label onclick="pick(38,1)">B) Metrics ownership spread across teams based on their area</label>
+      <label onclick="pick(38,2)">C) Nobody is responsible</label>
+      <label onclick="pick(38,3)">D) Only executives own metrics</label>
+    </div>
+
+    <div class="mq" id="mq39" data-week="W10">
+      <p><span class="qnum">39</span> A company acquires a European firm. Which driver of change is this?</p>
+      <label onclick="pick(39,0)">A) Threat landscape</label>
+      <label onclick="pick(39,1)">B) Technology evolution</label>
+      <label onclick="pick(39,2)">C) Business change</label>
+      <label onclick="pick(39,3)">D) Regulatory compliance only</label>
+    </div>
+
+    <div class="mq" id="mq40" data-week="W10">
+      <p><span class="qnum">40</span> Static metrics over three years represent which pitfall?</p>
+      <label onclick="pick(40,0)">A) Measuring everything</label>
+      <label onclick="pick(40,1)">B) Perfect being enemy of good</label>
+      <label onclick="pick(40,2)">C) Ignoring context</label>
+      <label onclick="pick(40,3)">D) Static metrics</label>
+    </div>
+
+    <div class="mq" id="mq41" data-week="W10">
+      <p><span class="qnum">41</span> SMART stands for:</p>
+      <label onclick="pick(41,0)">A) Simple, Managed, Accurate, Reliable, Tested</label>
+      <label onclick="pick(41,1)">B) Specific, Measurable, Actionable, Relevant, Time-bound</label>
+      <label onclick="pick(41,2)">C) Strategic, Monitored, Adjusted, Reviewed, Tracked</label>
+      <label onclick="pick(41,3)">D) Secure, Managed, Automated, Resilient, Transparent</label>
+    </div>
+
+    <div class="mq" id="mq42" data-week="W10">
+      <p><span class="qnum">42</span> Execution monitoring tracks all EXCEPT:</p>
+      <label onclick="pick(42,0)">A) Milestone progress</label>
+      <label onclick="pick(42,1)">B) Budget and resources</label>
+      <label onclick="pick(42,2)">C) Long-term security posture</label>
+      <label onclick="pick(42,3)">D) Blockers and dependencies</label>
+    </div>
+
+    <div class="mq" id="mq43" data-week="W10">
+      <p><span class="qnum">43</span> The "Baseline is Foundation" principle means:</p>
+      <label onclick="pick(43,0)">A) Start with what matters to business, extend to security</label>
+      <label onclick="pick(43,1)">B) Ignore existing performance data</label>
+      <label onclick="pick(43,2)">C) Use only vendor-provided baselines</label>
+      <label onclick="pick(43,3)">D) All baselines must be perfect</label>
+    </div>
+
+    <div class="mq" id="mq44" data-week="W10">
+      <p><span class="qnum">44</span> When presenting to technical teams, use:</p>
+      <label onclick="pick(44,0)">A) High-level scorecards</label>
+      <label onclick="pick(44,1)">B) Detailed dashboards with real-time alerting and drill-down</label>
+      <label onclick="pick(44,2)">C) One-page executive summaries</label>
+      <label onclick="pick(44,3)">D) Marketing brochures</label>
+    </div>
+
+    <div class="mq" id="mq45" data-week="W10">
+      <p><span class="qnum">45</span> The review cadence that addresses emerging trends is:</p>
+      <label onclick="pick(45,0)">A) Weekly</label>
+      <label onclick="pick(45,1)">B) Monthly</label>
+      <label onclick="pick(45,2)">C) Quarterly</label>
+      <label onclick="pick(45,3)">D) Annual</label>
+    </div>
+
+    <div class="mq" id="mq46" data-week="W10">
+      <p><span class="qnum">46</span> What percentage indicates VPN capacity planning concern?</p>
+      <label onclick="pick(46,0)">A) When utilization consistently exceeds 70-80% of design capacity</label>
+      <label onclick="pick(46,1)">B) Only at exactly 100%</label>
+      <label onclick="pick(46,2)">C) Below 10%</label>
+      <label onclick="pick(46,3)">D) There are no capacity concerns for VPNs</label>
+    </div>
+
+    <div class="mq" id="mq47" data-week="W10">
+      <p><span class="qnum">47</span> "Cost savings from prevented incidents" is which metric type?</p>
+      <label onclick="pick(47,0)">A) Security Effectiveness</label>
+      <label onclick="pick(47,1)">B) Operational Health</label>
+      <label onclick="pick(47,2)">C) Leading Indicator</label>
+      <label onclick="pick(47,3)">D) Business Value</label>
+    </div>
+
+    <div class="mq" id="mq48" data-week="W10">
+      <p><span class="qnum">48</span> The telemetry pitfall "perfect being enemy of good" means:</p>
+      <label onclick="pick(48,0)">A) Waiting for ideal monitoring before measuring anything</label>
+      <label onclick="pick(48,1)">B) Having too many metrics</label>
+      <label onclick="pick(48,2)">C) Ignoring context</label>
+      <label onclick="pick(48,3)">D) Static metrics</label>
+    </div>
+
+    <div class="mq" id="mq49" data-week="W10">
+      <p><span class="qnum">49</span> Compliance audit results fall under which metric category?</p>
+      <label onclick="pick(49,0)">A) Security Effectiveness</label>
+      <label onclick="pick(49,1)">B) Business Value</label>
+      <label onclick="pick(49,2)">C) Operational Health</label>
+      <label onclick="pick(49,3)">D) Vanity</label>
+    </div>
+
+    <div class="mq" id="mq50" data-week="W10">
+      <p><span class="qnum">50</span> Detecting architectural drift requires:</p>
+      <label onclick="pick(50,0)">A) Ignoring metrics</label>
+      <label onclick="pick(50,1)">B) Regular reviews comparing metrics against design documents</label>
+      <label onclick="pick(50,2)">C) Replacing all systems annually</label>
+      <label onclick="pick(50,3)">D) Only external audits</label>
+    </div>
+
+    <!-- WEEK 12: Execution Obstacles & Recovery -->
+    <div class="section-header" style="border-left-color: var(--w12); background: rgba(105,219,124,0.1);">Week 12: Execution Obstacles &amp; Recovery (Questions 51-75)</div>
+
+    <div class="mq" id="mq51" data-week="W12">
+      <p><span class="qnum">51</span> What percentage of initiatives suffer from scope creep?</p>
+      <label onclick="pick(51,0)">A) 20%</label>
+      <label onclick="pick(51,1)">B) 40%</label>
+      <label onclick="pick(51,2)">C) 60%</label>
+      <label onclick="pick(51,3)">D) 80%</label>
+    </div>
+
+    <div class="mq" id="mq52" data-week="W12">
+      <p><span class="qnum">52</span> The recovery framework has how many steps?</p>
+      <label onclick="pick(52,0)">A) 3</label>
+      <label onclick="pick(52,1)">B) 4</label>
+      <label onclick="pick(52,2)">C) 5</label>
+      <label onclick="pick(52,3)">D) 7</label>
+    </div>
+
+    <div class="mq" id="mq53" data-week="W12">
+      <p><span class="qnum">53</span> In the scope creep garden analogy, "optimization failure" means:</p>
+      <label onclick="pick(53,0)">A) Plants died</label>
+      <label onclick="pick(53,1)">B) Neighbor's garden got careful analysis skipped, receiving suboptimal solution</label>
+      <label onclick="pick(53,2)">C) Budget was doubled</label>
+      <label onclick="pick(53,3)">D) Too many sprinklers</label>
+    </div>
+
+    <div class="mq" id="mq54" data-week="W12">
+      <p><span class="qnum">54</span> Which requirement pattern involves treating critical controls as optional?</p>
+      <label onclick="pick(54,0)">A) Complete Misunderstanding</label>
+      <label onclick="pick(54,1)">B) Partial Coverage</label>
+      <label onclick="pick(54,2)">C) Misinterpreted Prioritization</label>
+      <label onclick="pick(54,3)">D) Scope Drift</label>
+    </div>
+
+    <div class="mq" id="mq55" data-week="W12">
+      <p><span class="qnum">55</span> Stage 2 of communication breakdown:</p>
+      <label onclick="pick(55,0)">A) Project derailed</label>
+      <label onclick="pick(55,1)">B) Stakeholders lose context</label>
+      <label onclick="pick(55,2)">C) Support erodes</label>
+      <label onclick="pick(55,3)">D) Updates sporadic</label>
+    </div>
+
+    <div class="mq" id="mq56" data-week="W12">
+      <p><span class="qnum">56</span> The "P" in PDCA stands for:</p>
+      <label onclick="pick(56,0)">A) Protect</label>
+      <label onclick="pick(56,1)">B) Plan</label>
+      <label onclick="pick(56,2)">C) Prevent</label>
+      <label onclick="pick(56,3)">D) Process</label>
+    </div>
+
+    <div class="mq" id="mq57" data-week="W12">
+      <p><span class="qnum">57</span> Formal risk acceptance for permanent resource loss should be:</p>
+      <label onclick="pick(57,0)">A) Verbal</label>
+      <label onclick="pick(57,1)">B) Implied</label>
+      <label onclick="pick(57,2)">C) In writing</label>
+      <label onclick="pick(57,3)">D) Optional</label>
+    </div>
+
+    <div class="mq" id="mq58" data-week="W12">
+      <p><span class="qnum">58</span> How many factors are in the decision matrix?</p>
+      <label onclick="pick(58,0)">A) 3</label>
+      <label onclick="pick(58,1)">B) 4</label>
+      <label onclick="pick(58,2)">C) 6</label>
+      <label onclick="pick(58,3)">D) 8</label>
+    </div>
+
+    <div class="mq" id="mq59" data-week="W12">
+      <p><span class="qnum">59</span> An executive champion helps by:</p>
+      <label onclick="pick(59,0)">A) Doing all technical work</label>
+      <label onclick="pick(59,1)">B) Reinforcing the message with executive peers and providing air coverage</label>
+      <label onclick="pick(59,2)">C) Replacing the project manager</label>
+      <label onclick="pick(59,3)">D) Approving all purchases</label>
+    </div>
+
+    <div class="mq" id="mq60" data-week="W12">
+      <p><span class="qnum">60</span> PDCA cycle should repeat:</p>
+      <label onclick="pick(60,0)">A) Once</label>
+      <label onclick="pick(60,1)">B) Annually</label>
+      <label onclick="pick(60,2)">C) Only when problems occur</label>
+      <label onclick="pick(60,3)">D) Continuously</label>
+    </div>
+
+    <div class="mq" id="mq61" data-week="W12">
+      <p><span class="qnum">61</span> The first step of the recovery framework is:</p>
+      <label onclick="pick(61,0)">A) Execute recovery</label>
+      <label onclick="pick(61,1)">B) Assess severity</label>
+      <label onclick="pick(61,2)">C) Detect the signal</label>
+      <label onclick="pick(61,3)">D) Classify the obstacle</label>
+    </div>
+
+    <div class="mq" id="mq62" data-week="W12">
+      <p><span class="qnum">62</span> Change barometers monitor for:</p>
+      <label onclick="pick(62,0)">A) Weather patterns</label>
+      <label onclick="pick(62,1)">B) Business changes, technology shifts, regulatory updates</label>
+      <label onclick="pick(62,2)">C) Employee birthdays</label>
+      <label onclick="pick(62,3)">D) Stock prices</label>
+    </div>
+
+    <div class="mq" id="mq63" data-week="W12">
+      <p><span class="qnum">63</span> Scope creep's three impacts are:</p>
+      <label onclick="pick(63,0)">A) Budget overruns, resource exhaustion, optimization failure</label>
+      <label onclick="pick(63,1)">B) Time, cost, quality</label>
+      <label onclick="pick(63,2)">C) People, process, technology</label>
+      <label onclick="pick(63,3)">D) Scope, schedule, risk</label>
+    </div>
+
+    <div class="mq" id="mq64" data-week="W12">
+      <p><span class="qnum">64</span> A design authority's ultimate decision maker is the:</p>
+      <label onclick="pick(64,0)">A) Project manager</label>
+      <label onclick="pick(64,1)">B) End user</label>
+      <label onclick="pick(64,2)">C) Chief architect</label>
+      <label onclick="pick(64,3)">D) Help desk</label>
+    </div>
+
+    <div class="mq" id="mq65" data-week="W12">
+      <p><span class="qnum">65</span> "Stakeholders assume the worst if they hear nothing" relates to:</p>
+      <label onclick="pick(65,0)">A) Budget management</label>
+      <label onclick="pick(65,1)">B) Technical design</label>
+      <label onclick="pick(65,2)">C) Maintaining engagement</label>
+      <label onclick="pick(65,3)">D) Risk assessment</label>
+    </div>
+
+    <div class="mq" id="mq66" data-week="W12">
+      <p><span class="qnum">66</span> Requirements as collaboration means:</p>
+      <label onclick="pick(66,0)">A) Using a static checklist</label>
+      <label onclick="pick(66,1)">B) Having dialogue where requirements emerge through mutual understanding</label>
+      <label onclick="pick(66,2)">C) Copying requirements from competitors</label>
+      <label onclick="pick(66,3)">D) Delegating requirements to vendors</label>
+    </div>
+
+    <div class="mq" id="mq67" data-week="W12">
+      <p><span class="qnum">67</span> When the recovery framework identifies a "minor" issue:</p>
+      <label onclick="pick(67,0)">A) Halt the entire project</label>
+      <label onclick="pick(67,1)">B) Adjust implementation during execution</label>
+      <label onclick="pick(67,2)">C) Start a new project</label>
+      <label onclick="pick(67,3)">D) Ignore it</label>
+    </div>
+
+    <div class="mq" id="mq68" data-week="W12">
+      <p><span class="qnum">68</span> Which foundation requires "scheduled reviews to force discipline"?</p>
+      <label onclick="pick(68,0)">A) Refine Metrics</label>
+      <label onclick="pick(68,1)">B) Create Change Barometers</label>
+      <label onclick="pick(68,2)">C) Establish Review Cadence</label>
+      <label onclick="pick(68,3)">D) Minimize Documentation</label>
+    </div>
+
+    <div class="mq" id="mq69" data-week="W12">
+      <p><span class="qnum">69</span> A vendor product performing at 3,000 events/sec when documented for 10,000 is what type of obstacle?</p>
+      <label onclick="pick(69,0)">A) Scope failure</label>
+      <label onclick="pick(69,1)">B) Communication breakdown</label>
+      <label onclick="pick(69,2)">C) Technical obstacle</label>
+      <label onclick="pick(69,3)">D) Stakeholder resistance</label>
+    </div>
+
+    <div class="mq" id="mq70" data-week="W12">
+      <p><span class="qnum">70</span> Shewhart-Deming cycle is another name for:</p>
+      <label onclick="pick(70,0)">A) Kill chain</label>
+      <label onclick="pick(70,1)">B) PDCA</label>
+      <label onclick="pick(70,2)">C) TOGAF ADM</label>
+      <label onclick="pick(70,3)">D) Feedback loop</label>
+    </div>
+
+    <div class="mq" id="mq71" data-week="W12">
+      <p><span class="qnum">71</span> An organization keeps reverting to the recovery framework project after project. This suggests:</p>
+      <label onclick="pick(71,0)">A) The framework is working perfectly</label>
+      <label onclick="pick(71,1)">B) A serious systemic concern that needs investigation</label>
+      <label onclick="pick(71,2)">C) Normal operations</label>
+      <label onclick="pick(71,3)">D) Good documentation practices</label>
+    </div>
+
+    <div class="mq" id="mq72" data-week="W12">
+      <p><span class="qnum">72</span> The lecture compares blueprint stakeholder engagement to:</p>
+      <label onclick="pick(72,0)">A) Building Stonehenge — ongoing commitment over time</label>
+      <label onclick="pick(72,1)">B) Running a marathon</label>
+      <label onclick="pick(72,2)">C) Playing chess</label>
+      <label onclick="pick(72,3)">D) Writing a novel</label>
+    </div>
+
+    <div class="mq" id="mq73" data-week="W12">
+      <p><span class="qnum">73</span> Resolution for Type 1 scope failure requires:</p>
+      <label onclick="pick(73,0)">A) Minor configuration change</label>
+      <label onclick="pick(73,1)">B) Adding one team member</label>
+      <label onclick="pick(73,2)">C) Full iteration through the design process</label>
+      <label onclick="pick(73,3)">D) Ignoring the problem</label>
+    </div>
+
+    <div class="mq" id="mq74" data-week="W12">
+      <p><span class="qnum">74</span> Temporary resource shortfalls primarily affect:</p>
+      <label onclick="pick(74,0)">A) The fundamental design viability</label>
+      <label onclick="pick(74,1)">B) Timeline</label>
+      <label onclick="pick(74,2)">C) The organization's reputation</label>
+      <label onclick="pick(74,3)">D) Employee morale only</label>
+    </div>
+
+    <div class="mq" id="mq75" data-week="W12">
+      <p><span class="qnum">75</span> Dan Blum's quote emphasizes that cybersecurity architecture creates:</p>
+      <label onclick="pick(75,0)">A) Job security for architects</label>
+      <label onclick="pick(75,1)">B) Coherent arrangement of security controls delivering capabilities aligned with risk</label>
+      <label onclick="pick(75,2)">C) Paperwork for compliance</label>
+      <label onclick="pick(75,3)">D) Barriers to business</label>
+    </div>
+
+    <!-- WEEK 13: Continuous Improvement & The Complete Architect -->
+    <div class="section-header" style="border-left-color: var(--w13); background: rgba(77,171,247,0.1);">Week 13: Continuous Improvement &amp; The Complete Architect (Questions 76-100)</div>
+
+    <div class="mq" id="mq76" data-week="W13">
+      <p><span class="qnum">76</span> A single architecture iteration is compared to:</p>
+      <label onclick="pick(76,0)">A) A season of baseball</label>
+      <label onclick="pick(76,1)">B) One at-bat in baseball</label>
+      <label onclick="pick(76,2)">C) An entire career</label>
+      <label onclick="pick(76,3)">D) A championship game</label>
+    </div>
+
+    <div class="mq" id="mq77" data-week="W13">
+      <p><span class="qnum">77</span> Level 2 improvement optimizes:</p>
+      <label onclick="pick(77,0)">A) Individual security controls</label>
+      <label onclick="pick(77,1)">B) The architectural PROCESS itself</label>
+      <label onclick="pick(77,2)">C) Budget allocation</label>
+      <label onclick="pick(77,3)">D) Staffing decisions</label>
+    </div>
+
+    <div class="mq" id="mq78" data-week="W13">
+      <p><span class="qnum">78</span> At maturity Level 4 (Managed), decisions are:</p>
+      <label onclick="pick(78,0)">A) Ad hoc</label>
+      <label onclick="pick(78,1)">B) Based on individual expertise</label>
+      <label onclick="pick(78,2)">C) Data-driven with quantitative metrics</label>
+      <label onclick="pick(78,3)">D) Completely automated</label>
+    </div>
+
+    <div class="mq" id="mq79" data-week="W13">
+      <p><span class="qnum">79</span> Andy Clark's early career lesson was about:</p>
+      <label onclick="pick(79,0)">A) Writing better documentation</label>
+      <label onclick="pick(79,1)">B) Actually listening to answers instead of preparing next question</label>
+      <label onclick="pick(79,2)">C) Working faster</label>
+      <label onclick="pick(79,3)">D) Using more tools</label>
+    </div>
+
+    <div class="mq" id="mq80" data-week="W13">
+      <p><span class="qnum">80</span> Philosophical alignment means:</p>
+      <label onclick="pick(80,0)">A) Everyone must agree philosophically</label>
+      <label onclick="pick(80,1)">B) Architecture approach reflects how org thinks and builds systems</label>
+      <label onclick="pick(80,2)">C) Using only open-source tools</label>
+      <label onclick="pick(80,3)">D) Following one framework exactly</label>
+    </div>
+
+    <div class="mq" id="mq81" data-week="W13">
+      <p><span class="qnum">81</span> Three keys to effective continuous improvement:</p>
+      <label onclick="pick(81,0)">A) Plan, Do, Check</label>
+      <label onclick="pick(81,1)">B) Scope, Design, Deploy</label>
+      <label onclick="pick(81,2)">C) Practice, Learning, Habit</label>
+      <label onclick="pick(81,3)">D) People, Process, Technology</label>
+    </div>
+
+    <div class="mq" id="mq82" data-week="W13">
+      <p><span class="qnum">82</span> In small organizations, finding diversity means:</p>
+      <label onclick="pick(82,0)">A) It's impossible</label>
+      <label onclick="pick(82,1)">B) Engaging professional groups, leveraging mentors, bringing in external experts</label>
+      <label onclick="pick(82,2)">C) Hiring 50+ employees</label>
+      <label onclick="pick(82,3)">D) Only working with large consulting firms</label>
+    </div>
+
+    <div class="mq" id="mq83" data-week="W13">
+      <p><span class="qnum">83</span> "Don't force heavyweight process on agile organization" is about:</p>
+      <label onclick="pick(83,0)">A) Philosophical alignment</label>
+      <label onclick="pick(83,1)">B) Temporal alignment</label>
+      <label onclick="pick(83,2)">C) Financial alignment</label>
+      <label onclick="pick(83,3)">D) Legal alignment</label>
+    </div>
+
+    <div class="mq" id="mq84" data-week="W13">
+      <p><span class="qnum">84</span> The lecture says shortcuts in preparation:</p>
+      <label onclick="pick(84,0)">A) Save time</label>
+      <label onclick="pick(84,1)">B) Create more work than they save</label>
+      <label onclick="pick(84,2)">C) Are always acceptable</label>
+      <label onclick="pick(84,3)">D) Only affect documentation</label>
+    </div>
+
+    <div class="mq" id="mq85" data-week="W13">
+      <p><span class="qnum">85</span> At which maturity level can new team members be onboarded effectively?</p>
+      <label onclick="pick(85,0)">A) Ad Hoc</label>
+      <label onclick="pick(85,1)">B) Repeatable</label>
+      <label onclick="pick(85,2)">C) Defined</label>
+      <label onclick="pick(85,3)">D) Managed</label>
+    </div>
+
+    <div class="mq" id="mq86" data-week="W13">
+      <p><span class="qnum">86</span> When navigating organizational politics, the recommended approach is:</p>
+      <label onclick="pick(86,0)">A) Play the political game aggressively</label>
+      <label onclick="pick(86,1)">B) Ignore politics entirely</label>
+      <label onclick="pick(86,2)">C) Understand politics but stay neutral</label>
+      <label onclick="pick(86,3)">D) Only work with politically powerful people</label>
+    </div>
+
+    <div class="mq" id="mq87" data-week="W13">
+      <p><span class="qnum">87</span> Listening as a strategy involves:</p>
+      <label onclick="pick(87,0)">A) Recording every conversation</label>
+      <label onclick="pick(87,1)">B) Providing forums for stakeholders to share, creating rapport for targeted questions later</label>
+      <label onclick="pick(87,2)">C) Only listening to executives</label>
+      <label onclick="pick(87,3)">D) Avoiding follow-up questions</label>
+    </div>
+
+    <div class="mq" id="mq88" data-week="W13">
+      <p><span class="qnum">88</span> Process too light for a large organization leads to:</p>
+      <label onclick="pick(88,0)">A) Faster delivery</label>
+      <label onclick="pick(88,1)">B) Better innovation</label>
+      <label onclick="pick(88,2)">C) Gaps, inconsistency, and compliance issues</label>
+      <label onclick="pick(88,3)">D) Reduced costs</label>
+    </div>
+
+    <div class="mq" id="mq89" data-week="W13">
+      <p><span class="qnum">89</span> The "Temptation to Disengage" occurs when:</p>
+      <label onclick="pick(89,0)">A) Projects are failing</label>
+      <label onclick="pick(89,1)">B) Things are going well and you assume they'll continue without attention</label>
+      <label onclick="pick(89,2)">C) Budget is cut</label>
+      <label onclick="pick(89,3)">D) Team members leave</label>
+    </div>
+
+    <div class="mq" id="mq90" data-week="W13">
+      <p><span class="qnum">90</span> Complete Architecture Journey spans:</p>
+      <label onclick="pick(90,0)">A) Weeks 1-7</label>
+      <label onclick="pick(90,1)">B) Weeks 8-13</label>
+      <label onclick="pick(90,2)">C) Weeks 1-13 (foundations to mastery)</label>
+      <label onclick="pick(90,3)">D) Only the final exam</label>
+    </div>
+
+    <div class="mq" id="mq91" data-week="W13">
+      <p><span class="qnum">91</span> Contextual understanding helps architects:</p>
+      <label onclick="pick(91,0)">A) Avoid all meetings</label>
+      <label onclick="pick(91,1)">B) Build designs people actually adopt because their perspectives are incorporated</label>
+      <label onclick="pick(91,2)">C) Reduce documentation</label>
+      <label onclick="pick(91,3)">D) Eliminate stakeholders</label>
+    </div>
+
+    <div class="mq" id="mq92" data-week="W13">
+      <p><span class="qnum">92</span> DevOps/CI-CD culture should lead to architecture that:</p>
+      <label onclick="pick(92,0)">A) Ignores deployment pipelines</label>
+      <label onclick="pick(92,1)">B) Integrates into the deployment pipeline</label>
+      <label onclick="pick(92,2)">C) Only works in waterfall</label>
+      <label onclick="pick(92,3)">D) Requires manual deployment</label>
+    </div>
+
+    <div class="mq" id="mq93" data-week="W13">
+      <p><span class="qnum">93</span> Information is only actionable if:</p>
+      <label onclick="pick(93,0)">A) It's expensive to collect</label>
+      <label onclick="pick(93,1)">B) It's retained and remembered</label>
+      <label onclick="pick(93,2)">C) It's presented beautifully</label>
+      <label onclick="pick(93,3)">D) Multiple tools generate it</label>
+    </div>
+
+    <div class="mq" id="mq94" data-week="W13">
+      <p><span class="qnum">94</span> The course lifecycle places "Execution Obstacles" at:</p>
+      <label onclick="pick(94,0)">A) Weeks 1-2</label>
+      <label onclick="pick(94,1)">B) Weeks 5-7</label>
+      <label onclick="pick(94,2)">C) Week 12</label>
+      <label onclick="pick(94,3)">D) Week 13</label>
+    </div>
+
+    <div class="mq" id="mq95" data-week="W13">
+      <p><span class="qnum">95</span> "Security isn't the end goal, the business is" relates to which architect trait?</p>
+      <label onclick="pick(95,0)">A) Technical foundation</label>
+      <label onclick="pick(95,1)">B) Interpersonal excellence</label>
+      <label onclick="pick(95,2)">C) Project management</label>
+      <label onclick="pick(95,3)">D) Strategic and adaptive thinking</label>
+    </div>
+
+    <div class="mq" id="mq96" data-week="W13">
+      <p><span class="qnum">96</span> At maturity Level 1 (Ad Hoc), success depends on:</p>
+      <label onclick="pick(96,0)">A) Standardized processes</label>
+      <label onclick="pick(96,1)">B) Individual heroics, not processes</label>
+      <label onclick="pick(96,2)">C) Quantitative metrics</label>
+      <label onclick="pick(96,3)">D) Executive sponsorship</label>
+    </div>
+
+    <div class="mq" id="mq97" data-week="W13">
+      <p><span class="qnum">97</span> A security architect admits "I don't know" about a topic. According to the lecture, this:</p>
+      <label onclick="pick(97,0)">A) Destroys their credibility</label>
+      <label onclick="pick(97,1)">B) Shows weakness</label>
+      <label onclick="pick(97,2)">C) Builds instant credibility and opens collaboration</label>
+      <label onclick="pick(97,3)">D) Should never happen</label>
+    </div>
+
+    <div class="mq" id="mq98" data-week="W13">
+      <p><span class="qnum">98</span> Having "just enough process" means:</p>
+      <label onclick="pick(98,0)">A) No process at all</label>
+      <label onclick="pick(98,1)">B) Process matches organization — enables without hindering</label>
+      <label onclick="pick(98,2)">C) Maximum possible governance</label>
+      <label onclick="pick(98,3)">D) Only using industry frameworks</label>
+    </div>
+
+    <div class="mq" id="mq99" data-week="W13">
+      <p><span class="qnum">99</span> Sustainable architecture program success is measured by:</p>
+      <label onclick="pick(99,0)">A) How fast each project completes</label>
+      <label onclick="pick(99,1)">B) Whether the organization is getting BETTER at architecture over time</label>
+      <label onclick="pick(99,2)">C) Total number of tools deployed</label>
+      <label onclick="pick(99,3)">D) Compliance checklist completion</label>
+    </div>
+
+    <div class="mq" id="mq100" data-week="W13">
+      <p><span class="qnum">100</span> After action reviews should happen:</p>
+      <label onclick="pick(100,0)">A) Only when projects fail</label>
+      <label onclick="pick(100,1)">B) As a required step for every project completion</label>
+      <label onclick="pick(100,2)">C) Once per year</label>
+      <label onclick="pick(100,3)">D) Only if the team has free time</label>
+    </div>
+    </div><!-- end questions-container -->
+
+    <div id="result">
+      <div class="result-label">Exam Results</div>
+      <div style="margin-bottom: 20px;"></div>
+    </div>
+
+    <div class="footer">
+      <p>SEAS 8405 Cybersecurity Architectures Finals Mega Exam</p>
+      <p style="margin-top: 10px; color: #666;">All 100 questions. Good luck!</p>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+    var answers = {};
+    var locked = {};
+    var score = 0;
+    var correct = {1:1,2:2,3:2,4:2,5:1,6:1,7:2,8:2,9:1,10:1,11:2,12:1,13:0,14:2,15:1,16:1,17:1,18:1,19:3,20:0,21:1,22:3,23:1,24:1,25:1,26:0,27:2,28:2,29:2,30:3,31:1,32:2,33:1,34:1,35:2,36:2,37:1,38:1,39:2,40:3,41:1,42:2,43:0,44:1,45:1,46:0,47:3,48:0,49:1,50:1,51:2,52:2,53:1,54:2,55:1,56:1,57:2,58:2,59:1,60:3,61:2,62:1,63:0,64:2,65:2,66:1,67:1,68:2,69:2,70:1,71:1,72:0,73:2,74:1,75:1,76:1,77:1,78:2,79:1,80:1,81:2,82:1,83:1,84:1,85:2,86:2,87:1,88:2,89:1,90:2,91:1,92:1,93:1,94:2,95:3,96:1,97:2,98:1,99:1,100:1};
+
+    // Explanations to help retain information
+    var explanations = {
+      1: "A blueprint records and formalizes design elements — the structured representation of how security architecture components fit together.",
+      2: "TOGAF (The Open Group Architecture Framework) is free for internal, non-commercial use. SABSA and COBIT have different licensing models.",
+      3: "The Lockheed Martin kill chain begins with Reconnaissance — the attacker gathers information before weaponizing or delivering an attack.",
+      4: "Competitor strategies are NOT your assets. Assets include customer trust, intellectual property, business processes — things YOUR organization values and must protect.",
+      5: "Phase A of TOGAF ADM is Architecture Vision — establishing the high-level scope, stakeholders, and objectives before diving into detailed design.",
+      6: "The Charter/Goal Statement should be a concise 1-2 sentence elevator pitch focused on business value — not a lengthy technical document.",
+      7: "Bottom-up approach starts by demonstrating value through quick wins to build executive support, then scales with that backing.",
+      8: "Risk = Impact x Likelihood. This fundamental formula drives all risk-based decision making in security architecture.",
+      9: "The ADD (Architectural Definition Document) is the Phase 2 detailed document, created after the high-level roadmap is validated.",
+      10: "SABSA's Conceptual Security Architecture is the blueprint equivalent — the highest-level view capturing business context and security strategy.",
+      11: "Installation is the kill chain phase where the attacker establishes persistence — backdoors, rootkits, or other mechanisms to maintain access.",
+      12: "Documenting assets verifies what's important to the organization — you can't protect what you don't know you have.",
+      13: "The high-level roadmap should be validated BEFORE creating the detailed ADD — ensure strategic direction is approved before investing in details.",
+      14: "The roadmap includes 7 components: Charter/Goal, Current State, Future State, Gap Analysis, Transition Milestones, Capability View, and Principles.",
+      15: "The capability view answers 'How might we achieve those goals?' — it maps capabilities needed to reach the desired future state.",
+      16: "Minimize documentation — only create what's practical and actually used. Documentation that sits unread wastes resources.",
+      17: "Enterprise blueprints use the house-building analogy — floor plan (layout), electrical (network), plumbing (data flow) — multiple views of one system.",
+      18: "The hybrid approach typically starts bottom-up to prove value, then scales top-down once executive backing is secured.",
+      19: "Actions on Objectives is Phase 7 — the final kill chain phase where the attacker achieves their ultimate goal (data theft, destruction, etc.).",
+      20: "The Rationale links technical measures to business goals using business language — helping non-technical stakeholders understand why a principle matters.",
+      21: "Personnel continuity addresses the risk of people leaving — documentation ensures new staff can continue work without starting from scratch.",
+      22: "Phase D of TOGAF ADM covers Technology Architecture — the infrastructure and platforms that support the information systems.",
+      23: "The three fundamental security architecture questions center on Assets (what to protect), Threats (what threatens them), and Risk (how to prioritize).",
+      24: "Transition milestones show phased stages from current state to desired future state — making the journey manageable and measurable.",
+      25: "John Tannehill advocates a risk-based approach to architecture — letting risk drive priorities rather than compliance checklists or technology trends.",
+      26: "Telemetry transforms architecture from a static document into a living system — continuously monitored, measured, and adapted.",
+      27: "Operational monitoring primarily serves operations teams and SOC analysts who need real-time visibility into system health and security events.",
+      28: "Detection and blocking rates are Security Effectiveness metrics — they measure how well security controls perform their intended function.",
+      29: "The feedback loop stages: (1) Collect Data, (2) Analyze/Learn, (3) Identify Issues, (4) Take Action, (5) Validate Results.",
+      30: "Phishing simulation click rates are leading indicators — they predict future risk before actual incidents occur.",
+      31: "Monthly strategic reviews are attended by CISO and security managers — the right level for trend analysis and strategic adjustments.",
+      32: "Number of successful breaches is a lagging indicator — it measures outcomes after the fact, not predictive risk.",
+      33: "The virtuous cycle begins with Design Architecture — you must have a design before you can collect metrics, analyze, and improve.",
+      34: "Board members want enterprise risk posture and heat maps — high-level views showing organizational risk, not technical details.",
+      35: "An actionable metric informs specific decisions and triggers concrete actions — if you can't act on it, it's a vanity metric.",
+      36: "CPU and memory utilization are Operational Health metrics — they indicate whether infrastructure is performing within acceptable parameters.",
+      37: "Three drivers of architectural change: business change, technology evolution, and threat landscape shifts.",
+      38: "Distributed ownership means metrics are owned by the teams responsible for that area — network team owns network metrics, etc.",
+      39: "Acquiring a European firm is a business change — it's a fundamental shift in organizational structure that drives architectural adaptation.",
+      40: "Static metrics over three years is the 'Static Metrics' pitfall — metrics should evolve as the organization and threat landscape change.",
+      41: "SMART = Specific, Measurable, Actionable, Relevant, Time-bound. This framework ensures metrics drive real improvement.",
+      42: "Execution monitoring tracks milestones, budget/resources, and blockers/dependencies — NOT long-term security posture (that's strategic monitoring).",
+      43: "Baseline is Foundation means start with what matters to business and extend to security — business context grounds all measurement.",
+      44: "Technical teams need detailed dashboards with real-time alerting and drill-down capability — they need granular, actionable data.",
+      45: "Monthly reviews address emerging trends — frequent enough to catch patterns, strategic enough to identify meaningful shifts.",
+      46: "VPN capacity concern triggers when utilization consistently exceeds 70-80% of design capacity — plan expansion before hitting limits.",
+      47: "Cost savings from prevented incidents is a Business Value metric — it translates security effectiveness into financial terms executives understand.",
+      48: "The 'perfect being enemy of good' pitfall means waiting for ideal monitoring before measuring anything — start imperfect and improve.",
+      49: "Compliance audit results fall under Business Value — they demonstrate security program effectiveness in terms the business cares about.",
+      50: "Detecting architectural drift requires regular reviews comparing metrics against design documents — metrics reveal when reality diverges from design.",
+      51: "60% of initiatives suffer from scope creep — it's the norm, not the exception, which is why active scope management is critical.",
+      52: "The recovery framework has 5 steps: Detect Signal, Classify Obstacle, Assess Severity, Execute Recovery, Validate Resolution.",
+      53: "Optimization failure in the garden analogy means the neighbor's garden got analysis skipped and received a suboptimal solution — spreading too thin degrades quality.",
+      54: "Misinterpreted Prioritization involves treating critical controls as optional — misunderstanding which requirements are truly mandatory.",
+      55: "Stage 2 of communication breakdown: stakeholders lose context — they no longer understand project status or direction.",
+      56: "PDCA = Plan, Do, Check, Act. The 'P' stands for Plan — establishing objectives and processes needed for results.",
+      57: "Formal risk acceptance for permanent resource loss should be in writing — documented decisions create accountability and audit trails.",
+      58: "The decision matrix has 6 factors for evaluating options and making informed architectural decisions.",
+      59: "An executive champion reinforces the message with executive peers and provides air coverage — political protection and advocacy at the leadership level.",
+      60: "PDCA should repeat continuously — it's a cycle of ongoing improvement, not a one-time activity.",
+      61: "The first step is Detect the Signal — you can't recover from what you haven't noticed. Early detection enables faster response.",
+      62: "Change barometers monitor for business changes, technology shifts, and regulatory updates — the three drivers that necessitate architectural evolution.",
+      63: "Scope creep's three impacts: budget overruns, resource exhaustion, and optimization failure — each compounds the others.",
+      64: "The chief architect is the design authority's ultimate decision maker — final arbiter of architectural decisions and trade-offs.",
+      65: "Stakeholders assuming the worst when they hear nothing relates to maintaining engagement — silence breeds anxiety and opposition.",
+      66: "Requirements as collaboration means dialogue where requirements emerge through mutual understanding — not a one-way handoff.",
+      67: "For minor issues, adjust implementation during execution — no need to halt the project for small course corrections.",
+      68: "Establish Review Cadence requires scheduled reviews to force discipline — without scheduled checkpoints, reviews get deprioritized.",
+      69: "A vendor product performing at 3,000 events/sec when documented for 10,000 is a technical obstacle — a gap between expected and actual technical performance.",
+      70: "The Shewhart-Deming cycle is another name for PDCA (Plan-Do-Check-Act) — Walter Shewhart originated it, W. Edwards Deming popularized it.",
+      71: "Repeatedly reverting to recovery suggests a serious systemic concern — root cause analysis is needed to fix underlying organizational issues.",
+      72: "Stakeholder engagement is compared to building Stonehenge — an ongoing commitment over time requiring sustained effort and coordination.",
+      73: "Type 1 scope failure requires full iteration through the design process — the scope missed something fundamental that can't be patched.",
+      74: "Temporary resource shortfalls primarily affect timeline — the design remains viable, but delivery takes longer.",
+      75: "Dan Blum emphasizes cybersecurity architecture creates a coherent arrangement of security controls delivering capabilities aligned with risk.",
+      76: "A single architecture iteration is compared to one at-bat in baseball — you'll have many opportunities, so learn from each one.",
+      77: "Level 2 improvement optimizes the architectural PROCESS itself — not just individual controls, but how you do architecture.",
+      78: "At maturity Level 4 (Managed), decisions are data-driven with quantitative metrics — moving beyond qualitative judgment to measurable evidence.",
+      79: "Andy Clark's early career lesson: actually listening to answers instead of preparing the next question — genuine listening builds understanding.",
+      80: "Philosophical alignment means architecture approach reflects how the organization thinks and builds systems — don't fight the culture.",
+      81: "Three keys to effective continuous improvement: Practice (doing it), Learning (reflecting on results), and Habit (making it routine).",
+      82: "Small organizations find diversity by engaging professional groups, leveraging mentors, and bringing in external experts — size doesn't limit perspective.",
+      83: "Don't force heavyweight process on an agile organization — this is temporal alignment, matching process weight to organizational pace.",
+      84: "Shortcuts in preparation create more work than they save — cutting corners early leads to rework, delays, and missed requirements.",
+      85: "At maturity Level 3 (Defined), processes are documented well enough that new team members can be onboarded effectively.",
+      86: "Understand politics but stay neutral — awareness of organizational dynamics helps navigate without getting caught in power struggles.",
+      87: "Listening as a strategy: provide forums for stakeholders to share, creating rapport that enables targeted questions later.",
+      88: "Process too light for a large organization leads to gaps, inconsistency, and compliance issues — insufficient governance for the complexity.",
+      89: "The Temptation to Disengage occurs when things are going well — assuming success will continue without attention is dangerous.",
+      90: "The Complete Architecture Journey spans Weeks 1-13, from foundations to mastery — the entire course builds toward comprehensive capability.",
+      91: "Contextual understanding helps architects build designs people actually adopt because their perspectives are incorporated — adoption requires buy-in.",
+      92: "DevOps/CI-CD culture should lead to architecture that integrates into the deployment pipeline — security as part of the flow, not a gate.",
+      93: "Information is only actionable if it's retained and remembered — insights that aren't captured are lost and can't drive improvement.",
+      94: "The course lifecycle places Execution Obstacles at Week 12 — understanding what goes wrong during implementation.",
+      95: "Security isn't the end goal, the business is — this reflects strategic and adaptive thinking, keeping business mission as the north star.",
+      96: "At maturity Level 1 (Ad Hoc), success depends on individual heroics, not processes — unsustainable and unrepeatable.",
+      97: "Admitting 'I don't know' builds instant credibility and opens collaboration — honesty about limits invites help and builds trust.",
+      98: "Just enough process means process matches the organization — enables without hindering, governance proportional to need.",
+      99: "Sustainable success is measured by whether the organization is getting BETTER at architecture over time — continuous improvement trajectory.",
+      100: "After action reviews should happen as a required step for every project completion — capture lessons learned whether the project succeeded or failed."
+    };
+
+    var startTime = Date.now();
+    setInterval(function(){
+      var s = Math.floor((Date.now() - startTime) / 1000);
+      var m = Math.floor(s / 60);
+      s = s % 60;
+      document.getElementById('timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+
+    function pick(q, c) {
+      if (locked[q]) return;
+      locked[q] = true;
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      var correctIdx = correct[q];
+      var isRight = (c === correctIdx);
+
+      // Disable all labels for this question
+      labels.forEach(function(l) {
+        l.style.pointerEvents = 'none';
+        l.style.opacity = '0.7';
+      });
+
+      if (isRight) {
+        score++;
+        labels[c].style.background = 'rgba(81,207,102,0.2)';
+        labels[c].style.borderColor = '#51cf66';
+        labels[c].style.color = '#51cf66';
+        labels[c].style.fontWeight = '700';
+        labels[c].style.opacity = '1';
+      } else {
+        // Mark wrong choice
+        labels[c].style.background = 'rgba(255,107,107,0.2)';
+        labels[c].style.borderColor = '#ff6b6b';
+        labels[c].style.color = '#ff6b6b';
+        labels[c].style.opacity = '1';
+        // Highlight correct answer
+        labels[correctIdx].style.background = 'rgba(81,207,102,0.2)';
+        labels[correctIdx].style.borderColor = '#51cf66';
+        labels[correctIdx].style.color = '#51cf66';
+        labels[correctIdx].style.fontWeight = '700';
+        labels[correctIdx].style.opacity = '1';
+      }
+
+      // Add feedback text with educational explanation
+      var feedback = document.createElement('div');
+      feedback.className = 'mq-feedback';
+      var explanation = explanations[q] || '';
+      var encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+      var encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+      if (isRight) {
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation;
+      } else {
+        var correctText = labels[correctIdx].textContent.trim();
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation;
+      }
+      document.getElementById('mq' + q).appendChild(feedback);
+
+      // Update progress
+      var answered = Object.keys(answers).length;
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 100 answered';
+      document.getElementById('progbar').style.width = (answered) + '%';
+    }
+
+    function gradeExam() {
+      var pct = Math.round(score / 100 * 100);
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+      var answered = Object.keys(answers).length;
+      document.getElementById('result').innerHTML = '<div style="font-size:2.5em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="font-size:1.5em;color:#aaa">' + pct + '%</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? 'var(--correct)' : 'var(--wrong)') + '">' + g + '</div>';
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+    }
+
+    function resetExam() {
+      answers = {};
+      locked = {};
+      score = 0;
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = '';
+        l.style.borderColor = '';
+        l.style.color = '';
+        l.style.fontWeight = '';
+        l.style.pointerEvents = '';
+        l.style.opacity = '';
+      });
+      document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
+      document.getElementById('progress').textContent = '0 correct / 0 of 100 answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function shuffleAndReset() {
+      // Reset first
+      resetExam();
+
+      var container = document.getElementById('questions-container');
+      var questions = Array.from(container.querySelectorAll('.mq'));
+      var headers = Array.from(container.querySelectorAll('.section-header'));
+
+      // Remove all questions and headers
+      questions.forEach(function(q) { q.remove(); });
+      headers.forEach(function(h) { h.remove(); });
+
+      // Shuffle questions
+      shuffleArray(questions);
+
+      // Add a single header
+      var newHeader = document.createElement('div');
+      newHeader.className = 'section-header';
+      newHeader.textContent = 'Randomized Questions (1-100)';
+      newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
+      container.insertBefore(newHeader, container.firstChild);
+
+      // Re-add questions with new numbers
+      questions.forEach(function(q, idx) {
+        var num = idx + 1;
+        var qnum = q.querySelector('.qnum');
+        if (qnum) qnum.textContent = num;
+        container.appendChild(q);
+      });
+
+      // Show notification
+      var notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#9775FA;color:#fff;padding:12px 24px;border-radius:25px;font-weight:600;z-index:1000;animation:fadeOut 2s forwards;';
+      notif.textContent = 'Questions shuffled! Good luck!';
+      document.body.appendChild(notif);
+      setTimeout(function() { notif.remove(); }, 2000);
+
+      // Reset timer
+      startTime = Date.now();
+    }
+
+    function filterWeek(week) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelector('.filter-btn[data-week="' + week + '"]').classList.add('active');
+
+      var questions = document.querySelectorAll('.mq');
+      var headers = document.querySelectorAll('.section-header');
+
+      if (week === 'all') {
+        questions.forEach(function(q) { q.style.display = ''; });
+        headers.forEach(function(h) { h.style.display = ''; });
+      } else {
+        questions.forEach(function(q) {
+          q.style.display = q.getAttribute('data-week') === week ? '' : 'none';
+        });
+        headers.forEach(function(h) {
+          // Show header if it matches the week filter
+          var weekLabel = week.replace('W', 'Week ');
+          h.style.display = h.textContent.indexOf(weekLabel) !== -1 || h.textContent.indexOf('Randomized') !== -1 ? '' : 'none';
+        });
+      }
+    }
+
+    // Shuffle on page load for fresh experience each time
+    document.addEventListener('DOMContentLoaded', function() {
+      shuffleAndReset();
+    });
+  </script>
+</body>
+</html>

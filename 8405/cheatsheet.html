@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8405 - Finals Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0d1b2a;
+      color: #e0e0e0;
+      font-size: 10px;
+      line-height: 1.3;
+      padding: 10px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      background: rgba(30, 40, 60, 0.9);
+      border: 1px solid #1e3a5f;
+      border-radius: 6px;
+    }
+
+    nav a {
+      color: #00d4ff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .print-btn {
+      background: #00d4ff;
+      color: #0d1b2a;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .print-btn:hover { background: #00b8d9; }
+
+    h1 {
+      text-align: center;
+      color: #00d4ff;
+      font-size: 16px;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #00d4ff;
+      padding-bottom: 4px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .section {
+      background: rgba(30, 40, 60, 0.8);
+      border: 1px solid #1e3a5f;
+      border-radius: 5px;
+      padding: 6px;
+      break-inside: avoid;
+    }
+
+    h2 {
+      color: #00d4ff;
+      font-size: 11px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #1e3a5f;
+      padding-bottom: 2px;
+    }
+
+    h3 {
+      color: #ffd700;
+      font-size: 9px;
+      margin: 4px 0 2px 0;
+    }
+
+    ul {
+      margin-left: 10px;
+      margin-bottom: 3px;
+    }
+
+    li { margin-bottom: 1px; }
+
+    strong { color: #ff6b6b; }
+
+    .white-bold { color: #ffffff; font-weight: bold; }
+
+    .highlight {
+      background: rgba(255, 215, 0, 0.15);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3px 0;
+      font-size: 9px;
+    }
+
+    th, td {
+      border: 1px solid #1e3a5f;
+      padding: 2px 4px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+    }
+
+    .formula {
+      background: rgba(255, 107, 107, 0.2);
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 3px 0;
+      text-align: center;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+        font-size: 8px;
+        line-height: 1.2;
+        padding: 3px;
+      }
+      nav { display: none; }
+      h1 { color: black; border-color: black; font-size: 12px; margin-bottom: 4px; }
+      h2 { color: black !important; border-color: #333 !important; font-size: 9px; }
+      h3 { color: #333 !important; font-size: 8px; }
+      .section {
+        border-color: #333 !important;
+        background: white !important;
+        padding: 4px;
+        break-inside: avoid;
+      }
+      .container { gap: 4px; }
+      strong { color: black; font-weight: bold; }
+      .white-bold { color: black; }
+      .highlight { background: #eee; }
+      .formula { background: #f0f0f0; }
+      th { background: #ddd !important; color: black !important; }
+      th, td { border-color: #333 !important; }
+      table { font-size: 8px; }
+    }
+
+    @media (max-width: 1200px) {
+      .container { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 800px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; 8405 Finals Home</a>
+  <button class="print-btn" onclick="window.print()">Print Cheat Sheet</button>
+</nav>
+
+<h1>SEAS 8405 Finals &mdash; One-Page Cheat Sheet</h1>
+
+<div class="container">
+
+  <!-- W9: Enterprise Blueprints -->
+  <div class="section">
+    <h2>W9: Enterprise Blueprints</h2>
+    <ul>
+      <li><strong>Blueprint</strong> = set of related docs capturing design elements</li>
+      <li>Dual purpose: (1) capture future state (2) create buildable docs</li>
+      <li><strong>TOGAF</strong> = Architecture Vision; <strong>SABSA</strong> = Conceptual Security Architecture</li>
+      <li>4 reasons: Socialize Design, Implementation Template, Progress Baseline, Status Reporting</li>
+      <li>Doc principles: minimize shelfware, personnel continuity, collaboration enablement</li>
+    </ul>
+    <h3>TOGAF ADM</h3>
+    <ul>
+      <li>5 advantages: Extensive docs, Free, Widely recognized, Customization (&sect;4.3), Systematic</li>
+      <li>Phases: Preliminary &rarr; A (Vision) &rarr; B (Business) &rarr; C (Info Systems) &rarr; D (Technology)</li>
+    </ul>
+    <h3>Kill Chain &amp; Assets</h3>
+    <ul>
+      <li><strong>Lockheed Martin Kill Chain:</strong> Recon &rarr; Weaponization &rarr; Delivery &rarr; Exploitation &rarr; Installation &rarr; C2 &rarr; Actions on Objectives</li>
+      <li><strong>Assets:</strong> data, personnel, IP, processes, reputation, trust (not just technical)</li>
+      <li class="highlight"><strong>3 Qs:</strong> What protecting? (Assets) What can go wrong? (Threats) Result? (Risk = Impact &times; Likelihood)</li>
+    </ul>
+    <h3>Goals, Roadmap &amp; Vision</h3>
+    <ul>
+      <li><strong>Goals</strong> (what) vs <strong>Capability</strong> (how) &mdash; need both</li>
+      <li>Roadmap 7 components: Charter, Scope, Principles, Goals/Outcomes, Transition Milestones, PM Artifacts, Impacts</li>
+      <li>Two-phase: Phase 1 = High-level Roadmap (validate first), Phase 2 = ADD (Architectural Definition Document)</li>
+      <li>Top-down (exec sponsor) vs Bottom-up (show value) vs <strong>Hybrid (preferred)</strong></li>
+      <li>Architectural Principles: Name, Statement, Rationale, Implications</li>
+      <li>Vision 3 components: Principles, Scope, Target Future State</li>
+      <li>4 Bootstrap Activities: Resource Discovery, Key Stakeholders, Validate Goals, Establish Feedback</li>
+    </ul>
+  </div>
+
+  <!-- W10: Technical Design & Execution -->
+  <div class="section">
+    <h2>W10: Technical Design &amp; Execution</h2>
+    <ul>
+      <li><strong>3-Phase Journey:</strong> Conceptual Design (Ch 5-6) &rarr; Technical Design (Ch 7) &rarr; Execution</li>
+    </ul>
+    <h3>5-Step Technical Design</h3>
+    <ul>
+      <li>1) Create Implementation Strategies</li>
+      <li>2) Assess Synergies &amp; Constraints</li>
+      <li>3) Validate Against Threats</li>
+      <li>4) Validate with Stakeholders</li>
+      <li>5) Finalize Documentation</li>
+    </ul>
+    <h3>Key Concepts</h3>
+    <ul>
+      <li><strong>Sound Wave Analogy:</strong> Constructive interference (strategies amplify) vs Destructive (strategies cancel out)</li>
+      <li><strong>6 Interrogatives:</strong> WHO, WHAT, WHEN, WHERE, WHY, HOW</li>
+      <li><strong>MITRE ATT&amp;CK</strong> for validation &mdash; use enterprise tactics to identify gaps</li>
+      <li><strong>Healthy Friction</strong> (good: critical thinking, better decisions) vs <strong>Unhealthy Friction</strong> (bad: burdensome, false positives)</li>
+      <li><strong>Skeleton Solution Documents:</strong> "straw man" designs, refined as you engage teams</li>
+      <li>Stakeholder Engagement: enable via formal detail, engage SMEs, validate technical feasibility</li>
+    </ul>
+  </div>
+
+  <!-- W11: Telemetry & Metrics -->
+  <div class="section">
+    <h2>W11: Telemetry &amp; Metrics</h2>
+    <ul>
+      <li>4 reasons telemetry matters: Guide Decisions, Detect Early, Validate Effectiveness, Enable Continuous Improvement</li>
+      <li class="highlight"><strong>"Without telemetry, you're flying blind"</strong></li>
+      <li><strong>Execution Monitoring</strong> (during, temporary) vs <strong>Operational Monitoring</strong> (after, permanent)</li>
+      <li>Execution tracks: Milestones, Budget/Resources, Blockers, Risk Indicators</li>
+    </ul>
+    <h3>3 Metric Categories</h3>
+    <table>
+      <tr><th>Category</th><th>Examples</th></tr>
+      <tr><td><strong>Security Effectiveness</strong></td><td>MTTD, false positives, ATT&amp;CK coverage</td></tr>
+      <tr><td><strong>Operational Health</strong></td><td>Uptime, latency, CPU</td></tr>
+      <tr><td><strong>Business Value</strong></td><td>Cost savings, ROI, audit results</td></tr>
+    </table>
+    <ul>
+      <li>3 Drivers of Change: Threat Landscape, Business Change, Technology Evolution</li>
+      <li><strong>Feedback Loop:</strong> Collect &rarr; Analyze &rarr; Identify &rarr; Act &rarr; Validate (continuous)</li>
+      <li><strong>Leading</strong> (predict: vuln scans, patching %, phishing clicks) vs <strong>Lagging</strong> (measure past: breaches, IR time, downtime)</li>
+      <li><strong>Vanity</strong> (look good, no action: "5,427 rules") vs <strong>Actionable</strong> (inform decisions: "95% patched in 7-day SLA")</li>
+      <li>Test: "What action does this metric inform?" If none &rarr; vanity</li>
+      <li>4-Step Baseline: Measure current &rarr; Set target (w/ interim) &rarr; Track progress &rarr; Validate</li>
+      <li><strong>SMART:</strong> Specific, Measurable, Actionable, Relevant, Time-bound</li>
+      <li>Traceability: Goal &rarr; Implementation &rarr; Key Metrics</li>
+    </ul>
+    <h3>Review Cadence &amp; Audience</h3>
+    <ul>
+      <li>Weekly (tactical/SOC) | Monthly (strategic/CISO) | Quarterly (comprehensive/cross-functional) | Annual (deep dive/board)</li>
+      <li>Technical=detail dashboards | Leadership=trend summaries | Executives=scorecards/biz language | Board=heat maps/risk posture</li>
+      <li><strong>Virtuous Cycle:</strong> Design &rarr; Telemetry &rarr; Collect &rarr; Analyze &rarr; Adapt &rarr; Validate &rarr; repeat</li>
+      <li>Sustainable: Automate, Distribute ownership, Document, Review &amp; prune</li>
+      <li><strong>5 Pitfalls:</strong> Measure everything, Perfect vs good, Ignore context, Static metrics, No actions defined</li>
+    </ul>
+  </div>
+
+  <!-- W12: Diffusion & Perturbation -->
+  <div class="section">
+    <h2>W12: Diffusion &amp; Perturbation</h2>
+    <ul>
+      <li class="highlight">80% IT projects hit unexpected events, 60% scope creep</li>
+      <li><strong>Scope Failure Type 1</strong> (Foundational): entire domain wrong &rarr; full redesign</li>
+      <li><strong>Scope Failure Type 2</strong> (Drift): implementation drifted &rarr; targeted corrections</li>
+      <li>Scope Creep 3 impacts: Budget Overruns, Resource Exhaustion, Optimization Failure</li>
+    </ul>
+    <h3>Requirement Failures</h3>
+    <ul>
+      <li><strong>Complete Misunderstanding</strong> (rare, full redesign)</li>
+      <li><strong>Misinterpreted Prioritization</strong> (common, reprioritize)</li>
+      <li><strong>Partial Coverage</strong> (most common, fix in implementation)</li>
+      <li class="highlight">Requirements = collaborative dialogue, NOT checklist (Dr. Perez)</li>
+    </ul>
+    <h3>Recovery Framework (5 Steps)</h3>
+    <ul>
+      <li>Detect Signal &rarr; Classify Obstacle &rarr; Assess Severity &rarr; Determine Path &rarr; Execute &amp; Validate</li>
+    </ul>
+    <h3>Decision Matrix 6 Factors</h3>
+    <ul>
+      <li>Issue Scope, Requirements Understanding, Security Outcome Impact, Dependency Effects, Stakeholder Alignment, Resource Requirements</li>
+      <li><strong>Critical factors TRUMP others</strong> &mdash; if security outcomes can't be met &rarr; full iteration</li>
+    </ul>
+    <h3>Resources &amp; Communication</h3>
+    <ul>
+      <li>Resource: <strong>Temporary</strong> (timeline impact, adjust/wait) vs <strong>Permanent</strong> (may need redesign, get risk acceptance IN WRITING)</li>
+      <li>Communication Breakdown 4 stages: Sporadic updates &rarr; Lose context &rarr; Support erodes &rarr; Project derailed</li>
+      <li class="highlight"><strong>Communication failure = ROOT CAUSE; other failures = symptoms</strong></li>
+      <li>6 Elements of Deliberate Communication: formal plan, clear cadence, act as hub, transparency, document all, don't assume</li>
+    </ul>
+    <h3>PDCA &amp; Foundations</h3>
+    <ul>
+      <li><strong>PDCA (Shewhart-Deming):</strong> Plan &rarr; Do &rarr; Check &rarr; Act (repeats continuously)</li>
+      <li>3 Foundations: Establish Review Cadence, Refine Metrics Over Time, Create Change Barometers</li>
+      <li><strong>Executive Champion:</strong> reinforces with peers, provides air coverage, validates business case</li>
+      <li>Building case: use data (risk reduction, ROI), align with champion's own goals</li>
+    </ul>
+  </div>
+
+  <!-- W13: Maturity & Professional Excellence -->
+  <div class="section">
+    <h2>W13: Maturity &amp; Professional Excellence</h2>
+    <ul>
+      <li><strong>Single Iteration</strong> (project, one at-bat) vs <strong>Sustainable Program</strong> (career, builds on lessons, never ends)</li>
+      <li>2 Levels: Level 1 = Individual Design Optimization | Level 2 = Process Optimization (meta-level)</li>
+      <li>3 Elements: Practice (iteration, tabletop exercises), Learning (measurement, metrics), Habit (self-reinforcing process)</li>
+      <li>Alignment: <strong>Temporal</strong> (match org rhythms: sprints, quarters) + <strong>Philosophical</strong> (cloud-first &rarr; cloud-native design)</li>
+    </ul>
+    <h3>Soft Skills &amp; Wisdom</h3>
+    <ul>
+      <li><strong>Active Listening:</strong> don't prepare Q3 while hearing Q2; stakeholders hold back because they don't know what's relevant</li>
+      <li><strong>Multi-Disciplinary</strong> (Steve Oran, Intel): bring threat hunting + identity + ops + business together</li>
+      <li><strong>Ego:</strong> Healthy confidence = about the work | Unhealthy ego = about you</li>
+      <li><strong>Walk Away:</strong> validate first, but walking away early = good judgment. Implement stop-gaps, document why</li>
+      <li><strong>Communication:</strong> over-communicate deliberately. Worst case of sharing = "I knew that." Worst case of not sharing = lost alignment</li>
+      <li>Process fit: Startup=lightweight | Mid-size=defined roles | Enterprise=formal governance</li>
+      <li><strong>Empathy</strong> (Mark Simoes, Microsoft): look through others' eyes. CEO &rarr; compliance; ops &rarr; performance; users &rarr; usability</li>
+    </ul>
+    <h3>3 Great Architect Traits</h3>
+    <ul>
+      <li>Technical Foundation, Interpersonal Excellence, Strategic &amp; Adaptive Thinking</li>
+    </ul>
+    <h3>5 Maturity Levels</h3>
+    <ul>
+      <li>Ad Hoc (reactive) &rarr; Repeatable (some structure) &rarr; Defined (standardized) &rarr; Managed (quantitative) &rarr; Optimizing (continuous improvement)</li>
+    </ul>
+    <ul>
+      <li><strong>Politics:</strong> understand the landscape but stay neutral</li>
+      <li>Stay engaged through completion &mdash; strong start &ne; strong finish</li>
+      <li>Don't shirk preparation &mdash; shortcuts waste more time, lose defensibility</li>
+    </ul>
+  </div>
+
+  <!-- Key Quotes & Expert Names -->
+  <div class="section">
+    <h2>Key Quotes &amp; Expert Names</h2>
+    <table>
+      <tr><th>Expert</th><th>Quote / Concept</th></tr>
+      <tr><td><strong>John Tannehill</strong></td><td>"Once assets are understood, take risk-based approach"</td></tr>
+      <tr><td><strong>Dr. Richard Perez</strong></td><td>"Requirements = forward-thinking collaborative discussion, not checklist"</td></tr>
+      <tr><td><strong>Samantha Davidson</strong> (Robinhood)</td><td>"Know when to cut losses &mdash; set success thresholds"</td></tr>
+      <tr><td><strong>Anon Cess Tree</strong> (Park Place)</td><td>"Metrics only valuable when they drive action"</td></tr>
+      <tr><td><strong>Mark Simoes</strong> (Microsoft)</td><td>"Look at environment through other people's eyes"</td></tr>
+      <tr><td><strong>Steve Oran</strong> (Intel)</td><td>"Security architecture is interdisciplinary"</td></tr>
+      <tr><td><strong>Dan Blum</strong></td><td>"Value of cybersecurity architecture is creating coherent arrangement of security controls"</td></tr>
+      <tr><td><strong>Andy Clark</strong></td><td>"Was so focused on asking right questions, wasn't listening to answers"</td></tr>
+    </table>
+  </div>
+
+</div>
+
+</body>
+</html>

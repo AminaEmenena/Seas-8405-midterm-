@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8405 Finals Prep — Cybersecurity Architectures</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --w9: #FF6B6B;
+    --w10: #FFA94D;
+    --w12: #69DB7C;
+    --w13: #4DABF7;
+    --mega: #e94560;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w9 { background: var(--w9); color: #000; }
+  .topnav a.w10 { background: var(--w10); color: #000; }
+  .topnav a.w12 { background: var(--w12); color: #000; }
+  .topnav a.w13 { background: var(--w13); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* HERO */
+  .hero {
+    text-align: center; padding: 50px 20px 30px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+  }
+  .hero h1 { font-size: 2.4em; color: var(--accent1); margin-bottom: 10px; }
+  .hero p { font-size: 1.1em; color: #aaa; max-width: 700px; margin: 0 auto; }
+  .hero .course-tag {
+    display: inline-block; margin-top: 14px;
+    padding: 6px 20px; border-radius: 20px;
+    background: rgba(233,69,96,0.2); border: 1px solid var(--accent1);
+    font-size: 0.85em; font-weight: 700; color: var(--accent1);
+    letter-spacing: 1px;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  /* SECTION CARDS */
+  a.card {
+    display: block; text-decoration: none;
+    margin: 16px 0; border-radius: 16px;
+    overflow: hidden; transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+  .card-inner {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 24px;
+    background: var(--card);
+  }
+  .card-icon {
+    font-size: 2em; min-width: 50px; text-align: center;
+  }
+  .card-text h2 { font-size: 1.15em; color: #fff; margin-bottom: 4px; }
+  .card-text p { font-size: 0.85em; color: #aaa; margin: 0; }
+  .card-badge {
+    margin-left: auto; padding: 6px 14px;
+    border-radius: 20px; font-size: 0.75em;
+    font-weight: 700; white-space: nowrap;
+  }
+
+  a.card.w9 { border-color: var(--w9); }
+  a.card.w9 .card-badge { background: rgba(255,107,107,0.2); color: var(--w9); }
+  a.card.w9:hover { border-color: var(--w9); background: rgba(255,107,107,0.05); }
+
+  a.card.w10 { border-color: var(--w10); }
+  a.card.w10 .card-badge { background: rgba(255,169,77,0.2); color: var(--w10); }
+  a.card.w10:hover { border-color: var(--w10); background: rgba(255,169,77,0.05); }
+
+  a.card.w12 { border-color: var(--w12); }
+  a.card.w12 .card-badge { background: rgba(105,219,124,0.2); color: var(--w12); }
+  a.card.w12:hover { border-color: var(--w12); background: rgba(105,219,124,0.05); }
+
+  a.card.w13 { border-color: var(--w13); }
+  a.card.w13 .card-badge { background: rgba(77,171,247,0.2); color: var(--w13); }
+  a.card.w13:hover { border-color: var(--w13); background: rgba(77,171,247,0.05); }
+
+  a.card.mega { border-color: var(--accent1); }
+  a.card.mega .card-badge { background: rgba(233,69,96,0.2); color: var(--accent1); }
+  a.card.mega:hover { border-color: var(--accent1); background: rgba(233,69,96,0.05); }
+  a.card.mega .card-inner { background: linear-gradient(135deg, var(--card), rgba(233,69,96,0.1)); }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 20px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--accent1); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* EXAM INFO */
+  .exam-info {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 20px 24px; margin: 24px 0;
+  }
+  .exam-info h3 { color: var(--accent1); margin-bottom: 12px; font-size: 1.1em; }
+  .exam-info ul { list-style: none; padding: 0; }
+  .exam-info li {
+    padding: 6px 0; font-size: 0.9em;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .exam-info li:last-child { border-bottom: none; }
+  .exam-info li strong { color: #fff; }
+
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .hero h1 { font-size: 1.6em; }
+    .card-inner { flex-direction: column; text-align: center; gap: 10px; }
+    .card-badge { margin-left: 0; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title">SEAS 8405 &bull; FINALS PREP</span>
+  <a href="../index.html" class="home">Home</a>
+  <a href="week9.html" class="w9">W9</a>
+  <a href="week10.html" class="w10">W10</a>
+  <a href="week12.html" class="w12">W12</a>
+  <a href="week13.html" class="w13">W13</a>
+  <a href="mega.html" class="mega">Mega</a>
+</nav>
+
+<div class="hero">
+  <h1>8405 Finals Prep</h1>
+  <p>Master enterprise blueprints, telemetry &amp; metrics, execution obstacles, and architectural maturity</p>
+  <div class="course-tag">SEAS 8405 &bull; FINALS PREP</div>
+</div>
+
+<div class="container">
+
+  <a href="../index.html" class="back-link">&larr; Back to Course Select</a>
+
+  <a href="week9.html" class="card w9">
+    <div class="card-inner">
+      <div class="card-icon">&#x1F3D7;&#xFE0F;</div>
+      <div class="card-text">
+        <h2>Week 9: Enterprise Security Blueprints</h2>
+        <p>TOGAF framework, blueprint documentation, kill chain, assets/threats/risk, architectural vision &amp; roadmaps</p>
+      </div>
+      <div class="card-badge">15 Questions</div>
+    </div>
+  </a>
+
+  <a href="week10.html" class="card w10">
+    <div class="card-inner">
+      <div class="card-icon">&#x1F4CA;</div>
+      <div class="card-text">
+        <h2>Weeks 10&ndash;11: Telemetry &amp; Metrics</h2>
+        <p>Security metrics, operational health, business value, feedback loops, leading/lagging indicators, vanity vs actionable</p>
+      </div>
+      <div class="card-badge">15 Questions</div>
+    </div>
+  </a>
+
+  <a href="week12.html" class="card w12">
+    <div class="card-inner">
+      <div class="card-icon">&#x26A1;</div>
+      <div class="card-text">
+        <h2>Week 12: Diffusion &amp; Perturbation</h2>
+        <p>Scope failures, requirement failures, recovery framework, resource shortfalls, communication breakdown, PDCA cycle</p>
+      </div>
+      <div class="card-badge">15 Questions</div>
+    </div>
+  </a>
+
+  <a href="week13.html" class="card w13">
+    <div class="card-inner">
+      <div class="card-icon">&#x1F3AF;</div>
+      <div class="card-text">
+        <h2>Week 13: Architectural Maturity</h2>
+        <p>Continuous improvement, organizational alignment, multi-disciplinary approach, maturity levels, professional skills</p>
+      </div>
+      <div class="card-badge">15 Questions</div>
+    </div>
+  </a>
+
+  <a href="mega.html" class="card mega">
+    <div class="card-inner">
+      <div class="card-icon">&#x1F3C6;</div>
+      <div class="card-text">
+        <h2>Finals Mega Exam</h2>
+        <p>100 randomized questions across all finals topics</p>
+      </div>
+      <div class="card-badge">100 Questions</div>
+    </div>
+  </a>
+
+  <a href="cheatsheet.html" class="card" style="border-color: #00d4ff;">
+    <div class="card-inner">
+      <div class="card-icon">&#x1F4CB;</div>
+      <div class="card-text">
+        <h2>Print-Friendly Cheat Sheet</h2>
+        <p>One-page condensed reference — all key concepts, frameworks, quotes, and formulas for Weeks 9&ndash;13</p>
+      </div>
+      <div class="card-badge" style="background: rgba(0,212,255,0.2); color: #00d4ff;">Print Ready</div>
+    </div>
+  </a>
+
+</div>
+
+</body>
+</html>
