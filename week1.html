@@ -1230,6 +1230,19 @@
       font-size: 1.4em;
     }
   }
+/* EXPAND/COLLAPSE ALL */
+.expand-collapse-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  margin: 0 0 16px; padding: 10px 0;
+}
+.expand-collapse-bar button {
+  background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.expand-collapse-bar button:hover {
+  background: var(--page-color); color: #000; border-color: var(--page-color);
+}
 </style>
 </head>
 <body>
@@ -1680,6 +1693,10 @@
         </details>
 
         <!-- Section 4: ASARP -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">📖 Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">📕 Collapse All</button>
+</div>
         <details>
             <summary>⚖️ 4. ASARP — As Secure As Reasonably Practicable</summary>
             <div class="content-section">

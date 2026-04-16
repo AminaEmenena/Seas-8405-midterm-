@@ -669,6 +669,19 @@
     table { font-size: 0.85em; }
     th, td { padding: 8px 10px; }
   }
+/* EXPAND/COLLAPSE ALL */
+.expand-collapse-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  margin: 0 0 16px; padding: 10px 0;
+}
+.expand-collapse-bar button {
+  background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.expand-collapse-bar button:hover {
+  background: var(--page-color); color: #000; border-color: var(--page-color);
+}
 </style>
 </head>
 <body>
@@ -679,7 +692,7 @@
   <a href="week10.html" class="w10 active">W10</a>
   <a href="week12.html" class="w12">W12</a>
   <a href="week13.html" class="w13">W13</a>
-  <a href="mega.html" class="mega">MEGA EXAM</a>
+  <a href="mega.html" class="mega">Mega</a>
   <a href="../index.html" class="home">Home</a>
 </nav>
 
@@ -836,6 +849,10 @@
 <!-- ═══════════════════════════════════════════════ -->
 <!-- STUDY TOPIC 1 -->
 <!-- ═══════════════════════════════════════════════ -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">📖 Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">📕 Collapse All</button>
+</div>
 <details>
   <summary>&#128202; 1. Why Telemetry Matters (4 Reasons)</summary>
   <div>
