@@ -1,0 +1,2895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 - Algorithm Selection & The Origins of AES</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #9775FA;
+    --page-tint: rgba(151,117,250,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.cs { background: #20C997; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar (Compact) */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* DIFFICULTY TOGGLE */
+  .difficulty-toggle {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0; padding: 14px 18px;
+    background: rgba(0,0,0,0.2); border-radius: 12px;
+  }
+  .difficulty-toggle label { font-weight: 700; color: #aaa; font-size: 0.95em; }
+  .diff-btn {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid transparent;
+    background: rgba(255,255,255,0.06); color: #aaa;
+    cursor: pointer; font-weight: 600; font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .diff-btn:hover { background: rgba(255,255,255,0.1); }
+  .diff-btn.active { border-color: var(--page-color); color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .diff-btn.easy.active { border-color: var(--correct); color: var(--correct); }
+  .diff-btn.medium.active { border-color: #FFA94D; color: #FFA94D; }
+  .diff-btn.hard.active { border-color: var(--wrong); color: var(--wrong); }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary styled like old layout) */
+  details {
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--page-color);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  details[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.15em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+    color: #000;
+  }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+    background: var(--page-tint);
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center;
+  }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* ORIGINAL DESIGN CLASSES */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* QUIZ SECTION */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar (mega exam) */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle / sub-headers */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+
+  /* FLASHCARD MODE */
+  .flashcard-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flashcard-toggle-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-toggle-btn:hover {
+    background: var(--page-color);
+    color: #000;
+    transform: scale(1.02);
+  }
+  .flashcard-toggle-btn.active {
+    background: var(--page-color);
+    color: #000;
+  }
+  .flashcard-toggle-label {
+    font-size: 0.95em;
+    color: #aaa;
+  }
+
+  /* Flashcard Container */
+  .flashcard-mode {
+    display: none;
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-mode.active {
+    display: block;
+  }
+  .flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .flashcard-title {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: var(--page-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-progress {
+    font-size: 1em;
+    font-weight: 600;
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .flashcard-progress .current {
+    color: var(--page-color);
+    font-weight: 800;
+  }
+
+  /* Flashcard Controls */
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .flashcard-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .flashcard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-btn.shuffle {
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .flashcard-btn.shuffle:hover {
+    background: rgba(255,212,59,0.15);
+  }
+  .flashcard-btn.nav-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  .flashcard-btn.prev { border-color: var(--w5); color: var(--w5); }
+  .flashcard-btn.prev:hover { background: rgba(77,171,247,0.15); }
+  .flashcard-btn.next { border-color: var(--w4); color: var(--w4); }
+  .flashcard-btn.next:hover { background: rgba(105,219,124,0.15); }
+
+  /* The Card */
+  .flashcard-wrapper {
+    perspective: 1000px;
+    margin: 0 auto 20px;
+    max-width: 700px;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .flashcard-front {
+    background: linear-gradient(145deg, #1e3a5f, #16213e);
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-back {
+    background: linear-gradient(145deg, #1a3a2e, #16213e);
+    border: 2px solid var(--w4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .flashcard-category.red { background: rgba(233,69,96,0.3); color: #e94560; }
+  .flashcard-category.blue { background: rgba(77,171,247,0.3); color: #4DABF7; }
+  .flashcard-category.green { background: rgba(105,219,124,0.3); color: #69DB7C; }
+  .flashcard-category.orange { background: rgba(255,169,77,0.3); color: #FFA94D; }
+  .flashcard-category.purple { background: rgba(151,117,250,0.3); color: #9775FA; }
+  .flashcard-hint {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.8em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-term {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    padding: 20px 0;
+  }
+  .flashcard-definition {
+    font-size: 1.05em;
+    color: #ddd;
+    line-height: 1.7;
+    padding: 20px 0;
+  }
+  .flashcard-label {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .flashcard-front .flashcard-label {
+    background: rgba(233,69,96,0.2);
+    color: var(--accent1);
+  }
+  .flashcard-back .flashcard-label {
+    background: rgba(105,219,124,0.2);
+    color: var(--w4);
+  }
+
+  /* Progress bar for flashcards */
+  .flashcard-progress-bar {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flashcard-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--page-color), var(--w4));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  /* Keyboard shortcut hints */
+  .flashcard-shortcuts {
+    text-align: center;
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 12px;
+  }
+  .flashcard-shortcuts kbd {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+
+  /* Responsive flashcards */
+  @media (max-width: 768px) {
+    .flashcard-toggle-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .flashcard-controls {
+      gap: 8px;
+    }
+    .flashcard-btn {
+      padding: 8px 14px;
+      font-size: 0.85em;
+    }
+    .flashcard-btn.nav-btn {
+      padding: 10px 18px;
+    }
+    .flashcard {
+      min-height: 320px;
+    }
+    .flashcard-face {
+      min-height: 320px;
+      padding: 20px;
+    }
+    .flashcard-term {
+      font-size: 1.1em;
+    }
+    .flashcard-definition {
+      font-size: 0.95em;
+    }
+    .flashcard-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* STUDY TIMER */
+  .study-timer-wrapper {
+    background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98));
+    border-bottom: 2px solid var(--page-color);
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  .study-timer-wrapper.collapsed {
+    max-height: 48px !important;
+  }
+  .study-timer-wrapper.collapsed .timer-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .timer-header:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .timer-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 0.95em;
+  }
+  .timer-header-left .timer-icon {
+    font-size: 1.2em;
+  }
+  .timer-mini-display {
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .study-timer-wrapper.collapsed .timer-mini-display {
+    display: inline-block;
+  }
+  .timer-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--page-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s;
+  }
+  .study-timer-wrapper.collapsed .timer-toggle-btn {
+    transform: rotate(180deg);
+  }
+  .timer-content {
+    padding: 0 20px 20px;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .preset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85em;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .preset-btn.active {
+    border-color: var(--page-color);
+    color: var(--page-color);
+    background: rgba(255,255,255,0.1);
+  }
+  .timer-custom-inputs {
+    display: none;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .timer-custom-inputs.show {
+    display: flex;
+  }
+  .timer-custom-inputs label {
+    font-size: 0.85em;
+    color: #aaa;
+  }
+  .timer-custom-inputs input {
+    width: 60px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .timer-custom-inputs input:focus {
+    outline: none;
+    border-color: var(--page-color);
+  }
+  .timer-display-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .timer-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 3em;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.4);
+    padding: 10px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+    min-width: 200px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .timer-countdown.study-mode {
+    border-color: var(--page-color);
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+  .timer-countdown.break-mode {
+    border-color: var(--correct);
+    color: var(--correct);
+    box-shadow: 0 0 20px rgba(81,207,102,0.2);
+  }
+  .timer-countdown.paused {
+    opacity: 0.6;
+  }
+  .timer-status {
+    font-size: 0.9em;
+    color: #aaa;
+    text-align: center;
+    min-width: 120px;
+  }
+  .timer-status .status-label {
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 1.1em;
+  }
+  .timer-status .status-label.break {
+    color: var(--correct);
+  }
+  .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .timer-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timer-btn.start {
+    background: var(--page-color);
+    color: #000;
+  }
+  .timer-btn.start:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  .timer-btn.pause {
+    background: rgba(255,169,77,0.8);
+    color: #000;
+  }
+  .timer-btn.pause:hover {
+    background: rgba(255,169,77,1);
+  }
+  .timer-btn.reset {
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .timer-btn.reset:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .timer-btn.skip {
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em;
+    padding: 8px 16px;
+  }
+  .timer-btn.skip:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .timer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .timer-stat {
+    text-align: center;
+  }
+  .timer-stat .stat-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--page-color);
+    font-family: 'Courier New', monospace;
+  }
+  .timer-stat .stat-label {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .break-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .break-overlay.show {
+    display: flex;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .break-message {
+    background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2));
+    border: 3px solid var(--correct);
+    border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 500px;
+    margin: 20px;
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .break-message h2 {
+    color: var(--correct);
+    font-size: 1.8em;
+    margin-bottom: 12px;
+  }
+  .break-message p {
+    color: #ccc;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .break-message .break-tip {
+    background: rgba(255,255,255,0.05);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 0.95em;
+    color: #aaa;
+  }
+  .break-message .break-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5em;
+    color: var(--correct);
+    margin: 16px 0;
+  }
+  .break-message button {
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: var(--correct);
+    color: #000;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .break-message button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .timer-countdown {
+      font-size: 2.2em;
+      padding: 8px 20px;
+      min-width: 150px;
+    }
+    .timer-display-section {
+      gap: 12px;
+    }
+    .timer-stats {
+      gap: 16px;
+    }
+    .break-message {
+      padding: 30px 24px;
+    }
+    .break-message h2 {
+      font-size: 1.4em;
+    }
+  }
+/* EXPAND/COLLAPSE ALL */
+.expand-collapse-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  margin: 0 0 16px; padding: 10px 0;
+}
+.expand-collapse-bar button {
+  background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.expand-collapse-bar button:hover {
+  background: var(--page-color); color: #000; border-color: var(--page-color);
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="../index.html" class="home">Home</a>
+  <span class="title">SEAS 8415 MIDTERM</span>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6 active">W6</a>
+  <a href="cheatsheet.html" class="cs">Cheat Sheet</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+</nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">&#9201;</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">&#9660;</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
+<div class="page-hero">
+  <h1>Week 6 — Algorithm Selection &amp; The Origins of AES</h1>
+  <div class="sub">SEAS 8415 · Summer 2026 · Prof. Fossaceca · GWU</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR — Week 6 Key Points</div>
+  <ul>
+    <li><strong>DES replaced by AES</strong> — 56-bit key was too short; brute force became feasible by the 1990s</li>
+    <li><strong>AES Competition (1997-2001)</strong> — open, transparent process; 15 candidates, 5 finalists, Rijndael won</li>
+    <li><strong>Rijndael (AES)</strong> — 128-bit blocks, 128/192/256-bit keys, SPN structure (NOT Feistel)</li>
+    <li><strong>Four AES Round Ops</strong> — SubBytes (confusion), ShiftRows (diffusion), MixColumns (diffusion), AddRoundKey (key mixing)</li>
+    <li><strong>Block Cipher Modes</strong> — ECB is INSECURE; CBC, CTR, GCM are preferred; GCM provides authenticated encryption</li>
+    <li><strong>Shannon's Properties</strong> — Confusion (S-boxes/substitution) + Diffusion (permutation/transposition)</li>
+    <li><strong>Quantum Threat</strong> — Grover's halves effective key length; AES-256 recommended for post-quantum security</li>
+    <li><strong>Algorithm Selection</strong> — Security margin, performance, simplicity, flexibility, peer review (Kerckhoffs' principle)</li>
+  </ul>
+  <div class="tldr-footer">Textbook: Chapter 2, pp. 57-85 | Expand sections below for details</div>
+</div>
+
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- FLASHCARD MODE TOGGLE -->
+<div class="flashcard-toggle-container">
+  <span class="flashcard-toggle-label">Study key concepts with interactive flashcards</span>
+  <button class="flashcard-toggle-btn" id="flashcardToggle" onclick="toggleFlashcardMode()">
+    <span>&#127924;</span> Flashcard Mode
+  </button>
+</div>
+
+<!-- FLASHCARD MODE CONTAINER -->
+<div class="flashcard-mode" id="flashcardMode">
+  <div class="flashcard-header">
+    <div class="flashcard-title">&#127924; Flashcard Mode</div>
+    <div class="flashcard-progress">
+      Card <span class="current" id="flashcardCurrent">1</span> of <span id="flashcardTotal">0</span>
+    </div>
+  </div>
+
+  <div class="flashcard-controls">
+    <button class="flashcard-btn prev nav-btn" id="flashcardPrev" onclick="prevFlashcard()">
+      &larr; Previous
+    </button>
+    <button class="flashcard-btn shuffle" id="flashcardShuffle" onclick="shuffleFlashcards()">
+      &#128256; Shuffle
+    </button>
+    <button class="flashcard-btn next nav-btn" id="flashcardNext" onclick="nextFlashcard()">
+      Next &rarr;
+    </button>
+  </div>
+
+  <div class="flashcard-progress-bar">
+    <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+  </div>
+
+  <div class="flashcard-wrapper">
+    <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+      <div class="flashcard-face flashcard-front">
+        <span class="flashcard-category red" id="flashcardCategory">Key Idea</span>
+        <span class="flashcard-label">Term</span>
+        <div class="flashcard-term" id="flashcardTerm">Loading...</div>
+        <div class="flashcard-hint">Click to flip <span>&circlearrowleft;</span></div>
+      </div>
+      <div class="flashcard-face flashcard-back">
+        <span class="flashcard-label">Definition</span>
+        <div class="flashcard-definition" id="flashcardDefinition">Loading...</div>
+        <div class="flashcard-hint">Click to flip back <span>&circlearrowleft;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flashcard-shortcuts">
+    <kbd>&larr;</kbd> Previous | <kbd>Space</kbd> Flip | <kbd>&rarr;</kbd> Next | <kbd>S</kbd> Shuffle
+  </div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">&#128214; Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">&#128220; Collapse All</button>
+</div>
+
+<!-- Section 1: The Need for a New Standard -->
+<details>
+  <summary>&#128274; 1. The Need for a New Standard: From DES to AES</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> DES became obsolete because its 56-bit key was too short for modern computing power. The search for a replacement led to AES.</div>
+
+    <h3>DES (Data Encryption Standard, 1977)</h3>
+    <ul>
+      <li><strong>Key size:</strong> 56 bits (with 8 parity bits = 64-bit key input)</li>
+      <li><strong>Block size:</strong> 64 bits</li>
+      <li><strong>Structure:</strong> 16-round Feistel cipher</li>
+      <li><strong>Designed with NSA involvement</strong> (behind closed doors)</li>
+    </ul>
+
+    <div class="warn"><strong>Problem:</strong> By the 1990s, DES was vulnerable to brute force. In 1998, the EFF's "Deep Crack" machine broke DES in 56 hours. A 56-bit key means only 2^56 possible keys — insufficient against modern hardware.</div>
+
+    <h3>3DES (Triple DES)</h3>
+    <ul>
+      <li>Applied DES three times with 2 or 3 independent keys</li>
+      <li><em>3DES-EDE</em>: Encrypt-Decrypt-Encrypt with different keys</li>
+      <li>Effective key length: 112 bits (2-key) or 168 bits (3-key)</li>
+      <li>Much slower than DES (3x the computation)</li>
+      <li>A stopgap measure — not a long-term solution</li>
+    </ul>
+
+    <div class="prof"><strong>Prof. Fossaceca:</strong> NIST announced the need for a new standard in 1997 because 3DES was too slow for modern applications and DES was broken. The AES competition was born.</div>
+  </div>
+</details>
+
+<!-- Section 2: The AES Competition -->
+<details>
+  <summary>&#127942; 2. The AES Competition (1997-2001)</summary>
+  <div class="content-section">
+    <div class="key"><strong>Definition:</strong> An open, transparent, international competition run by NIST to select the next standard symmetric encryption algorithm to replace DES.</div>
+
+    <h3>Competition Timeline</h3>
+    <ul>
+      <li><strong>1997:</strong> NIST issues call for proposals</li>
+      <li><strong>1998:</strong> 15 candidate algorithms submitted from around the world</li>
+      <li><strong>1999:</strong> Narrowed to 5 finalists after public analysis</li>
+      <li><strong>2000 (October):</strong> Rijndael selected as AES winner</li>
+      <li><strong>2001:</strong> Published as FIPS 197</li>
+    </ul>
+
+    <h3>Evaluation Criteria</h3>
+    <table>
+      <tr><th>Criterion</th><th>What It Means</th></tr>
+      <tr><td>Security</td><td>Resistance to all known cryptanalytic attacks</td></tr>
+      <tr><td>Performance</td><td>Speed on diverse platforms (32-bit, 64-bit, 8-bit)</td></tr>
+      <tr><td>Efficiency</td><td>Low computational and memory requirements</td></tr>
+      <tr><td>Flexibility</td><td>Support for multiple key and block sizes</td></tr>
+      <tr><td>Simplicity</td><td>Easy to analyze, implement, and verify</td></tr>
+    </table>
+
+    <h3>The 5 Finalists</h3>
+    <table>
+      <tr><th>Algorithm</th><th>Designers</th><th>Country</th><th>Notes</th></tr>
+      <tr><td><strong>Rijndael</strong></td><td>Daemen & Rijmen</td><td>Belgium</td><td>Winner — best overall balance</td></tr>
+      <tr><td>Serpent</td><td>Anderson, Biham, Knudsen</td><td>UK/Israel/Denmark</td><td>Most conservative security margin</td></tr>
+      <tr><td>Twofish</td><td>Schneier et al.</td><td>USA</td><td>Complex key schedule, fast</td></tr>
+      <tr><td>RC6</td><td>Rivest et al.</td><td>USA</td><td>Based on RC5, patented</td></tr>
+      <tr><td>MARS</td><td>IBM</td><td>USA</td><td>Complex, heterogeneous rounds</td></tr>
+    </table>
+
+    <div class="green"><strong>Key Principle:</strong> The open competition model was the opposite of DES (which NSA helped design behind closed doors). Public scrutiny = more trust and better security analysis.</div>
+  </div>
+</details>
+
+<!-- Section 3: Why Rijndael Won -->
+<details>
+  <summary>&#127775; 3. Why Rijndael Won</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Rijndael offered the best balance of security, performance, and simplicity across all platforms.</div>
+
+    <ul>
+      <li><strong>Performance:</strong> Efficient in both hardware and software implementations</li>
+      <li><strong>Low memory requirements:</strong> Suitable for constrained devices (smart cards, embedded systems)</li>
+      <li><strong>Variable key sizes:</strong> 128, 192, or 256 bits</li>
+      <li><strong>Variable block sizes:</strong> Originally supported 128, 192, 256-bit blocks (AES standardized on 128-bit only)</li>
+      <li><strong>Clean mathematical structure:</strong> Based on Galois field arithmetic (GF(2^8))</li>
+      <li><strong>Simplicity:</strong> Easier to analyze for weaknesses than complex alternatives</li>
+      <li><strong>Parallelizable:</strong> Operations can be computed simultaneously in hardware</li>
+    </ul>
+
+    <div class="mem"><small>Memory Aid</small><strong>Rijndael = "Rain-Dahl" (Belgian creators Joan Daemen + Vincent Rijmen)</strong></div>
+
+    <div class="prof"><strong>Prof. Fossaceca:</strong> Serpent had a larger security margin but was significantly slower. The committee valued practical performance alongside security — a real-world standard must be usable everywhere.</div>
+  </div>
+</details>
+
+<!-- Section 4: AES Internals -->
+<details>
+  <summary>&#128295; 4. AES (Rijndael) Internals</summary>
+  <div class="content-section">
+    <div class="key"><strong>Core Parameters:</strong></div>
+    <table>
+      <tr><th>Key Size</th><th>Rounds</th><th>Block Size</th></tr>
+      <tr><td>128-bit</td><td>10 rounds</td><td>128-bit (always)</td></tr>
+      <tr><td>192-bit</td><td>12 rounds</td><td>128-bit (always)</td></tr>
+      <tr><td>256-bit</td><td>14 rounds</td><td>128-bit (always)</td></tr>
+    </table>
+
+    <h3>Four Operations Per Round</h3>
+    <div class="concept-box">
+      <h4>1. SubBytes (Confusion)</h4>
+      <p>Non-linear byte substitution using a fixed S-box. Each byte is independently replaced. Based on multiplicative inverse in GF(2^8). Provides Shannon's <em>confusion</em> property.</p>
+    </div>
+    <div class="concept-box">
+      <h4>2. ShiftRows (Diffusion)</h4>
+      <p>Cyclic left shift of each row by different offsets (row 0: no shift, row 1: shift 1, row 2: shift 2, row 3: shift 3). Spreads bytes across columns for <em>diffusion</em>.</p>
+    </div>
+    <div class="concept-box">
+      <h4>3. MixColumns (Diffusion)</h4>
+      <p>Matrix multiplication of each column in GF(2^8). Each output byte depends on all 4 input bytes in the column. Further <em>diffusion</em>. (Skipped in the final round.)</p>
+    </div>
+    <div class="concept-box">
+      <h4>4. AddRoundKey (Key Mixing)</h4>
+      <p>XOR the state with the round key derived from the key schedule. This is how the secret key enters the computation.</p>
+    </div>
+
+    <div class="ascii-diagram-title">AES Round Structure</div>
+    <div class="ascii-diagram">Plaintext (128 bits)
+     |
+[AddRoundKey] (initial)
+     |
+[SubBytes] --> [ShiftRows] --> [MixColumns] --> [AddRoundKey]  x (Nr-1) rounds
+     |
+[SubBytes] --> [ShiftRows] --> [AddRoundKey]  (final round, no MixColumns)
+     |
+Ciphertext (128 bits)</div>
+
+    <div class="red"><strong>IMPORTANT:</strong> AES uses a Substitution-Permutation Network (SPN) — NOT a Feistel cipher like DES. The entire block is transformed each round.</div>
+  </div>
+</details>
+
+<!-- Section 5: Block Cipher Modes of Operation -->
+<details>
+  <summary>&#128260; 5. Block Cipher Modes of Operation</summary>
+  <div class="content-section">
+    <div class="red"><strong>CRITICAL:</strong> A block cipher alone only encrypts fixed-size blocks. Modes of operation define how to encrypt arbitrary-length messages securely.</div>
+
+    <table>
+      <tr><th>Mode</th><th>How It Works</th><th>Pros</th><th>Cons</th></tr>
+      <tr><td><strong>ECB</strong></td><td>Each block encrypted independently</td><td>Simple, parallelizable</td><td><strong>INSECURE</strong> — patterns visible (penguin example)</td></tr>
+      <tr><td><strong>CBC</strong></td><td>XOR with previous ciphertext block; IV required</td><td>Hides patterns, widely used</td><td>Sequential (not parallelizable), padding needed</td></tr>
+      <tr><td><strong>CTR</strong></td><td>Encrypt counter values, XOR with plaintext</td><td>Parallelizable, no padding, stream-like</td><td>Nonce reuse is catastrophic</td></tr>
+      <tr><td><strong>GCM</strong></td><td>CTR mode + GHASH authentication tag</td><td>Confidentiality AND integrity, fast</td><td>Nonce reuse breaks both properties</td></tr>
+      <tr><td><strong>CFB</strong></td><td>Previous ciphertext fed back as input</td><td>Stream-like, self-synchronizing</td><td>Sequential, error propagation</td></tr>
+      <tr><td><strong>OFB</strong></td><td>Output of cipher fed back as input</td><td>No error propagation</td><td>Sequential, bit-flipping attacks possible</td></tr>
+    </table>
+
+    <div class="warn"><strong>NEVER use ECB for anything!</strong> The famous "ECB Penguin" shows that identical plaintext blocks produce identical ciphertext blocks, revealing image patterns even after encryption.</div>
+
+    <div class="green"><strong>Best Practice:</strong> Use <em>GCM</em> (AES-GCM) whenever possible — it provides authenticated encryption (confidentiality + integrity) and is highly performant.</div>
+  </div>
+</details>
+
+<!-- Section 6: Feistel Ciphers vs SPN -->
+<details>
+  <summary>&#9878; 6. Feistel Ciphers vs. Substitution-Permutation Networks</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Property</th><th>Feistel (DES)</th><th>SPN (AES/Rijndael)</th></tr>
+      <tr><td>Structure</td><td>Split block into halves; apply round function to one half, XOR with other, swap</td><td>Apply substitution and permutation to the entire block</td></tr>
+      <tr><td>Encryption/Decryption</td><td>Same structure for both (reverse key schedule only)</td><td>Different operations (must compute inverses for decryption)</td></tr>
+      <tr><td>Per-round transformation</td><td>Only half the block changes per round</td><td>Entire block changes each round</td></tr>
+      <tr><td>Example ciphers</td><td>DES, 3DES, Blowfish, Twofish</td><td>AES, Serpent, PRESENT</td></tr>
+      <tr><td>Security approach</td><td>Many rounds needed (16 in DES)</td><td>Fewer rounds needed due to full-block diffusion</td></tr>
+    </table>
+
+    <div class="mem"><small>Memory Aid</small><strong>Feistel = "Half and Swap" | SPN = "Sub and Perm the Whole Thing"</strong></div>
+  </div>
+</details>
+
+<!-- Section 7: S-Boxes -->
+<details>
+  <summary>&#128230; 7. S-Boxes (Substitution Boxes)</summary>
+  <div class="content-section">
+    <div class="key"><strong>Definition:</strong> Non-linear lookup tables that map input bits to output bits, providing the crucial <em>confusion</em> property in block ciphers.</div>
+
+    <ul>
+      <li><strong>Purpose:</strong> Create complex, non-linear relationship between key and ciphertext</li>
+      <li><strong>DES S-boxes:</strong> 6 bits in, 4 bits out (8 different S-boxes). Designed by NSA — initially controversial because design criteria were secret.</li>
+      <li><strong>AES S-box:</strong> 8 bits in, 8 bits out (single S-box). Based on multiplicative inverse in GF(2^8) followed by an affine transformation. Mathematically defined and publicly verifiable.</li>
+    </ul>
+
+    <div class="red"><strong>Critical for Security:</strong> Weak S-boxes can make an entire cipher vulnerable to differential and linear cryptanalysis. The non-linearity of S-boxes is what prevents algebraic attacks.</div>
+
+    <div class="prof"><strong>Prof. Fossaceca:</strong> The AES S-box design is completely transparent — no "nothing up my sleeve" concerns. You can verify it yourself using the mathematical definition. This is a major advantage over DES.</div>
+  </div>
+</details>
+
+<!-- Section 8: Confusion and Diffusion -->
+<details>
+  <summary>&#128256; 8. Confusion and Diffusion (Shannon)</summary>
+  <div class="content-section">
+    <div class="key"><strong>Claude Shannon (1949)</strong> identified two fundamental properties that secure ciphers must provide:</div>
+
+    <div class="concept-box">
+      <h4>Confusion</h4>
+      <p>Each bit of ciphertext should depend on <strong>several parts of the key</strong>. Makes the relationship between key and ciphertext as complex as possible.</p>
+      <p><strong>Achieved by:</strong> Substitution operations (S-boxes)</p>
+      <p><strong>In AES:</strong> SubBytes step</p>
+    </div>
+
+    <div class="concept-box">
+      <h4>Diffusion</h4>
+      <p>Each bit of plaintext should affect <strong>many bits of ciphertext</strong>. A single bit change in plaintext should change approximately half of ciphertext bits.</p>
+      <p><strong>Achieved by:</strong> Permutation and transposition operations</p>
+      <p><strong>In AES:</strong> ShiftRows and MixColumns steps</p>
+    </div>
+
+    <div class="warn"><strong>Without confusion:</strong> The relationship between key and ciphertext is too simple — attacker can deduce key bits.</div>
+    <div class="warn"><strong>Without diffusion:</strong> Local changes in plaintext only affect local ciphertext — attacker can isolate and attack small portions independently.</div>
+
+    <div class="mem"><small>Memory Aid</small><strong>Confusion = "Con-fuse the key" (S-boxes) | Diffusion = "Diff-use the plaintext" (permutations)</strong></div>
+  </div>
+</details>
+
+<!-- Section 9: Key Size and Security Levels -->
+<details>
+  <summary>&#128272; 9. Key Size and Security Levels</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>AES Variant</th><th>Key Space</th><th>Security Level</th><th>Use Case</th></tr>
+      <tr><td>AES-128</td><td>2^128 keys</td><td>128-bit security</td><td>Most commercial applications</td></tr>
+      <tr><td>AES-192</td><td>2^192 keys</td><td>192-bit security</td><td>Extra margin applications</td></tr>
+      <tr><td>AES-256</td><td>2^256 keys</td><td>256-bit security</td><td>Classified data, long-term security</td></tr>
+    </table>
+
+    <h3>Comparative Security Strengths</h3>
+    <ul>
+      <li>AES-128 is approximately equivalent to RSA-3072 in security strength</li>
+      <li>AES-256 is approximately equivalent to RSA-15360</li>
+    </ul>
+
+    <h3>Quantum Computing Threat</h3>
+    <div class="red"><strong>Grover's Algorithm:</strong> Provides quadratic speedup for brute-force search. Effectively halves the key length:
+    <ul>
+      <li>AES-128 becomes 64-bit security (BROKEN post-quantum)</li>
+      <li>AES-192 becomes 96-bit security (marginal)</li>
+      <li>AES-256 becomes 128-bit security (still secure)</li>
+    </ul>
+    </div>
+
+    <div class="green"><strong>NIST Recommendation:</strong> Use AES-256 for long-term security and post-quantum resilience. It maintains 128-bit security even against quantum adversaries.</div>
+  </div>
+</details>
+
+<!-- Section 10: Algorithm Selection Criteria -->
+<details>
+  <summary>&#128203; 10. Algorithm Selection Criteria</summary>
+  <div class="content-section">
+    <div class="key"><strong>How to choose a cryptographic algorithm for your system:</strong></div>
+
+    <table>
+      <tr><th>Criterion</th><th>Questions to Ask</th></tr>
+      <tr><td><strong>Security margin</strong></td><td>How far beyond known attacks? Has it survived years of cryptanalysis?</td></tr>
+      <tr><td><strong>Performance</strong></td><td>Speed on target platforms? Hardware acceleration available (AES-NI)?</td></tr>
+      <tr><td><strong>Simplicity</strong></td><td>Is it easy to implement correctly? Fewer implementation bugs?</td></tr>
+      <tr><td><strong>Flexibility</strong></td><td>Multiple key/block sizes? Adaptable to different use cases?</td></tr>
+      <tr><td><strong>Resource requirements</strong></td><td>Memory, power consumption, die area for embedded/IoT?</td></tr>
+      <tr><td><strong>Existing cryptanalysis</strong></td><td>How well-studied? More analysis = more confidence.</td></tr>
+      <tr><td><strong>Standardization</strong></td><td>NIST/ISO approved? Peer-reviewed? Open design?</td></tr>
+    </table>
+
+    <div class="red"><strong>Kerckhoffs' Principle:</strong> A cryptosystem should be secure even if everything about the system, except the key, is public knowledge. Security through obscurity is NOT security.</div>
+
+    <div class="prof"><strong>Prof. Fossaceca:</strong> Never roll your own crypto. Always use well-analyzed, standardized algorithms. The AES competition is the gold standard for how algorithm selection should work — open, transparent, global peer review.</div>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+    <div class="quiz-section">
+      <h2>&#127919; Week 6 — Test Yourself (15 Questions)</h2>
+      <div class="quiz-score-bar">
+        <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</span>
+        <div class="score-fill-track"><div class="score-fill"></div></div>
+        <div class="streak-display"><span class="streak-icon">&#128293;</span> Streak: <span class="streak-count">0</span></div>
+        <button class="quiz-reset-btn">Reset Quiz</button>
+      </div>
+      <div class="difficulty-toggle">
+        <label>Difficulty:</label>
+        <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+        <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+        <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+        <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
+        <p><span class="qnum">1</span> Why was DES replaced by AES?</p>
+        <div class="options">
+          <div class="opt">DES's 56-bit key was too short and vulnerable to brute force attacks</div>
+          <div class="opt">DES was too slow for modern hardware</div>
+          <div class="opt">DES had a backdoor discovered by researchers</div>
+          <div class="opt">DES could only encrypt text, not binary data</div>
+        </div>
+        <div class="explanation">DES's 56-bit key meant only 2^56 possible keys. By 1998, specialized hardware could break DES in under 3 days. The key space was simply too small for modern computing power.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
+        <p><span class="qnum">2</span> Who designed Rijndael (AES)?</p>
+        <div class="options">
+          <div class="opt">Bruce Schneier and Niels Ferguson from the USA</div>
+          <div class="opt">Joan Daemen and Vincent Rijmen from Belgium</div>
+          <div class="opt">Ron Rivest and Adi Shamir from Israel</div>
+          <div class="opt">The NSA designed it in secret</div>
+        </div>
+        <div class="explanation">Joan Daemen and Vincent Rijmen from Belgium created Rijndael. The name is a portmanteau of their surnames (Rijmen + Daemen).</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
+        <p><span class="qnum">3</span> Which block cipher mode is considered INSECURE because identical plaintext blocks produce identical ciphertext?</p>
+        <div class="options">
+          <div class="opt">ECB (Electronic Codebook)</div>
+          <div class="opt">CBC (Cipher Block Chaining)</div>
+          <div class="opt">CTR (Counter Mode)</div>
+          <div class="opt">GCM (Galois/Counter Mode)</div>
+        </div>
+        <div class="explanation">ECB encrypts each block independently, so identical plaintext blocks always produce identical ciphertext blocks. This reveals patterns — famously demonstrated with the "ECB Penguin" image.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
+        <p><span class="qnum">4</span> AES uses which internal structure?</p>
+        <div class="options">
+          <div class="opt">Feistel network (like DES)</div>
+          <div class="opt">Stream cipher with feedback</div>
+          <div class="opt">Substitution-Permutation Network (SPN)</div>
+          <div class="opt">Unbalanced Feistel network</div>
+        </div>
+        <div class="explanation">AES uses a Substitution-Permutation Network (SPN) where the entire block is transformed each round through substitution (SubBytes) and permutation (ShiftRows, MixColumns) operations.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2" data-difficulty="medium">
+        <p><span class="qnum">5</span> How many rounds does AES-256 use?</p>
+        <div class="options">
+          <div class="opt">10 rounds</div>
+          <div class="opt">12 rounds</div>
+          <div class="opt">14 rounds</div>
+          <div class="opt">16 rounds</div>
+        </div>
+        <div class="explanation">AES-128 uses 10 rounds, AES-192 uses 12 rounds, and AES-256 uses 14 rounds. More rounds = more security but slightly slower performance.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
+        <p><span class="qnum">6</span> GCM mode provides:</p>
+        <div class="options">
+          <div class="opt">Only confidentiality (encryption without authentication)</div>
+          <div class="opt">Both confidentiality and integrity (authenticated encryption)</div>
+          <div class="opt">Only integrity (like a hash function)</div>
+          <div class="opt">Only authentication (like a digital signature)</div>
+        </div>
+        <div class="explanation">GCM (Galois/Counter Mode) combines CTR mode encryption with a GHASH authentication tag, providing both confidentiality AND integrity in a single operation — this is called authenticated encryption.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
+        <p><span class="qnum">7</span> S-boxes provide which of Shannon's properties?</p>
+        <div class="options">
+          <div class="opt">Confusion</div>
+          <div class="opt">Diffusion</div>
+          <div class="opt">Both confusion and diffusion equally</div>
+          <div class="opt">Neither — they provide authentication</div>
+        </div>
+        <div class="explanation">S-boxes provide confusion — they create a complex, non-linear relationship between the key and ciphertext. Diffusion is provided by permutation operations like ShiftRows and MixColumns.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1" data-difficulty="easy">
+        <p><span class="qnum">8</span> The AES competition had how many initial candidate algorithms?</p>
+        <div class="options">
+          <div class="opt">5</div>
+          <div class="opt">15</div>
+          <div class="opt">21</div>
+          <div class="opt">50</div>
+        </div>
+        <div class="explanation">15 candidate algorithms were submitted from around the world. These were narrowed to 5 finalists (Rijndael, Serpent, Twofish, RC6, MARS) before Rijndael was selected.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="3" data-difficulty="medium">
+        <p><span class="qnum">9</span> Which was NOT an AES finalist?</p>
+        <div class="options">
+          <div class="opt">Serpent</div>
+          <div class="opt">Twofish</div>
+          <div class="opt">RC6</div>
+          <div class="opt">Blowfish</div>
+        </div>
+        <div class="explanation">The 5 AES finalists were Rijndael, Serpent, Twofish, RC6, and MARS. Blowfish (also by Bruce Schneier) was NOT a finalist — Twofish was its successor designed for the AES competition.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="medium">
+        <p><span class="qnum">10</span> What makes AES different from DES structurally?</p>
+        <div class="options">
+          <div class="opt">AES uses SPN while DES uses a Feistel network</div>
+          <div class="opt">AES uses a Feistel network while DES uses SPN</div>
+          <div class="opt">Both use the same SPN structure but different key sizes</div>
+          <div class="opt">AES is a stream cipher while DES is a block cipher</div>
+        </div>
+        <div class="explanation">AES uses a Substitution-Permutation Network (SPN) that transforms the entire block each round. DES uses a Feistel network that splits the block in half and only transforms one half per round.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
+        <p><span class="qnum">11</span> In AES, the SubBytes step provides:</p>
+        <div class="options">
+          <div class="opt">Linear permutation for diffusion</div>
+          <div class="opt">Non-linear substitution using the S-box for confusion</div>
+          <div class="opt">Key mixing via XOR</div>
+          <div class="opt">Row shifting for byte spreading</div>
+        </div>
+        <div class="explanation">SubBytes applies a non-linear substitution to each byte using the AES S-box (based on multiplicative inverse in GF(2^8)). This non-linearity provides Shannon's confusion property.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="easy">
+        <p><span class="qnum">12</span> CBC mode requires what additional input?</p>
+        <div class="options">
+          <div class="opt">An Initialization Vector (IV)</div>
+          <div class="opt">A second encryption key</div>
+          <div class="opt">A hash of the plaintext</div>
+          <div class="opt">A digital signature</div>
+        </div>
+        <div class="explanation">CBC mode XORs each plaintext block with the previous ciphertext block. For the first block, there is no previous ciphertext, so an Initialization Vector (IV) is used. The IV should be random and unpredictable.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="2" data-difficulty="hard">
+        <p><span class="qnum">13</span> Grover's algorithm impacts AES by:</p>
+        <div class="options">
+          <div class="opt">Breaking AES entirely regardless of key size</div>
+          <div class="opt">Having no effect on symmetric encryption</div>
+          <div class="opt">Halving the effective key length, making AES-128 equivalent to 64-bit security post-quantum</div>
+          <div class="opt">Only affecting AES-256 but not AES-128</div>
+        </div>
+        <div class="explanation">Grover's algorithm provides a quadratic speedup for searching, effectively halving key lengths. AES-128 drops to 64-bit security (insecure), while AES-256 drops to 128-bit security (still secure). This is why NIST recommends AES-256 for post-quantum resilience.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="1" data-difficulty="medium">
+        <p><span class="qnum">14</span> Diffusion in a block cipher is achieved by:</p>
+        <div class="options">
+          <div class="opt">S-box substitution operations</div>
+          <div class="opt">Permutation operations like ShiftRows and MixColumns</div>
+          <div class="opt">XOR with the round key</div>
+          <div class="opt">Key schedule generation</div>
+        </div>
+        <div class="explanation">Diffusion spreads plaintext bits across the ciphertext. In AES, ShiftRows moves bytes across columns, and MixColumns mixes bytes within each column — both are permutation/mixing operations that achieve diffusion.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="0" data-difficulty="hard">
+        <p><span class="qnum">15</span> Why was the AES competition run as an open public process?</p>
+        <div class="options">
+          <div class="opt">To ensure worldwide scrutiny and transparency, unlike the closed DES design process with NSA involvement</div>
+          <div class="opt">Because NIST lacked the expertise to design a cipher internally</div>
+          <div class="opt">To save money on research and development costs</div>
+          <div class="opt">Because US law required public competitions for all standards</div>
+        </div>
+        <div class="explanation">DES was designed with secret NSA involvement, creating lasting suspicion about backdoors. The AES competition deliberately chose transparency — worldwide experts could analyze all candidates publicly, building trust and confidence in the final selection.</div>
+      </div>
+    </div>
+</div>
+
+<script>
+(function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('\u{1F525} 3 in a row!');
+            else if (streak === 5) { showEncouragement('\u26A1 FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('\u{1F3C6} UNSTOPPABLE!'); showConfetti(); }
+            else if (streak === 15) { showEncouragement('\u{1F451} PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">\u2713 Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">\u2717 Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+<!-- FLASHCARD MODE SCRIPT -->
+<script>
+(function() {
+  let flashcards = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+
+  function getFlashcardData() {
+    return [
+      { term: "AES (Advanced Encryption Standard)", definition: "Symmetric block cipher selected in 2000 to replace DES. Uses 128-bit blocks with 128/192/256-bit keys and a Substitution-Permutation Network structure.", category: "blue", label: "Definition" },
+      { term: "DES Vulnerability", definition: "DES's 56-bit key was too short. By 1998, brute force attacks could break it in hours. This drove the need for AES.", category: "red", label: "Key Idea" },
+      { term: "Rijndael", definition: "The algorithm selected as AES, designed by Joan Daemen and Vincent Rijmen from Belgium. Won due to best balance of security, performance, and simplicity.", category: "blue", label: "Definition" },
+      { term: "SubBytes", definition: "AES round operation that performs non-linear byte substitution using an S-box based on multiplicative inverse in GF(2^8). Provides confusion.", category: "purple", label: "AES Internal" },
+      { term: "ShiftRows", definition: "AES round operation that cyclically shifts rows by different offsets. Provides diffusion by spreading bytes across columns.", category: "purple", label: "AES Internal" },
+      { term: "MixColumns", definition: "AES round operation that performs matrix multiplication on each column in GF(2^8). Provides further diffusion. Skipped in the final round.", category: "purple", label: "AES Internal" },
+      { term: "ECB Mode (INSECURE)", definition: "Electronic Codebook mode encrypts each block independently. Identical plaintext blocks produce identical ciphertext, revealing patterns. Never use this!", category: "red", label: "Key Idea" },
+      { term: "GCM Mode", definition: "Galois/Counter Mode combines CTR encryption with GHASH authentication. Provides both confidentiality AND integrity (authenticated encryption).", category: "green", label: "Best Practice" },
+      { term: "Confusion (Shannon)", definition: "Each bit of ciphertext depends on several parts of the key. Achieved by substitution/S-boxes. Makes key-ciphertext relationship complex.", category: "blue", label: "Definition" },
+      { term: "Diffusion (Shannon)", definition: "Each bit of plaintext affects many bits of ciphertext. Achieved by permutation operations. A 1-bit change should flip ~50% of output bits.", category: "blue", label: "Definition" },
+      { term: "Feistel vs. SPN", definition: "Feistel (DES): splits block in half, transforms one half per round. SPN (AES): transforms entire block each round. SPN needs fewer rounds for full diffusion.", category: "orange", label: "Comparison" },
+      { term: "Grover's Algorithm", definition: "Quantum algorithm that halves effective key length for symmetric ciphers. AES-128 drops to 64-bit security; AES-256 drops to 128-bit (still secure).", category: "red", label: "Key Idea" },
+      { term: "Kerckhoffs' Principle", definition: "A cryptosystem should be secure even if everything except the key is public knowledge. Security through obscurity is not real security.", category: "green", label: "Best Practice" },
+      { term: "S-Box", definition: "Substitution Box: a non-linear lookup table that maps input bits to output bits. Critical for providing confusion. Weak S-boxes break the entire cipher.", category: "blue", label: "Definition" },
+      { term: "AES Competition Model", definition: "Open, transparent, international process (1997-2001). 15 candidates, 5 finalists, public analysis. Opposite of DES's closed NSA-involved design.", category: "green", label: "Best Practice" }
+    ];
+  }
+
+  function initFlashcards() {
+    flashcards = getFlashcardData();
+    document.getElementById('flashcardTotal').textContent = flashcards.length;
+    if (flashcards.length > 0) {
+      showFlashcard(0);
+    }
+  }
+
+  function showFlashcard(index) {
+    if (flashcards.length === 0) return;
+
+    currentIndex = index;
+    const card = flashcards[index];
+
+    isFlipped = false;
+    document.getElementById('flashcard').classList.remove('flipped');
+
+    document.getElementById('flashcardTerm').textContent = card.term;
+    document.getElementById('flashcardDefinition').textContent = card.definition;
+
+    const categoryEl = document.getElementById('flashcardCategory');
+    categoryEl.textContent = card.label;
+    categoryEl.className = 'flashcard-category ' + card.category;
+
+    document.getElementById('flashcardCurrent').textContent = index + 1;
+    const progressPercent = ((index + 1) / flashcards.length) * 100;
+    document.getElementById('flashcardProgressFill').style.width = progressPercent + '%';
+
+    document.getElementById('flashcardPrev').disabled = index === 0;
+    document.getElementById('flashcardNext').disabled = index === flashcards.length - 1;
+  }
+
+  window.flipFlashcard = function() {
+    isFlipped = !isFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  };
+
+  window.prevFlashcard = function() {
+    if (currentIndex > 0) {
+      showFlashcard(currentIndex - 1);
+    }
+  };
+
+  window.nextFlashcard = function() {
+    if (currentIndex < flashcards.length - 1) {
+      showFlashcard(currentIndex + 1);
+    }
+  };
+
+  window.shuffleFlashcards = function() {
+    for (let i = flashcards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+    }
+    showFlashcard(0);
+
+    const btn = document.getElementById('flashcardShuffle');
+    btn.textContent = '\u2713 Shuffled!';
+    setTimeout(() => {
+      btn.innerHTML = '&#128256; Shuffle';
+    }, 1000);
+  };
+
+  window.toggleFlashcardMode = function() {
+    const mode = document.getElementById('flashcardMode');
+    const btn = document.getElementById('flashcardToggle');
+    const isActive = mode.classList.toggle('active');
+    btn.classList.toggle('active', isActive);
+
+    if (isActive && flashcards.length === 0) {
+      initFlashcards();
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    const mode = document.getElementById('flashcardMode');
+    if (!mode.classList.contains('active')) return;
+
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        prevFlashcard();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextFlashcard();
+        break;
+      case ' ':
+        e.preventDefault();
+        flipFlashcard();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        shuffleFlashcards();
+        break;
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlashcards);
+  } else {
+    initFlashcards();
+  }
+})();
+
+// DIFFICULTY FILTER
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
+// STUDY TIMER
+(function() {
+  let timerState = {
+    studyMinutes: 25,
+    breakMinutes: 5,
+    secondsRemaining: 25 * 60,
+    isRunning: false,
+    isBreak: false,
+    totalStudySeconds: 0,
+    sessionsCompleted: 0,
+    currentStreak: 0,
+    intervalId: null
+  };
+
+  const presets = {
+    pomodoro: { study: 25, break: 5 },
+    short: { study: 15, break: 3 },
+    custom: { study: 25, break: 5 }
+  };
+
+  const breakMessages = [
+    { title: "Time for a Break!", text: "Great focus session! You've earned this rest." },
+    { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." },
+    { title: "Break Time!", text: "Step away, stretch, and come back refreshed." },
+    { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." },
+    { title: "Rest Up!", text: "A short break now means better focus later." },
+    { title: "You Did It!", text: "Another session down! Keep up the great work." }
+  ];
+
+  const breakTips = [
+    "Stand up and stretch your legs for a minute.",
+    "Look away from the screen - focus on something 20 feet away.",
+    "Grab a glass of water to stay hydrated.",
+    "Do some shoulder rolls to release tension.",
+    "Take a few deep breaths to reset your focus.",
+    "Walk around the room or do some light movement.",
+    "Close your eyes and rest them for 30 seconds.",
+    "Snack on something healthy if you're hungry."
+  ];
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function formatTotalTime(seconds) {
+    if (seconds >= 3600) {
+      const hours = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${mins}m`;
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function updateDisplay() {
+    const countdown = document.getElementById('timerCountdown');
+    const miniDisplay = document.getElementById('timerMiniDisplay');
+    const statusLabel = document.getElementById('timerStatusLabel');
+    const statusText = document.getElementById('timerStatusText');
+    const startPauseBtn = document.getElementById('startPauseBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const totalStudyEl = document.getElementById('totalStudyTime');
+    const sessionsEl = document.getElementById('sessionsCompleted');
+    const streakEl = document.getElementById('currentStreak');
+    const breakCountdown = document.getElementById('breakCountdown');
+
+    const timeStr = formatTime(timerState.secondsRemaining);
+    countdown.textContent = timeStr;
+    miniDisplay.textContent = timeStr;
+
+    totalStudyEl.textContent = formatTotalTime(timerState.totalStudySeconds);
+    sessionsEl.textContent = timerState.sessionsCompleted;
+    streakEl.textContent = timerState.currentStreak;
+
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) {
+      countdown.classList.add('break-mode');
+      statusLabel.textContent = 'BREAK';
+      statusLabel.classList.add('break');
+      statusText.textContent = 'Relax and recharge';
+      skipBtn.textContent = 'End Break';
+      breakCountdown.textContent = timeStr;
+    } else if (timerState.isRunning) {
+      countdown.classList.add('study-mode');
+      statusLabel.textContent = 'STUDYING';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Stay focused!';
+      skipBtn.textContent = 'Skip to Break';
+    } else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) {
+      countdown.classList.add('paused');
+      statusLabel.textContent = 'PAUSED';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to resume';
+    } else {
+      statusLabel.textContent = 'READY';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to begin';
+    }
+
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start';
+    startPauseBtn.classList.toggle('pause', timerState.isRunning);
+    startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+
+  function playNotification() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const playTone = (freq, startTime, duration) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+      };
+      const now = audioContext.currentTime;
+      playTone(523.25, now, 0.3);
+      playTone(659.25, now + 0.15, 0.3);
+      playTone(783.99, now + 0.3, 0.4);
+    } catch (e) {
+      const countdown = document.getElementById('timerCountdown');
+      countdown.style.animation = 'none';
+      setTimeout(() => {
+        countdown.style.animation = 'pulse 0.5s ease-in-out 3';
+      }, 10);
+    }
+  }
+
+  function showBreakOverlay() {
+    const overlay = document.getElementById('breakOverlay');
+    const titleEl = document.getElementById('breakTitle');
+    const textEl = document.getElementById('breakEncouragement');
+    const tipEl = document.getElementById('breakTip');
+
+    const message = breakMessages[Math.floor(Math.random() * breakMessages.length)];
+    const tip = breakTips[Math.floor(Math.random() * breakTips.length)];
+
+    titleEl.textContent = message.title;
+    textEl.textContent = message.text;
+    tipEl.textContent = tip;
+
+    overlay.classList.add('show');
+  }
+
+  function tick() {
+    if (!timerState.isRunning) return;
+
+    timerState.secondsRemaining--;
+
+    if (!timerState.isBreak) {
+      timerState.totalStudySeconds++;
+    }
+
+    updateDisplay();
+
+    if (timerState.secondsRemaining <= 0) {
+      playNotification();
+
+      if (timerState.isBreak) {
+        timerState.isBreak = false;
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+        timerState.currentStreak++;
+        dismissBreak();
+      } else {
+        timerState.sessionsCompleted++;
+        timerState.isBreak = true;
+        timerState.secondsRemaining = timerState.breakMinutes * 60;
+        showBreakOverlay();
+      }
+      updateDisplay();
+    }
+  }
+
+  window.toggleTimer = function() {
+    if (timerState.isRunning) {
+      timerState.isRunning = false;
+      clearInterval(timerState.intervalId);
+    } else {
+      timerState.isRunning = true;
+      timerState.intervalId = setInterval(tick, 1000);
+    }
+    updateDisplay();
+  };
+
+  window.resetTimer = function() {
+    timerState.isRunning = false;
+    timerState.isBreak = false;
+    clearInterval(timerState.intervalId);
+    timerState.secondsRemaining = timerState.studyMinutes * 60;
+    dismissBreak();
+    updateDisplay();
+  };
+
+  window.skipToBreak = function() {
+    if (timerState.isBreak) {
+      timerState.isBreak = false;
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+      timerState.currentStreak++;
+      dismissBreak();
+    } else {
+      timerState.sessionsCompleted++;
+      timerState.isBreak = true;
+      timerState.secondsRemaining = timerState.breakMinutes * 60;
+      showBreakOverlay();
+    }
+    updateDisplay();
+  };
+
+  window.dismissBreak = function() {
+    document.getElementById('breakOverlay').classList.remove('show');
+  };
+
+  window.setPreset = function(presetName) {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === presetName);
+    });
+
+    document.getElementById('customInputs').classList.toggle('show', presetName === 'custom');
+
+    if (presetName !== 'custom') {
+      const preset = presets[presetName];
+      timerState.studyMinutes = preset.study;
+      timerState.breakMinutes = preset.break;
+      if (!timerState.isRunning && !timerState.isBreak) {
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+      }
+      updateDisplay();
+    }
+  };
+
+  window.applyCustom = function() {
+    const studyInput = document.getElementById('customStudy');
+    const breakInput = document.getElementById('customBreak');
+
+    const study = Math.max(1, Math.min(120, parseInt(studyInput.value) || 25));
+    const breakTime = Math.max(1, Math.min(30, parseInt(breakInput.value) || 5));
+
+    studyInput.value = study;
+    breakInput.value = breakTime;
+
+    timerState.studyMinutes = study;
+    timerState.breakMinutes = breakTime;
+    presets.custom = { study, break: breakTime };
+
+    if (!timerState.isRunning && !timerState.isBreak) {
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+    }
+    updateDisplay();
+  };
+
+  window.toggleStudyTimer = function() {
+    document.getElementById('studyTimerWrapper').classList.toggle('collapsed');
+  };
+
+  updateDisplay();
+
+  setInterval(() => {
+    if (timerState.totalStudySeconds > 0) {
+      localStorage.setItem('studyTimerStats', JSON.stringify({
+        totalStudySeconds: timerState.totalStudySeconds,
+        sessionsCompleted: timerState.sessionsCompleted,
+        date: new Date().toDateString()
+      }));
+    }
+  }, 30000);
+
+  const saved = localStorage.getItem('studyTimerStats');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.date === new Date().toDateString()) {
+        timerState.totalStudySeconds = data.totalStudySeconds || 0;
+        timerState.sessionsCompleted = data.sessionsCompleted || 0;
+        updateDisplay();
+      }
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">8</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="56" data-alt="56-bit,56 bit">
+    <p class="fb-question"><span class="fb-num">1</span> DES was vulnerable because its key was only <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> bits long, making brute force attacks feasible.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Rijndael" data-alt="rijndael">
+    <p class="fb-question"><span class="fb-num">2</span> The algorithm <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> was selected as AES in October 2000, designed by Joan Daemen and Vincent Rijmen.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ECB" data-alt="electronic codebook">
+    <p class="fb-question"><span class="fb-num">3</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> mode is insecure because identical plaintext blocks produce identical ciphertext blocks, revealing patterns.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="confusion" data-alt="shannon's confusion">
+    <p class="fb-question"><span class="fb-num">4</span> S-boxes provide <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>, making the relationship between the key and ciphertext complex and non-linear.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="14" data-alt="fourteen">
+    <p class="fb-question"><span class="fb-num">5</span> AES-256 uses <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> rounds of encryption to process each block.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="GCM" data-alt="galois counter mode,galois/counter mode">
+    <p class="fb-question"><span class="fb-num">6</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> mode provides both confidentiality and integrity by combining CTR encryption with an authentication tag.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="SPN" data-alt="substitution-permutation network,substitution permutation network">
+    <p class="fb-question"><span class="fb-num">7</span> AES uses a <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> structure (not Feistel), where the entire block is transformed each round.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="Grover" data-alt="grover's,grovers">
+    <p class="fb-question"><span class="fb-num">8</span> <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>'s algorithm halves the effective key length of symmetric ciphers, making AES-256 recommended for post-quantum security.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  /* Fill-in-the-Blank Styles */
+  .fill-blank-section {
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 2px solid var(--page-color);
+  }
+  .fill-blank-section h2 {
+    color: var(--page-color);
+    margin-bottom: 8px;
+    font-size: 1.3em;
+  }
+  .fill-blank-intro {
+    color: #aaa;
+    font-size: 0.95em;
+    margin-bottom: 16px;
+  }
+  .fill-blank-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+  }
+  .fb-score-text {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: var(--page-color);
+  }
+  .fb-score-fill-track {
+    flex: 1;
+    min-width: 120px;
+    height: 18px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .fb-score-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .fb-check-all-btn, .fb-reset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .fb-check-all-btn:hover {
+    background: var(--page-color);
+    color: #000;
+  }
+  .fb-reset-btn {
+    border-color: #666;
+    color: #aaa;
+  }
+  .fb-reset-btn:hover {
+    border-color: #888;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .fill-blank-item {
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    border-left: 4px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .fill-blank-item.correct {
+    border-left-color: var(--correct);
+    background: rgba(81,207,102,0.1);
+  }
+  .fill-blank-item.wrong {
+    border-left-color: var(--wrong);
+    background: rgba(255,107,107,0.1);
+  }
+  .fb-question {
+    font-size: 1em;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .fb-num {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--page-color);
+    color: #000;
+    border-radius: 50%;
+    font-size: 0.75em;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+  .fb-blank-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .fb-input {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 0.95em;
+    min-width: 120px;
+    max-width: 200px;
+    transition: all 0.2s;
+  }
+  .fb-input:focus {
+    outline: none;
+    border-color: var(--page-color);
+    background: rgba(0,0,0,0.6);
+  }
+  .fb-input.correct {
+    border-color: var(--correct);
+    background: rgba(81,207,102,0.2);
+    color: var(--correct);
+  }
+  .fb-input.wrong {
+    border-color: var(--wrong);
+    background: rgba(255,107,107,0.2);
+  }
+  .fb-input:disabled {
+    opacity: 0.8;
+  }
+  .fb-hint-btn, .fb-check-btn {
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fb-hint-btn:hover {
+    background: rgba(255,212,59,0.2);
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .fb-check-btn:hover {
+    background: rgba(77,171,247,0.2);
+    border-color: var(--w5);
+    color: var(--w5);
+  }
+  .fb-feedback {
+    margin-top: 8px;
+    font-size: 0.9em;
+    min-height: 20px;
+  }
+  .fb-feedback.correct {
+    color: var(--correct);
+  }
+  .fb-feedback.wrong {
+    color: var(--wrong);
+  }
+  @media (max-width: 768px) {
+    .fill-blank-score-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .fb-score-fill-track {
+      width: 100%;
+    }
+    .fb-blank-wrapper {
+      display: flex;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .fb-input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+
+  function updateFbScore() {
+    const scoreEl = document.querySelector('.fb-score-correct');
+    const fillEl = document.querySelector('.fb-score-fill');
+    const totalEl = document.querySelector('.fb-score-total');
+    if (scoreEl) scoreEl.textContent = fbCorrect;
+    if (totalEl) totalEl.textContent = fbTotal;
+    if (fillEl && fbTotal > 0) {
+      fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%';
+    }
+  }
+
+  window.showHint = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const answer = item.dataset.answer.toLowerCase();
+
+    if (input.value.length === 0) {
+      const hint = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1));
+      input.placeholder = hint;
+      input.focus();
+    } else {
+      const currentLen = input.value.length;
+      if (currentLen < answer.length) {
+        input.value = answer.substring(0, currentLen + 1);
+        input.focus();
+      }
+    }
+  };
+
+  window.checkBlank = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const feedback = item.querySelector('.fb-feedback');
+    const answer = item.dataset.answer.toLowerCase();
+    const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : [];
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if (item.classList.contains('checked')) return;
+
+    const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer);
+
+    item.classList.add('checked');
+    input.disabled = true;
+
+    if (isCorrect) {
+      item.classList.add('correct');
+      input.classList.add('correct');
+      feedback.classList.add('correct');
+      feedback.innerHTML = '<strong>Correct!</strong>';
+      fbCorrect++;
+    } else {
+      item.classList.add('wrong');
+      input.classList.add('wrong');
+      feedback.classList.add('wrong');
+      feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer;
+    }
+
+    updateFbScore();
+  };
+
+  window.checkAllBlanks = function() {
+    fbItems.forEach(item => {
+      if (!item.classList.contains('checked')) {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  };
+
+  window.resetAllBlanks = function() {
+    fbCorrect = 0;
+    fbItems.forEach(item => {
+      item.classList.remove('checked', 'correct', 'wrong');
+      const input = item.querySelector('.fb-input');
+      const feedback = item.querySelector('.fb-feedback');
+      input.value = '';
+      input.disabled = false;
+      input.classList.remove('correct', 'wrong');
+      input.placeholder = '________';
+      feedback.innerHTML = '';
+      feedback.classList.remove('correct', 'wrong');
+    });
+    updateFbScore();
+  };
+
+  fbItems.forEach(item => {
+    const input = item.querySelector('.fb-input');
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  });
+
+  updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">SubBytes</div>
+      <div class="match-term" data-match="2">ECB Mode</div>
+      <div class="match-term" data-match="3">GCM Mode</div>
+      <div class="match-term" data-match="4">Grover's Algorithm</div>
+      <div class="match-term" data-match="5">Diffusion</div>
+      <div class="match-term" data-match="6">Kerckhoffs' Principle</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="4">Halves effective symmetric key length in quantum computing</div>
+      <div class="match-def" data-match="1">Non-linear S-box substitution providing confusion</div>
+      <div class="match-def" data-match="6">Security must not depend on algorithm secrecy, only key secrecy</div>
+      <div class="match-def" data-match="3">Authenticated encryption providing confidentiality and integrity</div>
+      <div class="match-def" data-match="5">Each plaintext bit affects many ciphertext bits (ShiftRows, MixColumns)</div>
+      <div class="match-def" data-match="2">Insecure mode where identical blocks produce identical ciphertext</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
+})();
+</script>
+
+</body>
+</html>

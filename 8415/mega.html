@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8415 Applied Cryptography — MEGA EXAM</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #e94560;
+    --page-tint: rgba(233,69,96,0.12);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.cs { background: #20C997; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* ═══ MEGA EXAM COMPONENTS ═══ */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-bottom: 8px;
+  }
+  .header a { color: var(--page-color); text-decoration: none; font-weight: 600; }
+  .header a:hover { text-decoration: underline; }
+
+  .timer {
+    font-size: 2em; font-weight: 800; color: var(--accent1);
+    font-variant-numeric: tabular-nums;
+  }
+  .timer.warning { color: #FFA94D; }
+  .timer.danger { color: #ff6b6b; animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .progress-section { margin: 16px 0 24px; }
+  .progress-bar {
+    background: #333; border-radius: 12px; height: 28px;
+    overflow: hidden; margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent1), #c0392b);
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    text-align: center; font-weight: 600; color: #aaa; font-size: 0.95em;
+  }
+
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .btn-submit {
+    padding: 14px 32px; border-radius: 10px; border: none;
+    background: var(--accent1); color: #fff;
+    font-size: 1.05em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #c0392b; transform: scale(1.03); }
+  .btn-reset {
+    padding: 14px 32px; border-radius: 10px;
+    border: 2px solid var(--accent1); background: transparent;
+    color: var(--accent1); font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent1); color: #fff; }
+
+  .btn-shuffle {
+    padding: 14px 32px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #9775FA, #a78bfa);
+    color: #fff; font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-shuffle:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(151,117,250,0.4); }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .section-header {
+    font-size: 1.15em; font-weight: 800; color: var(--accent1);
+    padding: 14px 20px; margin: 28px 0 12px;
+    background: rgba(233,69,96,0.1); border-radius: 10px;
+    border-left: 5px solid var(--accent1);
+  }
+
+  .mq {
+    margin: 14px 0; padding: 18px 20px;
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s;
+  }
+  .mq p { font-weight: 600; margin-bottom: 14px; font-size: 1em; line-height: 1.6; }
+  .qnum {
+    display: inline-block; min-width: 32px; height: 32px;
+    line-height: 32px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.8em; font-weight: 800; margin-right: 10px;
+  }
+  .mq label {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); font-size: 0.95em;
+    cursor: pointer; transition: all 0.2s;
+    line-height: 1.5; user-select: none;
+  }
+  .mq label:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  #result {
+    display: none; text-align: center;
+    background: rgba(233,69,96,0.12); border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 32px; margin: 32px 0;
+  }
+  .result-label {
+    font-size: 1.2em; font-weight: 700; color: var(--accent1);
+    margin-bottom: 12px;
+  }
+
+  .mq-feedback {
+    margin-top: 12px; padding: 12px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 0; color: #666;
+    border-top: 1px solid rgba(255,255,255,0.06); margin-top: 32px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    .timer { font-size: 1.5em; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="../index.html" class="title" style="text-decoration:none">SEAS 8415 MIDTERM</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="cheatsheet.html" class="cs">Cheat Sheet</a>
+  <a href="mega.html" class="mega active">MEGA EXAM</a>
+  <a href="../index.html" class="home">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>MEGA EXAM — 135 Questions</h1>
+  <div class="sub">SEAS 8415 Applied Cryptography &amp; Data Protection · Midterm Prep · 2-Hour Timed Exam</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <a href="index.html">&larr; Back to Hub</a>
+      <div style="color: #aaa; font-size: 0.95em;">Midterm Exam</div>
+    </div>
+    <div class="header-right">
+      <div class="timer">
+        <span id="timer">2:00:00</span>
+      </div>
+      <div style="font-size: 0.9em; color: #aaa;">Time Remaining</div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progbar" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress">0/135 answered</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
+    <button class="btn-reset" onclick="resetExam()">Reset</button>
+    <button class="btn-shuffle" onclick="shuffleAndReset()">Shuffle Questions</button>
+  </div>
+
+  <div id="questions-container">
+
+  <!-- WEEK 1: Ciphers, Fundamentals & Hashing -->
+  <div class="section-header">Week 1: Ciphers, Fundamentals &amp; Hashing (Questions 1-17, 101-103, 121-125)</div>
+
+  <div class="mq" id="mq1">
+    <p><span class="qnum">1</span> The One-Time Pad achieves perfect secrecy because:</p>
+    <label onclick="pick(1,0)">A) It uses AES-256 internally</label>
+    <label onclick="pick(1,1)">B) The ciphertext is always shorter than the plaintext</label>
+    <label onclick="pick(1,2)">C) The key is truly random, as long as the message, and used only once</label>
+    <label onclick="pick(1,3)">D) It relies on computational hardness assumptions</label>
+  </div>
+
+  <div class="mq" id="mq2">
+    <p><span class="qnum">2</span> Which cipher uses a repeating keyword for polyalphabetic substitution?</p>
+    <label onclick="pick(2,0)">A) Caesar</label>
+    <label onclick="pick(2,1)">B) Vigenere</label>
+    <label onclick="pick(2,2)">C) Playfair</label>
+    <label onclick="pick(2,3)">D) Rail Fence</label>
+  </div>
+
+  <div class="mq" id="mq3">
+    <p><span class="qnum">3</span> The Bifid cipher combines substitution with:</p>
+    <label onclick="pick(3,0)">A) Transposition</label>
+    <label onclick="pick(3,1)">B) Hashing</label>
+    <label onclick="pick(3,2)">C) Key exchange</label>
+    <label onclick="pick(3,3)">D) Steganography</label>
+  </div>
+
+  <div class="mq" id="mq4">
+    <p><span class="qnum">4</span> Salting a password hash primarily defends against:</p>
+    <label onclick="pick(4,0)">A) Brute force attacks on a single password</label>
+    <label onclick="pick(4,1)">B) Rainbow table attacks</label>
+    <label onclick="pick(4,2)">C) Keyloggers</label>
+    <label onclick="pick(4,3)">D) Side-channel attacks</label>
+  </div>
+
+  <div class="mq" id="mq5">
+    <p><span class="qnum">5</span> HMAC provides which security services?</p>
+    <label onclick="pick(5,0)">A) Integrity and Authentication</label>
+    <label onclick="pick(5,1)">B) Confidentiality and Non-repudiation</label>
+    <label onclick="pick(5,2)">C) Availability and Integrity</label>
+    <label onclick="pick(5,3)">D) Authentication and Confidentiality</label>
+  </div>
+
+  <div class="mq" id="mq6">
+    <p><span class="qnum">6</span> SHA-256 produces an output of:</p>
+    <label onclick="pick(6,0)">A) 128 bits</label>
+    <label onclick="pick(6,1)">B) 192 bits</label>
+    <label onclick="pick(6,2)">C) 256 bits</label>
+    <label onclick="pick(6,3)">D) 512 bits</label>
+  </div>
+
+  <div class="mq" id="mq7">
+    <p><span class="qnum">7</span> Kerckhoffs' Principle states that security should depend on:</p>
+    <label onclick="pick(7,0)">A) The secrecy of the key, not the algorithm</label>
+    <label onclick="pick(7,1)">B) The complexity of the algorithm</label>
+    <label onclick="pick(7,2)">C) The length of the ciphertext</label>
+    <label onclick="pick(7,3)">D) Keeping the algorithm proprietary</label>
+  </div>
+
+  <div class="mq" id="mq8">
+    <p><span class="qnum">8</span> Which hash algorithm is considered BROKEN?</p>
+    <label onclick="pick(8,0)">A) SHA-256</label>
+    <label onclick="pick(8,1)">B) MD5</label>
+    <label onclick="pick(8,2)">C) SHA-3</label>
+    <label onclick="pick(8,3)">D) BLAKE2</label>
+  </div>
+
+  <div class="mq" id="mq9">
+    <p><span class="qnum">9</span> Data currently being processed by the CPU is called:</p>
+    <label onclick="pick(9,0)">A) Data at Rest</label>
+    <label onclick="pick(9,1)">B) Data in Transit</label>
+    <label onclick="pick(9,2)">C) Data in Use</label>
+    <label onclick="pick(9,3)">D) Data in Storage</label>
+  </div>
+
+  <div class="mq" id="mq10">
+    <p><span class="qnum">10</span> The Rail Fence cipher is an example of a:</p>
+    <label onclick="pick(10,0)">A) Transposition cipher</label>
+    <label onclick="pick(10,1)">B) Substitution cipher</label>
+    <label onclick="pick(10,2)">C) Block cipher</label>
+    <label onclick="pick(10,3)">D) Stream cipher</label>
+  </div>
+
+  <div class="mq" id="mq11">
+    <p><span class="qnum">11</span> Claude Shannon is associated with defining:</p>
+    <label onclick="pick(11,0)">A) Public key cryptography</label>
+    <label onclick="pick(11,1)">B) Perfect secrecy</label>
+    <label onclick="pick(11,2)">C) The Diffie-Hellman protocol</label>
+    <label onclick="pick(11,3)">D) The RSA algorithm</label>
+  </div>
+
+  <div class="mq" id="mq12">
+    <p><span class="qnum">12</span> Why are proprietary crypto ciphers risky?</p>
+    <label onclick="pick(12,0)">A) They are always slower than open-source alternatives</label>
+    <label onclick="pick(12,1)">B) They cannot be implemented in hardware</label>
+    <label onclick="pick(12,2)">C) They lack rigorous peer review</label>
+    <label onclick="pick(12,3)">D) They violate international export laws</label>
+  </div>
+
+  <div class="mq" id="mq13">
+    <p><span class="qnum">13</span> A computationally secure cipher means:</p>
+    <label onclick="pick(13,0)">A) Breaking it costs more than the information is worth</label>
+    <label onclick="pick(13,1)">B) It can never be broken under any circumstances</label>
+    <label onclick="pick(13,2)">C) Only quantum computers can break it</label>
+    <label onclick="pick(13,3)">D) The key space is infinite</label>
+  </div>
+
+  <div class="mq" id="mq14">
+    <p><span class="qnum">14</span> The avalanche effect in hashing means:</p>
+    <label onclick="pick(14,0)">A) Hash outputs grow exponentially with input size</label>
+    <label onclick="pick(14,1)">B) A small input change produces a drastically different output</label>
+    <label onclick="pick(14,2)">C) Multiple inputs always produce the same hash</label>
+    <label onclick="pick(14,3)">D) The hash function runs faster with larger inputs</label>
+  </div>
+
+  <div class="mq" id="mq15">
+    <p><span class="qnum">15</span> Block ciphers encrypt data in:</p>
+    <label onclick="pick(15,0)">A) Fixed-size blocks</label>
+    <label onclick="pick(15,1)">B) One bit at a time</label>
+    <label onclick="pick(15,2)">C) Variable-length segments</label>
+    <label onclick="pick(15,3)">D) Continuous streams</label>
+  </div>
+
+  <div class="mq" id="mq16">
+    <p><span class="qnum">16</span> What makes OTP impractical for most real-world use?</p>
+    <label onclick="pick(16,0)">A) It requires quantum hardware</label>
+    <label onclick="pick(16,1)">B) The algorithm is too slow</label>
+    <label onclick="pick(16,2)">C) Key must be as long as message and used only once</label>
+    <label onclick="pick(16,3)">D) It only works with numeric data</label>
+  </div>
+
+  <div class="mq" id="mq17">
+    <p><span class="qnum">17</span> The Caesar cipher is vulnerable to:</p>
+    <label onclick="pick(17,0)">A) Frequency analysis</label>
+    <label onclick="pick(17,1)">B) Quantum attacks</label>
+    <label onclick="pick(17,2)">C) Side-channel attacks</label>
+    <label onclick="pick(17,3)">D) Birthday attacks</label>
+  </div>
+
+  <div class="mq" id="mq101">
+    <p><span class="qnum">101</span> Shannon's criteria for good ciphers states that ciphertext size should:</p>
+    <label onclick="pick(101,0)">A) Not exceed plaintext size (C &le; P)</label>
+    <label onclick="pick(101,1)">B) Be exactly double</label>
+    <label onclick="pick(101,2)">C) Be variable</label>
+    <label onclick="pick(101,3)">D) Always be 128 bits</label>
+  </div>
+
+  <div class="mq" id="mq102">
+    <p><span class="qnum">102</span> Key stretching algorithms like PBKDF2 and bcrypt are deliberately slow because:</p>
+    <label onclick="pick(102,0)">A) They use weak algorithms</label>
+    <label onclick="pick(102,1)">B) This makes brute-force attacks computationally expensive</label>
+    <label onclick="pick(102,2)">C) They are poorly optimized</label>
+    <label onclick="pick(102,3)">D) They only work on old hardware</label>
+  </div>
+
+  <div class="mq" id="mq103">
+    <p><span class="qnum">103</span> In the 'Game' of cryptography, the adversary is modeled as:</p>
+    <label onclick="pick(103,0)">A) A probabilistic polynomial-time algorithm</label>
+    <label onclick="pick(103,1)">B) An omniscient entity</label>
+    <label onclick="pick(103,2)">C) A random number generator</label>
+    <label onclick="pick(103,3)">D) A fixed-state machine</label>
+  </div>
+
+  <div class="mq" id="mq121">
+    <p><span class="qnum">121</span> The Enigma machine's key vulnerability was that:</p>
+    <label onclick="pick(121,0)">A) No plaintext letter could be ciphered as itself</label>
+    <label onclick="pick(121,1)">B) It used a single rotor</label>
+    <label onclick="pick(121,2)">C) Its keyspace was too small</label>
+    <label onclick="pick(121,3)">D) It had no plugboard</label>
+  </div>
+
+  <div class="mq" id="mq122">
+    <p><span class="qnum">122</span> The Kasiski Examination is used to break:</p>
+    <label onclick="pick(122,0)">A) One-Time Pads</label>
+    <label onclick="pick(122,1)">B) Polyalphabetic substitution ciphers like Vigenere</label>
+    <label onclick="pick(122,2)">C) AES encryption</label>
+    <label onclick="pick(122,3)">D) RSA signatures</label>
+  </div>
+
+  <div class="mq" id="mq123">
+    <p><span class="qnum">123</span> Pre-image resistance means:</p>
+    <label onclick="pick(123,0)">A) It's infeasible to find ANY input that maps to a specific hash value</label>
+    <label onclick="pick(123,1)">B) Two inputs can't produce the same hash</label>
+    <label onclick="pick(123,2)">C) Small changes produce big output changes</label>
+    <label onclick="pick(123,3)">D) Hashes have fixed length</label>
+  </div>
+
+  <div class="mq" id="mq124">
+    <p><span class="qnum">124</span> In a brute-force attack on an N-bit key, the AVERAGE number of attempts to find the key is:</p>
+    <label onclick="pick(124,0)">A) 2^N</label>
+    <label onclick="pick(124,1)">B) N^2</label>
+    <label onclick="pick(124,2)">C) 2^(N-1)</label>
+    <label onclick="pick(124,3)">D) Log2(N)</label>
+  </div>
+
+  <div class="mq" id="mq125">
+    <p><span class="qnum">125</span> HMACs fail to provide non-repudiation because:</p>
+    <label onclick="pick(125,0)">A) Both sender and receiver share the same secret key</label>
+    <label onclick="pick(125,1)">B) They don't use hashing</label>
+    <label onclick="pick(125,2)">C) They are too slow</label>
+    <label onclick="pick(125,3)">D) They use public keys</label>
+  </div>
+
+  <!-- WEEK 2: Asymmetric Crypto & Key Exchange -->
+  <div class="section-header">Week 2: Asymmetric Crypto &amp; Key Exchange (Questions 18-34, 104-107, 126-127)</div>
+
+  <div class="mq" id="mq18">
+    <p><span class="qnum">18</span> Diffie-Hellman key exchange is based on:</p>
+    <label onclick="pick(18,0)">A) The discrete logarithm problem</label>
+    <label onclick="pick(18,1)">B) Integer factorization</label>
+    <label onclick="pick(18,2)">C) Elliptic curve isogeny</label>
+    <label onclick="pick(18,3)">D) Lattice-based assumptions</label>
+  </div>
+
+  <div class="mq" id="mq19">
+    <p><span class="qnum">19</span> RSA security depends on the difficulty of:</p>
+    <label onclick="pick(19,0)">A) The discrete logarithm problem</label>
+    <label onclick="pick(19,1)">B) Factoring large prime products</label>
+    <label onclick="pick(19,2)">C) Finding hash collisions</label>
+    <label onclick="pick(19,3)">D) Solving systems of linear equations</label>
+  </div>
+
+  <div class="mq" id="mq20">
+    <p><span class="qnum">20</span> Digital signatures provide all EXCEPT:</p>
+    <label onclick="pick(20,0)">A) Integrity</label>
+    <label onclick="pick(20,1)">B) Authentication</label>
+    <label onclick="pick(20,2)">C) Confidentiality</label>
+    <label onclick="pick(20,3)">D) Non-repudiation</label>
+  </div>
+
+  <div class="mq" id="mq21">
+    <p><span class="qnum">21</span> In RSA, the public key consists of:</p>
+    <label onclick="pick(21,0)">A) (n, e)</label>
+    <label onclick="pick(21,1)">B) (n, d)</label>
+    <label onclick="pick(21,2)">C) (p, q)</label>
+    <label onclick="pick(21,3)">D) (d, e)</label>
+  </div>
+
+  <div class="mq" id="mq22">
+    <p><span class="qnum">22</span> Hybrid encryption combines:</p>
+    <label onclick="pick(22,0)">A) Two different symmetric algorithms</label>
+    <label onclick="pick(22,1)">B) Asymmetric for key exchange, symmetric for bulk data</label>
+    <label onclick="pick(22,2)">C) Hashing with encryption</label>
+    <label onclick="pick(22,3)">D) Steganography with encryption</label>
+  </div>
+
+  <div class="mq" id="mq23">
+    <p><span class="qnum">23</span> Plain Diffie-Hellman is vulnerable to:</p>
+    <label onclick="pick(23,0)">A) Man-in-the-middle attacks</label>
+    <label onclick="pick(23,1)">B) Replay attacks</label>
+    <label onclick="pick(23,2)">C) Birthday attacks</label>
+    <label onclick="pick(23,3)">D) Padding oracle attacks</label>
+  </div>
+
+  <div class="mq" id="mq24">
+    <p><span class="qnum">24</span> For N users, symmetric crypto requires how many keys?</p>
+    <label onclick="pick(24,0)">A) N</label>
+    <label onclick="pick(24,1)">B) 2N</label>
+    <label onclick="pick(24,2)">C) N(N-1)/2</label>
+    <label onclick="pick(24,3)">D) N^2</label>
+  </div>
+
+  <div class="mq" id="mq25">
+    <p><span class="qnum">25</span> A trap-door function is:</p>
+    <label onclick="pick(25,0)">A) A one-way function reversible with a secret value</label>
+    <label onclick="pick(25,1)">B) A hash function with a secret salt</label>
+    <label onclick="pick(25,2)">C) A symmetric cipher with a backdoor</label>
+    <label onclick="pick(25,3)">D) An encryption scheme that leaks metadata</label>
+  </div>
+
+  <div class="mq" id="mq26">
+    <p><span class="qnum">26</span> Non-repudiation means:</p>
+    <label onclick="pick(26,0)">A) Messages cannot be intercepted</label>
+    <label onclick="pick(26,1)">B) The signer cannot deny signing</label>
+    <label onclick="pick(26,2)">C) Encryption cannot be reversed</label>
+    <label onclick="pick(26,3)">D) Keys cannot be shared</label>
+  </div>
+
+  <div class="mq" id="mq27">
+    <p><span class="qnum">27</span> PKI stands for:</p>
+    <label onclick="pick(27,0)">A) Public Key Infrastructure</label>
+    <label onclick="pick(27,1)">B) Private Key Index</label>
+    <label onclick="pick(27,2)">C) Protocol Key Interface</label>
+    <label onclick="pick(27,3)">D) Polynomial Key Integration</label>
+  </div>
+
+  <div class="mq" id="mq28">
+    <p><span class="qnum">28</span> In digital signing, which key signs?</p>
+    <label onclick="pick(28,0)">A) Receiver's public key</label>
+    <label onclick="pick(28,1)">B) Sender's private key</label>
+    <label onclick="pick(28,2)">C) Shared symmetric key</label>
+    <label onclick="pick(28,3)">D) Certificate Authority's key</label>
+  </div>
+
+  <div class="mq" id="mq29">
+    <p><span class="qnum">29</span> A Certificate Authority (CA) does what?</p>
+    <label onclick="pick(29,0)">A) Generates private keys for users</label>
+    <label onclick="pick(29,1)">B) Encrypts all web traffic</label>
+    <label onclick="pick(29,2)">C) Binds identities to public keys via certificates</label>
+    <label onclick="pick(29,3)">D) Manages firewall rules</label>
+  </div>
+
+  <div class="mq" id="mq30">
+    <p><span class="qnum">30</span> RSA key generation uses phi(n) = :</p>
+    <label onclick="pick(30,0)">A) (p-1)(q-1)</label>
+    <label onclick="pick(30,1)">B) p*q - 1</label>
+    <label onclick="pick(30,2)">C) (p+1)(q+1)</label>
+    <label onclick="pick(30,3)">D) p^2 + q^2</label>
+  </div>
+
+  <div class="mq" id="mq31">
+    <p><span class="qnum">31</span> Asymmetric encryption is slower than symmetric by roughly:</p>
+    <label onclick="pick(31,0)">A) 2-5x</label>
+    <label onclick="pick(31,1)">B) 100-1000x</label>
+    <label onclick="pick(31,2)">C) 10-50x</label>
+    <label onclick="pick(31,3)">D) They are about the same speed</label>
+  </div>
+
+  <div class="mq" id="mq32">
+    <p><span class="qnum">32</span> The Double Key Creation scenario involves encrypting a session key:</p>
+    <label onclick="pick(32,0)">A) Twice with the same public key</label>
+    <label onclick="pick(32,1)">B) Once for backup, once for primary</label>
+    <label onclick="pick(32,2)">C) Once for server, once for law enforcement</label>
+    <label onclick="pick(32,3)">D) With both symmetric and asymmetric algorithms</label>
+  </div>
+
+  <div class="mq" id="mq33">
+    <p><span class="qnum">33</span> Key escrow is controversial because:</p>
+    <label onclick="pick(33,0)">A) A third party holds copies of keys</label>
+    <label onclick="pick(33,1)">B) It makes encryption faster</label>
+    <label onclick="pick(33,2)">C) It eliminates the need for PKI</label>
+    <label onclick="pick(33,3)">D) It is only used in open-source software</label>
+  </div>
+
+  <div class="mq" id="mq34">
+    <p><span class="qnum">34</span> Certificate revocation is handled by:</p>
+    <label onclick="pick(34,0)">A) The end user manually</label>
+    <label onclick="pick(34,1)">B) CRL and OCSP</label>
+    <label onclick="pick(34,2)">C) DNS records</label>
+    <label onclick="pick(34,3)">D) Firewall rules</label>
+  </div>
+
+  <div class="mq" id="mq104">
+    <p><span class="qnum">104</span> ECC provides equivalent security to RSA with:</p>
+    <label onclick="pick(104,0)">A) Larger key sizes</label>
+    <label onclick="pick(104,1)">B) Much smaller key sizes (ECC-256 &asymp; RSA-3072)</label>
+    <label onclick="pick(104,2)">C) The same key sizes</label>
+    <label onclick="pick(104,3)">D) No keys at all</label>
+  </div>
+
+  <div class="mq" id="mq105">
+    <p><span class="qnum">105</span> Shor's algorithm threatens RSA because it can:</p>
+    <label onclick="pick(105,0)">A) Factor large numbers in polynomial time on a quantum computer</label>
+    <label onclick="pick(105,1)">B) Guess passwords faster</label>
+    <label onclick="pick(105,2)">C) Break hash functions</label>
+    <label onclick="pick(105,3)">D) Intercept network traffic</label>
+  </div>
+
+  <div class="mq" id="mq106">
+    <p><span class="qnum">106</span> The 'harvest now, decrypt later' threat means:</p>
+    <label onclick="pick(106,0)">A) Stealing data before encryption</label>
+    <label onclick="pick(106,1)">B) Breaking encryption in real-time</label>
+    <label onclick="pick(106,2)">C) Adversaries collect encrypted data today to decrypt with future quantum computers</label>
+    <label onclick="pick(106,3)">D) Deleting encrypted backups</label>
+  </div>
+
+  <div class="mq" id="mq107">
+    <p><span class="qnum">107</span> Which PQC candidate category was broken in 2022?</p>
+    <label onclick="pick(107,0)">A) Lattice-based</label>
+    <label onclick="pick(107,1)">B) Hash-based</label>
+    <label onclick="pick(107,2)">C) Super-singular isogeny-based (SIKE)</label>
+    <label onclick="pick(107,3)">D) Code-based</label>
+  </div>
+
+  <div class="mq" id="mq126">
+    <p><span class="qnum">126</span> Given g=2, p=19, a=6: what is g^a mod p?</p>
+    <label onclick="pick(126,0)">A) 12</label>
+    <label onclick="pick(126,1)">B) 7</label>
+    <label onclick="pick(126,2)">C) 8</label>
+    <label onclick="pick(126,3)">D) 19</label>
+  </div>
+
+  <div class="mq" id="mq127">
+    <p><span class="qnum">127</span> The two primary uses of public-key encryption are:</p>
+    <label onclick="pick(127,0)">A) Confidentiality and hashing</label>
+    <label onclick="pick(127,1)">B) Authentication and compression</label>
+    <label onclick="pick(127,2)">C) Digital signatures and symmetric key exchange</label>
+    <label onclick="pick(127,3)">D) Steganography and encoding</label>
+  </div>
+
+  <!-- WEEK 3: Secure Design & Usability -->
+  <div class="section-header">Week 3: Secure Design &amp; Usability (Questions 35-51, 108-110, 128-131)</div>
+
+  <div class="mq" id="mq35">
+    <p><span class="qnum">35</span> In "Why Johnny Can't Encrypt," what fraction sent secrets unencrypted?</p>
+    <label onclick="pick(35,0)">A) One-third</label>
+    <label onclick="pick(35,1)">B) One-half</label>
+    <label onclick="pick(35,2)">C) One-quarter</label>
+    <label onclick="pick(35,3)">D) Two-thirds</label>
+  </div>
+
+  <div class="mq" id="mq36">
+    <p><span class="qnum">36</span> The PGP 5.0 quill pen icon failed because:</p>
+    <label onclick="pick(36,0)">A) Users thought it meant "write a new message"</label>
+    <label onclick="pick(36,1)">B) It didn't communicate private key was used for signing</label>
+    <label onclick="pick(36,2)">C) The icon was too small to see</label>
+    <label onclick="pick(36,3)">D) It only appeared on certain operating systems</label>
+  </div>
+
+  <div class="mq" id="mq37">
+    <p><span class="qnum">37</span> Anderson's "Why Cryptosystems Fail" found most failures were from:</p>
+    <label onclick="pick(37,0)">A) Implementation and configuration errors, not broken algorithms</label>
+    <label onclick="pick(37,1)">B) Weak algorithms that were easily broken</label>
+    <label onclick="pick(37,2)">C) Insufficient key lengths</label>
+    <label onclick="pick(37,3)">D) Quantum computing advances</label>
+  </div>
+
+  <div class="mq" id="mq38">
+    <p><span class="qnum">38</span> What percentage of security failures are attributed to configuration errors?</p>
+    <label onclick="pick(38,0)">A) About 50%</label>
+    <label onclick="pick(38,1)">B) About 75%</label>
+    <label onclick="pick(38,2)">C) Over 90%</label>
+    <label onclick="pick(38,3)">D) About 60%</label>
+  </div>
+
+  <div class="mq" id="mq39">
+    <p><span class="qnum">39</span> The Barn Door Property states:</p>
+    <label onclick="pick(39,0)">A) Once exposed, a secret can't be un-exposed</label>
+    <label onclick="pick(39,1)">B) Security is only as strong as the weakest link</label>
+    <label onclick="pick(39,2)">C) Encryption must be applied at every layer</label>
+    <label onclick="pick(39,3)">D) Open-source code is more secure than closed-source</label>
+  </div>
+
+  <div class="mq" id="mq40">
+    <p><span class="qnum">40</span> "Authorize After You Authenticate" means:</p>
+    <label onclick="pick(40,0)">A) Authentication is not necessary if authorization is strong</label>
+    <label onclick="pick(40,1)">B) Identity doesn't automatically grant all permissions</label>
+    <label onclick="pick(40,2)">C) Authorization should happen before authentication</label>
+    <label onclick="pick(40,3)">D) Both steps can be skipped for internal users</label>
+  </div>
+
+  <div class="mq" id="mq41">
+    <p><span class="qnum">41</span> Cognitive Walkthrough evaluates:</p>
+    <label onclick="pick(41,0)">A) System performance under load</label>
+    <label onclick="pick(41,1)">B) Code quality and test coverage</label>
+    <label onclick="pick(41,2)">C) Learnability by simulating a novice user's understanding</label>
+    <label onclick="pick(41,3)">D) Network latency and throughput</label>
+  </div>
+
+  <div class="mq" id="mq42">
+    <p><span class="qnum">42</span> The "U in Crypto" study found double-spends caused by:</p>
+    <label onclick="pick(42,0)">A) Poor Send button feedback in wallet UI</label>
+    <label onclick="pick(42,1)">B) Blockchain protocol vulnerabilities</label>
+    <label onclick="pick(42,2)">C) Weak encryption algorithms</label>
+    <label onclick="pick(42,3)">D) Insufficient mining power</label>
+  </div>
+
+  <div class="mq" id="mq43">
+    <p><span class="qnum">43</span> OWASP crypto failure categories include all EXCEPT:</p>
+    <label onclick="pick(43,0)">A) Hardcoded keys in source code</label>
+    <label onclick="pick(43,1)">B) Using deprecated algorithms</label>
+    <label onclick="pick(43,2)">C) Access control vulnerabilities</label>
+    <label onclick="pick(43,3)">D) Insufficient entropy in key generation</label>
+  </div>
+
+  <div class="mq" id="mq44">
+    <p><span class="qnum">44</span> "Earn or Give, But Never Assume, Trust" warns against:</p>
+    <label onclick="pick(44,0)">A) Offloading security from server to client</label>
+    <label onclick="pick(44,1)">B) Using third-party libraries</label>
+    <label onclick="pick(44,2)">C) Implementing multi-factor authentication</label>
+    <label onclick="pick(44,3)">D) Conducting regular security audits</label>
+  </div>
+
+  <div class="mq" id="mq45">
+    <p><span class="qnum">45</span> Anderson compared crypto failures to which industry's learning?</p>
+    <label onclick="pick(45,0)">A) Automotive engineering</label>
+    <label onclick="pick(45,1)">B) Aeronautical engineering</label>
+    <label onclick="pick(45,2)">C) Civil engineering</label>
+    <label onclick="pick(45,3)">D) Chemical engineering</label>
+  </div>
+
+  <div class="mq" id="mq46">
+    <p><span class="qnum">46</span> The Abstraction Property means:</p>
+    <label onclick="pick(46,0)">A) Security concepts are abstract and alien to general users</label>
+    <label onclick="pick(46,1)">B) Abstractions improve system performance</label>
+    <label onclick="pick(46,2)">C) All encryption should be abstracted away</label>
+    <label onclick="pick(46,3)">D) Users prefer abstract interfaces over concrete ones</label>
+  </div>
+
+  <div class="mq" id="mq47">
+    <p><span class="qnum">47</span> Blockchain irreversibility amplifies UX errors because:</p>
+    <label onclick="pick(47,0)">A) Transactions are too fast to review</label>
+    <label onclick="pick(47,1)">B) The blockchain UI is always poorly designed</label>
+    <label onclick="pick(47,2)">C) A single mistake causes permanent financial loss</label>
+    <label onclick="pick(47,3)">D) Users cannot view transaction history</label>
+  </div>
+
+  <div class="mq" id="mq48">
+    <p><span class="qnum">48</span> Uninformed wallet users frequently:</p>
+    <label onclick="pick(48,0)">A) Discovered advanced security features on their own</label>
+    <label onclick="pick(48,1)">B) Gave 1-star reviews for issues outside developer control</label>
+    <label onclick="pick(48,2)">C) Switched to hardware wallets immediately</label>
+    <label onclick="pick(48,3)">D) Read the full documentation before use</label>
+  </div>
+
+  <div class="mq" id="mq49">
+    <p><span class="qnum">49</span> IEEE recommends "Use Cryptography Correctly" which means:</p>
+    <label onclick="pick(49,0)">A) Use established libraries, don't roll your own</label>
+    <label onclick="pick(49,1)">B) Always use the newest algorithm available</label>
+    <label onclick="pick(49,2)">C) Encrypt everything regardless of performance</label>
+    <label onclick="pick(49,3)">D) Only use government-approved algorithms</label>
+  </div>
+
+  <div class="mq" id="mq50">
+    <p><span class="qnum">50</span> Why did the crypto community lack a learning mechanism (Anderson)?</p>
+    <label onclick="pick(50,0)">A) The community was too small</label>
+    <label onclick="pick(50,1)">B) Government agencies' secrecy and reluctance to admit mistakes</label>
+    <label onclick="pick(50,2)">C) Academic journals refused to publish failure analyses</label>
+    <label onclick="pick(50,3)">D) Encryption vendors had no incentive to share</label>
+  </div>
+
+  <div class="mq" id="mq51">
+    <p><span class="qnum">51</span> The most important design principle for usable security is:</p>
+    <label onclick="pick(51,0)">A) Maximize the number of security options for power users</label>
+    <label onclick="pick(51,1)">B) Always show raw cryptographic details to the user</label>
+    <label onclick="pick(51,2)">C) Make the secure path the easiest path</label>
+    <label onclick="pick(51,3)">D) Require security training before granting access</label>
+  </div>
+
+  <div class="mq" id="mq108">
+    <p><span class="qnum">108</span> The Clipper Chip (1993) was defeated partly because:</p>
+    <label onclick="pick(108,0)">A) Matt Blaze found a vulnerability in the protocol</label>
+    <label onclick="pick(108,1)">B) It was too expensive</label>
+    <label onclick="pick(108,2)">C) No one used encryption</label>
+    <label onclick="pick(108,3)">D) Congress banned it</label>
+  </div>
+
+  <div class="mq" id="mq109">
+    <p><span class="qnum">109</span> In the Ronin Network hack, the root cause was:</p>
+    <label onclick="pick(109,0)">A) A software bug in the blockchain</label>
+    <label onclick="pick(109,1)">B) Reducing validators from 9-of-9 to 5-of-9 for convenience</label>
+    <label onclick="pick(109,2)">C) A phishing email</label>
+    <label onclick="pick(109,3)">D) Weak encryption algorithm</label>
+  </div>
+
+  <div class="mq" id="mq110">
+    <p><span class="qnum">110</span> The Apple vs FBI case demonstrated that:</p>
+    <label onclick="pick(110,0)">A) Apple cooperated fully</label>
+    <label onclick="pick(110,1)">B) FBI couldn't access the phone</label>
+    <label onclick="pick(110,2)">C) There is no technical solution providing access only to authorized parties</label>
+    <label onclick="pick(110,3)">D) Encryption should be banned</label>
+  </div>
+
+  <div class="mq" id="mq128">
+    <p><span class="qnum">128</span> OWASP renamed 'Sensitive Data Exposure' to 'Cryptographic Failures' to:</p>
+    <label onclick="pick(128,0)">A) Shift focus from the symptom to the root cause</label>
+    <label onclick="pick(128,1)">B) Simplify the category name</label>
+    <label onclick="pick(128,2)">C) Remove encryption from scope</label>
+    <label onclick="pick(128,3)">D) Focus on network attacks instead</label>
+  </div>
+
+  <div class="mq" id="mq129">
+    <p><span class="qnum">129</span> In the Johnny study, participants who figured out encryption commonly:</p>
+    <label onclick="pick(129,0)">A) Deleted their private keys</label>
+    <label onclick="pick(129,1)">B) Encrypted with their OWN public key instead of the recipient's</label>
+    <label onclick="pick(129,2)">C) Sent messages unencrypted</label>
+    <label onclick="pick(129,3)">D) Used symmetric encryption</label>
+  </div>
+
+  <div class="mq" id="mq130">
+    <p><span class="qnum">130</span> The IEEE distinguishes a 'flaw' from a 'bug' by stating:</p>
+    <label onclick="pick(130,0)">A) A flaw is a design-level mistake; a bug is an implementation-level issue</label>
+    <label onclick="pick(130,1)">B) Flaws are in crypto libraries; bugs are in applications</label>
+    <label onclick="pick(130,2)">C) Bugs are design-level; flaws are implementation-level</label>
+    <label onclick="pick(130,3)">D) They are the same thing</label>
+  </div>
+
+  <div class="mq" id="mq131">
+    <p><span class="qnum">131</span> The 'Unmotivated User Property' means:</p>
+    <label onclick="pick(131,0)">A) Users are too lazy for passwords</label>
+    <label onclick="pick(131,1)">B) Security is too expensive</label>
+    <label onclick="pick(131,2)">C) Users don't actively seek security controls because their primary task is something else</label>
+    <label onclick="pick(131,3)">D) Users prefer weak encryption</label>
+  </div>
+
+  <!-- WEEK 4: Zero Knowledge Proofs -->
+  <div class="section-header">Week 4: Zero Knowledge Proofs (Questions 52-68, 111-114, 132-135)</div>
+
+  <div class="mq" id="mq52">
+    <p><span class="qnum">52</span> ZKP completeness means:</p>
+    <label onclick="pick(52,0)">A) An honest prover can convince an honest verifier of a true statement</label>
+    <label onclick="pick(52,1)">B) The proof contains all information about the secret</label>
+    <label onclick="pick(52,2)">C) Every possible statement can be proven</label>
+    <label onclick="pick(52,3)">D) The verifier learns the secret after the proof</label>
+  </div>
+
+  <div class="mq" id="mq53">
+    <p><span class="qnum">53</span> ZKP soundness means:</p>
+    <label onclick="pick(53,0)">A) The proof produces an audible confirmation</label>
+    <label onclick="pick(53,1)">B) A cheating prover cannot convince the verifier of a false statement</label>
+    <label onclick="pick(53,2)">C) The verifier can always determine the secret</label>
+    <label onclick="pick(53,3)">D) Multiple rounds are never needed</label>
+  </div>
+
+  <div class="mq" id="mq54">
+    <p><span class="qnum">54</span> The Ali Baba cave analogy was introduced by:</p>
+    <label onclick="pick(54,0)">A) Goldwasser and Micali</label>
+    <label onclick="pick(54,1)">B) Shamir</label>
+    <label onclick="pick(54,2)">C) Quisquater</label>
+    <label onclick="pick(54,3)">D) Rivest</label>
+  </div>
+
+  <div class="mq" id="mq55">
+    <p><span class="qnum">55</span> zk-SNARKs require:</p>
+    <label onclick="pick(55,0)">A) A trusted setup phase</label>
+    <label onclick="pick(55,1)">B) Public randomness only</label>
+    <label onclick="pick(55,2)">C) No pre-computation</label>
+    <label onclick="pick(55,3)">D) Quantum-resistant hardware</label>
+  </div>
+
+  <div class="mq" id="mq56">
+    <p><span class="qnum">56</span> zk-STARKs advantage over SNARKs:</p>
+    <label onclick="pick(56,0)">A) Smaller proof sizes</label>
+    <label onclick="pick(56,1)">B) No trusted setup required (transparent)</label>
+    <label onclick="pick(56,2)">C) Faster verification time</label>
+    <label onclick="pick(56,3)">D) Lower computational cost</label>
+  </div>
+
+  <div class="mq" id="mq57">
+    <p><span class="qnum">57</span> The Fiat-Shamir heuristic:</p>
+    <label onclick="pick(57,0)">A) Converts interactive ZKP to non-interactive using hash functions</label>
+    <label onclick="pick(57,1)">B) Generates random primes for RSA</label>
+    <label onclick="pick(57,2)">C) Provides key exchange without certificates</label>
+    <label onclick="pick(57,3)">D) Compresses zero-knowledge proofs</label>
+  </div>
+
+  <div class="mq" id="mq58">
+    <p><span class="qnum">58</span> Starkware focuses on commercializing:</p>
+    <label onclick="pick(58,0)">A) zk-SNARKs</label>
+    <label onclick="pick(58,1)">B) Homomorphic encryption</label>
+    <label onclick="pick(58,2)">C) zk-STARKs</label>
+    <label onclick="pick(58,3)">D) Multi-party computation</label>
+  </div>
+
+  <div class="mq" id="mq59">
+    <p><span class="qnum">59</span> ZK-STARKs are quantum-resistant because:</p>
+    <label onclick="pick(59,0)">A) They use hash functions instead of elliptic curves</label>
+    <label onclick="pick(59,1)">B) They require quantum computers to generate proofs</label>
+    <label onclick="pick(59,2)">C) Their proof sizes are too large for quantum attacks</label>
+    <label onclick="pick(59,3)">D) They use lattice-based cryptography</label>
+  </div>
+
+  <div class="mq" id="mq60">
+    <p><span class="qnum">60</span> Ken Thompson's "Reflections on Trusting Trust" showed:</p>
+    <label onclick="pick(60,0)">A) Open-source software is always trustworthy</label>
+    <label onclick="pick(60,1)">B) A compiler can be backdoored to persist even with clean source</label>
+    <label onclick="pick(60,2)">C) Trust hierarchies eliminate all security risks</label>
+    <label onclick="pick(60,3)">D) Code reviews catch all backdoors</label>
+  </div>
+
+  <div class="mq" id="mq61">
+    <p><span class="qnum">61</span> Minimum-disclosure proofs vs ZKP:</p>
+    <label onclick="pick(61,0)">A) They are identical concepts</label>
+    <label onclick="pick(61,1)">B) ZKP reveals more information</label>
+    <label onclick="pick(61,2)">C) Minimum-disclosure reveals more information</label>
+    <label onclick="pick(61,3)">D) Neither reveals any information</label>
+  </div>
+
+  <div class="mq" id="mq62">
+    <p><span class="qnum">62</span> In the Ali Baba cave, cheating probability after n rounds is:</p>
+    <label onclick="pick(62,0)">A) 1/2^n</label>
+    <label onclick="pick(62,1)">B) 1/n</label>
+    <label onclick="pick(62,2)">C) n/2</label>
+    <label onclick="pick(62,3)">D) 2^n</label>
+  </div>
+
+  <div class="mq" id="mq63">
+    <p><span class="qnum">63</span> Non-interactivity in zk-SNARKs means:</p>
+    <label onclick="pick(63,0)">A) The verifier generates the proof</label>
+    <label onclick="pick(63,1)">B) Only one message is sent from prover to verifier</label>
+    <label onclick="pick(63,2)">C) No communication is needed at all</label>
+    <label onclick="pick(63,3)">D) The proof is verified offline</label>
+  </div>
+
+  <div class="mq" id="mq64">
+    <p><span class="qnum">64</span> ZKP enhances privacy by:</p>
+    <label onclick="pick(64,0)">A) Reducing the risk of data breaches</label>
+    <label onclick="pick(64,1)">B) Making all data publicly verifiable</label>
+    <label onclick="pick(64,2)">C) Encrypting data at rest</label>
+    <label onclick="pick(64,3)">D) Replacing passwords with biometrics</label>
+  </div>
+
+  <div class="mq" id="mq65">
+    <p><span class="qnum">65</span> The threat model for ZKP assumes the Prover may:</p>
+    <label onclick="pick(65,0)">A) Always be honest</label>
+    <label onclick="pick(65,1)">B) Attempt to cheat</label>
+    <label onclick="pick(65,2)">C) Have unlimited computational power</label>
+    <label onclick="pick(65,3)">D) Collude with the verifier</label>
+  </div>
+
+  <div class="mq" id="mq66">
+    <p><span class="qnum">66</span> zk-STARKs use what instead of trusted setup?</p>
+    <label onclick="pick(66,0)">A) Private randomness</label>
+    <label onclick="pick(66,1)">B) Elliptic curve parameters</label>
+    <label onclick="pick(66,2)">C) Public randomness</label>
+    <label onclick="pick(66,3)">D) Pre-shared keys</label>
+  </div>
+
+  <div class="mq" id="mq67">
+    <p><span class="qnum">67</span> Smart contracts with zk-STARKs enable:</p>
+    <label onclick="pick(67,0)">A) Immutable verification of proofs</label>
+    <label onclick="pick(67,1)">B) Reversible transactions</label>
+    <label onclick="pick(67,2)">C) Anonymous contract deployment</label>
+    <label onclick="pick(67,3)">D) Unlimited gas execution</label>
+  </div>
+
+  <div class="mq" id="mq68">
+    <p><span class="qnum">68</span> Thompson argued you can't fully trust:</p>
+    <label onclick="pick(68,0)">A) Only proprietary software</label>
+    <label onclick="pick(68,1)">B) Code you didn't write yourself, including the compiler</label>
+    <label onclick="pick(68,2)">C) Software with more than 1000 lines of code</label>
+    <label onclick="pick(68,3)">D) Any code written before 1990</label>
+  </div>
+
+  <div class="mq" id="mq111">
+    <p><span class="qnum">111</span> Pinocchio's proof size is always:</p>
+    <label onclick="pick(111,0)">A) 288 bytes regardless of computation size</label>
+    <label onclick="pick(111,1)">B) Proportional to input size</label>
+    <label onclick="pick(111,2)">C) 1 KB minimum</label>
+    <label onclick="pick(111,3)">D) Variable based on complexity</label>
+  </div>
+
+  <div class="mq" id="mq112">
+    <p><span class="qnum">112</span> Who was revealed as the 6th participant in Zcash's trusted setup ceremony?</p>
+    <label onclick="pick(112,0)">A) Satoshi Nakamoto</label>
+    <label onclick="pick(112,1)">B) Edward Snowden (using pseudonym 'John Dobbertin')</label>
+    <label onclick="pick(112,2)">C) Vitalik Buterin</label>
+    <label onclick="pick(112,3)">D) Matt Blaze</label>
+  </div>
+
+  <div class="mq" id="mq113">
+    <p><span class="qnum">113</span> The distinction between 'quantum resistant' and 'quantum proof' is:</p>
+    <label onclick="pick(113,0)">A) Like water resistant vs waterproof — resistance is not a guarantee</label>
+    <label onclick="pick(113,1)">B) They mean the same thing</label>
+    <label onclick="pick(113,2)">C) Proof is weaker than resistant</label>
+    <label onclick="pick(113,3)">D) Only marketing terminology</label>
+  </div>
+
+  <div class="mq" id="mq114">
+    <p><span class="qnum">114</span> zk-SNARK proof sizes are approximately:</p>
+    <label onclick="pick(114,0)">A) Hundreds of kilobytes</label>
+    <label onclick="pick(114,1)">B) Hundreds of bytes (~100s bytes)</label>
+    <label onclick="pick(114,2)">C) Several megabytes</label>
+    <label onclick="pick(114,3)">D) A few bits</label>
+  </div>
+
+  <div class="mq" id="mq132">
+    <p><span class="qnum">132</span> A zk-SNARK reduces Acme Bank's handle time by:</p>
+    <label onclick="pick(132,0)">A) Eliminating identity verification entirely</label>
+    <label onclick="pick(132,1)">B) Reducing questions during authentication AND streamlining identity verification</label>
+    <label onclick="pick(132,2)">C) Automating the transfer process</label>
+    <label onclick="pick(132,3)">D) All of the above</label>
+  </div>
+
+  <div class="mq" id="mq133">
+    <p><span class="qnum">133</span> The primary purpose of a one-way hash function in ZKP is:</p>
+    <label onclick="pick(133,0)">A) To prevent cheating (ensure soundness)</label>
+    <label onclick="pick(133,1)">B) To act as a surrogate for the verifier</label>
+    <label onclick="pick(133,2)">C) To encrypt the data</label>
+    <label onclick="pick(133,3)">D) To generate random numbers</label>
+  </div>
+
+  <div class="mq" id="mq134">
+    <p><span class="qnum">134</span> What method does zk-STARK use to prove a function is close to a low-degree polynomial?</p>
+    <label onclick="pick(134,0)">A) Lagrange interpolation</label>
+    <label onclick="pick(134,1)">B) Fast Fourier Transform</label>
+    <label onclick="pick(134,2)">C) Fast Reed-Solomon Interactive Oracle Proofs (FRI)</label>
+    <label onclick="pick(134,3)">D) Polynomial remainder theorem</label>
+  </div>
+
+  <div class="mq" id="mq135">
+    <p><span class="qnum">135</span> 'Succinct' in zk-SNARKs specifically means:</p>
+    <label onclick="pick(135,0)">A) Small proof size</label>
+    <label onclick="pick(135,1)">B) Rapid data transmission</label>
+    <label onclick="pick(135,2)">C) Efficient encryption</label>
+    <label onclick="pick(135,3)">D) Low memory usage</label>
+  </div>
+
+  <!-- WEEK 5: Zero Trust -->
+  <div class="section-header">Week 5: Zero Trust (Questions 69-84, 115-120)</div>
+
+  <div class="mq" id="mq69">
+    <p><span class="qnum">69</span> Zero Trust's core principle is:</p>
+    <label onclick="pick(69,0)">A) Never trust, always verify</label>
+    <label onclick="pick(69,1)">B) Trust but verify</label>
+    <label onclick="pick(69,2)">C) Trust internal networks only</label>
+    <label onclick="pick(69,3)">D) Verify once, trust forever</label>
+  </div>
+
+  <div class="mq" id="mq70">
+    <p><span class="qnum">70</span> NIST SP 800-207 defines:</p>
+    <label onclick="pick(70,0)">A) Cryptographic key management</label>
+    <label onclick="pick(70,1)">B) Zero Trust Architecture</label>
+    <label onclick="pick(70,2)">C) Risk management framework</label>
+    <label onclick="pick(70,3)">D) Incident response procedures</label>
+  </div>
+
+  <div class="mq" id="mq71">
+    <p><span class="qnum">71</span> The Policy Engine (PE) does:</p>
+    <label onclick="pick(71,0)">A) Makes access decisions based on policy and data sources</label>
+    <label onclick="pick(71,1)">B) Encrypts all network traffic</label>
+    <label onclick="pick(71,2)">C) Manages user passwords</label>
+    <label onclick="pick(71,3)">D) Scans for malware</label>
+  </div>
+
+  <div class="mq" id="mq72">
+    <p><span class="qnum">72</span> The Policy Enforcement Point (PEP) does:</p>
+    <label onclick="pick(72,0)">A) Creates security policies</label>
+    <label onclick="pick(72,1)">B) Audits compliance</label>
+    <label onclick="pick(72,2)">C) Enables, monitors, and terminates connections</label>
+    <label onclick="pick(72,3)">D) Generates encryption keys</label>
+  </div>
+
+  <div class="mq" id="mq73">
+    <p><span class="qnum">73</span> Micro-segmentation prevents:</p>
+    <label onclick="pick(73,0)">A) Lateral movement within the network</label>
+    <label onclick="pick(73,1)">B) External DDoS attacks</label>
+    <label onclick="pick(73,2)">C) Phishing emails</label>
+    <label onclick="pick(73,3)">D) SQL injection</label>
+  </div>
+
+  <div class="mq" id="mq74">
+    <p><span class="qnum">74</span> Zero Trust assumes:</p>
+    <label onclick="pick(74,0)">A) The firewall will stop all threats</label>
+    <label onclick="pick(74,1)">B) The network is already compromised</label>
+    <label onclick="pick(74,2)">C) Internal users are always trustworthy</label>
+    <label onclick="pick(74,3)">D) VPNs provide sufficient security</label>
+  </div>
+
+  <div class="mq" id="mq75">
+    <p><span class="qnum">75</span> Who coined "Zero Trust"?</p>
+    <label onclick="pick(75,0)">A) John Kindervag at Forrester</label>
+    <label onclick="pick(75,1)">B) Bruce Schneier</label>
+    <label onclick="pick(75,2)">C) NIST</label>
+    <label onclick="pick(75,3)">D) Google's BeyondCorp team</label>
+  </div>
+
+  <div class="mq" id="mq76">
+    <p><span class="qnum">76</span> CISA Zero Trust has how many pillars?</p>
+    <label onclick="pick(76,0)">A) Three</label>
+    <label onclick="pick(76,1)">B) Four</label>
+    <label onclick="pick(76,2)">C) Five</label>
+    <label onclick="pick(76,3)">D) Seven</label>
+  </div>
+
+  <div class="mq" id="mq77">
+    <p><span class="qnum">77</span> Software-Defined Perimeters (SDP):</p>
+    <label onclick="pick(77,0)">A) Replace all firewalls with software</label>
+    <label onclick="pick(77,1)">B) Create one-to-one connections hiding resources from unauthorized users</label>
+    <label onclick="pick(77,2)">C) Only work with cloud infrastructure</label>
+    <label onclick="pick(77,3)">D) Require hardware security modules</label>
+  </div>
+
+  <div class="mq" id="mq78">
+    <p><span class="qnum">78</span> Access in Zero Trust is granted:</p>
+    <label onclick="pick(78,0)">A) Per-session with dynamic policy</label>
+    <label onclick="pick(78,1)">B) Once during initial login for the entire day</label>
+    <label onclick="pick(78,2)">C) Based on network location alone</label>
+    <label onclick="pick(78,3)">D) Permanently after first authentication</label>
+  </div>
+
+  <div class="mq" id="mq79">
+    <p><span class="qnum">79</span> Mutual TLS (mTLS) requires:</p>
+    <label onclick="pick(79,0)">A) Only the server to present a certificate</label>
+    <label onclick="pick(79,1)">B) Both client and server authenticate each other</label>
+    <label onclick="pick(79,2)">C) A VPN tunnel first</label>
+    <label onclick="pick(79,3)">D) Pre-shared symmetric keys</label>
+  </div>
+
+  <div class="mq" id="mq80">
+    <p><span class="qnum">80</span> Traditional perimeter security fails because:</p>
+    <label onclick="pick(80,0)">A) Firewalls are too expensive to maintain</label>
+    <label onclick="pick(80,1)">B) Encryption makes perimeter inspection impossible</label>
+    <label onclick="pick(80,2)">C) Cloud and remote work dissolve the network boundary</label>
+    <label onclick="pick(80,3)">D) VPNs are no longer available</label>
+  </div>
+
+  <div class="mq" id="mq81">
+    <p><span class="qnum">81</span> The trust algorithm considers all EXCEPT:</p>
+    <label onclick="pick(81,0)">A) Device health</label>
+    <label onclick="pick(81,1)">B) User behavior patterns</label>
+    <label onclick="pick(81,2)">C) The user's physical appearance</label>
+    <label onclick="pick(81,3)">D) Network context</label>
+  </div>
+
+  <div class="mq" id="mq82">
+    <p><span class="qnum">82</span> Zero Trust maturity levels (CISA) include:</p>
+    <label onclick="pick(82,0)">A) Traditional, Initial, Advanced, Optimal</label>
+    <label onclick="pick(82,1)">B) Basic, Intermediate, Expert</label>
+    <label onclick="pick(82,2)">C) Level 1 through Level 5</label>
+    <label onclick="pick(82,3)">D) Bronze, Silver, Gold, Platinum</label>
+  </div>
+
+  <div class="mq" id="mq83">
+    <p><span class="qnum">83</span> The control plane carries:</p>
+    <label onclick="pick(83,0)">A) User data and application traffic</label>
+    <label onclick="pick(83,1)">B) Policy and access control decisions</label>
+    <label onclick="pick(83,2)">C) Encrypted file transfers</label>
+    <label onclick="pick(83,3)">D) Log data only</label>
+  </div>
+
+  <div class="mq" id="mq84">
+    <p><span class="qnum">84</span> A key Zero Trust implementation challenge is:</p>
+    <label onclick="pick(84,0)">A) Legacy systems may not support ZT principles</label>
+    <label onclick="pick(84,1)">B) Zero Trust is only for cloud-native organizations</label>
+    <label onclick="pick(84,2)">C) It requires replacing all existing hardware</label>
+    <label onclick="pick(84,3)">D) There are no standards or frameworks to follow</label>
+  </div>
+
+  <div class="mq" id="mq115">
+    <p><span class="qnum">115</span> The Jericho Forum promoted which concept?</p>
+    <label onclick="pick(115,0)">A) De-perimeterization — protecting data where it flows rather than behind a network boundary</label>
+    <label onclick="pick(115,1)">B) Stronger firewalls</label>
+    <label onclick="pick(115,2)">C) Air-gapped networks</label>
+    <label onclick="pick(115,3)">D) Physical security controls</label>
+  </div>
+
+  <div class="mq" id="mq116">
+    <p><span class="qnum">116</span> Executive Order 14028 focuses on:</p>
+    <label onclick="pick(116,0)">A) Banning encryption</label>
+    <label onclick="pick(116,1)">B) Enhancing the cybersecurity posture of US government and critical infrastructure</label>
+    <label onclick="pick(116,2)">C) Privatizing government IT</label>
+    <label onclick="pick(116,3)">D) Reducing cybersecurity spending</label>
+  </div>
+
+  <div class="mq" id="mq117">
+    <p><span class="qnum">117</span> In Zero Trust, the 'implicit trust zone' is:</p>
+    <label onclick="pick(117,0)">A) The entire corporate network</label>
+    <label onclick="pick(117,1)">B) The DMZ</label>
+    <label onclick="pick(117,2)">C) The area beyond the PEP where entities are trusted to the level of the last gateway</label>
+    <label onclick="pick(117,3)">D) The internet</label>
+  </div>
+
+  <div class="mq" id="mq118">
+    <p><span class="qnum">118</span> Perimeter security uses persistent access while Zero Trust uses:</p>
+    <label onclick="pick(118,0)">A) Temporal access that is re-evaluated per transaction</label>
+    <label onclick="pick(118,1)">B) Permanent access once authenticated</label>
+    <label onclick="pick(118,2)">C) Role-based access only</label>
+    <label onclick="pick(118,3)">D) No access controls</label>
+  </div>
+
+  <div class="mq" id="mq119">
+    <p><span class="qnum">119</span> OMB Memorandum M-22-09 required federal agencies to:</p>
+    <label onclick="pick(119,0)">A) Ban all cloud services</label>
+    <label onclick="pick(119,1)">B) Meet specific zero trust cybersecurity standards by end of FY2024</label>
+    <label onclick="pick(119,2)">C) Use only open-source software</label>
+    <label onclick="pick(119,3)">D) Eliminate remote work</label>
+  </div>
+
+  <div class="mq" id="mq120">
+    <p><span class="qnum">120</span> A Zero Trust Network component that grants or denies access based on signals is the:</p>
+    <label onclick="pick(120,0)">A) Identity provider</label>
+    <label onclick="pick(120,1)">B) Device directory</label>
+    <label onclick="pick(120,2)">C) Access proxy</label>
+    <label onclick="pick(120,3)">D) Firewall</label>
+  </div>
+
+  <!-- WEEK 6: AES & Algorithm Selection -->
+  <div class="section-header">Week 6: AES &amp; Algorithm Selection (Questions 85-100)</div>
+
+  <div class="mq" id="mq85">
+    <p><span class="qnum">85</span> DES was replaced because:</p>
+    <label onclick="pick(85,0)">A) Its 56-bit key was vulnerable to brute force</label>
+    <label onclick="pick(85,1)">B) It was too slow for modern hardware</label>
+    <label onclick="pick(85,2)">C) The algorithm was never publicly reviewed</label>
+    <label onclick="pick(85,3)">D) It used an asymmetric structure</label>
+  </div>
+
+  <div class="mq" id="mq86">
+    <p><span class="qnum">86</span> How many candidates entered the AES competition?</p>
+    <label onclick="pick(86,0)">A) 5</label>
+    <label onclick="pick(86,1)">B) 15</label>
+    <label onclick="pick(86,2)">C) 21</label>
+    <label onclick="pick(86,3)">D) 10</label>
+  </div>
+
+  <div class="mq" id="mq87">
+    <p><span class="qnum">87</span> Rijndael was designed by:</p>
+    <label onclick="pick(87,0)">A) Ron Rivest and Adi Shamir</label>
+    <label onclick="pick(87,1)">B) Whitfield Diffie and Martin Hellman</label>
+    <label onclick="pick(87,2)">C) Joan Daemen and Vincent Rijmen</label>
+    <label onclick="pick(87,3)">D) Bruce Schneier and Niels Ferguson</label>
+  </div>
+
+  <div class="mq" id="mq88">
+    <p><span class="qnum">88</span> AES block size is always:</p>
+    <label onclick="pick(88,0)">A) 128 bits</label>
+    <label onclick="pick(88,1)">B) 192 bits</label>
+    <label onclick="pick(88,2)">C) 256 bits</label>
+    <label onclick="pick(88,3)">D) Variable depending on key size</label>
+  </div>
+
+  <div class="mq" id="mq89">
+    <p><span class="qnum">89</span> AES-256 uses how many rounds?</p>
+    <label onclick="pick(89,0)">A) 10</label>
+    <label onclick="pick(89,1)">B) 12</label>
+    <label onclick="pick(89,2)">C) 14</label>
+    <label onclick="pick(89,3)">D) 16</label>
+  </div>
+
+  <div class="mq" id="mq90">
+    <p><span class="qnum">90</span> ECB mode is insecure because:</p>
+    <label onclick="pick(90,0)">A) Identical plaintext blocks produce identical ciphertext blocks</label>
+    <label onclick="pick(90,1)">B) It requires an initialization vector</label>
+    <label onclick="pick(90,2)">C) It only works with 64-bit block sizes</label>
+    <label onclick="pick(90,3)">D) Decryption is significantly slower than encryption</label>
+  </div>
+
+  <div class="mq" id="mq91">
+    <p><span class="qnum">91</span> GCM mode provides:</p>
+    <label onclick="pick(91,0)">A) Only confidentiality</label>
+    <label onclick="pick(91,1)">B) Authenticated encryption (confidentiality + integrity)</label>
+    <label onclick="pick(91,2)">C) Only integrity</label>
+    <label onclick="pick(91,3)">D) Key exchange functionality</label>
+  </div>
+
+  <div class="mq" id="mq92">
+    <p><span class="qnum">92</span> S-boxes provide which Shannon property?</p>
+    <label onclick="pick(92,0)">A) Confusion</label>
+    <label onclick="pick(92,1)">B) Diffusion</label>
+    <label onclick="pick(92,2)">C) Compression</label>
+    <label onclick="pick(92,3)">D) Expansion</label>
+  </div>
+
+  <div class="mq" id="mq93">
+    <p><span class="qnum">93</span> Diffusion is achieved by:</p>
+    <label onclick="pick(93,0)">A) S-box substitution</label>
+    <label onclick="pick(93,1)">B) Permutation operations like ShiftRows and MixColumns</label>
+    <label onclick="pick(93,2)">C) Key addition</label>
+    <label onclick="pick(93,3)">D) Padding the plaintext</label>
+  </div>
+
+  <div class="mq" id="mq94">
+    <p><span class="qnum">94</span> AES uses which structure?</p>
+    <label onclick="pick(94,0)">A) Substitution-Permutation Network (SPN)</label>
+    <label onclick="pick(94,1)">B) Feistel network</label>
+    <label onclick="pick(94,2)">C) Stream cipher structure</label>
+    <label onclick="pick(94,3)">D) Merkle-Damgard construction</label>
+  </div>
+
+  <div class="mq" id="mq95">
+    <p><span class="qnum">95</span> DES uses which structure?</p>
+    <label onclick="pick(95,0)">A) Substitution-Permutation Network</label>
+    <label onclick="pick(95,1)">B) Sponge construction</label>
+    <label onclick="pick(95,2)">C) Feistel network</label>
+    <label onclick="pick(95,3)">D) Lai-Massey scheme</label>
+  </div>
+
+  <div class="mq" id="mq96">
+    <p><span class="qnum">96</span> The SubBytes step provides:</p>
+    <label onclick="pick(96,0)">A) Non-linear substitution via S-box</label>
+    <label onclick="pick(96,1)">B) Row shifting for diffusion</label>
+    <label onclick="pick(96,2)">C) Column mixing for diffusion</label>
+    <label onclick="pick(96,3)">D) Round key addition</label>
+  </div>
+
+  <div class="mq" id="mq97">
+    <p><span class="qnum">97</span> CBC mode requires:</p>
+    <label onclick="pick(97,0)">A) No additional parameters beyond the key</label>
+    <label onclick="pick(97,1)">B) An Initialization Vector (IV)</label>
+    <label onclick="pick(97,2)">C) Two separate encryption keys</label>
+    <label onclick="pick(97,3)">D) A hash of the plaintext</label>
+  </div>
+
+  <div class="mq" id="mq98">
+    <p><span class="qnum">98</span> Grover's algorithm affects AES by:</p>
+    <label onclick="pick(98,0)">A) Halving the effective key length</label>
+    <label onclick="pick(98,1)">B) Completely breaking all AES variants</label>
+    <label onclick="pick(98,2)">C) Only affecting AES-128</label>
+    <label onclick="pick(98,3)">D) Having no impact on symmetric ciphers</label>
+  </div>
+
+  <div class="mq" id="mq99">
+    <p><span class="qnum">99</span> Why was the AES competition public?</p>
+    <label onclick="pick(99,0)">A) NIST lacked internal cryptographic expertise</label>
+    <label onclick="pick(99,1)">B) To ensure worldwide scrutiny unlike closed DES process</label>
+    <label onclick="pick(99,2)">C) The law required open competition</label>
+    <label onclick="pick(99,3)">D) Only academic institutions could participate</label>
+  </div>
+
+  <div class="mq" id="mq100">
+    <p><span class="qnum">100</span> AES-128 is equivalent in security to approximately:</p>
+    <label onclick="pick(100,0)">A) RSA-1024</label>
+    <label onclick="pick(100,1)">B) RSA-2048</label>
+    <label onclick="pick(100,2)">C) RSA-3072</label>
+    <label onclick="pick(100,3)">D) RSA-4096</label>
+  </div>
+
+  </div><!-- end questions-container -->
+
+  <div id="result">
+    <div class="result-label">Exam Results</div>
+    <div style="margin-bottom: 20px;"></div>
+  </div>
+
+  <div class="footer">
+    <p>SEAS 8415 Applied Cryptography &amp; Data Protection — Midterm Mega Exam</p>
+    <p style="margin-top: 10px; color: #666;">All 135 questions. 2-hour time limit. Good luck!</p>
+  </div>
+</div>
+
+<script>
+    var answers = {};
+    var locked = {};
+    var score = 0;
+    var correct = {1:2,2:1,3:0,4:1,5:0,6:2,7:0,8:1,9:2,10:0,11:1,12:2,13:0,14:1,15:0,16:2,17:0,18:0,19:1,20:2,21:0,22:1,23:0,24:2,25:0,26:1,27:0,28:1,29:2,30:0,31:1,32:2,33:0,34:1,35:0,36:1,37:0,38:2,39:0,40:1,41:2,42:0,43:2,44:0,45:1,46:0,47:2,48:1,49:0,50:1,51:2,52:0,53:1,54:2,55:0,56:1,57:0,58:2,59:0,60:1,61:2,62:0,63:1,64:0,65:1,66:2,67:0,68:1,69:0,70:1,71:0,72:2,73:0,74:1,75:0,76:2,77:1,78:0,79:1,80:2,81:2,82:0,83:1,84:0,85:0,86:1,87:2,88:0,89:2,90:0,91:1,92:0,93:1,94:0,95:2,96:0,97:1,98:0,99:1,100:2,101:0,102:1,103:0,104:1,105:0,106:2,107:2,108:0,109:1,110:2,111:0,112:1,113:0,114:1,115:0,116:1,117:2,118:0,119:1,120:2,121:0,122:1,123:0,124:2,125:0,126:1,127:2,128:0,129:1,130:0,131:2,132:1,133:0,134:2,135:0};
+
+    var explanations = {
+      1: "The OTP achieves perfect secrecy (Shannon proved this) because the key is truly random, at least as long as the plaintext, and never reused. Every possible plaintext is equally likely given the ciphertext.",
+      2: "The Vigenere cipher uses a repeating keyword to shift each letter differently, creating polyalphabetic substitution. It resisted frequency analysis longer than monoalphabetic ciphers like Caesar.",
+      3: "The Bifid cipher uses a Polybius square for substitution then rearranges coordinates (transposition). This combination of two techniques makes it stronger than either alone.",
+      4: "Salts are random values prepended to passwords before hashing. They defeat rainbow tables because each password+salt combo requires its own precomputed table, making mass precomputation infeasible.",
+      5: "HMAC (Hash-based Message Authentication Code) provides integrity (message hasn't been altered) and authentication (message came from someone with the secret key). It does NOT provide confidentiality.",
+      6: "SHA-256 always produces a 256-bit (32-byte) digest regardless of input size. The '256' in the name literally tells you the output length.",
+      7: "Kerckhoffs' Principle (1883): A cryptosystem should be secure even if everything about it is public knowledge, except the key. This is why we use published, peer-reviewed algorithms.",
+      8: "MD5 has known collision vulnerabilities discovered in 2004. Researchers can create different files with the same MD5 hash. Never use MD5 for security-critical applications.",
+      9: "Data in Use is actively being processed in CPU/memory. It's the hardest state to protect because the data must be decrypted for processing. Technologies like Intel SGX address this.",
+      10: "The Rail Fence cipher rearranges plaintext characters in a zigzag pattern across 'rails' — it changes position, not identity, making it a transposition cipher.",
+      11: "Claude Shannon's 1949 paper 'Communication Theory of Secrecy Systems' mathematically defined perfect secrecy and proved the One-Time Pad achieves it.",
+      12: "Proprietary ciphers haven't been scrutinized by the global cryptographic community. History shows that algorithms thought secure in private are often broken once analyzed publicly.",
+      13: "Computational security means the cost to break the cipher exceeds the value of the protected information. Unlike perfect secrecy (OTP), it relies on practical computational limits.",
+      14: "The avalanche effect means changing even one bit of input should change approximately 50% of the output bits. This is crucial for hash functions and block ciphers to prevent pattern analysis.",
+      15: "Block ciphers process data in fixed-size chunks (e.g., 128 bits for AES). If the data is shorter, it gets padded; if longer, it's split into multiple blocks processed via a mode of operation.",
+      16: "The OTP requires a truly random key as long as the message, used only once, and securely distributed. Key distribution at scale makes it impractical for most applications.",
+      17: "The Caesar cipher is a simple monoalphabetic substitution with only 25 possible keys. Frequency analysis easily breaks it by matching letter frequencies to known language patterns.",
+      18: "Diffie-Hellman relies on the discrete logarithm problem: given g, p, and g^a mod p, it's computationally infeasible to find 'a'. This enables secure key exchange over insecure channels.",
+      19: "RSA security rests on the difficulty of factoring the product of two large primes (n = p*q). If you can factor n, you can compute the private key.",
+      20: "Digital signatures provide integrity (detecting tampering), authentication (verifying sender), and non-repudiation (sender can't deny signing). They do NOT provide confidentiality — the message isn't encrypted.",
+      21: "The RSA public key is (n, e) where n = p*q and e is the public exponent (commonly 65537). The private key contains d, which requires knowing p and q to compute.",
+      22: "Hybrid encryption uses asymmetric crypto (RSA/ECC) to exchange a symmetric key, then symmetric crypto (AES) for bulk data. This combines the best of both: key distribution + speed.",
+      23: "Plain Diffie-Hellman has no authentication — an attacker can intercept and establish separate keys with each party (MITM). Authenticated DH or signed parameters fix this.",
+      24: "With N users needing pairwise symmetric keys, each pair needs a unique key: N(N-1)/2. For 1000 users, that's 499,500 keys — asymmetric crypto solves this scaling problem.",
+      25: "A trap-door (trapdoor) function is easy to compute in one direction but hard to reverse WITHOUT the secret trapdoor value. RSA's trapdoor is the factorization of n into p and q.",
+      26: "Non-repudiation prevents the signer from denying they signed. Only they have the private key, so only they could have produced the signature. This is critical for legal and financial transactions.",
+      27: "PKI = Public Key Infrastructure. It's the framework of policies, hardware, software, and procedures needed to create, manage, distribute, use, store, and revoke digital certificates.",
+      28: "The sender signs with their PRIVATE key. Anyone can verify with the sender's PUBLIC key. This proves authenticity — only the private key holder could have created the signature.",
+      29: "A Certificate Authority (CA) verifies identities and issues digital certificates that bind a public key to an identity. This creates the trust foundation for PKI.",
+      30: "Euler's totient phi(n) = (p-1)(q-1) for n = p*q. This is used to find d such that e*d = 1 mod phi(n), giving us the private key exponent.",
+      31: "Asymmetric encryption is roughly 100-1000x slower than symmetric. This is why hybrid encryption exists — use slow asymmetric only for key exchange, fast symmetric for data.",
+      32: "Double Key Creation encrypts the session key twice: once for the intended server, once for law enforcement. This enables lawful intercept capabilities while maintaining normal encryption.",
+      33: "Key escrow means a third party (often government) holds copies of encryption keys. Critics argue this creates a high-value target and undermines the purpose of encryption.",
+      34: "Certificate Revocation Lists (CRL) are published lists of revoked certificates. OCSP (Online Certificate Status Protocol) provides real-time certificate status checks. Both handle compromised certificates.",
+      35: "In Whitten and Tygar's famous 1999 study, one-third of participants accidentally sent their secret unencrypted despite trying to use PGP encryption. This highlighted fundamental usability failures.",
+      36: "Users didn't understand that the quill pen icon meant 'sign with private key.' The metaphor was unclear — signing a document physically is different from cryptographic signing.",
+      37: "Anderson found that almost all real-world crypto failures were due to implementation bugs, configuration errors, and operational mistakes — not because the underlying algorithms were broken.",
+      38: "Over 90% of security failures come from configuration and implementation errors. The math is sound; humans are the weak link. This drives the need for usable security design.",
+      39: "The Barn Door Property: once a secret is exposed (the barn door is open), you can't make it secret again (the horse has left). Prevention is critical because recovery is impossible.",
+      40: "Authentication confirms identity; authorization determines permissions. Just because someone is authenticated doesn't mean they should access everything. Apply least privilege after authentication.",
+      41: "Cognitive Walkthrough simulates a new user stepping through tasks, evaluating whether the interface guides them correctly. It identifies where users might get confused or make dangerous mistakes.",
+      42: "The 'U in Crypto' study found users accidentally double-spent cryptocurrency because the Send button didn't provide clear feedback that the transaction was processing, leading them to click again.",
+      43: "OWASP crypto failures focus on cryptographic misuse: hardcoded keys, deprecated algorithms, insufficient entropy, etc. Access control is a separate OWASP category, not a crypto failure.",
+      44: "Never assume trust — especially don't trust the client side. Client-side validation can be bypassed. All security enforcement must happen server-side where the attacker can't manipulate it.",
+      45: "Anderson compared crypto to aviation: aircraft accidents are investigated publicly, lessons are shared industry-wide. Crypto failures were hidden by government secrecy, preventing collective learning.",
+      46: "Security concepts like public/private keys, certificates, and encryption are abstract — they have no physical real-world analogy that general users can relate to, making them inherently hard to understand.",
+      47: "Blockchain transactions are irreversible by design. Unlike credit cards with chargebacks, a wrong address or amount in crypto means permanent loss. This makes UX errors catastrophically consequential.",
+      48: "Users who didn't understand blockchain fundamentals left 1-star reviews for network fees, transaction delays, and price volatility — things wallet developers have no control over.",
+      49: "IEEE's guidance: use well-tested, peer-reviewed cryptographic libraries (OpenSSL, libsodium, etc.). Rolling your own crypto almost always introduces vulnerabilities that experts would catch.",
+      50: "Government crypto agencies classified their failures, preventing the broader community from learning. Unlike aviation's open accident reports, crypto mistakes were repeated because lessons weren't shared.",
+      51: "If the secure option is also the easiest option, users will naturally choose security. If security requires extra steps, users will find workarounds. Design security into the path of least resistance.",
+      52: "Completeness: if the statement is true and both parties are honest, the verifier will be convinced. This ensures the protocol actually works for legitimate provers.",
+      53: "Soundness: a dishonest prover has negligible probability of convincing the verifier of a false statement. This protects against fraud — you can't fake knowledge you don't have.",
+      54: "Quisquater et al. published 'How to Explain Zero-Knowledge Protocols to Your Children' using the Ali Baba cave analogy — making ZKP concepts accessible through a story.",
+      55: "zk-SNARKs (Succinct Non-interactive Arguments of Knowledge) require a trusted setup ceremony to generate common reference parameters. If the setup is compromised, fake proofs become possible.",
+      56: "zk-STARKs (Scalable Transparent Arguments of Knowledge) use public randomness instead of a trusted setup, making them 'transparent.' No secret parameters that could be compromised.",
+      57: "The Fiat-Shamir heuristic replaces the verifier's random challenges with hash function outputs, converting an interactive protocol into a non-interactive one that can be verified by anyone.",
+      58: "Starkware (now Starknet) is the primary company commercializing zk-STARKs technology, particularly for blockchain scalability through validity proofs (StarkEx, Starknet).",
+      59: "zk-STARKs rely on hash functions and algebraic coding theory rather than elliptic curve assumptions. Since hash functions aren't vulnerable to Shor's algorithm, STARKs are quantum-resistant.",
+      60: "Thompson demonstrated that a compiler could be modified to insert a backdoor into any program it compiles — and the backdoor persists even if you recompile the compiler from clean source code.",
+      61: "Minimum-disclosure proofs reveal some information beyond just the truth of the statement, while zero-knowledge proofs reveal absolutely nothing beyond the statement's validity.",
+      62: "Each round of the Ali Baba cave protocol gives a 50% chance of catching a cheater. After n rounds, the cheating probability drops to (1/2)^n, becoming negligible for large n.",
+      63: "Non-interactive means the prover sends a single proof message; no back-and-forth dialogue is needed. This is critical for blockchain applications where interaction is impractical.",
+      64: "ZKP allows proving statements about data without revealing the data itself. This means less sensitive data is exposed during verification, reducing the attack surface for data breaches.",
+      65: "ZKP threat models assume the Prover may try to cheat (prove a false statement). Soundness is the property that prevents this. The Verifier is assumed to follow the protocol.",
+      66: "zk-STARKs use publicly verifiable randomness (transparency) instead of a trusted setup ceremony. This eliminates the risk of compromised setup parameters creating fake proofs.",
+      67: "Smart contracts can verify zk-STARK proofs on-chain, creating immutable, trustless verification. Once verified, the proof's validity is permanently recorded on the blockchain.",
+      68: "Thompson's key insight: you can never fully trust software you didn't create, because even the tools (compilers) used to build it could be compromised. Trust is ultimately about people.",
+      69: "Zero Trust's foundational principle: never trust any user, device, or network by default. Always verify identity, check device health, and enforce least-privilege access for every request.",
+      70: "NIST SP 800-207 (2020) is the authoritative reference for Zero Trust Architecture, defining core components, deployment models, and implementation guidance.",
+      71: "The Policy Engine is the 'brain' of Zero Trust — it evaluates identity, device health, behavior, threat intelligence, and other signals to make real-time allow/deny decisions.",
+      72: "The PEP is the 'enforcer' — it sits in the data path and enables, monitors, or terminates connections based on the Policy Engine's decisions. Think of it as the bouncer.",
+      73: "Micro-segmentation divides the network into granular zones, preventing attackers from moving laterally. Even if one segment is compromised, others remain protected.",
+      74: "Zero Trust operates on the 'assume breach' mindset — treat the network as already compromised. This drives continuous verification rather than relying on perimeter defenses.",
+      75: "John Kindervag coined 'Zero Trust' in 2010 while at Forrester Research. His core insight: trust is a vulnerability, and the network perimeter is no longer a reliable trust boundary.",
+      76: "CISA's Zero Trust Maturity Model has five pillars: Identity, Devices, Networks, Applications & Workloads, and Data. Cross-cutting capabilities include Visibility, Automation, and Governance.",
+      77: "Software-Defined Perimeters create dynamic, one-to-one network connections. Resources are invisible to unauthorized users — they can't attack what they can't see (dark cloud approach).",
+      78: "Zero Trust grants access per-session with dynamic policy evaluation. Context can change mid-session (device gets infected, anomalous behavior detected), triggering re-evaluation or revocation.",
+      79: "Mutual TLS requires BOTH parties to present certificates and authenticate each other. Standard TLS only requires the server to authenticate. mTLS is foundational for Zero Trust service-to-service communication.",
+      80: "Cloud workloads, remote workers, mobile devices, and SaaS applications all operate outside the traditional network perimeter. The castle-and-moat model can't protect what's not inside the castle.",
+      81: "The trust algorithm evaluates device health, user behavior, network context, time of access, data sensitivity, and more. Physical appearance is never a factor in Zero Trust decisions.",
+      82: "CISA defines four maturity levels: Traditional (perimeter-based), Initial (started ZT journey), Advanced (automated enforcement), and Optimal (fully dynamic, continuous verification).",
+      83: "The control plane carries policy decisions, configuration, and access control signals. The data plane carries actual user/application traffic. Separating them is crucial for Zero Trust security.",
+      84: "Legacy systems often lack APIs, modern authentication support, or the ability to participate in Zero Trust policy evaluation. Migrating or wrapping them is a major implementation hurdle.",
+      85: "DES's 56-bit key was cracked by the EFF's 'Deep Crack' machine in 1998 in under 23 hours. This proved 56 bits was insufficient and drove the need for AES.",
+      86: "NIST received 15 candidate algorithms for the AES competition in 1997. After two rounds of analysis, five finalists were selected, and Rijndael won in 2001.",
+      87: "Joan Daemen and Vincent Rijmen, Belgian cryptographers, designed Rijndael. The name combines parts of their surnames (Rijmen + Daemen).",
+      88: "AES always uses a 128-bit (16-byte) block size regardless of key length. The original Rijndael supported variable block sizes, but AES standardized on 128 bits.",
+      89: "AES rounds vary by key size: AES-128 = 10 rounds, AES-192 = 12 rounds, AES-256 = 14 rounds. More rounds = more security = slightly slower.",
+      90: "ECB (Electronic Codebook) encrypts each block independently. Identical plaintext blocks produce identical ciphertext, revealing patterns. The famous 'ECB penguin' image demonstrates this visually.",
+      91: "GCM (Galois/Counter Mode) provides authenticated encryption — both confidentiality (CTR mode encryption) and integrity/authentication (GHASH). It's the gold standard for modern symmetric encryption.",
+      92: "S-boxes (Substitution boxes) provide confusion by creating a complex, non-linear relationship between the key and ciphertext. This is Shannon's confusion principle in action.",
+      93: "Diffusion spreads each plaintext bit's influence across many ciphertext bits. In AES, ShiftRows and MixColumns achieve this by mixing data across rows and columns of the state matrix.",
+      94: "AES uses a Substitution-Permutation Network (SPN) where each round applies substitution (SubBytes), permutation (ShiftRows, MixColumns), and key mixing (AddRoundKey).",
+      95: "DES uses a Feistel network: each round splits data in half, processes one half through a function, and XORs with the other half. This structure makes encryption and decryption nearly identical.",
+      96: "SubBytes applies a non-linear S-box substitution to each byte independently. This is the primary source of confusion in AES — it obscures the relationship between key and ciphertext.",
+      97: "CBC (Cipher Block Chaining) XORs each plaintext block with the previous ciphertext block before encryption. The first block needs an IV (Initialization Vector) since there's no previous ciphertext.",
+      98: "Grover's algorithm provides a quadratic speedup for brute-force search, effectively halving the key length. AES-128 becomes 64-bit equivalent, AES-256 becomes 128-bit — still secure with AES-256.",
+      99: "The DES selection process was criticized for being closed (NSA involvement, unexplained S-box modifications). NIST made AES fully public to build global trust and ensure thorough analysis.",
+      100: "NIST SP 800-57 maps equivalent security levels: AES-128 ~ RSA-3072, AES-192 ~ RSA-7680, AES-256 ~ RSA-15360. Symmetric keys are much more efficient per bit of security.",
+      101: "Shannon's criteria state that good ciphers should not expand the ciphertext beyond the plaintext size (C ≤ P). Ciphertext expansion wastes bandwidth and can leak information about message length.",
+      102: "Key stretching algorithms like PBKDF2, bcrypt, and scrypt are intentionally slow (high computational cost) to make brute-force and dictionary attacks impractical by increasing the time per guess.",
+      103: "In formal cryptographic security proofs ('games'), the adversary is modeled as a probabilistic polynomial-time (PPT) algorithm — powerful but computationally bounded, not omniscient.",
+      104: "ECC achieves equivalent security to RSA with much smaller key sizes. ECC-256 provides roughly the same security as RSA-3072, making ECC more efficient for constrained environments.",
+      105: "Shor's algorithm can factor large integers in polynomial time on a sufficiently powerful quantum computer, which would break RSA, DH, and ECC — all based on factoring or discrete log assumptions.",
+      106: "The 'harvest now, decrypt later' (HNDL) threat means adversaries collect encrypted traffic today, storing it until quantum computers can break the encryption. This makes post-quantum migration urgent.",
+      107: "SIKE (Supersingular Isogeny Key Encapsulation), based on supersingular isogeny problems, was broken in 2022 by a classical attack, demonstrating that novel mathematical assumptions carry risk.",
+      108: "Matt Blaze, a cryptographer at AT&T Bell Labs, discovered a vulnerability in the Clipper Chip's key escrow protocol in 1994, undermining the government's backdoor access scheme.",
+      109: "The Ronin Network hack ($625M) occurred because validators were reduced from 9-of-9 to 5-of-9 for convenience, making it easier for attackers to compromise enough validators to steal funds.",
+      110: "The Apple vs FBI case (2016) highlighted that there is no technical way to provide exceptional access to encrypted data only for authorized parties — any backdoor can be exploited by adversaries.",
+      111: "Pinocchio, a practical zk-SNARK system, produces proofs of constant size (~288 bytes) regardless of the complexity of the computation being proven, making verification extremely efficient.",
+      112: "Edward Snowden was revealed as the secret 6th participant in Zcash's trusted setup ceremony, using the pseudonym 'John Dobbertin' to help ensure no single party could compromise the parameters.",
+      113: "Quantum resistant means an algorithm is believed to resist quantum attacks based on current knowledge, but like water resistance vs waterproofing, it's not an absolute guarantee against future attacks.",
+      114: "zk-SNARK proofs are remarkably small — on the order of hundreds of bytes (~100s bytes) — regardless of the statement being proven, which is why 'Succinct' is the S in SNARK.",
+      115: "The Jericho Forum (2004) advocated de-perimeterization: the idea that security should protect data wherever it travels rather than relying on a network perimeter, presaging Zero Trust concepts.",
+      116: "Executive Order 14028 (May 2021) focused on improving the nation's cybersecurity, requiring federal agencies to enhance software supply chain security, adopt Zero Trust, and improve incident response.",
+      117: "In NIST SP 800-207, the implicit trust zone is the area behind the PEP where subjects are granted a level of trust based on the last policy evaluation at the gateway — not blanket trust.",
+      118: "Perimeter security grants persistent (long-lived) access after initial authentication, while Zero Trust uses temporal access that is continuously re-evaluated for each transaction or session.",
+      119: "OMB Memorandum M-22-09 (January 2022) required federal agencies to achieve specific zero trust cybersecurity goals by the end of fiscal year 2024, operationalizing the EO 14028 mandate.",
+      120: "In a Zero Trust architecture, the access proxy (part of the Policy Enforcement Point) is the component that grants or denies access to resources based on signals and policy decisions.",
+      121: "The Enigma machine's critical design flaw was that no letter could ever be encrypted as itself. This property allowed Allied codebreakers (notably at Bletchley Park) to eliminate impossible configurations and dramatically reduce the search space.",
+      122: "The Kasiski Examination (1863) detects repeating key-length patterns in Vigenere ciphertext by finding repeated sequences and computing the distances between them. The GCD of those distances reveals the likely key length, enabling frequency analysis on each position.",
+      123: "Pre-image resistance means given a hash value h, it is computationally infeasible to find ANY input m such that H(m) = h. This is distinct from second pre-image resistance (finding a different input with the same hash) and collision resistance (finding any two inputs with the same hash).",
+      124: "With an N-bit key, there are 2^N possible keys. On average, a brute-force search will find the correct key after trying half the keyspace: 2^(N-1) attempts. This is why we say AES-128 provides 127 bits of brute-force security on average.",
+      125: "HMACs use a shared secret key known to both sender and receiver. Since either party could have generated the MAC, the receiver cannot prove to a third party that the sender (and not the receiver themselves) created the message. Digital signatures solve this by using asymmetric keys.",
+      126: "2^6 = 64. 64 mod 19: 64 / 19 = 3 remainder 7. So 2^6 mod 19 = 7. This is the type of modular exponentiation calculation fundamental to Diffie-Hellman key exchange.",
+      127: "The two primary uses of public-key (asymmetric) encryption are: (1) digital signatures for authentication, integrity, and non-repudiation, and (2) symmetric key exchange to securely establish shared session keys for bulk data encryption.",
+      128: "OWASP renamed 'Sensitive Data Exposure' (A3:2017) to 'Cryptographic Failures' (A02:2021) to emphasize that the root cause is the failure to properly implement cryptography, not merely the symptom of data being exposed. This shift encourages fixing the underlying crypto issues.",
+      129: "In the Whitten and Tygar 'Why Johnny Can't Encrypt' study, participants who managed to figure out the encryption process commonly encrypted messages with their OWN public key instead of the recipient's, meaning only they (not the intended recipient) could decrypt the message.",
+      130: "The IEEE distinguishes flaws from bugs: a flaw is a design-level mistake in the architecture or specification, while a bug is an implementation-level coding error. Both can create vulnerabilities, but flaws are typically harder to fix because they require redesigning, not just patching code.",
+      131: "The Unmotivated User Property (Whitten and Tygar) recognizes that security is almost never the user's primary goal — they want to send email, browse the web, or complete a transaction. Security is a secondary task they tolerate, so security mechanisms must not impede primary tasks.",
+      132: "In the Acme Bank case study, zk-SNARKs reduce average handle time by both reducing the number of security questions asked during authentication AND streamlining the identity verification process, allowing faster customer service without sacrificing security assurance.",
+      133: "In ZKP protocols, the one-way hash function serves as the primary mechanism to ensure soundness — it prevents the prover from cheating by making it computationally infeasible to reverse-engineer or forge valid proof components.",
+      134: "zk-STARKs use Fast Reed-Solomon Interactive Oracle Proofs (FRI) to verify that a function is close to a low-degree polynomial. FRI is a key component that enables the scalability and transparency properties of STARKs without requiring a trusted setup.",
+      135: "'Succinct' in zk-SNARKs refers specifically to the small proof size — proofs are on the order of hundreds of bytes regardless of the complexity of the computation being proven. This compact size makes verification extremely fast and efficient."
+    };
+
+    // 2-hour countdown timer
+    var totalSeconds = 2 * 60 * 60; // 2 hours
+    var startTime = Date.now();
+
+    var timerInterval = setInterval(function(){
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var remaining = totalSeconds - elapsed;
+      if (remaining <= 0) {
+        remaining = 0;
+        clearInterval(timerInterval);
+        gradeExam();
+      }
+      var h = Math.floor(remaining / 3600);
+      var m = Math.floor((remaining % 3600) / 60);
+      var s = remaining % 60;
+      var timerEl = document.getElementById('timer');
+      timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+
+      // Warning colors
+      var timerContainer = timerEl.parentElement;
+      if (remaining <= 300) {
+        timerContainer.className = 'timer danger';
+      } else if (remaining <= 900) {
+        timerContainer.className = 'timer warning';
+      } else {
+        timerContainer.className = 'timer';
+      }
+    }, 1000);
+
+    function pick(q, c) {
+      if (locked[q]) return;
+      locked[q] = true;
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      var correctIdx = correct[q];
+      var isRight = (c === correctIdx);
+
+      labels.forEach(function(l) {
+        l.style.pointerEvents = 'none';
+        l.style.opacity = '0.7';
+      });
+
+      if (isRight) {
+        score++;
+        labels[c].style.background = 'rgba(81,207,102,0.2)';
+        labels[c].style.borderColor = '#51cf66';
+        labels[c].style.color = '#51cf66';
+        labels[c].style.fontWeight = '700';
+        labels[c].style.opacity = '1';
+      } else {
+        labels[c].style.background = 'rgba(255,107,107,0.2)';
+        labels[c].style.borderColor = '#ff6b6b';
+        labels[c].style.color = '#ff6b6b';
+        labels[c].style.opacity = '1';
+        labels[correctIdx].style.background = 'rgba(81,207,102,0.2)';
+        labels[correctIdx].style.borderColor = '#51cf66';
+        labels[correctIdx].style.color = '#51cf66';
+        labels[correctIdx].style.fontWeight = '700';
+        labels[correctIdx].style.opacity = '1';
+      }
+
+      var feedback = document.createElement('div');
+      feedback.className = 'mq-feedback';
+      var explanation = explanations[q] || '';
+      var encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+      var encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+      if (isRight) {
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation;
+      } else {
+        var correctText = labels[correctIdx].textContent.trim();
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation;
+      }
+      document.getElementById('mq' + q).appendChild(feedback);
+
+      var answered = Object.keys(answers).length;
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 135 answered';
+      document.getElementById('progbar').style.width = (answered / 135 * 100) + '%';
+    }
+
+    function gradeExam() {
+      var pct = Math.round(score / 135 * 100);
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+      var answered = Object.keys(answers).length;
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var em = Math.floor(elapsed / 60);
+      var es = elapsed % 60;
+      var timeStr = em + 'm ' + es + 's';
+
+      var confetti = '';
+      if (pct >= 90) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#127881; &#127942; &#127881;</div>';
+      } else if (pct >= 80) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128170; &#11088; &#128170;</div>';
+      } else if (pct >= 70) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128077;</div>';
+      }
+
+      document.getElementById('result').innerHTML = confetti + '<div style="font-size:2.5em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="font-size:1.5em;color:#aaa">' + pct + '% in ' + timeStr + '</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? 'var(--correct)' : 'var(--wrong)') + '">' + g + '</div>';
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+
+      if (pct >= 90) { launchConfetti(); }
+    }
+
+    function launchConfetti() {
+      var colors = ['#e94560','#51cf66','#4DABF7','#FFD43B','#9775FA','#FFA94D'];
+      for (var i = 0; i < 80; i++) {
+        var c = document.createElement('div');
+        c.style.cssText = 'position:fixed;width:10px;height:10px;border-radius:50%;top:-10px;z-index:9999;pointer-events:none;';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animation = 'confettiFall ' + (2 + Math.random() * 3) + 's linear forwards';
+        c.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(c);
+        setTimeout(function(el){ el.remove(); }.bind(null, c), 6000);
+      }
+      var style = document.createElement('style');
+      style.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }';
+      document.head.appendChild(style);
+    }
+
+    function resetExam() {
+      answers = {};
+      locked = {};
+      score = 0;
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = '';
+        l.style.borderColor = '';
+        l.style.color = '';
+        l.style.fontWeight = '';
+        l.style.pointerEvents = '';
+        l.style.opacity = '';
+      });
+      document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
+      document.getElementById('progress').textContent = '0/135 answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+
+      // Reset timer
+      clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(function(){
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var remaining = totalSeconds - elapsed;
+        if (remaining <= 0) {
+          remaining = 0;
+          clearInterval(timerInterval);
+          gradeExam();
+        }
+        var h = Math.floor(remaining / 3600);
+        var m = Math.floor((remaining % 3600) / 60);
+        var s = remaining % 60;
+        var timerEl = document.getElementById('timer');
+        timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        var timerContainer = timerEl.parentElement;
+        if (remaining <= 300) {
+          timerContainer.className = 'timer danger';
+        } else if (remaining <= 900) {
+          timerContainer.className = 'timer warning';
+        } else {
+          timerContainer.className = 'timer';
+        }
+      }, 1000);
+
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function shuffleAndReset() {
+      resetExam();
+
+      var container = document.getElementById('questions-container');
+      var questions = Array.from(container.querySelectorAll('.mq'));
+      var headers = Array.from(container.querySelectorAll('.section-header'));
+
+      questions.forEach(function(q) { q.remove(); });
+      headers.forEach(function(h) { h.remove(); });
+
+      shuffleArray(questions);
+
+      var newHeader = document.createElement('div');
+      newHeader.className = 'section-header';
+      newHeader.textContent = 'Randomized Questions (1-135)';
+      newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
+      container.insertBefore(newHeader, container.firstChild);
+
+      questions.forEach(function(q, idx) {
+        var num = idx + 1;
+        var qnum = q.querySelector('.qnum');
+        if (qnum) qnum.textContent = num;
+        container.appendChild(q);
+      });
+
+      var notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#9775FA;color:#fff;padding:12px 24px;border-radius:25px;font-weight:600;z-index:1000;animation:fadeOut 2s forwards;';
+      notif.textContent = 'Questions shuffled! Good luck!';
+      document.body.appendChild(notif);
+      setTimeout(function() { notif.remove(); }, 2000);
+
+      startTime = Date.now();
+    }
+
+    // Shuffle on page load for fresh experience each time
+    document.addEventListener('DOMContentLoaded', function() {
+      shuffleAndReset();
+    });
+</script>
+</body>
+</html>

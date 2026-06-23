@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8415 - Midterm Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      font-size: 9px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 8px;
+      background: #1a237e;
+      border-radius: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    nav .nav-brand { color: #fff; font-size: 11px; font-weight: bold; }
+    nav .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav a { color: #90caf9; text-decoration: none; font-size: 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    nav a.active { color: #ffd740; border-bottom: 2px solid #ffd740; }
+    .print-btn {
+      background: #ffd740; color: #1a237e; border: none; padding: 3px 8px;
+      border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 9px;
+    }
+    .print-btn:hover { background: #ffca28; }
+
+    /* HEADER */
+    .sheet-title {
+      text-align: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #1a237e;
+      margin: 1px 0 2px 0;
+      padding: 1px 0;
+      border-bottom: 1px solid #1a237e;
+      border-top: 1px solid #1a237e;
+      letter-spacing: 0.2px;
+    }
+
+    /* COLUMNS LAYOUT */
+    .columns {
+      column-count: 3;
+      column-gap: 4px;
+      column-rule: 1px solid #ccc;
+    }
+
+    /* WEEK SECTIONS */
+    .week {
+      margin-bottom: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 0.5px solid #bbb;
+    }
+
+    .week-header {
+      padding: 1px 3px;
+      font-size: 8px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .week-body {
+      padding: 1px 2px 1px 2px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .week-body ul {
+      margin: 0;
+      padding-left: 7px;
+      list-style: disc;
+    }
+
+    .week-body li {
+      margin-bottom: 0;
+    }
+
+    .week-body li b {
+      font-weight: 700;
+    }
+
+    /* WEEK 1 - Coral */
+    .w1 .week-header { background: #c62828; color: #fff; }
+    .w1 .week-body { background: #FFE4E1; }
+    .w1 { border-color: #c62828; }
+
+    /* WEEK 2 - Orange */
+    .w2 .week-header { background: #e65100; color: #fff; }
+    .w2 .week-body { background: #FFF3E0; }
+    .w2 { border-color: #e65100; }
+
+    /* WEEK 3 - Yellow */
+    .w3 .week-header { background: #f9a825; color: #1a1a1a; }
+    .w3 .week-body { background: #FFFDE7; }
+    .w3 { border-color: #f9a825; }
+
+    /* WEEK 4 - Green */
+    .w4 .week-header { background: #2e7d32; color: #fff; }
+    .w4 .week-body { background: #E8F5E9; }
+    .w4 { border-color: #2e7d32; }
+
+    /* WEEK 5 - Blue */
+    .w5 .week-header { background: #1565c0; color: #fff; }
+    .w5 .week-body { background: #E3F2FD; }
+    .w5 { border-color: #1565c0; }
+
+    /* WEEK 6 - Purple */
+    .w6 .week-header { background: #6a1b9a; color: #fff; }
+    .w6 .week-body { background: #F3E5F5; }
+    .w6 { border-color: #6a1b9a; }
+
+    /* PRINT STYLES */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.12in;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 5.7pt;
+        line-height: 1.08;
+        padding: 0;
+      }
+      nav { display: none !important; }
+      .print-btn { display: none !important; }
+
+      .sheet-title {
+        font-size: 6pt;
+        margin: 0;
+        padding: 0;
+        border-width: 0.5px;
+      }
+
+      .columns {
+        column-count: 3;
+        column-gap: 3px;
+        column-rule: 0.4px solid #999;
+      }
+
+      .week {
+        margin-bottom: 1px;
+        border-width: 0.4px;
+      }
+
+      .week-header {
+        padding: 0px 2px;
+        font-size: 5.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body {
+        padding: 0px 1px 0px 1px;
+        font-size: 5.7pt;
+        line-height: 1.08;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body ul {
+        padding-left: 5px;
+      }
+
+      code {
+        font-size: 5pt;
+      }
+
+      .week-body li {
+        margin-bottom: 0;
+      }
+
+      .w1 .week-header { background: #c62828 !important; color: #fff !important; }
+      .w1 .week-body { background: #FFE4E1 !important; }
+      .w2 .week-header { background: #e65100 !important; color: #fff !important; }
+      .w2 .week-body { background: #FFF3E0 !important; }
+      .w3 .week-header { background: #f9a825 !important; color: #1a1a1a !important; }
+      .w3 .week-body { background: #FFFDE7 !important; }
+      .w4 .week-header { background: #2e7d32 !important; color: #fff !important; }
+      .w4 .week-body { background: #E8F5E9 !important; }
+      .w5 .week-header { background: #1565c0 !important; color: #fff !important; }
+      .w5 .week-body { background: #E3F2FD !important; }
+      .w6 .week-header { background: #6a1b9a !important; color: #fff !important; }
+      .w6 .week-body { background: #F3E5F5 !important; }
+    }
+
+    @media (max-width: 900px) {
+      .columns { column-count: 2; }
+    }
+    @media (max-width: 550px) {
+      .columns { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">SEAS 8415 MIDTERM</span>
+  <div class="nav-links">
+    <a href="week1.html">W1</a>
+    <a href="week2.html">W2</a>
+    <a href="week3.html">W3</a>
+    <a href="week4.html">W4</a>
+    <a href="week5.html">W5</a>
+    <a href="week6.html">W6</a>
+    <a href="cheatsheet.html" class="active">Cheat Sheet</a>
+    <a href="mega.html">Mega Exam</a>
+    <a href="../index.html">Home</a>
+    <button class="print-btn" onclick="window.print()">Print</button>
+  </div>
+</nav>
+
+<div class="sheet-title">SEAS 8415 MIDTERM CHEAT SHEET (W1&ndash;6) &mdash; Prof Fossaceca &mdash; Applied Crypto &amp; Data Protection &mdash; 2hrs | Closed book | 1 sheet (both sides) + scratch | Honorlock + side cam | 35% of grade</div>
+
+<div class="columns">
+
+  <!-- WEEK 1 -->
+  <div class="week w1">
+    <div class="week-header">W1 &mdash; Ciphers, Fundamentals &amp; Hashing</div>
+    <div class="week-body">
+      <ul>
+        <li><b>CRYPTOGRAPHY DEFINED:</b> Science of secure communication in presence of adversaries. Three goals: Confidentiality (only authorized access), Integrity (data not altered), Authentication (verify identity). Kerckhoffs' Principle: security depends on KEY secrecy, not algo secrecy &mdash; all modern algos are public (AES, RSA). Opposite of "security through obscurity." Why proprietary ciphers are risky: lack rigorous peer review needed to find vulnerabilities.</li>
+        <li><b>ATOMIC PRIMITIVES:</b> Higher-level protocols built on atomic primitives. Two types: (1) Engineered constructs &mdash; designed by humans (AES, SHA-256), (2) Mathematical problems &mdash; found in nature (discrete log, factoring). Protocols tell parties what to do but NOT the adversary. The adversary NEVER vanishes in formal analysis. Prof Fossaceca emphasis: "the Game of cryptography."</li>
+        <li><b>CLASSICAL &mdash; SUBSTITUTION:</b> Caesar cipher = monoalphabetic, shift each letter by fixed amount, trivially broken by frequency analysis. Monoalphabetic = 1-to-1 letter mapping, vulnerable to frequency analysis. Vigenere = polyalphabetic, uses repeating keyword to change substitution per position, defeats simple frequency analysis but broken by Kasiski examination. Key distinction: polyalphabetic &gt; monoalphabetic.</li>
+        <li><b>CLASSICAL &mdash; TRANSPOSITION:</b> Rail Fence = write plaintext in zigzag across rows, read off by row. Columnar transposition = rearrange columns based on keyword. Bifid = UNIQUE because it combines substitution WITH transposition using Polybius square. Key distinction: substitution CHANGES letters, transposition REARRANGES positions.</li>
+        <li><b>SHANNON'S PERFECT SECRECY &amp; OTP:</b> Claude Shannon (1949) defined perfect secrecy: ciphertext reveals ZERO information about plaintext. P(M|C) = P(M). One-Time Pad = ONLY cipher achieving perfect secrecy. OTP requirements: key must be (1) truly random, (2) as long as message, (3) used only ONCE, (4) kept secret. OTP is impractical &mdash; key distribution/management impossible at scale. Computational security = practical alternative: cost/time to break exceeds value of information.</li>
+        <li><b>SHANNON'S 5 CRITERIA (1949):</b> (1) Degree of secrecy = amount of labor to break, (2) Algorithm should be free from complexity, (3) Implementation should be simple, (4) Ciphertext size &le; plaintext size (C &le; P), (5) Error propagation should be limited. Prof emphasized: "STILL VALID TODAY" &mdash; likely testable!</li>
+        <li><b>COMPLEXITY THEORY:</b> Probability of breaking a cipher &le; t/2^200 where t = number of computing cycles. Adversary modeled as probabilistic polynomial-time (PPT) algorithm. Security proven by reduction: if breaking cipher is easy &rarr; solving known hard problem is also easy (contradiction). This is the formal foundation of modern cryptographic security proofs.</li>
+        <li><b>SYMMETRIC vs ASYMMETRIC:</b> Symmetric = same key enc/dec (fast, bulk data, AES). Asymmetric = pub/priv key pair (slower, solves key distribution, RSA/ECC). Hybrid systems = use asym to exchange sym key, then sym for data (TLS model). Symmetric is 100-1000x faster than asymmetric.</li>
+        <li><b>HASHING:</b> One-way functions: easy to compute, infeasible to reverse. Properties: deterministic, fixed-length output, avalanche effect (small input change &rarr; drastically different output), collision resistance. MD5 = 128-bit, BROKEN (collisions found). SHA-1 = 160-bit, deprecated. SHA-256/SHA-3 = current standards. Also: RIPEMD, Tiger, HAVAL. NOT encryption &mdash; hashing is IRREVERSIBLE.</li>
+        <li><b>SALTING &amp; PASSWORD SECURITY:</b> Salt = unique random string added BEFORE hashing. Ensures identical passwords produce different hashes. Defeats rainbow table attacks (precomputed hash lookups). Each user gets unique salt stored alongside hash.</li>
+        <li><b>KEY STRETCHING:</b> Transforms weak/short password into stronger key. PBKDF2 = applies HMAC repeatedly (thousands of iterations). bcrypt = based on Blowfish, includes automatic salt, adaptive cost factor. Deliberately slow &mdash; that's the FEATURE. Makes brute-force expensive even with weak passwords.</li>
+        <li><b>HMAC:</b> Hash-based Message Authentication Code. Combines hashing with secret key. Provides Integrity AND Authentication (NOT confidentiality). HMAC = Hash(key || message). Used in TLS, API auth, data integrity verification.</li>
+        <li><b>DATA STATES:</b> At Rest = stored on persistent media (HDD, DB) &rarr; encrypt with AES. In Transit = moving across networks &rarr; protect with TLS/SSL. In Use = processed by CPU &rarr; hardest to protect (emerging: secure enclaves, homomorphic encryption).</li>
+        <li><b>BLOCK vs STREAM CIPHERS:</b> Block = encrypt fixed-size blocks (AES = 128-bit blocks). Stream = encrypt one bit/byte at a time (RC4, ChaCha20). Modern block ciphers use substitution-permutation networks.</li>
+        <li><b>PRNG PROPERTIES:</b> Pseudo-Random Number Generators. Requirements: uncorrelated sequences (output not predictable from prior values), long period (no repeats), uniformity (all values equally likely). CSPRNG (Cryptographically Secure PRNG) required for crypto &mdash; weak PRNGs &rarr; predictable keys.</li>
+        <li><b>SYMMETRIC CIPHER COMPARISON:</b> RC4: stream, 40-2048 bit key, BROKEN (WEP). DES: 56-bit key, 64-bit block, BROKEN 1999. 3DES: 112/168-bit key, 64-bit block, deprecated, 3x slower. AES: 128/192/256-bit key, 128-bit block, CURRENT STANDARD, selected 2001.</li>
+        <li><b>MATH FOUNDATIONS:</b> Modular arithmetic: a mod n = remainder. XOR (&oplus;): key operation in ciphers. GCD: important for RSA key gen. Primes &gt;3 are form 6k&plusmn;1. Binary key space: n-bit key = 2^n possible keys. Permutations (order matters) vs Combinations (order doesn't).</li>
+        <li><b>ENIGMA:</b> No plaintext letter ciphered as itself &mdash; key vulnerability allowing Allies to dismiss translations. Alan Turing cracked it at Bletchley Park.</li>
+        <li><b>KASISKI EXAMINATION:</b> Systematic attack breaking polyalphabetic ciphers (Vigenere). Finds repeated ciphertext sequences to determine keyword length.</li>
+        <li><b>PRE-IMAGE RESISTANCE:</b> Infeasible to find ANY input mapping to specific hash. Different from collision resistance. TRAP: Avalanche effect = small change &rarr; big output change, NOT about collisions.</li>
+        <li><b>NONCE:</b> Unique random number used ONCE. Prevents replay attacks. HMAC fails non-repudiation because both parties share key. One-way function analogy: smashing a plate.</li>
+        <li><b>KEY LENGTH MATH:</b> N to N+k bits = key space &times; 2^k. 8&rarr;16 bits = 256&times; more keys. Brute force average = 2^(N-1) not 2^N. NVIDIA CUDA enables parallel brute-force cracking.</li>
+        <li><b>PUB KEY TWO USES:</b> (1) Digital Signatures, (2) Symmetric Key Exchange. NOT "confidentiality" as primary. Message Digest = fixed-size hash output. Washington's spies = invisible ink (steganography).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week w2">
+    <div class="week-header">W2 &mdash; Asymmetric Crypto &amp; Key Exchange</div>
+    <div class="week-body">
+      <ul>
+        <li><b>KEY DISTRIBUTION PROBLEM:</b> Symmetric crypto's fundamental challenge: N users need N(N-1)/2 keys for pairwise communication &mdash; doesn't scale. 10 users = 45 keys, 100 users = 4,950 keys. Motivated invention of public key cryptography.</li>
+        <li><b>DIFFIE-HELLMAN (1976):</b> First published public key exchange (Diffie &amp; Hellman). Based on discrete logarithm problem. How it works: Alice &amp; Bob agree on public p (prime) and g (generator). Each picks secret (a, b). Exchange g^a mod p and g^b mod p. Both compute shared secret g^(ab) mod p. DOES NOT authenticate &mdash; vulnerable to MITM. Example: p=23, g=5, a=6, b=15 &rarr; shared secret.</li>
+        <li><b>RSA (1977):</b> Rivest, Shamir, Adleman. Based on difficulty of factoring product of two large primes. Key gen: pick p,q (large primes) &rarr; n=p*q &rarr; &phi;(n)=(p-1)(q-1) &rarr; choose e coprime to &phi;(n) &rarr; d=e^(-1) mod &phi;(n). Public key=(n,e). Private key=(n,d). Encrypt: c=m^e mod n. Decrypt: m=c^d mod n. Trap-door function: easy forward, hard reverse without key.</li>
+        <li><b>DIGITAL SIGNATURES:</b> Provide authentication + integrity + non-repudiation. Sign with PRIVATE key, verify with PUBLIC key (opposite of encryption). Process: hash message &rarr; encrypt hash with private key = signature. Non-repudiation: signer cannot deny (unique private key). Anyone with public key can verify.</li>
+        <li><b>PKI:</b> Public Key Infrastructure. CA (Certificate Authority) = trusted third party issuing certificates. Certificate binds identity to public key. Chain of trust: Root CA &rarr; Intermediate CA &rarr; End entity. Certificate revocation: CRL (Certificate Revocation List) and OCSP (Online Certificate Status Protocol).</li>
+        <li><b>TRAP-DOOR FUNCTIONS:</b> One-way functions with secret "trap door" enabling reversal. RSA trap door: knowing factorization of n (p,q) allows computing d. Foundation of all public key crypto.</li>
+        <li><b>HYBRID ENCRYPTION:</b> Combines asymmetric (key exchange) with symmetric (data). Asymmetric is 100-1000x slower. TLS: use RSA/DH to exchange AES session key, then AES for bulk data. Envelope encryption: encrypt data with sym key, encrypt sym key with pub key.</li>
+        <li><b>KEY MANAGEMENT:</b> Generation: use CSPRNG. Storage: protect private keys (HSMs, key vaults). Rotation: periodically change keys. Escrow: third party holds copy (controversial &mdash; law enforcement vs privacy).</li>
+        <li><b>MITM ATTACKS:</b> Attacker intercepts key exchange, establishes separate keys with each party. Defeats plain DH (no auth). Prevention: digital signatures, certificates, authenticated key exchange. "Double Key Creation" = encrypt session key once for server, once for law enforcement.</li>
+        <li><b>DH CALCULATION (EXAM):</b> g=2,p=19,a=6,b=3: Y=2^6 mod 19=7, C=2^3 mod 19=8, S=8^6 mod 19=18 or 7^3 mod 19=18. MATCH. Use repeated squaring for large exponents. One-way func is "easy/simple/feasible" to compute (NOT "efficient").</li>
+        <li><b>ECC:</b> Elliptic Curve Cryptography. Lighter, more agile alternative to RSA. Smaller keys: ECC-256 &asymp; RSA-3072. Ideal for IoT, mobile, battery-powered devices. Based on ECDLP (Elliptic Curve Discrete Log Problem). ECDSA (signatures), ECDH (key exchange). CAB Forum now requires RSA minimum 3072 bits &mdash; driving ECC adoption.</li>
+        <li><b>"RSA IS DEAD" DISCUSSION:</b> 90% of internet SSL connections still use RSA. Key length must keep growing (3072+ now). CSPRNG seeding vulnerability: weak RNG &rarr; predictable keys. Key scaling problem: RSA grows exponentially, ECC stays small. Quantum threat via Shor's algorithm.</li>
+        <li><b>POST-QUANTUM CRYPTOGRAPHY:</b> Shor's algorithm = quantum algorithm breaking RSA, DH, ECC (factors/solves discrete log in polynomial time). NIST PQC standardization: 5 candidate categories: (1) Code-based (McEliece), (2) Lattice-based (CRYSTALS-Kyber, CRYSTALS-Dilithium &mdash; NIST winners), (3) Hash-based (SPHINCS+), (4) Multivariate polynomial, (5) Super-singular isogeny (SIKE &mdash; BROKEN 2022). "Harvest now, decrypt later" = adversaries collect encrypted data today to decrypt with future quantum. NIST migration timeline: by 2035.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week w3">
+    <div class="week-header">W3 &mdash; Secure Design &amp; Usability</div>
+    <div class="week-body">
+      <ul>
+        <li><b>WHY JOHNNY CAN'T ENCRYPT (Whitten &amp; Tygar 1999):</b> Landmark PGP 5.0 usability study. Even technically competent users made critical errors. "Quill pen" icon problem: failed to communicate private key was used for signing. Users confused encryption with signing. 1/3 of participants sent secrets WITHOUT encrypting. Key insight: security software must be usable or people won't use it correctly.</li>
+        <li><b>WHY CRYPTOSYSTEMS FAIL (Anderson 1993):</b> Studied real-world banking crypto failures. Key finding: most failures NOT from broken algorithms but implementation/configuration errors. Over 90% of computer security failures = config/implementation errors. Crypto community lacks "learning mechanism" found in aeronautical engineering (govt secrecy). Banking "phantom withdrawals" &mdash; banks blamed customers. Anderson: security bugs should be tracked/published like aviation incidents.</li>
+        <li><b>"U" IN CRYPTO STANDS FOR USABLE:</b> Mobile cryptocurrency wallet usability study. "Uninformed people" gave 1-star reviews for issues dev had no control over (network fees). Primary cause of double-spends: poor interface design &mdash; Send button fails to give immediate clear feedback. Blockchain irreversibility amplifies UX errors &mdash; single mistake = permanent financial loss. Users apply "traditional payment" mental model expecting reversibility.</li>
+        <li><b>BARN DOOR PROPERTY:</b> Once a secret is exposed, can't be un-exposed. Makes PREVENTION of high-cost errors a design priority. Especially critical in crypto wallets: blockchain irreversibility = errors permanent. Design implication: build guardrails BEFORE mistakes happen.</li>
+        <li><b>ABSTRACTION PROPERTY:</b> Security management involves abstract rules/policies alien to general users. Users don't think about security until something goes wrong. Good design makes security invisible and automatic.</li>
+        <li><b>COGNITIVE WALKTHROUGH:</b> Usability evaluation technique particularly fitting for security. Evaluator mentally simulates novice user's understanding. Concerned with learnability. Can be done WITHOUT actual users (expert evaluation). Ask: will user know what to do? Notice correct action? Understand feedback?</li>
+        <li><b>IEEE TOP 10 SECURE DESIGN FLAWS:</b> (1) Earn or Give, But Never Assume, Trust &mdash; don't offload security from server to client. (2) Use Cryptography Correctly &mdash; don't roll your own, use established libraries. (3) Authorize After You Authenticate &mdash; knowing identity &ne; allowing all actions. (4) Strictly Separate Data and Control Instructions &mdash; prevent injection. (5) Define approach ensuring all data explicitly validated. (6) Use strong auth. (7) Compartmentalize and isolate. (8) Least privilege. (9) Don't implement security yourself. (10) Make security usable.</li>
+        <li><b>OWASP CRYPTOGRAPHIC FAILURES (Top 10 #2):</b> Three categories: (1) Loss of confidentiality (data exposure), (2) Non-repudiation failure, (3) Failed integrity checks. Common mistakes: weak algos (MD5, SHA-1, DES), hardcoded keys, improper key mgmt. "Access control vulnerabilities" is NOT one of the three (separate OWASP category).</li>
+        <li><b>CLIPPER CHIP &amp; KEY ESCROW (1993):</b> US govt proposed hardware enc device with built-in backdoor. Used classified Skipjack algo. Key escrow = govt holds copies of enc keys. Matt Blaze found protocol vulnerability. Public backlash killed it. Lesson: can't have strong encryption AND guaranteed govt access &mdash; fundamental trade-off. Prof Fossaceca emphasized as recurring theme.</li>
+        <li><b>LAW ENFORCEMENT ACCESS:</b> "Going dark" problem: can't access encrypted comms even with warrant. Apple vs FBI (2015-16): FBI demanded backdoor for San Bernardino phone. Apple refused (dangerous precedent). FBI used third-party tool (Cellebrite). "Double Key Creation" = encrypt session key for server AND for law enforcement pub key. No technical solution providing access ONLY to "good guys."</li>
+        <li><b>RONIN NETWORK HACK (2022):</b> $620M stolen from Axie Infinity blockchain bridge. Root cause: compromised private keys (5 of 9 validators). Usability failure: reduced validators 9-of-9 to 5-of-9 for "convenience." Temporary Sky Mavis permission never revoked. Barn Door Property in action &mdash; funds irrecoverable. Security config shortcuts have permanent consequences.</li>
+        <li><b>OWASP RENAME:</b> "Sensitive Data Exposure" &rarr; "Cryptographic Failures" (2021). Shifted from symptom to root cause. Flaw=design mistake, Bug=implementation issue. "Agility"=capability to change algos as needed.</li>
+        <li><b>HW-TESTED DETAILS:</b> RBF (Replace-by-Fee)=overwrite stuck Bitcoin tx w/ higher fee. Hard-coded passwords=significant failure mode. 96% negative reviews (not 94%). PGP users encrypted w/ OWN pub key (not recipient's). Unmotivated User Property=users don't seek security. Lack of Feedback Property=software can't error-check because only user knows intent. Salting&ne;Seeding (salt=unique hashes, seed=PRNG start). Anderson's paradigm shift=fuse security w/ software engineering.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week w4">
+    <div class="week-header">W4 &mdash; Zero Knowledge Proofs</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ZKP DEFINITION:</b> Proof where Prover convinces Verifier a statement is true WITHOUT revealing any information beyond truth of statement. Example: prove you know a password without revealing it. Invented by Goldwasser, Micali, Rackoff (1985). Three properties: (1) Completeness &mdash; honest prover convinces honest verifier of true statement, (2) Soundness &mdash; cheating prover can't convince verifier of false statement (except negligible probability), (3) Zero-knowledge &mdash; verifier learns NOTHING beyond whether statement is true. Threat model assumes potential cheating from Prover.</li>
+        <li><b>ALI BABA CAVE (Quisquater):</b> Peggy (Prover) proves she knows secret word to open door in circular cave. Victor (Verifier) waits outside, Peggy enters path A or B. Victor calls which path to exit. If Peggy knows secret, always exits correctly. Cheating probability = 1/2^n after n rounds &mdash; negligible.</li>
+        <li><b>INTERACTIVE vs NON-INTERACTIVE:</b> Interactive = back-and-forth between Prover and Verifier. Non-interactive = single proof message anyone can verify. Fiat-Shamir heuristic: transforms interactive ZKP into non-interactive by replacing Verifier's random challenges with hash function output. Peggy uses one-way hash to ensure Victor cannot learn polynomial amount of info.</li>
+        <li><b>zk-SNARKs:</b> Zero-Knowledge Succinct Non-interactive ARgument of Knowledge. (zk) = proving without revealing. (S) = Succinct &mdash; computationally feasible, proof small enough to verify in milliseconds. (NARK) = Non-interactive Argument of Knowledge &mdash; no back-and-forth. Require trusted setup phase &mdash; creates initial parameters. Trusted setup = vulnerability: if compromised, fake proofs possible. Properties: Completeness, Soundness, Zero-knowledge, Succinct, Non-interactive, Argument (soundness vs PPT prover), of Knowledge (proof can't be constructed without witness). Proof size: ~100s of bytes. Verification: ~10ms. Used in Zcash. VULNERABLE to quantum attacks (uses elliptic curves).</li>
+        <li><b>zk-STARKs:</b> Zero-Knowledge Scalable Transparent ARgument of Knowledge. Key advantage: NO trusted setup (transparent) &mdash; uses public randomness. Quantum resistant (uses hash functions, not ECC &mdash; Grover's doesn't meaningfully break collision-resistant hashing). Larger proofs (~100s of kilobytes) but more scalable. Starkware = company commercializing. "Verifiable trust." Proof size: ~100s KB. Verification: 50-100ms.</li>
+        <li><b>SNARKs vs STARKs DETAILED:</b> Trusted setup: SNARKs YES, STARKs NO. Crypto basis: SNARKs = elliptic curves/pairings, STARKs = hash functions. Scalability: SNARKs less scalable, STARKs highly scalable. Proof size: SNARKs ~100s bytes (small), STARKs ~100s KB (larger). Verify speed: SNARKs faster (~10ms), STARKs slower (50-100ms). Quantum: SNARKs NOT safe, STARKs safe. Maturity: SNARKs more mature/widely adopted, STARKs newer. Communication complexity: SNARKs grow linearly, STARKs polylogarithmic. Prover complexity: STARKs ~10x faster as computation increases.</li>
+        <li><b>PINOCCHIO:</b> First general-purpose verifiable computation system. Client creates public evaluation key. Worker evaluates computation + produces proof of correctness. Proof = only 288 bytes regardless of computation size. Verification: 5-7 orders of magnitude faster than previous work (~10ms). First to demonstrate verification cheaper than native execution. Reduces worker proof effort 19-60x. Generalizes to ZKP at negligible cost. End-to-end toolchain: compiles C subset into verifiable programs.</li>
+        <li><b>SELF-SOVEREIGN IDENTITY:</b> Personal data (DOB, SSN) = our identity. Facebook data mining + Equifax breach = orgs can't be trusted. Self-sovereign identity: individuals own/manage their data. zk-SNARKs enable proving identity without sharing sensitive info. Crypto proof can't be linked to data used to create it. With ZKP, Equifax-type leaks could become thing of the past.</li>
+        <li><b>ZCASH &mdash; zk-SNARKs IN PRACTICE:</b> First widespread zk-SNARK application. Shielded transactions: fully encrypted on blockchain but verifiable. Requires trusted setup via multi-party ceremony. Original: 6 participants, 5 revealed identities. 6th = pseudonym "John Dobbertin" = Edward Snowden. Zerocash protocol. Cons: computationally intensive, complicated setup, incorrect implementation &rarr; coin forgery. New ceremony: 88 participants. Zcash market cap ~$794M (Sept 2025).</li>
+        <li><b>TRUSTING TRUST (Ken Thompson 1984):</b> Turing Award lecture. Can't fully trust code you didn't write (even compiler). Self-replicating Trojan: modify compiler to insert backdoor, then modify compiler to insert the modification &mdash; persists even with clean source. Thompson: "more balanced media portrayal" needed. Trust is fundamental and hard to establish in computing.</li>
+        <li><b>QUANTUM RESISTANT vs PROOF:</b> Important distinction from lecture. Resistant = like water RESISTANT watch (resists to certain depth). Proof = WATERPROOF (impervious). Until true quantum capabilities known, can only claim RESISTANCE. zk-STARKs = quantum resistant. zk-SNARKs = vulnerable. May not see changes to Bitcoin/Ethereum encryption until mainstream quantum closer.</li>
+        <li><b>COMMITMENT SCHEMES:</b> Coin-tossing vs ZKP distinction. Commitment scheme = Alice commits to value without revealing, later opens. Different from ZKP (which proves knowledge without revealing).</li>
+        <li><b>HW-TESTED TRAPS:</b> Acme Bank handle time reduced by C&amp;D (reduce questions + streamline verification), NOT "all of the above." Hash in ZKP = "prevent cheating" (soundness), NOT "surrogate for verifier." "Succinct"=small proof size. FRI=method proving function close to low-degree polynomial. "Cut and choose"=basic ZKP technique (Schneier). PCPs=key to verifiable computation. Ripple NOT a zk-STARK adopter. Thompson read about Trojans in Air Force Multics critique.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week w5">
+    <div class="week-header">W5 &mdash; Zero Trust Architecture</div>
+    <div class="week-body">
+      <ul>
+        <li><b>WHAT IS ZERO TRUST:</b> "Never trust, always verify." Security model: no one blindly trusted inside network. Supports "least privilege access." Conceived in response to: mobile/remote workers, BYOD trend, shadow IT, cloud services. At its core: effective Identity and Access Management Platform. ZT brings back control in face of dissolving network perimeter.</li>
+        <li><b>WHY ZERO TRUST:</b> Move to cloud &rarr; APIs, distributed microservices, IoT ecosystems. Each "thing" = sophisticated actor. Data protected in every deployment model. Consumer-facing services (banking, healthcare, connected car, telco) already use ZT models. Convergence of: identity, trust, authorization, access. Global ZT market projected $52 billion by 2026 (CNBC). Driving growth: frequency of target-based cyber attacks + increasing regulations.</li>
+        <li><b>JERICHO FORUM (2007):</b> Earliest formal work on Zero Trust concepts. Security consortium of CISOs. Founded by Paul Simmonds (same time as first iPhone). Promoted "de-perimeterization": protect data flowing in/out rather than behind boundary. "Secure assets where they are." De-perimeterization has happened, is happening, is inevitable; central protection decreasing. Generic roadmap for planning.</li>
+        <li><b>JERICHO COMMANDMENTS:</b> Fundamentals: (1) Protection scope specific/appropriate to asset at risk, (2) Security mechanisms must be pervasive, simple, scalable, easy to manage, (3) Assume context at your peril. Surviving Hostile World: (1) Use open, secure protocols &mdash; eliminate insecure ones, (2) All devices maintain security on untrusted network. Need for Trust: (1) Declared/transparent trust levels, (2) Mutual trust assurance determinable. Identity/Federation: Auth/authz/accountability interoperate outside your control. Access to Data: (1) Controlled by data's security attributes, (2) Privacy requires segregation of duties, (3) Data secured when stored, in transit, AND in use.</li>
+        <li><b>KINDERVAG &amp; FORRESTER (2009):</b> John Kindervag coined "Zero Trust" at Forrester in 2009 (NOT 2010). Core belief: "trust is a vulnerability." Security designed with "Never trust, always verify." Workload-first, data-driven, identity-aware model. Improves security AND employee experience (Prof: "But does it?").</li>
+        <li><b>NIST SP 800-207 (2020):</b> Abstract definition of ZTA. General deployment models and use cases. Also: "Planning for ZTA: Starting Guide for Administrators" (Aug 2021). Why NIST: vendor neutral, standardized definitions, used as specifications/requirements.</li>
+        <li><b>ZT vs ZTA vs ZTE DEFINITIONS:</b> Zero Trust (ZT) = collection of concepts designed to minimize uncertainty in enforcing accurate, least privilege per-request access decisions in systems viewed as compromised. Zero Trust Architecture (ZTA) = enterprise cybersecurity plan utilizing ZT concepts, encompassing component relationships, workflow planning, access policies. Zero Trust Enterprise = network infrastructure + operational policies as product of ZTA plan.</li>
+        <li><b>PERIMETER vs ZERO TRUST:</b> Perimeter: Static perimeter defined around boundary | Trust Model: users authorized by identity/role/clearance | Persistent Access: decisions stay as long as role unchanged. Zero Trust: Dynamic perimeter defined by transaction attributes | Transactional Model: authorization by attributes for each transaction | Temporal Access: decisions only for duration, then re-evaluated.</li>
+        <li><b>7 NIST ZT TENETS:</b> (1) All data sources and computing services = resources (incl personally owned devices), (2) All communication secured regardless of network location (protect confidentiality/integrity, provide source auth), (3) Access to individual resources granted per-session (least privilege), (4) Access determined by dynamic policy (client identity, app/service, requesting asset, behavioral/environmental attributes), (5) Enterprise monitors/measures integrity and security posture of ALL assets (no asset inherently trusted, evaluate posture per request, continuous monitoring, patch as needed), (6) All auth/authz dynamic and strictly enforced (constant cycle: obtain access, scan, assess threats, adapt, re-evaluate &mdash; ICAM + MFA), (7) Collect as much info as possible about asset state, infrastructure, communications to improve posture.</li>
+        <li><b>ZT VIEW OF NETWORK:</b> Entire enterprise private network NOT considered implicit trust zone. Authenticate all connections, encrypt all traffic. Devices may not be enterprise-owned/configurable. No resource inherently trusted. Not all resources on enterprise infrastructure. Remote subjects can't trust local network. Consistent security policy across enterprise/non-enterprise.</li>
+        <li><b>LOGICAL COMPONENTS (NIST):</b> Policy Engine (PE) = makes and logs decisions (approved/denied). Policy Administrator (PA) = generates session-specific auth tokens/credentials. Policy Enforcement Point (PEP) = enables, monitors, terminates connections. Beyond PEP = trust zone hosting resource. Control Plane = PE + PA (policy decisions). Data Plane = subject &rarr; PEP &rarr; resource (actual data traffic). Logical components don't necessarily need to be unique systems.</li>
+        <li><b>ZT DATA/POLICY SOURCES:</b> CDM (Continuous Diagnostics &amp; Mitigation), Industry compliance system, Threat intelligence feeds, Network/system activity logs, Data access policies, Enterprise PKI, ID management system, SIEM.</li>
+        <li><b>ZT NETWORK COMPONENTS (Microsoft/Soseman):</b> Identity provider (track users), Device directory (list of devices + type/integrity info), Policy evaluation service (user/device conform to policy?), Access proxy (grant/deny based on signals), Anomaly detection + ML. Conditional access controls = "if-this-then-that" automated approach. Controls: allow/deny, require MFA, force password reset, control session access (read not download), block legacy auth.</li>
+        <li><b>DEVICE HEALTH CONDITIONS:</b> Machine risk level (malware, Pass-the-Hash). System integrity/posture (hardware-rooted boot-time + runtime checks). Integrity checks: drivers, kernel, firmware, peripheral firmware, antimalware driver code. Verify boot state. Compliance policy checks (OS security settings).</li>
+        <li><b>IDENTITY CONDITIONS:</b> User risk level. Sign-in from: known botnet IP? Anonymous IP? Unauthorized browser (Tor)? Unfamiliar location? Impossible travel? Suspicious sign-in (failed attempts across accounts, attacker IP patterns)? Leaked credentials (dark web)?</li>
+        <li><b>IMPLICIT TRUST ZONE:</b> Area beyond PEP where all entities trusted to at least level of last PDP/PEP gateway. ZT principle: move PDP/PEPs CLOSER to the resource. The idea: explicitly auth/authz ALL subjects, assets, workflows.</li>
+        <li><b>THREE NIST ZTA DEPLOYMENT MODELS:</b> (1) Device Agent/Gateway Model &mdash; agent on device communicates with gateway protecting resource. (2) Enclave Gateway Model &mdash; gateway protects resource enclave (group of resources). (3) Resource Portal Model &mdash; gateway portal = single entry point to data resources. All maintain Control Plane (PE+PA) separate from Data Plane.</li>
+        <li><b>ZTN vs SDP:</b> ZTN: Core = "never trust, always verify" (continuous auth). Architecture = philosophy using auth/authz/micro-seg/monitoring. Auth = continuous per-request based on identity/device/context. Visibility = deep insight into traffic/behavior. Deploy = flexible, coexists with existing infra. SDP: Core = dynamically create secure isolated connections, hide resources. Architecture = defined framework with controllers/gateways. Auth = strong crypto ensures only verified connect. Visibility = tracks access, resources hidden from public internet. Deploy = requires SDP controllers/gateways, often for remote/cloud.</li>
+        <li><b>EO 14028 + OMB M-22-09:</b> Executive Order 14028: comprehensive cybersecurity initiatives for US govt. 7 provisions: (1) ZTA, (2) Improved cybersecurity standards, (3) Incident response/remediation, (4) Software supply chain security, (5) Cybersecurity Review Board, (6) Information sharing, (7) Federal contracting requirements. OMB M-22-09 (Jan 26, 2022): requires agencies meet specific cybersecurity standards by end of FY2024. Strategic goals align with CISA 5 pillars: Identity (phishing-resistant MFA), Devices (complete inventory), Networks (encrypt all DNS/HTTP), Applications (internet-connected, empirical testing), Data (thorough categorization).</li>
+        <li><b>CISA ZT MATURITY MODEL v2.0 (Apr 2023):</b> 5 pillars + 3 cross-cutting capabilities (Visibility/Analytics, Automation/Orchestration, Governance). Four maturity levels: Traditional &rarr; Initial &rarr; Advanced &rarr; Optimal. Each pillar has specific capabilities at each level. One of many roadmaps for ZT transition.</li>
+        <li><b>ZT BENEFITS:</b> Allow conditional access while restricting high-value resources to managed devices. Prevent lateral movement with stolen credentials. Enable productivity (work anywhere). Identity = control plane. "If-this-then-that" automation. Can enable new business outcomes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week w6">
+    <div class="week-header">W6 &mdash; AES &amp; Algorithm Selection</div>
+    <div class="week-body">
+      <ul>
+        <li><b>DES TO AES:</b> DES (1977): 56-bit key, 64-bit block. Vulnerable to brute force by 1990s. 3DES: applied DES 3x with 2-3 keys, slower but more secure. NIST announced need for new standard 1997.</li>
+        <li><b>AES COMPETITION (1997-2001):</b> Open, transparent international competition. 15 initial candidates. Evaluation: security, performance, efficiency, flexibility, simplicity. 5 finalists: Rijndael, Serpent, Twofish, RC6, MARS. Rijndael selected Oct 2000 by Joan Daemen + Vincent Rijmen (Belgium). Open process = opposite of DES (NSA behind closed doors).</li>
+        <li><b>WHY RIJNDAEL WON:</b> Best balance of security + performance + simplicity. Efficient in hardware AND software. Low memory (smart cards). Variable key sizes: 128/192/256. Clean math: Galois field arithmetic.</li>
+        <li><b>AES INTERNALS:</b> Block = 128 bits (always). Keys: 128 (10 rounds), 192 (12 rounds), 256 (14 rounds). Four operations per round: (1) SubBytes &mdash; non-linear substitution via S-box (confusion), (2) ShiftRows &mdash; cyclic shift of rows (diffusion), (3) MixColumns &mdash; matrix multiplication (further diffusion), (4) AddRoundKey &mdash; XOR with round key. SPN structure &mdash; NOT Feistel.</li>
+        <li><b>BLOCK CIPHER MODES:</b> ECB = each block independent &rarr; INSECURE (patterns visible, penguin example). CBC = XOR with previous ciphertext + IV &rarr; fixes patterns. CTR = turns block into stream cipher, parallelizable, no padding. GCM = CTR + auth tag &rarr; confidentiality + integrity (AEAD). CFB/OFB = stream-like modes.</li>
+        <li><b>FEISTEL vs SPN:</b> Feistel (DES): split block in half, apply round function to one half, XOR with other, swap. Same structure for enc/dec (reverse key schedule). SPN (AES/Rijndael): apply sub+perm to entire block. Different operations for enc vs dec (compute inverses). Both use multiple rounds.</li>
+        <li><b>S-BOXES:</b> Non-linear lookup tables. Provide "confusion" (Shannon): complex relationship between key and ciphertext. DES S-boxes: 6 bits in, 4 out (NSA designed, initially controversial). AES S-box: 8 bits in, 8 out, based on multiplicative inverse in GF(2^8). Critical: weak S-boxes = entire cipher vulnerable.</li>
+        <li><b>CONFUSION &amp; DIFFUSION (Shannon):</b> Confusion = each ciphertext bit depends on several key parts (achieved by substitution/S-boxes). Diffusion = each plaintext bit affects many ciphertext bits (achieved by permutation/ShiftRows/MixColumns). Modern block ciphers achieve both through multiple rounds of substitution-permutation.</li>
+        <li><b>KEY SIZES &amp; QUANTUM:</b> AES-128 = 2^128 keys (currently secure). AES-192 = extra margin. AES-256 = recommended for classified, quantum margin. AES-128 &asymp; RSA-3072. Grover's algorithm: halves effective key length &rarr; AES-256 = 128-bit post-quantum. NIST recommends AES-256 for long-term.</li>
+        <li><b>ALGORITHM SELECTION CRITERIA:</b> Security margin (beyond known attacks). Performance (speed on different platforms). Simplicity (easier to analyze/implement correctly). Flexibility (multiple key/block sizes). Resource requirements (memory, power). Existing cryptanalysis (how well studied). Standardization + peer review = essential (Kerckhoffs').</li>
+        <li><b>CTR MODE DETAIL:</b> Counter mode encrypts sequential counter values, XORs result with plaintext. Each block uses unique counter &rarr; no chaining dependency. Parallelizable (unlike CBC). Random access to any block. No padding needed. Pre-computable. Combined with GMAC = GCM mode.</li>
+        <li><b>CBC MODE DETAIL:</b> Each plaintext block XORed with previous ciphertext block before encryption. First block uses IV (Initialization Vector). IV must be unpredictable (random). Error in one block affects current + next block. Sequential (not parallelizable for encryption). Padding required (PKCS#7).</li>
+        <li><b>AES S-BOX CONSTRUCTION:</b> Built from multiplicative inverse in GF(2^8) followed by affine transformation. Provides maximum non-linearity. No fixed points (S(x) &ne; x for any x). No opposite fixed points (S(x) &ne; x&#773; for any x). Algebraically complex &mdash; resists linear and differential cryptanalysis.</li>
+        <li><b>GALOIS FIELD GF(2^8):</b> Finite field with 256 elements used in AES. Addition = XOR. Multiplication = polynomial multiplication modulo irreducible polynomial x^8+x^4+x^3+x+1. All AES math operations defined over this field. Enables efficient hardware implementation.</li>
+        <li><b>ROUND KEY GENERATION:</b> AES key schedule expands cipher key into array of round keys. Uses RotWord (circular byte shift), SubWord (S-box substitution), XOR with round constant (Rcon). Each round key derived from previous. Independent subkeys prevent related-key attacks.</li>
+        <li><b>DES DETAILS:</b> 64-bit input, 56-bit effective key (8 parity bits discarded). 16 rounds of Feistel. Initial/final permutation (IP/FP). Each round: expansion (32&rarr;48 bits), XOR with subkey, S-box substitution (48&rarr;32 bits), permutation. Key schedule generates 16 48-bit subkeys. Broken by EFF "Deep Crack" in 22 hours (1998).</li>
+        <li><b>3DES VARIANTS:</b> EDE (Encrypt-Decrypt-Encrypt). Two-key (K1=K3): effective 112-bit security. Three-key (K1&ne;K2&ne;K3): effective 168-bit security. Meet-in-the-middle attack reduces two-key to ~80-bit effective. 3x slower than single DES. Block size still 64 bits (vulnerability to birthday attacks at 2^32 blocks).</li>
+        <li><b>BIRTHDAY PARADOX/ATTACK:</b> Collision probability for n-bit hash &asymp; 2^(n/2) attempts (not 2^n). MD5 (128-bit): collision in ~2^64 ops. SHA-256: ~2^128 ops. This is why hash output must be at least 2x the desired security level. Named after birthday problem: only 23 people needed for 50% chance of shared birthday in a room.</li>
+        <li><b>AES FINALISTS COMPARISON:</b> Rijndael: best balance, efficient HW+SW, low memory, clean math &mdash; WINNER. Serpent: considered MORE SECURE but significantly SLOWER (conservative design, 32 rounds). Twofish: Bruce Schneier's entry, complex key schedule, competitive performance. RC6: from RSA Labs, simple design, used multiplication. MARS: IBM entry, complex, variable structure. Rijndael won on performance+simplicity+security balance.</li>
+        <li><b>PLAYFAIR CIPHER:</b> Digraph substitution cipher (encrypts pairs of letters using 5x5 grid). More secure than monoalphabetic (26^2=676 digraphs vs 26 letters). Not polyalphabetic &mdash; still vulnerable to frequency analysis of digraphs. May appear as distractor answer on exam.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CROSS-REFERENCE: KEY FORMULAS -->
+  <div class="week" style="border-color: #455a64;">
+    <div class="week-header" style="background: #455a64; color: #fff;">KEY FORMULAS &amp; NUMERICAL FACTS</div>
+    <div class="week-body" style="background: #ECEFF1;">
+      <ul>
+        <li><b>RSA:</b> n=p&times;q, &phi;(n)=(p-1)(q-1), e&times;d &equiv; 1 mod &phi;(n), Encrypt: c=m^e mod n, Decrypt: m=c^d mod n. Public=(n,e), Private=(n,d).</li>
+        <li><b>DH:</b> Shared secret = g^(ab) mod p. Alice sends g^a mod p, Bob sends g^b mod p. Both compute g^(ab) mod p. Based on discrete log problem.</li>
+        <li><b>KEY SPACE:</b> n-bit key = 2^n possibilities. DES: 2^56 = 7.2&times;10^16. AES-128: 2^128 = 3.4&times;10^38. AES-256: 2^256 = 1.16&times;10^77.</li>
+        <li><b>SYMMETRIC KEY PAIRS:</b> N users need N(N-1)/2 keys. 10 users = 45 keys. 100 = 4,950. 1000 = 499,500. Doesn't scale &rarr; motivated public key crypto.</li>
+        <li><b>ZKP CHEATING PROB:</b> After n rounds = 1/2^n. 10 rounds = 1/1024. 20 rounds = 1/1,048,576. 30 rounds = ~1 in a billion.</li>
+        <li><b>KEY EQUIVALENCE:</b> AES-128 &asymp; RSA-3072 &asymp; ECC-256. AES-256 &asymp; RSA-15360 &asymp; ECC-512. Source: NIST SP 800-57.</li>
+        <li><b>SECURITY BOUND:</b> Prob of breaking &le; t/2^200 where t = computing cycles available to adversary.</li>
+        <li><b>AES ROUNDS:</b> 128-bit key = 10 rounds. 192-bit = 12 rounds. 256-bit = 14 rounds. Each round: SubBytes &rarr; ShiftRows &rarr; MixColumns &rarr; AddRoundKey.</li>
+        <li><b>PINOCCHIO:</b> 288-byte proofs. Verification 5-7 orders of magnitude faster. Worker effort reduced 19-60x.</li>
+        <li><b>SNARK PROOFS:</b> ~100s bytes, ~10ms verify. <b>STARK PROOFS:</b> ~100s KB, 50-100ms verify. STARKs ~10x faster prover.</li>
+        <li><b>GROVER'S IMPACT:</b> Halves key length. AES-128&rarr;64-bit (broken). AES-192&rarr;96-bit (weak). AES-256&rarr;128-bit (secure). Need AES-256 for post-quantum.</li>
+        <li><b>ZT MARKET:</b> $52 billion projected by 2026. Anderson: &gt;90% security failures = config errors. 1/3 PGP users sent secrets unencrypted. Ronin: $620M stolen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXCEL FORMULA REFERENCE -->
+  <div class="week" style="border-color: #0d47a1;">
+    <div class="week-header" style="background: #0d47a1; color: #fff;">EXCEL FORMULAS &mdash; BUILD FROM BLANK SHEET</div>
+    <div class="week-body" style="background: #E3F2FD;">
+      <ul>
+        <li><b>CORE EXCEL FUNCTIONS:</b> <code>=MOD(a,n)</code> &mdash; modular arithmetic (remainder). <code>=POWER(base,exp)</code> &mdash; exponentiation. <code>=GCD(a,b)</code> &mdash; greatest common divisor. <code>=CODE("A")</code> &mdash; ASCII value (A=65). <code>=CHAR(65)</code> &mdash; ASCII to letter. <code>=LEN(text)</code> &mdash; string length. <code>=MID(text,start,len)</code> &mdash; extract substring.</li>
+        <li><b>RSA SETUP (start with blank sheet):</b> A1: "p" B1: <i>enter prime</i> (e.g., 61) | A2: "q" B2: <i>enter prime</i> (e.g., 53) | A3: "n=p&times;q" B3: <code>=B1*B2</code> | A4: "&phi;(n)" B4: <code>=(B1-1)*(B2-1)</code> | A5: "e" B5: <i>enter value coprime to &phi;</i> (e.g., 17) | A6: "GCD check" B6: <code>=GCD(B5,B4)</code> <i>must=1</i> | A7: "d" B7: <i>find d where d&times;e mod &phi;(n)=1</i> (try values or use extended Euclidean) | A8: "verify d" B8: <code>=MOD(B7*B5,B4)</code> <i>must=1</i></li>
+        <li><b>RSA ENCRYPT:</b> Message in C1. Ciphertext: <code>=MOD(POWER(C1,B5),B3)</code> &mdash; c = m^e mod n. <b>RSA DECRYPT:</b> <code>=MOD(POWER(ciphertext,B7),B3)</code> &mdash; m = c^d mod n. <b>NOTE:</b> Excel POWER overflows for large numbers. For exam-size problems (small primes), it works fine.</li>
+        <li><b>DIGITAL SIGNATURE:</b> Sign: <code>=MOD(POWER(message,B7),B3)</code> (use private key d). Verify: <code>=MOD(POWER(signature,B5),B3)</code> (use public key e). Result should = original message.</li>
+        <li><b>DIFFIE-HELLMAN SETUP:</b> A1: "p" B1: <i>prime</i> (23) | A2: "g" B2: <i>generator</i> (5) | A3: "a (Alice secret)" B3: <i>enter</i> (6) | A4: "b (Bob secret)" B4: <i>enter</i> (15) | A5: "A=g^a mod p" B5: <code>=MOD(POWER(B2,B3),B1)</code> | A6: "B=g^b mod p" B6: <code>=MOD(POWER(B2,B4),B1)</code> | A7: "Alice shared secret" B7: <code>=MOD(POWER(B6,B3),B1)</code> | A8: "Bob shared secret" B8: <code>=MOD(POWER(B5,B4),B1)</code> | A9: "Match?" B9: <code>=B7=B8</code> <i>must=TRUE</i></li>
+        <li><b>CAESAR CIPHER:</b> Plaintext letter in A1. Key (shift) in B1. Encrypt: <code>=CHAR(MOD(CODE(UPPER(A1))-65+B1,26)+65)</code>. Decrypt: <code>=CHAR(MOD(CODE(UPPER(A1))-65-B1+26,26)+65)</code>. For full word: use MID to extract each letter, apply formula, CONCATENATE results.</li>
+        <li><b>VIGEN&Egrave;RE:</b> Plaintext letter in A1, keyword letter in B1. Encrypt: <code>=CHAR(MOD(CODE(UPPER(A1))+CODE(UPPER(B1))-130,26)+65)</code>. Key letter cycles: use <code>=MID(keyword,MOD(column-1,LEN(keyword))+1,1)</code> to get the right key letter for each position.</li>
+        <li><b>KEY SPACE:</b> <code>=POWER(2,n)</code> where n=key bits. DES: <code>=POWER(2,56)</code>=7.2&times;10^16. AES-128: <code>=POWER(2,128)</code>=3.4&times;10^38. <b>Symmetric keys for N users:</b> <code>=N*(N-1)/2</code>. 100 users = 4,950 keys.</li>
+        <li><b>ZKP CHEATING PROB:</b> <code>=1/POWER(2,n)</code> where n=rounds. 10 rounds: <code>=1/POWER(2,10)</code>=0.00098. 20 rounds: ~1 in a million. 30 rounds: ~1 in a billion.</li>
+        <li><b>HASH OUTPUT SIZE:</b> MD5=128 bits=16 bytes. SHA-1=160=20 bytes. SHA-256=256=32 bytes. SHA-512=512=64 bytes. Bits to bytes: <code>=bits/8</code>.</li>
+        <li><b>GROVER'S IMPACT:</b> Post-quantum effective key length: <code>=keybits/2</code>. AES-128&rarr;64 (broken). AES-256&rarr;128 (safe). <b>PBKDF2 iterations:</b> enter count. <b>bcrypt:</b> <code>=POWER(2,cost)</code> where cost=12 &rarr; 4096 rounds.</li>
+        <li><b>MODULAR INVERSE (brute force for small numbers):</b> To find d where d&times;e &equiv; 1 mod &phi;: In column A put 1,2,3... In column B: <code>=MOD(A1*e,phi)</code>. Scan column B for value=1. That row's A value = d. Works for exam-sized numbers.</li>
+        <li><b>PRIME CHECK (simple):</b> <code>=AND(MOD(n,2)&lt;&gt;0,MOD(n,3)&lt;&gt;0,MOD(n,5)&lt;&gt;0,MOD(n,7)&lt;&gt;0)</code> works for primes &lt;121. For larger: all primes &gt;3 are form 6k&plusmn;1, check <code>=OR(MOD(n-1,6)=0,MOD(n+1,6)=0)</code>.</li>
+        <li><b>XOR IN EXCEL:</b> No native XOR for numbers. Use <code>=IF(A1=B1,0,1)</code> for single bits. For bytes: convert to binary with <code>=DEC2BIN()</code>, XOR each bit, convert back with <code>=BIN2DEC()</code>. OTP/stream cipher: XOR plaintext with key byte-by-byte.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CROSS-REFERENCE: ASSIGNED READINGS -->
+  <div class="week" style="border-color: #37474f;">
+    <div class="week-header" style="background: #37474f; color: #fff;">ASSIGNED READINGS &amp; KEY PAPERS SUMMARY</div>
+    <div class="week-body" style="background: #ECEFF1;">
+      <ul>
+        <li><b>Diffie &amp; Hellman "New Directions" (1976):</b> Introduced public key crypto concept. Proposed key exchange without pre-shared secret. Discrete log as one-way function. Revolutionized cryptography &mdash; enabled secure communication without trusted courier. Did NOT solve authentication (MITM still possible).</li>
+        <li><b>RSA Paper (Rivest, Shamir, Adleman 1977):</b> First practical public key encryption system. Based on factoring difficulty. Provides both encryption AND digital signatures. Trap-door one-way function. n=pq where p,q are large primes. Security scales with key size but so does computation cost.</li>
+        <li><b>Shannon "Communication Theory of Secrecy Systems" (1949):</b> Founded information-theoretic security. Defined perfect secrecy: P(M|C)=P(M). Proved OTP = only perfectly secure cipher. Introduced confusion + diffusion as cipher design principles. 5 criteria for good ciphers still valid today.</li>
+        <li><b>Whitten &amp; Tygar "Why Johnny Can't Encrypt" (1999):</b> PGP 5.0 usability study. Users confused signing with encryption. Quill pen icon miscommunicated private key usage. 1/3 sent secrets in the clear. Conclusion: security UI must be designed for non-experts or it fails in practice.</li>
+        <li><b>Anderson "Why Cryptosystems Fail" (1993):</b> Banking system failures study. &gt;90% failures = implementation/config, NOT broken math. "Phantom withdrawals" &mdash; banks blamed customers. Crypto community lacks learning mechanism (unlike aviation). Solution: publish failures like NTSB reports.</li>
+        <li><b>"The U in Crypto" (2021):</b> Mobile crypto wallet usability. Double-spends from poor Send button feedback. Uninformed users gave 1-star reviews for things dev couldn't control. Barn Door Property: once secret exposed, can't undo. Blockchain irreversibility amplifies every UX mistake permanently.</li>
+        <li><b>Thompson "Reflections on Trusting Trust" (1984):</b> Turing Award lecture. Demonstrated self-replicating compiler Trojan. Even clean source code compiled by compromised compiler produces backdoored binary. Backdoor persists across compilations. You can NEVER fully trust code you didn't write. Moral: trust is foundation of computing security.</li>
+        <li><b>Quisquater "Ali Baba Cave" (1990):</b> Intuitive ZKP explanation. Peggy proves she knows cave secret without revealing it. Victor calls exit path, repeated trials make cheating probability negligible (1/2^n). Made ZKP accessible to non-mathematicians.</li>
+        <li><b>Goldwasser, Micali, Rackoff (1985):</b> Formalized ZKP with three properties: completeness, soundness, zero-knowledge. Defined interactive proof systems. Knowledge complexity = information leaked. Foundation of all modern ZKP systems.</li>
+        <li><b>NIST SP 800-207 (2020):</b> Defines ZTA. 7 tenets of zero trust. PE/PA/PEP logical components. Three deployment models (agent/gateway, enclave, resource portal). Control plane vs data plane separation. Implicit trust zone concept. Used as specification by federal agencies per EO 14028.</li>
+        <li><b>ZK-STARKs Medium Posts (Parts 1-3):</b> Scalable Transparent ARgument of Knowledge. No trusted setup (public randomness). Quantum resistant (hash-based, not ECC). Polylogarithmic communication complexity. ~10x faster prover than SNARKs. Starkware commercializing. "Verifiable trust" concept.</li>
+        <li><b>IEEE Top 10 Secure Design Flaws:</b> (1) Never assume trust, (2) Use crypto correctly, (3) Authorize after authenticate, (4) Separate data/control, (5) Validate all data, (6) Strong auth, (7) Compartmentalize, (8) Least privilege, (9) Don't DIY security, (10) Make security usable.</li>
+        <li><b>OWASP Crypto Failures:</b> #2 on Top 10. Three failure categories: loss of confidentiality, non-repudiation failure, failed integrity. NOT access control (separate category). Common mistakes: weak algos, hardcoded keys, no key rotation, improper padding.</li>
+        <li><b>Buchanan Textbook Chapters:</b> Ch1 p.3-20,33-48: Fundamentals, sym/asym intro. Ch2 p.49-85: Ciphers, sub/trans, block cipher modes, DES/AES. Ch3 p.87-97,117-120,133-135: Hashing. Ch4 p.143-155: Asymmetric. Ch5 p.167-177: Key exchange. Ch6 p.183-212: Zero Trust. Ch8 p.251-254: Usability. Ch11 p.337-367: ZKP.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAM STRATEGY -->
+  <div class="week" style="border-color: #b71c1c;">
+    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM PATTERNS &amp; PROFESSOR EMPHASIS</div>
+    <div class="week-body" style="background: #FFEBEE;">
+      <ul>
+        <li><b>QUESTION TYPES:</b> Mix of fill-in-the-blank and multiple choice (based on HW pattern). Tests specific details: percentages, named concepts, exact terminology, paper authors, comparison distinctions. Know exact numbers (288 bytes, 90%, 1/3, $620M, $52B, 2009 not 2010).</li>
+        <li><b>FOSSACECA EMPHASIS AREAS:</b> (1) "The Game" &mdash; adversary model, protocols don't control adversary, (2) Shannon's criteria "still valid today," (3) Clipper Chip as recurring policy theme, (4) Practical vs theoretical security (computational security vs perfect secrecy), (5) Usability determines real-world security, (6) ZKP applications to self-sovereign identity and banking, (7) Jericho Forum as ZT origin story.</li>
+        <li><b>COMMON TRAPS:</b> HMAC provides integrity+auth but NOT confidentiality. Digital sigs provide auth+integrity+non-repudiation but NOT confidentiality. OTP is perfect but impractical. ECB is a real mode but NEVER use it. Quantum resistant &ne; quantum proof. Kindervag = 2009 not 2010. Access control vuln is NOT an OWASP crypto failure category. Minimum-disclosure &ne; zero-knowledge (reveals more).</li>
+        <li><b>COMPARE/CONTRAST PAIRS:</b> Symmetric vs Asymmetric. SNARKs vs STARKs. Feistel vs SPN. Block vs Stream. Interactive vs Non-interactive ZKP. Perimeter vs Zero Trust. ZTN vs SDP. Confusion vs Diffusion. Architecture vs Engineering. ECC vs RSA. Quantum resistant vs quantum proof. Caesar vs Vigenere (mono vs poly).</li>
+        <li><b>KEY PEOPLE:</b> Shannon (perfect secrecy, confusion/diffusion, 5 criteria). Diffie &amp; Hellman (key exchange 1976). Rivest/Shamir/Adleman (RSA 1977). Daemen &amp; Rijmen (Rijndael/AES, Belgium). Goldwasser/Micali/Rackoff (ZKP 1985). Quisquater (Ali Baba cave). Thompson (Trusting Trust 1984, Turing Award). Whitten &amp; Tygar (Johnny Can't Encrypt). Anderson (Cryptosystems Fail). Kindervag (Zero Trust 2009). Simmonds (Jericho Forum 2007). Matt Blaze (broke Clipper Chip). Snowden ("John Dobbertin," Zcash 6th participant).</li>
+        <li><b>TIMELINE:</b> 1949: Shannon perfect secrecy + 5 criteria. 1976: DH key exchange. 1977: RSA + DES adopted. 1984: Thompson Trusting Trust. 1985: GMR formalize ZKP. 1990: Quisquater Ali Baba. 1993: Anderson Cryptosystems Fail + Clipper Chip proposed. 1997: AES competition begins. 1998: DES brute-forced. 1999: Whitten Johnny study. 2000: Rijndael selected as AES. 2007: Jericho Forum Commandments. 2009: Kindervag coins Zero Trust. 2016: Zcash launches (Snowden ceremony). 2020: NIST SP 800-207. 2021: "U in Crypto" study. 2022: EO 14028 + M-22-09 + Ronin hack ($620M) + SIKE broken. 2023: CISA ZTMM v2.0. 2035: NIST PQC migration target.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,3193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 - Secure Design & Usability | SEAS 8415 Midterm Prep</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #FFD43B;
+    --page-tint: rgba(255,212,59,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.cs { background: #20C997; color: #000; }
+  .topnav a.home { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* DIFFICULTY TOGGLE */
+  .difficulty-toggle {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0; padding: 14px 18px;
+    background: rgba(0,0,0,0.2); border-radius: 12px;
+  }
+  .difficulty-toggle label { font-weight: 700; color: #aaa; font-size: 0.95em; }
+  .diff-btn {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid transparent;
+    background: rgba(255,255,255,0.06); color: #aaa;
+    cursor: pointer; font-weight: 600; font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .diff-btn:hover { background: rgba(255,255,255,0.1); }
+  .diff-btn.active { border-color: var(--page-color); color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .diff-btn.easy.active { border-color: var(--correct); color: var(--correct); }
+  .diff-btn.medium.active { border-color: #FFA94D; color: #FFA94D; }
+  .diff-btn.hard.active { border-color: var(--wrong); color: var(--wrong); }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary) */
+  details {
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--page-color);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  details[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.15em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+    color: #000;
+  }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+    background: var(--page-tint);
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center;
+  }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* ORIGINAL DESIGN CLASSES */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* QUIZ SECTION */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+
+  /* FLASHCARD MODE */
+  .flashcard-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flashcard-toggle-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-toggle-btn:hover {
+    background: var(--page-color);
+    color: #000;
+    transform: scale(1.02);
+  }
+  .flashcard-toggle-btn.active {
+    background: var(--page-color);
+    color: #000;
+  }
+  .flashcard-toggle-label {
+    font-size: 0.95em;
+    color: #aaa;
+  }
+
+  /* Flashcard Container */
+  .flashcard-mode {
+    display: none;
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-mode.active {
+    display: block;
+  }
+  .flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .flashcard-title {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: var(--page-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-progress {
+    font-size: 1em;
+    font-weight: 600;
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .flashcard-progress .current {
+    color: var(--page-color);
+    font-weight: 800;
+  }
+
+  /* Flashcard Controls */
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .flashcard-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .flashcard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-btn.shuffle {
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .flashcard-btn.shuffle:hover {
+    background: rgba(255,212,59,0.15);
+  }
+  .flashcard-btn.nav-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  .flashcard-btn.prev { border-color: var(--w5); color: var(--w5); }
+  .flashcard-btn.prev:hover { background: rgba(77,171,247,0.15); }
+  .flashcard-btn.next { border-color: var(--w4); color: var(--w4); }
+  .flashcard-btn.next:hover { background: rgba(105,219,124,0.15); }
+
+  /* The Card */
+  .flashcard-wrapper {
+    perspective: 1000px;
+    margin: 0 auto 20px;
+    max-width: 700px;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .flashcard-front {
+    background: linear-gradient(145deg, #1e3a5f, #16213e);
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-back {
+    background: linear-gradient(145deg, #1a3a2e, #16213e);
+    border: 2px solid var(--w4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .flashcard-category.red { background: rgba(233,69,96,0.3); color: #e94560; }
+  .flashcard-category.blue { background: rgba(77,171,247,0.3); color: #4DABF7; }
+  .flashcard-category.green { background: rgba(105,219,124,0.3); color: #69DB7C; }
+  .flashcard-category.orange { background: rgba(255,169,77,0.3); color: #FFA94D; }
+  .flashcard-category.purple { background: rgba(151,117,250,0.3); color: #9775FA; }
+  .flashcard-hint {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.8em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-term {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    padding: 20px 0;
+  }
+  .flashcard-definition {
+    font-size: 1.05em;
+    color: #ddd;
+    line-height: 1.7;
+    padding: 20px 0;
+  }
+  .flashcard-label {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .flashcard-front .flashcard-label {
+    background: rgba(233,69,96,0.2);
+    color: var(--accent1);
+  }
+  .flashcard-back .flashcard-label {
+    background: rgba(105,219,124,0.2);
+    color: var(--w4);
+  }
+
+  /* Progress bar for flashcards */
+  .flashcard-progress-bar {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flashcard-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--page-color), var(--w4));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  /* Keyboard shortcut hints */
+  .flashcard-shortcuts {
+    text-align: center;
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 12px;
+  }
+  .flashcard-shortcuts kbd {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+
+  /* Responsive flashcards */
+  @media (max-width: 768px) {
+    .flashcard-toggle-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .flashcard-controls {
+      gap: 8px;
+    }
+    .flashcard-btn {
+      padding: 8px 14px;
+      font-size: 0.85em;
+    }
+    .flashcard-btn.nav-btn {
+      padding: 10px 18px;
+    }
+    .flashcard {
+      min-height: 320px;
+    }
+    .flashcard-face {
+      min-height: 320px;
+      padding: 20px;
+    }
+    .flashcard-term {
+      font-size: 1.1em;
+    }
+    .flashcard-definition {
+      font-size: 0.95em;
+    }
+    .flashcard-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* STUDY TIMER */
+  .study-timer-wrapper {
+    background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98));
+    border-bottom: 2px solid var(--page-color);
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  .study-timer-wrapper.collapsed {
+    max-height: 48px !important;
+  }
+  .study-timer-wrapper.collapsed .timer-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .timer-header:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .timer-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 0.95em;
+  }
+  .timer-header-left .timer-icon {
+    font-size: 1.2em;
+  }
+  .timer-mini-display {
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .study-timer-wrapper.collapsed .timer-mini-display {
+    display: inline-block;
+  }
+  .timer-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--page-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s;
+  }
+  .study-timer-wrapper.collapsed .timer-toggle-btn {
+    transform: rotate(180deg);
+  }
+  .timer-content {
+    padding: 0 20px 20px;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .preset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85em;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .preset-btn.active {
+    border-color: var(--page-color);
+    color: var(--page-color);
+    background: rgba(255,255,255,0.1);
+  }
+  .timer-custom-inputs {
+    display: none;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .timer-custom-inputs.show {
+    display: flex;
+  }
+  .timer-custom-inputs label {
+    font-size: 0.85em;
+    color: #aaa;
+  }
+  .timer-custom-inputs input {
+    width: 60px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .timer-custom-inputs input:focus {
+    outline: none;
+    border-color: var(--page-color);
+  }
+  .timer-display-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .timer-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 3em;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.4);
+    padding: 10px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+    min-width: 200px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .timer-countdown.study-mode {
+    border-color: var(--page-color);
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+  .timer-countdown.break-mode {
+    border-color: var(--correct);
+    color: var(--correct);
+    box-shadow: 0 0 20px rgba(81,207,102,0.2);
+  }
+  .timer-countdown.paused {
+    opacity: 0.6;
+  }
+  .timer-status {
+    font-size: 0.9em;
+    color: #aaa;
+    text-align: center;
+    min-width: 120px;
+  }
+  .timer-status .status-label {
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 1.1em;
+  }
+  .timer-status .status-label.break {
+    color: var(--correct);
+  }
+  .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .timer-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timer-btn.start {
+    background: var(--page-color);
+    color: #000;
+  }
+  .timer-btn.start:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  .timer-btn.pause {
+    background: rgba(255,169,77,0.8);
+    color: #000;
+  }
+  .timer-btn.pause:hover {
+    background: rgba(255,169,77,1);
+  }
+  .timer-btn.reset {
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .timer-btn.reset:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .timer-btn.skip {
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em;
+    padding: 8px 16px;
+  }
+  .timer-btn.skip:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .timer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .timer-stat {
+    text-align: center;
+  }
+  .timer-stat .stat-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--page-color);
+    font-family: 'Courier New', monospace;
+  }
+  .timer-stat .stat-label {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .break-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .break-overlay.show {
+    display: flex;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .break-message {
+    background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2));
+    border: 3px solid var(--correct);
+    border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 500px;
+    margin: 20px;
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .break-message h2 {
+    color: var(--correct);
+    font-size: 1.8em;
+    margin-bottom: 12px;
+  }
+  .break-message p {
+    color: #ccc;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .break-message .break-tip {
+    background: rgba(255,255,255,0.05);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 0.95em;
+    color: #aaa;
+  }
+  .break-message .break-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5em;
+    color: var(--correct);
+    margin: 16px 0;
+  }
+  .break-message button {
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: var(--correct);
+    color: #000;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .break-message button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .timer-countdown {
+      font-size: 2.2em;
+      padding: 8px 20px;
+      min-width: 150px;
+    }
+    .timer-display-section {
+      gap: 12px;
+    }
+    .timer-stats {
+      gap: 16px;
+    }
+    .break-message {
+      padding: 30px 24px;
+    }
+    .break-message h2 {
+      font-size: 1.4em;
+    }
+  }
+/* EXPAND/COLLAPSE ALL */
+.expand-collapse-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  margin: 0 0 16px; padding: 10px 0;
+}
+.expand-collapse-bar button {
+  background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.expand-collapse-bar button:hover {
+  background: var(--page-color); color: #000; border-color: var(--page-color);
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title">SEAS 8415 MIDTERM</span>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3 active">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="cheatsheet.html" class="cs">Cheat Sheet</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+  <a href="../index.html" class="home">Home</a>
+</nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">&#9201;</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">&#9660;</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
+<div class="page-hero">
+  <h1>Week 3 — Secure Design &amp; Usability</h1>
+  <div class="sub">SEAS 8415 &middot; Summer 2026 &middot; Prof. Fossaceca &middot; GWU</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">15</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR — Week 3 Key Points</div>
+  <ul>
+    <li><strong>Why Johnny Can't Encrypt</strong> — Even technically competent users made critical errors with PGP 5.0; 1/3 sent secrets unencrypted</li>
+    <li><strong>Why Cryptosystems Fail</strong> — Over 90% of failures are implementation/config errors, not broken algorithms (Anderson, 1993)</li>
+    <li><strong>Barn Door Property</strong> — Once a secret is exposed, you can't un-expose it; prevention over recovery</li>
+    <li><strong>IEEE Top 10</strong> — "Earn or Give, But Never Assume, Trust" and "Authorize After You Authenticate"</li>
+    <li><strong>OWASP Crypto Failures</strong> — Loss of confidentiality, non-repudiation failure, failed integrity checks</li>
+    <li><strong>Cognitive Walkthrough</strong> — Expert evaluation of learnability without actual users needed</li>
+    <li><strong>Usable Crypto</strong> — Double-spends caused by poor Send button UX; blockchain irreversibility amplifies errors</li>
+    <li><strong>Design Principle</strong> — Make the secure path the easiest path; security should be invisible when possible</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details. Quiz at the bottom to test yourself. Textbook: Ch. 8 pp. 251-254</div>
+</div>
+
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- FLASHCARD MODE TOGGLE -->
+<div class="flashcard-toggle-container">
+  <span class="flashcard-toggle-label">Study key concepts with interactive flashcards</span>
+  <button class="flashcard-toggle-btn" id="flashcardToggle" onclick="toggleFlashcardMode()">
+    <span>&#127924;</span> Flashcard Mode
+  </button>
+</div>
+
+<!-- FLASHCARD MODE CONTAINER -->
+<div class="flashcard-mode" id="flashcardMode">
+  <div class="flashcard-header">
+    <div class="flashcard-title">&#127924; Flashcard Mode</div>
+    <div class="flashcard-progress">
+      Card <span class="current" id="flashcardCurrent">1</span> of <span id="flashcardTotal">0</span>
+    </div>
+  </div>
+
+  <div class="flashcard-controls">
+    <button class="flashcard-btn prev nav-btn" id="flashcardPrev" onclick="prevFlashcard()">
+      &larr; Previous
+    </button>
+    <button class="flashcard-btn shuffle" id="flashcardShuffle" onclick="shuffleFlashcards()">
+      &#128256; Shuffle
+    </button>
+    <button class="flashcard-btn next nav-btn" id="flashcardNext" onclick="nextFlashcard()">
+      Next &rarr;
+    </button>
+  </div>
+
+  <div class="flashcard-progress-bar">
+    <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+  </div>
+
+  <div class="flashcard-wrapper">
+    <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+      <div class="flashcard-face flashcard-front">
+        <span class="flashcard-category red" id="flashcardCategory">Key Idea</span>
+        <span class="flashcard-label">Term</span>
+        <div class="flashcard-term" id="flashcardTerm">Loading...</div>
+        <div class="flashcard-hint">Click to flip <span>&circlearrowright;</span></div>
+      </div>
+      <div class="flashcard-face flashcard-back">
+        <span class="flashcard-label">Definition</span>
+        <div class="flashcard-definition" id="flashcardDefinition">Loading...</div>
+        <div class="flashcard-hint">Click to flip back <span>&circlearrowright;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flashcard-shortcuts">
+    <kbd>&larr;</kbd> Previous | <kbd>Space</kbd> Flip | <kbd>&rarr;</kbd> Next | <kbd>S</kbd> Shuffle
+  </div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Why Johnny Can't Encrypt -->
+<details>
+  <summary>1. Why Johnny Can't Encrypt (Whitten &amp; Tygar, 1999)</summary>
+  <div class="content-section">
+    <div class="red"><strong>LANDMARK STUDY:</strong> Usability evaluation of PGP 5.0 email encryption that demonstrated even technically competent users made critical security errors.</div>
+
+    <p><strong>Background:</strong> Whitten and Tygar conducted a cognitive walkthrough and user study of PGP 5.0, one of the most widely available email encryption tools at the time.</p>
+
+    <h3>Key Findings</h3>
+    <ul>
+      <li><strong>The "Quill Pen" icon problem:</strong> Failed to communicate that the private key was being used for signing</li>
+      <li>Users consistently <em>confused encryption with signing</em> — thinking one operation did both</li>
+      <li><strong>1/3 of participants sent the secret without encrypting it</strong></li>
+      <li>Even technically competent users could not use the system correctly</li>
+    </ul>
+
+    <div class="prof"><strong>Professor's Insight:</strong> The quill pen icon is the classic example of a metaphor failure in security UI. Users saw "quill pen" and thought "writing/sending" — they had no mental model connecting it to cryptographic signing with a private key.</div>
+
+    <div class="key"><strong>Key Insight:</strong> Security software must be usable or people won't use it correctly. The most secure system in the world is useless if users bypass or misuse it.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"If Johnny can't encrypt, the crypto doesn't matter."</strong></div>
+  </div>
+</details>
+
+<!-- Section 2: Why Cryptosystems Fail -->
+<details>
+  <summary>2. Why Cryptosystems Fail (Ross Anderson, 1993)</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY FINDING:</strong> Most failures were NOT from broken algorithms but from implementation and configuration errors.</div>
+
+    <p><strong>Study Focus:</strong> Anderson studied real-world failures of banking cryptographic systems, examining why systems with mathematically sound algorithms still failed in practice.</p>
+
+    <h3>Major Findings</h3>
+    <ul>
+      <li><strong>Over 90% of computer security failures</strong> attributed to configuration/implementation errors, not cryptanalysis</li>
+      <li>The cryptography community <em>lacks a "learning mechanism"</em> found in aeronautical engineering</li>
+      <li>Government agencies' secretive nature prevents shared learning from failures</li>
+      <li>Banking systems had <strong>"phantom withdrawals"</strong> — banks blamed customers rather than investigating system flaws</li>
+    </ul>
+
+    <div class="warn"><strong>Caution:</strong> Anderson argued that security bugs should be tracked and published like aviation incidents. Without transparency, the same mistakes are repeated across organizations.</div>
+
+    <table>
+      <tr><th>Aviation Industry</th><th>Crypto/Security Industry</th></tr>
+      <tr><td>Mandatory incident reporting</td><td>Secrecy around failures</td></tr>
+      <tr><td>Shared learning database</td><td>No equivalent mechanism</td></tr>
+      <tr><td>Blame-free investigation</td><td>Blame customers ("phantom withdrawals")</td></tr>
+      <tr><td>Continuous improvement</td><td>Repeated same mistakes</td></tr>
+    </table>
+
+    <div class="prof"><strong>Professor's Insight:</strong> This paper was revolutionary because it shifted focus from "is the math secure?" to "is the system secure?" Implementation quality matters more than algorithm strength.</div>
+  </div>
+</details>
+
+<!-- Section 3: The "U" in Crypto Stands for Usable -->
+<details>
+  <summary>3. The "U" in Crypto Stands for Usable</summary>
+  <div class="content-section">
+    <div class="key"><strong>Study Focus:</strong> Usability evaluation of mobile cryptocurrency wallets, examining how interface design causes real financial losses.</div>
+
+    <h3>Key Findings</h3>
+    <ul>
+      <li><strong>"Uninformed people"</strong> gave 1-star reviews for issues the developer had no control over (e.g., network fees)</li>
+      <li><strong>Primary cause of "double-spends":</strong> Poor interface design where the Send button fails to provide immediate clear feedback</li>
+      <li>Users apply a <em>"traditional payment system" mental model</em> — expecting reversibility that doesn't exist in blockchain</li>
+      <li>A single UX mistake = permanent financial loss with no recovery</li>
+    </ul>
+
+    <div class="red"><strong>The Barn Door Property:</strong> Once a secret is exposed, you can't un-expose it. This is amplified by blockchain irreversibility — errors are permanent.</div>
+
+    <div class="ascii-diagram-title">Why UX Errors Are Catastrophic in Crypto</div>
+<div class="ascii-diagram">Traditional Payment:
+  User Error --> Bank Reversal --> Recovery Possible
+
+Blockchain Payment:
+  User Error --> Transaction Confirmed --> PERMANENT LOSS
+                                           (Barn Door Property)
+
+  No undo. No customer service. No reversal.</div>
+
+    <div class="prof"><strong>Professor's Insight:</strong> The "double-spend" problem in wallets isn't a cryptographic failure — it's a UX failure. Users tap Send, see no feedback, tap again, and send twice. The fix is UI design, not better cryptography.</div>
+  </div>
+</details>
+
+<!-- Section 4: The Abstraction Property of Security -->
+<details>
+  <summary>4. The Abstraction Property of Security</summary>
+  <div class="content-section">
+    <div class="key"><strong>Core Concept:</strong> Security management involves abstract rules and policies that are often alien to the general user population.</div>
+
+    <ul>
+      <li>Users don't think about security until something goes wrong</li>
+      <li>Security concepts (keys, certificates, trust models) are <em>inherently abstract</em></li>
+      <li>General users lack mental models for cryptographic operations</li>
+      <li>Good design makes security <strong>invisible and automatic</strong></li>
+    </ul>
+
+    <div class="green"><strong>Design Implication:</strong> The best security is security that users never have to think about. When security is visible, users find ways to bypass it. When it's invisible and automatic, it actually protects them.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"The best lock is one the user doesn't know is there."</strong></div>
+  </div>
+</details>
+
+<!-- Section 5: IEEE Top 10 Secure Design Flaws -->
+<details>
+  <summary>5. IEEE Top 10 Secure Design Flaws</summary>
+  <div class="content-section">
+    <div class="red"><strong>EXAM FOCUS:</strong> Know these principles and what each one means. The IEEE recommendations address architectural-level design flaws.</div>
+
+    <table>
+      <tr><th>#</th><th>Principle</th><th>Meaning</th></tr>
+      <tr><td>1</td><td><strong>Earn or Give, But Never Assume, Trust</strong></td><td>Never offload security from server to client; don't trust what clients send</td></tr>
+      <tr><td>2</td><td><strong>Use Cryptography Correctly</strong></td><td>Don't roll your own crypto; use established, peer-reviewed libraries</td></tr>
+      <tr><td>3</td><td><strong>Authorize After You Authenticate</strong></td><td>Knowing identity doesn't mean allowing all actions — separate verification from permission</td></tr>
+      <tr><td>4</td><td><strong>Strictly Separate Data and Control Instructions</strong></td><td>Prevent injection attacks (SQL injection, command injection)</td></tr>
+      <tr><td>5</td><td><strong>Define an Approach That Ensures All Data Are Explicitly Validated</strong></td><td>Never trust input; validate everything</td></tr>
+      <tr><td>6</td><td><strong>Use Strong Authentication and Validate All Inputs</strong></td><td>Combine strong auth with input validation</td></tr>
+      <tr><td>7</td><td><strong>Compartmentalize and Isolate</strong></td><td>Limit blast radius through segmentation</td></tr>
+      <tr><td>8</td><td><strong>Embrace the Principle of Least Privilege</strong></td><td>Grant minimum permissions needed</td></tr>
+      <tr><td>9</td><td><strong>Don't Implement Security by Yourself</strong></td><td>Use community-vetted solutions, not homebrew</td></tr>
+      <tr><td>10</td><td><strong>Make Security Usable</strong></td><td>If security is hard to use, people will bypass it</td></tr>
+    </table>
+
+    <div class="prof"><strong>Professor's Insight:</strong> "Earn or Give, But Never Assume, Trust" is the one that catches students. It means: if a client says "I'm authorized," the server should NEVER just believe it. Trust must be earned (verified) or explicitly given (by the server), never assumed.</div>
+
+    <div class="warn"><strong>Common Exam Trap:</strong> "Authorize After You Authenticate" does NOT mean authentication = authorization. Authentication answers "WHO are you?" Authorization answers "WHAT are you allowed to do?" They are separate steps.</div>
+  </div>
+</details>
+
+<!-- Section 6: OWASP Cryptographic Failures -->
+<details>
+  <summary>6. OWASP Cryptographic Failures (Top 10 #2)</summary>
+  <div class="content-section">
+    <div class="red"><strong>Three Primary Categories of Cryptographic Failures:</strong></div>
+
+    <table>
+      <tr><th>Category</th><th>Description</th><th>Example</th></tr>
+      <tr><td><strong>Loss of Confidentiality</strong></td><td>Data exposure to unauthorized parties</td><td>Unencrypted PII in transit</td></tr>
+      <tr><td><strong>Non-repudiation Failure</strong></td><td>Cannot prove who performed an action</td><td>Missing digital signatures on transactions</td></tr>
+      <tr><td><strong>Failed Integrity Checks</strong></td><td>Cannot verify data hasn't been tampered with</td><td>No hash verification on downloads</td></tr>
+    </table>
+
+    <div class="warn"><strong>Exam Trap:</strong> "Access control vulnerabilities" is NOT one of the three primary categories of OWASP cryptographic failures. Access control is a separate OWASP Top 10 category (#1: Broken Access Control).</div>
+
+    <h3>Common Cryptographic Mistakes</h3>
+    <ul>
+      <li>Using <strong>weak algorithms</strong>: MD5, SHA-1, DES</li>
+      <li><strong>Hardcoded keys</strong> in source code</li>
+      <li><strong>Improper key management</strong> (no rotation, shared keys)</li>
+      <li>Using encryption without authentication (no HMAC/AEAD)</li>
+    </ul>
+
+    <div class="green"><strong>Best Practice:</strong> Use AES-256-GCM (provides both encryption and authentication), rotate keys regularly, never hardcode secrets, use a key management service (KMS).</div>
+  </div>
+</details>
+
+<!-- Section 7: Cognitive Walkthrough Method -->
+<details>
+  <summary>7. Cognitive Walkthrough Method</summary>
+  <div class="content-section">
+    <div class="key"><strong>Definition:</strong> A usability evaluation technique where an evaluator mentally simulates a novice user's understanding of an interface — particularly fitting for evaluating security software.</div>
+
+    <h3>Key Characteristics</h3>
+    <ul>
+      <li>Concerned with <em>learnability</em> — can a new user figure out the interface?</li>
+      <li>Can be done <strong>WITHOUT actual users</strong> (expert evaluation method)</li>
+      <li>Evaluator asks at each step:
+        <ul>
+          <li>"Will the user know what to do?"</li>
+          <li>"Will they notice the correct action?"</li>
+          <li>"Will they understand the feedback?"</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="prof"><strong>Professor's Insight:</strong> Cognitive walkthrough is "particularly fitting" for security evaluation because security tasks are often infrequent (users don't practice them) and high-stakes (mistakes have serious consequences). You need learnability evaluation for tasks users rarely perform.</div>
+
+    <div class="green"><strong>Why It Works for Security:</strong> You don't need to recruit users and expose them to real security risks. An expert can identify where novice users will fail by systematically walking through each step of a security task.</div>
+  </div>
+</details>
+
+<!-- Section 8: The Barn Door Property -->
+<details>
+  <summary>8. The Barn Door Property</summary>
+  <div class="content-section">
+    <div class="red"><strong>Core Principle:</strong> Once a secret is accidentally exposed, there's no way to be sure an attacker hasn't already accessed it.</div>
+
+    <p><strong>The metaphor:</strong> Once the barn door is open and the horse has bolted, closing the door doesn't bring the horse back. Similarly, once a cryptographic key or sensitive data is exposed, you cannot "un-expose" it.</p>
+
+    <h3>Implications</h3>
+    <ul>
+      <li>Makes <strong>PREVENTION</strong> of high-cost errors a design priority (not recovery)</li>
+      <li>Especially critical in crypto wallets: blockchain irreversibility means errors are permanent</li>
+      <li>Design guardrails BEFORE mistakes happen, not recovery mechanisms after</li>
+      <li>Assume any exposed key/secret is compromised — rotate immediately</li>
+    </ul>
+
+    <div class="ascii-diagram-title">The Barn Door Property</div>
+<div class="ascii-diagram">BEFORE exposure:     Secret is SAFE
+                     (Prevention is possible)
+
+AFTER exposure:      Secret is COMPROMISED FOREVER
+                     (No way to guarantee attacker didn't copy it)
+
+Design Priority:     BUILD GUARDRAILS BEFORE THE DOOR OPENS
+                     Not recovery mechanisms after.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"You can't un-ring a bell. You can't un-expose a key."</strong></div>
+  </div>
+</details>
+
+<!-- Section 9: Designing Usable Security -->
+<details>
+  <summary>9. Designing Usable Security</summary>
+  <div class="content-section">
+    <h3>Key Design Principles for Usable Security</h3>
+
+    <ul>
+      <li><strong>"Authorize After You Authenticate"</strong> — Identity verification is separate from permission checking</li>
+      <li><strong>"Earn or Give, But Never Assume, Trust"</strong> — Don't trust client-side validation</li>
+      <li><strong>Make the secure path the easiest path</strong> — If the insecure way is easier, users will choose it</li>
+      <li>Users have <em>misconceptions about transaction reversibility</em></li>
+      <li>Provide <strong>safe staging and practice environments</strong> for irreversible actions</li>
+    </ul>
+
+    <div class="green"><strong>Design Guidelines:</strong></div>
+    <table>
+      <tr><th>Principle</th><th>Implementation</th></tr>
+      <tr><td>Secure path = easiest path</td><td>Default to secure options; require effort to downgrade</td></tr>
+      <tr><td>Immediate feedback</td><td>Show transaction status clearly; prevent double-clicks</td></tr>
+      <tr><td>Confirmation for irreversible actions</td><td>Multi-step confirmation for high-value transactions</td></tr>
+      <tr><td>Practice environments</td><td>Testnets, sandboxes for learning without risk</td></tr>
+      <tr><td>Clear mental models</td><td>Use metaphors users understand; avoid jargon</td></tr>
+    </table>
+
+    <div class="prof"><strong>Professor's Insight:</strong> The "Double Key Creation" scenario in law enforcement access involves encrypting a symmetric session key once for the server and once with a law enforcement public key. This is how key escrow works — and it's a usability challenge because users don't understand what's happening behind the scenes.</div>
+  </div>
+</details>
+
+<!-- Section 10: Key Design Principles Summary -->
+<details>
+  <summary>10. Key Design Principles Summary</summary>
+  <div class="content-section">
+    <div class="key"><strong>Summary of Core Principles from All Readings:</strong></div>
+
+    <ul>
+      <li>Security should be <strong>invisible to users</strong> when possible</li>
+      <li>Never sacrifice usability for security <em>or vice versa</em></li>
+      <li>Test with <strong>real (non-expert) users</strong></li>
+      <li>Publish security failures to enable community learning (Anderson's argument)</li>
+      <li>Use <strong>established, peer-reviewed cryptographic libraries</strong></li>
+    </ul>
+
+    <div class="flow">
+      <span class="flow-step">Prevention First</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Usable Design</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Real User Testing</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Transparent Failures</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Continuous Learning</span>
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"Security that isn't usable isn't security at all."</strong></div>
+
+    <h3>Quick Reference: Paper Contributions</h3>
+    <table>
+      <tr><th>Paper</th><th>Key Contribution</th></tr>
+      <tr><td>Why Johnny Can't Encrypt</td><td>Proved usability failures defeat even strong crypto</td></tr>
+      <tr><td>Why Cryptosystems Fail</td><td>90%+ failures are implementation, not algorithm</td></tr>
+      <tr><td>"U" in Crypto</td><td>Blockchain UX errors cause permanent financial loss</td></tr>
+      <tr><td>IEEE Top 10</td><td>Architectural-level secure design principles</td></tr>
+      <tr><td>OWASP Crypto Failures</td><td>Three categories: confidentiality, non-repudiation, integrity</td></tr>
+    </table>
+  </div>
+</details>
+
+<!-- Section 11: The Clipper Chip & Key Escrow Debate -->
+<details>
+  <summary>11. The Clipper Chip &amp; Key Escrow Debate</summary>
+  <div class="content-section">
+    <div class="red"><strong>CRYPTO POLICY LANDMARK:</strong> In 1993, the US government proposed the Clipper Chip — a hardware encryption device with a built-in government backdoor. This became one of the defining battles in cryptographic policy.</div>
+
+    <h3>What Was the Clipper Chip?</h3>
+    <ul>
+      <li>A hardware encryption device proposed by the US government in <strong>1993</strong></li>
+      <li>Used the <em>Skipjack algorithm</em> (classified at the time)</li>
+      <li>Built-in <strong>key escrow</strong>: government holds copies of encryption keys</li>
+      <li>Intended for use in telecommunications equipment</li>
+    </ul>
+
+    <h3>Key Escrow: The Core Mechanism</h3>
+    <p><strong>Key escrow</strong> means a copy of every encryption key is held by a trusted third party (in this case, the government). Law enforcement could obtain escrowed keys with a warrant to decrypt communications.</p>
+
+    <h3>Arguments For and Against</h3>
+    <table>
+      <tr><th>Argument FOR</th><th>Argument AGAINST</th></tr>
+      <tr><td>Law enforcement needs access to encrypted communications</td><td>Backdoors weaken security for everyone</td></tr>
+      <tr><td>National security requires surveillance capability</td><td>Single point of failure — if escrow keys leak, all communications compromised</td></tr>
+      <tr><td>Warrant-based access is constitutional</td><td>"Who watches the watchers?" — no accountability guarantees</td></tr>
+    </table>
+
+    <h3>What Killed the Clipper Chip</h3>
+    <ul>
+      <li><strong>Matt Blaze</strong> found a vulnerability in the Clipper Chip protocol, demonstrating the escrow mechanism could be bypassed</li>
+      <li>Massive public backlash and crypto community opposition</li>
+      <li>The proposal was eventually abandoned</li>
+    </ul>
+
+    <div class="prof"><strong>Professor Fossaceca's Emphasis:</strong> This is a recurring theme in crypto policy — you cannot have strong encryption AND guaranteed government access. This is a fundamental trade-off, not a solvable engineering problem.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"You can't build a door that only the good guys can walk through."</strong></div>
+  </div>
+</details>
+
+<!-- Section 12: Law Enforcement Access to Encrypted Data -->
+<details>
+  <summary>12. Law Enforcement Access to Encrypted Data</summary>
+  <div class="content-section">
+    <div class="red"><strong>THE "GOING DARK" PROBLEM:</strong> Law enforcement agencies argue they are "going dark" — unable to access encrypted communications even with a valid warrant.</div>
+
+    <h3>Apple vs FBI (2015-2016)</h3>
+    <ul>
+      <li>FBI demanded Apple create a backdoor to unlock the <strong>San Bernardino shooter's iPhone</strong></li>
+      <li>Apple refused, citing it would set a <em>dangerous precedent</em></li>
+      <li>Creating a tool to bypass encryption would put all iPhone users at risk</li>
+      <li>FBI eventually used a <strong>third-party tool (Cellebrite)</strong> to access the phone</li>
+      <li>The case was dropped, but the legal and policy questions remain unresolved</li>
+    </ul>
+
+    <h3>Double Key Creation Scenario</h3>
+    <p>One proposed solution: encrypt the session key <strong>once for the server</strong> AND <strong>once with law enforcement's public key</strong>. This gives law enforcement the ability to decrypt communications when needed.</p>
+
+    <div class="warn"><strong>The Fundamental Tension:</strong> Individual privacy vs. public safety. There is no known technical solution that provides access only to "good guys" — any backdoor can potentially be exploited by attackers.</div>
+
+    <div class="ascii-diagram-title">The Encryption Access Dilemma</div>
+<div class="ascii-diagram">Strong Encryption (No Backdoor):
+  Citizens: PROTECTED     Law Enforcement: LOCKED OUT
+
+Weak Encryption (With Backdoor):
+  Citizens: VULNERABLE    Law Enforcement: CAN ACCESS
+  Attackers: CAN ALSO ACCESS
+
+No middle ground exists.</div>
+
+    <div class="prof"><strong>Professor's Insight:</strong> The Apple vs FBI case is the modern version of the Clipper Chip debate. The technology changes, but the fundamental trade-off remains identical.</div>
+  </div>
+</details>
+
+<!-- Section 13: Ronin Network Hack — Usability Failure Case Study -->
+<details>
+  <summary>13. Ronin Network Hack — Usability Failure Case Study</summary>
+  <div class="content-section">
+    <div class="red"><strong>CASE STUDY:</strong> In March 2022, $620 million was stolen from the Ronin Network (Axie Infinity blockchain bridge) — one of the largest crypto hacks in history.</div>
+
+    <h3>What Happened</h3>
+    <ul>
+      <li><strong>Root cause:</strong> Compromised private keys — attackers gained control of 5 of 9 validator nodes</li>
+      <li>The organization had <em>reduced security validators</em> from 9-of-9 to <strong>5-of-9</strong> for "convenience"</li>
+      <li>A <strong>temporary permission</strong> given to Sky Mavis was <em>never revoked</em></li>
+      <li>Attackers exploited these relaxed controls to sign fraudulent transactions</li>
+    </ul>
+
+    <h3>Why This Is a Usability Failure</h3>
+    <ul>
+      <li>Security configuration was weakened to improve operational convenience</li>
+      <li>Demonstrates the <strong>Barn Door Property</strong> in action — once keys were compromised, funds were irrecoverable</li>
+      <li>Blockchain irreversibility amplified the damage — no "undo" button</li>
+      <li>Temporary elevated permissions became permanent attack surface</li>
+    </ul>
+
+    <div class="ascii-diagram-title">Ronin Network: How Convenience Killed Security</div>
+<div class="ascii-diagram">Original Design:     9-of-9 validators required
+                     (Very secure, but slow)
+        |
+        v
+"Convenience" Change: 5-of-9 validators required
+                     (Faster, but lower threshold)
+        |
+        v
+Forgotten Permission: Sky Mavis still had validator access
+                     (Temporary became permanent)
+        |
+        v
+Attack:              Attacker compromised 5 nodes
+                     $620M stolen. Irreversible.</div>
+
+    <div class="key"><strong>Key Lesson:</strong> Security configuration shortcuts have permanent consequences. Reducing security for convenience is a form of technical debt that can result in catastrophic, irreversible loss.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"Temporary permissions that aren't revoked become permanent vulnerabilities."</strong></div>
+  </div>
+</details>
+
+<!-- Section 14: Exam-Tested Details from Homework -->
+<details>
+  <summary>14. Exam-Tested Details from Homework</summary>
+  <div class="content-section">
+    <div class="red"><strong>HIGH-YIELD:</strong> These concepts have appeared on homework assignments and are likely to be tested on exams. Know them precisely.</div>
+
+    <h3>OWASP Rename</h3>
+    <p><strong>"Sensitive Data Exposure"</strong> was renamed to <strong>"Cryptographic Failures"</strong> in the 2021 OWASP Top 10 to shift focus from the broad symptom (exposure) to the root cause (cryptographic failure).</p>
+
+    <h3>"Domain-Specific" UX Issue</h3>
+    <p>In crypto wallets, users assume transactions are reversible or can be cancelled like traditional banking. This is a <strong>domain-specific misunderstanding</strong> unique to cryptocurrency.</p>
+
+    <h3>IEEE: Flaw vs Bug Distinction</h3>
+    <ul>
+      <li><strong>FLAW</strong> = result of a mistake or oversight during the <em>DESIGN</em> process</li>
+      <li><strong>BUG</strong> = an <em>implementation-level</em> issue</li>
+      <li>Flaws are harder to fix because they're architectural</li>
+    </ul>
+
+    <h3>"Replace-by-Fee" (RBF)</h3>
+    <p>Method to "overwrite" a stuck Bitcoin transaction by sending a new one with a higher fee. This is a <strong>UX mechanism</strong> to handle stuck transactions, not a security flaw.</p>
+
+    <h3>Hard-Coded Passwords</h3>
+    <p>Using hard-coded passwords in configuration files is a significant failure mode because it increases the risk of <strong>unauthorized access</strong> if the config file or source control is compromised. <em>Tested on HW3.</em></p>
+
+    <h3>Anderson's "Paradigm Shift"</h3>
+    <p>Anderson argued the overdue paradigm shift in computer security is <strong>fusing security with software engineering</strong> and focusing on implementation/management — not just algorithm design.</p>
+
+    <h3>"Unmotivated User Property"</h3>
+    <p>Users don't actively seek out security controls because their primary intent is to complete a <em>different</em> task (browsing, emailing, etc.). <strong>Security is never the user's goal.</strong></p>
+
+    <h3>"Lack of Feedback Property"</h3>
+    <p>Security software can't perform useful error checking because only the user knows what they "truly want." The system can't distinguish between intentional and accidental actions.</p>
+
+    <h3>Salting vs Seeding</h3>
+    <ul>
+      <li><strong>SEEDING</strong> = provides a starting point for random series generation</li>
+      <li><strong>SALTING</strong> = ensures hash values are unique for the same input</li>
+      <li>Different purposes — <em>tested on HW3</em></li>
+    </ul>
+
+    <h3>96% Negative Reviews</h3>
+    <p>In the "U in Crypto" study, <strong>96%</strong> of app reviews pertaining to user experience were negative (NOT 94%). Know the exact number.</p>
+
+    <h3>Most Common PGP Error</h3>
+    <p>Users who "figured out how to encrypt" made the mistake of encrypting with their <strong>OWN public keys</strong> instead of the <strong>RECIPIENT'S public key</strong>. So recipients couldn't decrypt.</p>
+
+    <h3>Security Specification (Anderson)</h3>
+    <p>Should not only list failure modes but <strong>ALSO detail the strategy adopted to prevent each failure mode</strong> or make it acceptably unlikely.</p>
+
+    <h3>"Agility" (IEEE)</h3>
+    <p>The capability to change layers and algorithms as needed. Design crypto systems so components can be <strong>swapped when algorithms become broken</strong>.</p>
+
+    <h3>"Political Campaign Coordinator" (Johnny Study)</h3>
+    <p>The role was assigned to provide a plausible, motivating context that mirrored the real-world value of protecting secrets. It <strong>wasn't testing political knowledge</strong>.</p>
+
+    <div class="prof"><strong>Professor's Insight:</strong> These homework-tested details test precise recall. Pay attention to exact numbers (96%, not 94%), exact terminology (flaw vs bug), and the reasoning behind study design choices.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"Flaws are by design, bugs are by implementation. Salting is for hashes, seeding is for randomness."</strong></div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+  <h2>Week 3 — Test Yourself (24 Questions)</h2>
+  <div class="quiz-score-bar">
+    <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">19</span> correct</span>
+    <div class="score-fill-track"><div class="score-fill"></div></div>
+    <div class="streak-display"><span class="streak-icon">&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    <button class="quiz-reset-btn">Reset Quiz</button>
+  </div>
+  <div class="difficulty-toggle">
+    <label>Difficulty:</label>
+    <button class="diff-btn all active" onclick="filterDifficulty('all')">All</button>
+    <button class="diff-btn easy" onclick="filterDifficulty('easy')">Easy</button>
+    <button class="diff-btn medium" onclick="filterDifficulty('medium')">Medium</button>
+    <button class="diff-btn hard" onclick="filterDifficulty('hard')">Hard</button>
+  </div>
+
+  <div class="quiz-q" data-correct="0" data-difficulty="medium">
+    <p><span class="qnum">1</span> What specific visual metaphor problem was identified with PGP 5.0's quill pen icon?</p>
+    <div class="options">
+      <div class="opt">Failed to communicate that the private key was being used for signing</div>
+      <div class="opt">Users thought it meant "write a new email"</div>
+      <div class="opt">The icon was too small to see clearly</div>
+      <div class="opt">It looked identical to the encryption icon</div>
+    </div>
+    <div class="explanation">The quill pen icon was supposed to represent digital signing (using the private key), but users had no mental model connecting a pen to cryptographic operations. They confused signing with encryption.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="3" data-difficulty="medium">
+    <p><span class="qnum">2</span> According to the "U in Crypto" study, what is the primary cause of double-spends in mobile wallets?</p>
+    <div class="options">
+      <div class="opt">Cryptographic algorithm weaknesses</div>
+      <div class="opt">Network latency causing duplicate transactions</div>
+      <div class="opt">Users intentionally exploiting the system</div>
+      <div class="opt">Poor interface design where the Send button fails to provide immediate clear feedback</div>
+    </div>
+    <div class="explanation">Double-spends in mobile wallets are a UX problem, not a crypto problem. Users tap Send, see no immediate feedback, and tap again — creating duplicate transactions.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="4" data-difficulty="hard">
+    <p><span class="qnum">3</span> According to Ross Anderson's "Why Cryptosystems Fail," why does the crypto community lack a learning mechanism?</p>
+    <div class="options">
+      <div class="opt">Because cryptographic algorithms are too complex to analyze</div>
+      <div class="opt">Because there aren't enough security researchers</div>
+      <div class="opt">Because users refuse to report problems</div>
+      <div class="opt">Because vendors have no financial incentive to share</div>
+      <div class="opt">The secretive nature of government agencies and their reluctance to admit mistakes</div>
+    </div>
+    <div class="explanation">Anderson argued that government agencies' secrecy prevents shared learning. Unlike aviation (which has mandatory incident reporting), the security community hides failures, causing the same mistakes to be repeated.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="0" data-difficulty="easy">
+    <p><span class="qnum">4</span> Which statement best describes the Abstraction Property of security?</p>
+    <div class="options">
+      <div class="opt">Security management involves abstract rules and policies often alien to the general user population</div>
+      <div class="opt">Security can only be understood by mathematicians</div>
+      <div class="opt">Abstract security is weaker than concrete security</div>
+      <div class="opt">Users prefer abstract security interfaces over concrete ones</div>
+    </div>
+    <div class="explanation">The Abstraction Property means security concepts (keys, certificates, trust models) are inherently abstract and don't map to users' everyday mental models. Good design makes these invisible.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="easy">
+    <p><span class="qnum">5</span> Which is NOT one of the three primary categories of OWASP cryptographic failures?</p>
+    <div class="options">
+      <div class="opt">Loss of confidentiality</div>
+      <div class="opt">Non-repudiation failure</div>
+      <div class="opt">Access control vulnerabilities</div>
+      <div class="opt">Failed integrity checks</div>
+    </div>
+    <div class="explanation">The three OWASP cryptographic failure categories are: loss of confidentiality, non-repudiation failure, and failed integrity checks. Access control vulnerabilities is a separate OWASP Top 10 category (#1: Broken Access Control).</div>
+  </div>
+
+  <div class="quiz-q" data-correct="4" data-difficulty="medium">
+    <p><span class="qnum">6</span> What finding about "uninformed people" was noted in the mobile wallet study?</p>
+    <div class="options">
+      <div class="opt">They never downloaded cryptocurrency apps</div>
+      <div class="opt">They always used maximum security settings</div>
+      <div class="opt">They preferred desktop wallets over mobile ones</div>
+      <div class="opt">They understood blockchain technology but not the UI</div>
+      <div class="opt">They frequently wrote one-star reviews for issues the developer had no control over</div>
+    </div>
+    <div class="explanation">"Uninformed people" gave 1-star reviews for things like network transaction fees, which are inherent to the blockchain protocol and outside developer control.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="easy">
+    <p><span class="qnum">7</span> The IEEE recommendation to "Authorize After You Authenticate" means:</p>
+    <div class="options">
+      <div class="opt">Authentication and authorization are the same thing</div>
+      <div class="opt">Authorization should happen before authentication</div>
+      <div class="opt">Knowing a user's identity doesn't automatically mean they are allowed to perform every action</div>
+      <div class="opt">Only authenticated users need authorization checks</div>
+    </div>
+    <div class="explanation">Authentication answers "WHO are you?" while authorization answers "WHAT can you do?" Just because you've proven your identity doesn't mean you have permission for every action. These are separate security checks.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="hard">
+    <p><span class="qnum">8</span> The "Double Key Creation" scenario in law enforcement access involves:</p>
+    <div class="options">
+      <div class="opt">Creating two separate encryption algorithms</div>
+      <div class="opt">Encrypting a symmetric session key once for the server and once with a law enforcement public key</div>
+      <div class="opt">Generating two private keys for the same user</div>
+      <div class="opt">Using double-encryption with the same key</div>
+    </div>
+    <div class="explanation">In the Double Key Creation scenario, the session key is encrypted twice: once for the intended recipient (server) and once with a law enforcement public key, enabling lawful access when needed.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="4" data-difficulty="easy">
+    <p><span class="qnum">9</span> According to the readings, what percentage of computer security failures are attributed to configuration errors?</p>
+    <div class="options">
+      <div class="opt">About 25%</div>
+      <div class="opt">About 50%</div>
+      <div class="opt">About 75%</div>
+      <div class="opt">About 85%</div>
+      <div class="opt">Over 90%</div>
+    </div>
+    <div class="explanation">Ross Anderson's research found that over 90% of computer security failures are attributed to configuration and implementation errors — not to broken cryptographic algorithms.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="easy">
+    <p><span class="qnum">10</span> In "Why Johnny Can't Encrypt," what fraction of participants sent secret data without encrypting?</p>
+    <div class="options">
+      <div class="opt">One-half</div>
+      <div class="opt">One-third</div>
+      <div class="opt">One-quarter</div>
+      <div class="opt">One-tenth</div>
+    </div>
+    <div class="explanation">One-third (1/3) of participants in Whitten and Tygar's study sent the secret data without encrypting it — a catastrophic security failure caused by poor usability.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="medium">
+    <p><span class="qnum">11</span> Which IEEE design principle warns against offloading security functions from server to client?</p>
+    <div class="options">
+      <div class="opt">Authorize After You Authenticate</div>
+      <div class="opt">Use Cryptography Correctly</div>
+      <div class="opt">Earn or Give, But Never Assume, Trust</div>
+      <div class="opt">Compartmentalize and Isolate</div>
+    </div>
+    <div class="explanation">"Earn or Give, But Never Assume, Trust" means never trust what a client tells you. If you offload security checks to the client, an attacker can bypass them. Trust must be earned (verified server-side) or explicitly given.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="3" data-difficulty="medium">
+    <p><span class="qnum">12</span> Why is Cognitive Walkthrough particularly fitting for evaluating security usability?</p>
+    <div class="options">
+      <div class="opt">It requires large numbers of test participants</div>
+      <div class="opt">It tests expert users who already know the system</div>
+      <div class="opt">It focuses on system performance metrics</div>
+      <div class="opt">It's concerned with learnability for novices by mentally simulating their understanding</div>
+    </div>
+    <div class="explanation">Cognitive walkthrough evaluates learnability — whether a novice can figure out a task. Security tasks are infrequent and high-stakes, making learnability critical. The method doesn't require actual users, avoiding exposing them to real security risks.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="0" data-difficulty="easy">
+    <p><span class="qnum">13</span> The Barn Door Property states that:</p>
+    <div class="options">
+      <div class="opt">Once a secret is exposed, there's no way to be sure an attacker hasn't accessed it — making prevention critical</div>
+      <div class="opt">All barn doors should have cryptographic locks</div>
+      <div class="opt">Secrets can be recovered after exposure through key rotation</div>
+      <div class="opt">Prevention and recovery are equally important</div>
+    </div>
+    <div class="explanation">The Barn Door Property means once a secret is out, you can't guarantee no one saw it. This makes PREVENTION the priority — build guardrails before mistakes happen, because recovery after exposure is impossible.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="medium">
+    <p><span class="qnum">14</span> Anderson argued that security failures should be:</p>
+    <div class="options">
+      <div class="opt">Kept secret to avoid helping attackers</div>
+      <div class="opt">Tracked and published like aviation incidents to enable community learning</div>
+      <div class="opt">Only shared within the same organization</div>
+      <div class="opt">Reported only to government agencies</div>
+    </div>
+    <div class="explanation">Anderson argued for transparency in security failures, modeled after aviation's mandatory incident reporting. Without shared learning, the same implementation mistakes get repeated across organizations.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="medium">
+    <p><span class="qnum">15</span> Why is blockchain irreversibility especially dangerous from a usability perspective?</p>
+    <div class="options">
+      <div class="opt">Because blockchain is too slow for real-time feedback</div>
+      <div class="opt">Because users cannot see their transaction history</div>
+      <div class="opt">A single UX error leads to immediate and permanent financial loss with no recovery</div>
+      <div class="opt">Because blockchain interfaces are always poorly designed</div>
+    </div>
+    <div class="explanation">Blockchain transactions are irreversible. Combined with the Barn Door Property, this means any UX error (like a double-tap on Send) results in permanent financial loss. Users expect payment reversibility from traditional banking — blockchain provides none.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="medium">
+    <p><span class="qnum">16</span> What was the Clipper Chip, proposed by the US government in 1993?</p>
+    <div class="options">
+      <div class="opt">A software firewall with logging capabilities</div>
+      <div class="opt">An open-source encryption library for email</div>
+      <div class="opt">A hardware encryption device with a built-in government backdoor using key escrow</div>
+      <div class="opt">A secure messaging protocol for military communications</div>
+    </div>
+    <div class="explanation">The Clipper Chip was a hardware encryption device proposed in 1993 that used the classified Skipjack algorithm and included key escrow — meaning the government held copies of all encryption keys, providing a built-in backdoor for law enforcement access.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="3" data-difficulty="hard">
+    <p><span class="qnum">17</span> In the Apple vs FBI case (2015-2016), how was the San Bernardino shooter's iPhone eventually accessed?</p>
+    <div class="options">
+      <div class="opt">Apple complied with the court order and created a backdoor</div>
+      <div class="opt">The FBI brute-forced the passcode using their own tools</div>
+      <div class="opt">The case was dismissed and the phone was never accessed</div>
+      <div class="opt">The FBI used a third-party tool (Cellebrite) to bypass the encryption</div>
+    </div>
+    <div class="explanation">Apple refused to create a backdoor, arguing it would set a dangerous precedent. The FBI ultimately used a third-party forensic tool from Cellebrite to access the phone, and the legal case was dropped.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="medium">
+    <p><span class="qnum">18</span> What was the root cause of the Ronin Network hack that resulted in $620 million stolen?</p>
+    <div class="options">
+      <div class="opt">A zero-day vulnerability in the blockchain protocol itself</div>
+      <div class="opt">Compromised private keys due to reduced validator requirements (5-of-9 instead of 9-of-9) and unrevoked temporary permissions</div>
+      <div class="opt">A phishing attack that tricked users into sending funds to the wrong address</div>
+      <div class="opt">An insider who had legitimate access to all validator nodes</div>
+    </div>
+    <div class="explanation">The Ronin Network reduced its validator requirement from 9-of-9 to 5-of-9 for convenience, and a temporary permission given to Sky Mavis was never revoked. Attackers compromised 5 validator nodes and stole $620M — a textbook example of how security shortcuts lead to catastrophic, irreversible consequences.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="0" data-difficulty="hard">
+    <p><span class="qnum">19</span> Why did Matt Blaze's discovery matter in the Clipper Chip debate?</p>
+    <div class="options">
+      <div class="opt">He found a vulnerability in the Clipper Chip protocol, proving the escrow mechanism could be bypassed</div>
+      <div class="opt">He proved the Skipjack algorithm was mathematically weak</div>
+      <div class="opt">He demonstrated that key escrow was too expensive to implement at scale</div>
+      <div class="opt">He showed that the Clipper Chip was slower than existing encryption hardware</div>
+    </div>
+    <div class="explanation">Matt Blaze discovered a vulnerability in the Clipper Chip's escrow mechanism itself, demonstrating that the backdoor could be bypassed. This undermined the government's argument that the system was secure, and contributed to the public backlash that killed the proposal.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="medium">
+    <p><span class="qnum">20</span> In the 2021 OWASP Top 10, "Sensitive Data Exposure" was renamed to:</p>
+    <div class="options">
+      <div class="opt">Data Breach Vulnerabilities</div>
+      <div class="opt">Cryptographic Failures</div>
+      <div class="opt">Encryption Weaknesses</div>
+      <div class="opt">Information Leakage</div>
+    </div>
+    <div class="explanation">The rename to "Cryptographic Failures" shifted focus from the broad symptom (data exposure) to the root cause (failures in cryptographic implementation). This reflects a more actionable, engineering-focused approach.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="2" data-difficulty="medium">
+    <p><span class="qnum">21</span> According to IEEE terminology, what is the difference between a FLAW and a BUG?</p>
+    <div class="options">
+      <div class="opt">A flaw is in the code; a bug is in the design</div>
+      <div class="opt">A flaw is minor; a bug is critical</div>
+      <div class="opt">A flaw is a design-level mistake; a bug is an implementation-level issue</div>
+      <div class="opt">They are interchangeable terms for the same concept</div>
+    </div>
+    <div class="explanation">A FLAW results from a mistake during the DESIGN process and is architectural, making it harder to fix. A BUG is an implementation-level issue in the code. This distinction matters because fixing flaws often requires redesigning the system.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="3" data-difficulty="easy">
+    <p><span class="qnum">22</span> What percentage of crypto app reviews pertaining to user experience were negative in the "U in Crypto" study?</p>
+    <div class="options">
+      <div class="opt">88%</div>
+      <div class="opt">92%</div>
+      <div class="opt">94%</div>
+      <div class="opt">96%</div>
+    </div>
+    <div class="explanation">96% of app reviews pertaining to user experience were negative — not 94%. This is a precise number the professor may test. The overwhelming negativity underscores how badly crypto wallets fail at usability.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="0" data-difficulty="hard">
+    <p><span class="qnum">23</span> In the Johnny Can't Encrypt study, what was the most common mistake made by users who successfully figured out how to encrypt?</p>
+    <div class="options">
+      <div class="opt">They encrypted with their own public key instead of the recipient's</div>
+      <div class="opt">They used the wrong encryption algorithm</div>
+      <div class="opt">They forgot to attach the encrypted file</div>
+      <div class="opt">They shared their private key with the recipient</div>
+    </div>
+    <div class="explanation">Users who figured out encryption made the critical error of encrypting with their OWN public key instead of the RECIPIENT'S public key. This meant only the sender could decrypt the message — the recipient could not. A fundamental misunderstanding of public-key cryptography.</div>
+  </div>
+
+  <div class="quiz-q" data-correct="1" data-difficulty="medium">
+    <p><span class="qnum">24</span> What is the difference between SALTING and SEEDING?</p>
+    <div class="options">
+      <div class="opt">Salting generates random numbers; seeding ensures unique hashes</div>
+      <div class="opt">Seeding provides a starting point for random series generation; salting ensures hash values are unique for the same input</div>
+      <div class="opt">They are the same process applied at different stages</div>
+      <div class="opt">Salting is for symmetric encryption; seeding is for asymmetric encryption</div>
+    </div>
+    <div class="explanation">SEEDING provides a starting point for random number generation. SALTING adds random data to inputs before hashing to ensure that identical inputs produce different hash values. They serve completely different purposes — this distinction was tested on HW3.</div>
+  </div>
+</div>
+</div>
+
+
+<script>
+(function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+            else if (streak === 15) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+<!-- FLASHCARD MODE SCRIPT -->
+<script>
+(function() {
+  let flashcards = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+
+  function getFlashcardData() {
+    return [
+      { term: "Why Johnny Can't Encrypt", definition: "Landmark 1999 usability study by Whitten & Tygar showing that even technically competent users made critical errors with PGP 5.0 email encryption.", category: "red", label: "Key Study" },
+      { term: "Barn Door Property", definition: "Once a secret is accidentally exposed, there's no way to be sure an attacker hasn't accessed it. Makes prevention of errors the design priority.", category: "red", label: "Key Idea" },
+      { term: "Cognitive Walkthrough", definition: "Usability evaluation technique where an expert mentally simulates a novice user's understanding. Can be done WITHOUT actual users. Concerned with learnability.", category: "blue", label: "Definition" },
+      { term: "Abstraction Property of Security", definition: "Security management involves abstract rules and policies (keys, certificates, trust models) that are alien to general users' everyday mental models.", category: "blue", label: "Definition" },
+      { term: "Earn or Give, But Never Assume, Trust", definition: "IEEE principle: never offload security from server to client. Trust must be verified (earned) or explicitly granted (given), never assumed.", category: "green", label: "Design Principle" },
+      { term: "Authorize After You Authenticate", definition: "Knowing a user's identity (authentication) doesn't mean they're allowed to perform every action (authorization). These are separate checks.", category: "green", label: "Design Principle" },
+      { term: "OWASP Cryptographic Failures", definition: "Three categories: Loss of confidentiality, Non-repudiation failure, and Failed integrity checks. Access control is a SEPARATE category.", category: "orange", label: "Framework" },
+      { term: "Double-Spend (UX Cause)", definition: "In mobile crypto wallets, caused by poor interface design where the Send button fails to provide immediate clear feedback, leading users to tap twice.", category: "red", label: "Key Finding" },
+      { term: "90% Implementation Failures", definition: "Anderson found over 90% of crypto system failures are from configuration/implementation errors, not broken algorithms.", category: "red", label: "Key Statistic" },
+      { term: "Phantom Withdrawals", definition: "Banking systems that blamed customers for unauthorized transactions rather than investigating system flaws. Example of refusing to learn from failures.", category: "orange", label: "Case Study" },
+      { term: "Quill Pen Icon Problem", definition: "PGP 5.0's signing icon failed to communicate that the private key was being used. Users confused signing with encryption.", category: "purple", label: "Memory Aid" },
+      { term: "Aviation vs. Security Learning", definition: "Aviation has mandatory incident reporting and shared learning. Security community lacks this due to government secrecy and reluctance to admit mistakes.", category: "orange", label: "Comparison" },
+      { term: "Make Security Usable (IEEE #10)", definition: "If security is hard to use, people will bypass it. The secure path should be the easiest path for users.", category: "green", label: "Design Principle" },
+      { term: "Double Key Creation", definition: "Law enforcement access scenario: symmetric session key encrypted once for server and once with law enforcement public key.", category: "blue", label: "Definition" },
+      { term: "Blockchain Irreversibility + UX", definition: "Unlike traditional payments, blockchain transactions cannot be reversed. A single UX error = permanent financial loss with no recovery possible.", category: "red", label: "Key Concept" },
+      { term: "Clipper Chip (1993)", definition: "US government-proposed hardware encryption device with built-in key escrow backdoor using the classified Skipjack algorithm. Killed by public backlash and Matt Blaze's vulnerability discovery.", category: "orange", label: "Case Study" },
+      { term: "Key Escrow", definition: "System where copies of encryption keys are held by a trusted third party (e.g., government). Enables lawful access but creates a single point of failure and weakens security for everyone.", category: "blue", label: "Definition" },
+      { term: "Going Dark Problem", definition: "Law enforcement's inability to access encrypted communications even with a valid warrant. Central argument in the Apple vs FBI case and the Clipper Chip debate.", category: "red", label: "Key Concept" },
+      { term: "Ronin Network Hack (2022)", definition: "$620M stolen due to reduced validator requirements (5-of-9 instead of 9-of-9) and unrevoked temporary permissions. Demonstrates Barn Door Property — blockchain losses are irreversible.", category: "orange", label: "Case Study" }
+    ];
+  }
+
+  function initFlashcards() {
+    flashcards = getFlashcardData();
+    document.getElementById('flashcardTotal').textContent = flashcards.length;
+    if (flashcards.length > 0) {
+      showFlashcard(0);
+    }
+  }
+
+  function showFlashcard(index) {
+    if (flashcards.length === 0) return;
+    currentIndex = index;
+    const card = flashcards[index];
+
+    isFlipped = false;
+    document.getElementById('flashcard').classList.remove('flipped');
+
+    document.getElementById('flashcardTerm').textContent = card.term;
+    document.getElementById('flashcardDefinition').textContent = card.definition;
+
+    const categoryEl = document.getElementById('flashcardCategory');
+    categoryEl.textContent = card.label;
+    categoryEl.className = 'flashcard-category ' + card.category;
+
+    document.getElementById('flashcardCurrent').textContent = index + 1;
+    const progressPercent = ((index + 1) / flashcards.length) * 100;
+    document.getElementById('flashcardProgressFill').style.width = progressPercent + '%';
+
+    document.getElementById('flashcardPrev').disabled = index === 0;
+    document.getElementById('flashcardNext').disabled = index === flashcards.length - 1;
+  }
+
+  window.flipFlashcard = function() {
+    isFlipped = !isFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  };
+
+  window.prevFlashcard = function() {
+    if (currentIndex > 0) {
+      showFlashcard(currentIndex - 1);
+    }
+  };
+
+  window.nextFlashcard = function() {
+    if (currentIndex < flashcards.length - 1) {
+      showFlashcard(currentIndex + 1);
+    }
+  };
+
+  window.shuffleFlashcards = function() {
+    for (let i = flashcards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+    }
+    showFlashcard(0);
+
+    const btn = document.getElementById('flashcardShuffle');
+    btn.textContent = 'Shuffled!';
+    setTimeout(() => {
+      btn.innerHTML = '&#128256; Shuffle';
+    }, 1000);
+  };
+
+  window.toggleFlashcardMode = function() {
+    const mode = document.getElementById('flashcardMode');
+    const btn = document.getElementById('flashcardToggle');
+    const isActive = mode.classList.toggle('active');
+    btn.classList.toggle('active', isActive);
+
+    if (isActive && flashcards.length === 0) {
+      initFlashcards();
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    const mode = document.getElementById('flashcardMode');
+    if (!mode.classList.contains('active')) return;
+
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        prevFlashcard();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextFlashcard();
+        break;
+      case ' ':
+        e.preventDefault();
+        flipFlashcard();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        shuffleFlashcards();
+        break;
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlashcards);
+  } else {
+    initFlashcards();
+  }
+})();
+
+// DIFFICULTY FILTER
+window.filterDifficulty = function(level) {
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.classList.contains(level)) btn.classList.add('active');
+  });
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const diff = q.dataset.difficulty || 'all';
+    if (level === 'all' || diff === level) {
+      q.style.display = '';
+    } else {
+      q.style.display = 'none';
+    }
+  });
+
+  const visible = document.querySelectorAll('.quiz-q:not([style*="display: none"])').length;
+  const totalEl = document.querySelector('.score-total');
+  if (totalEl) totalEl.textContent = visible;
+};
+
+// STUDY TIMER
+(function() {
+  let timerState = {
+    studyMinutes: 25,
+    breakMinutes: 5,
+    secondsRemaining: 25 * 60,
+    isRunning: false,
+    isBreak: false,
+    totalStudySeconds: 0,
+    sessionsCompleted: 0,
+    currentStreak: 0,
+    intervalId: null
+  };
+
+  const presets = {
+    pomodoro: { study: 25, break: 5 },
+    short: { study: 15, break: 3 },
+    custom: { study: 25, break: 5 }
+  };
+
+  const breakMessages = [
+    { title: "Time for a Break!", text: "Great focus session! You've earned this rest." },
+    { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." },
+    { title: "Break Time!", text: "Step away, stretch, and come back refreshed." },
+    { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." },
+    { title: "Rest Up!", text: "A short break now means better focus later." },
+    { title: "You Did It!", text: "Another session down! Keep up the great work." }
+  ];
+
+  const breakTips = [
+    "Stand up and stretch your legs for a minute.",
+    "Look away from the screen - focus on something 20 feet away.",
+    "Grab a glass of water to stay hydrated.",
+    "Do some shoulder rolls to release tension.",
+    "Take a few deep breaths to reset your focus.",
+    "Walk around the room or do some light movement.",
+    "Close your eyes and rest them for 30 seconds.",
+    "Snack on something healthy if you're hungry."
+  ];
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function formatTotalTime(seconds) {
+    if (seconds >= 3600) {
+      const hours = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${mins}m`;
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function updateDisplay() {
+    const countdown = document.getElementById('timerCountdown');
+    const miniDisplay = document.getElementById('timerMiniDisplay');
+    const statusLabel = document.getElementById('timerStatusLabel');
+    const statusText = document.getElementById('timerStatusText');
+    const startPauseBtn = document.getElementById('startPauseBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const totalStudyEl = document.getElementById('totalStudyTime');
+    const sessionsEl = document.getElementById('sessionsCompleted');
+    const streakEl = document.getElementById('currentStreak');
+    const breakCountdown = document.getElementById('breakCountdown');
+
+    const timeStr = formatTime(timerState.secondsRemaining);
+    countdown.textContent = timeStr;
+    miniDisplay.textContent = timeStr;
+
+    totalStudyEl.textContent = formatTotalTime(timerState.totalStudySeconds);
+    sessionsEl.textContent = timerState.sessionsCompleted;
+    streakEl.textContent = timerState.currentStreak;
+
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) {
+      countdown.classList.add('break-mode');
+      statusLabel.textContent = 'BREAK';
+      statusLabel.classList.add('break');
+      statusText.textContent = 'Relax and recharge';
+      skipBtn.textContent = 'End Break';
+      breakCountdown.textContent = timeStr;
+    } else if (timerState.isRunning) {
+      countdown.classList.add('study-mode');
+      statusLabel.textContent = 'STUDYING';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Stay focused!';
+      skipBtn.textContent = 'Skip to Break';
+    } else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) {
+      countdown.classList.add('paused');
+      statusLabel.textContent = 'PAUSED';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to resume';
+    } else {
+      statusLabel.textContent = 'READY';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to begin';
+    }
+
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start';
+    startPauseBtn.classList.toggle('pause', timerState.isRunning);
+    startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+
+  function playNotification() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const playTone = (freq, startTime, duration) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+      };
+      const now = audioContext.currentTime;
+      playTone(523.25, now, 0.3);
+      playTone(659.25, now + 0.15, 0.3);
+      playTone(783.99, now + 0.3, 0.4);
+    } catch (e) {
+      const countdown = document.getElementById('timerCountdown');
+      countdown.style.animation = 'none';
+      setTimeout(() => {
+        countdown.style.animation = 'pulse 0.5s ease-in-out 3';
+      }, 10);
+    }
+  }
+
+  function showBreakOverlay() {
+    const overlay = document.getElementById('breakOverlay');
+    const titleEl = document.getElementById('breakTitle');
+    const textEl = document.getElementById('breakEncouragement');
+    const tipEl = document.getElementById('breakTip');
+
+    const message = breakMessages[Math.floor(Math.random() * breakMessages.length)];
+    const tip = breakTips[Math.floor(Math.random() * breakTips.length)];
+
+    titleEl.textContent = message.title;
+    textEl.textContent = message.text;
+    tipEl.textContent = tip;
+
+    overlay.classList.add('show');
+  }
+
+  function tick() {
+    if (!timerState.isRunning) return;
+
+    timerState.secondsRemaining--;
+
+    if (!timerState.isBreak) {
+      timerState.totalStudySeconds++;
+    }
+
+    updateDisplay();
+
+    if (timerState.secondsRemaining <= 0) {
+      playNotification();
+
+      if (timerState.isBreak) {
+        timerState.isBreak = false;
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+        timerState.currentStreak++;
+        dismissBreak();
+      } else {
+        timerState.sessionsCompleted++;
+        timerState.isBreak = true;
+        timerState.secondsRemaining = timerState.breakMinutes * 60;
+        showBreakOverlay();
+      }
+      updateDisplay();
+    }
+  }
+
+  window.toggleTimer = function() {
+    if (timerState.isRunning) {
+      timerState.isRunning = false;
+      clearInterval(timerState.intervalId);
+    } else {
+      timerState.isRunning = true;
+      timerState.intervalId = setInterval(tick, 1000);
+    }
+    updateDisplay();
+  };
+
+  window.resetTimer = function() {
+    timerState.isRunning = false;
+    timerState.isBreak = false;
+    clearInterval(timerState.intervalId);
+    timerState.secondsRemaining = timerState.studyMinutes * 60;
+    dismissBreak();
+    updateDisplay();
+  };
+
+  window.skipToBreak = function() {
+    if (timerState.isBreak) {
+      timerState.isBreak = false;
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+      timerState.currentStreak++;
+      dismissBreak();
+    } else {
+      timerState.sessionsCompleted++;
+      timerState.isBreak = true;
+      timerState.secondsRemaining = timerState.breakMinutes * 60;
+      showBreakOverlay();
+    }
+    updateDisplay();
+  };
+
+  window.dismissBreak = function() {
+    document.getElementById('breakOverlay').classList.remove('show');
+  };
+
+  window.setPreset = function(presetName) {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === presetName);
+    });
+
+    document.getElementById('customInputs').classList.toggle('show', presetName === 'custom');
+
+    if (presetName !== 'custom') {
+      const preset = presets[presetName];
+      timerState.studyMinutes = preset.study;
+      timerState.breakMinutes = preset.break;
+      if (!timerState.isRunning && !timerState.isBreak) {
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+      }
+      updateDisplay();
+    }
+  };
+
+  window.applyCustom = function() {
+    const studyInput = document.getElementById('customStudy');
+    const breakInput = document.getElementById('customBreak');
+
+    const study = Math.max(1, Math.min(120, parseInt(studyInput.value) || 25));
+    const breakTime = Math.max(1, Math.min(30, parseInt(breakInput.value) || 5));
+
+    studyInput.value = study;
+    breakInput.value = breakTime;
+
+    timerState.studyMinutes = study;
+    timerState.breakMinutes = breakTime;
+    presets.custom = { study, break: breakTime };
+
+    if (!timerState.isRunning && !timerState.isBreak) {
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+    }
+    updateDisplay();
+  };
+
+  window.toggleStudyTimer = function() {
+    document.getElementById('studyTimerWrapper').classList.toggle('collapsed');
+  };
+
+  updateDisplay();
+
+  setInterval(() => {
+    if (timerState.totalStudySeconds > 0) {
+      localStorage.setItem('studyTimerStats_8415w3', JSON.stringify({
+        totalStudySeconds: timerState.totalStudySeconds,
+        sessionsCompleted: timerState.sessionsCompleted,
+        date: new Date().toDateString()
+      }));
+    }
+  }, 30000);
+
+  const saved = localStorage.getItem('studyTimerStats_8415w3');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.date === new Date().toDateString()) {
+        timerState.totalStudySeconds = data.totalStudySeconds || 0;
+        timerState.sessionsCompleted = data.sessionsCompleted || 0;
+        updateDisplay();
+      }
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!-- FILL-IN-THE-BLANK SECTION -->
+<div class="container">
+<div class="fill-blank-section">
+  <h2>Quick Check - Fill in the Blanks</h2>
+  <p class="fill-blank-intro">Test your recall of key terms. Type your answer and check!</p>
+
+  <div class="fill-blank-score-bar">
+    <span class="fb-score-text"><span class="fb-score-correct">0</span> / <span class="fb-score-total">10</span> correct</span>
+    <div class="fb-score-fill-track"><div class="fb-score-fill"></div></div>
+    <button class="fb-check-all-btn" onclick="checkAllBlanks()">Check All</button>
+    <button class="fb-reset-btn" onclick="resetAllBlanks()">Reset</button>
+  </div>
+
+  <div class="fill-blank-item" data-answer="barn door" data-alt="barn door property,the barn door property">
+    <p class="fb-question"><span class="fb-num">1</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> Property states that once a secret is exposed, there's no way to be sure an attacker hasn't accessed it.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="90" data-alt="90%,over 90,over 90%">
+    <p class="fb-question"><span class="fb-num">2</span> Anderson found that over <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>% of computer security failures are attributed to configuration and implementation errors.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="one-third" data-alt="1/3,one third,a third">
+    <p class="fb-question"><span class="fb-num">3</span> In the PGP 5.0 study, <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> of participants sent the secret without encrypting it.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="cognitive walkthrough" data-alt="cognitive walk-through">
+    <p class="fb-question"><span class="fb-num">4</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> method evaluates usability by mentally simulating a novice user's understanding, without requiring actual users.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="authorize" data-alt="authorization">
+    <p class="fb-question"><span class="fb-num">5</span> The IEEE principle "<span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> After You Authenticate" means identity verification is separate from permission checking.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="usable" data-alt="usability">
+    <p class="fb-question"><span class="fb-num">6</span> The key insight from "Why Johnny Can't Encrypt" is that security software must be <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> or people won't use it correctly.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="signing" data-alt="digital signing,sign">
+    <p class="fb-question"><span class="fb-num">7</span> The quill pen icon in PGP 5.0 failed to communicate that the private key was being used for <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="access control" data-alt="access control vulnerabilities,broken access control">
+    <p class="fb-question"><span class="fb-num">8</span> The answer that is NOT one of the three OWASP cryptographic failure categories is <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> vulnerabilities.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="key escrow" data-alt="escrow,clipper chip">
+    <p class="fb-question"><span class="fb-num">9</span> The Clipper Chip used <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span>, a system where the government holds copies of encryption keys to enable lawful access.</p>
+    <div class="fb-feedback"></div>
+  </div>
+
+  <div class="fill-blank-item" data-answer="ronin" data-alt="ronin network,axie infinity">
+    <p class="fb-question"><span class="fb-num">10</span> The <span class="fb-blank-wrapper"><input type="text" class="fb-input" placeholder="________"><button class="fb-hint-btn" onclick="showHint(this)">Hint</button><button class="fb-check-btn" onclick="checkBlank(this)">Check</button></span> Network hack of 2022 lost $620 million because the organization reduced validator requirements from 9-of-9 to 5-of-9 for convenience.</p>
+    <div class="fb-feedback"></div>
+  </div>
+</div>
+</div>
+
+<style>
+  /* Fill-in-the-Blank Styles */
+  .fill-blank-section {
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 2px solid var(--page-color);
+  }
+  .fill-blank-section h2 {
+    color: var(--page-color);
+    margin-bottom: 8px;
+    font-size: 1.3em;
+  }
+  .fill-blank-intro {
+    color: #aaa;
+    font-size: 0.95em;
+    margin-bottom: 16px;
+  }
+  .fill-blank-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+  }
+  .fb-score-text {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: var(--page-color);
+  }
+  .fb-score-fill-track {
+    flex: 1;
+    min-width: 120px;
+    height: 18px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .fb-score-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .fb-check-all-btn, .fb-reset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .fb-check-all-btn:hover {
+    background: var(--page-color);
+    color: #000;
+  }
+  .fb-reset-btn {
+    border-color: #666;
+    color: #aaa;
+  }
+  .fb-reset-btn:hover {
+    border-color: #888;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .fill-blank-item {
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    border-left: 4px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .fill-blank-item.correct {
+    border-left-color: var(--correct);
+    background: rgba(81,207,102,0.1);
+  }
+  .fill-blank-item.wrong {
+    border-left-color: var(--wrong);
+    background: rgba(255,107,107,0.1);
+  }
+  .fb-question {
+    font-size: 1em;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .fb-num {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--page-color);
+    color: #000;
+    border-radius: 50%;
+    font-size: 0.75em;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+  .fb-blank-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .fb-input {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 0.95em;
+    min-width: 120px;
+    max-width: 200px;
+    transition: all 0.2s;
+  }
+  .fb-input:focus {
+    outline: none;
+    border-color: var(--page-color);
+    background: rgba(0,0,0,0.6);
+  }
+  .fb-input.correct {
+    border-color: var(--correct);
+    background: rgba(81,207,102,0.2);
+    color: var(--correct);
+  }
+  .fb-input.wrong {
+    border-color: var(--wrong);
+    background: rgba(255,107,107,0.2);
+  }
+  .fb-input:disabled {
+    opacity: 0.8;
+  }
+  .fb-hint-btn, .fb-check-btn {
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fb-hint-btn:hover {
+    background: rgba(255,212,59,0.2);
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .fb-check-btn:hover {
+    background: rgba(77,171,247,0.2);
+    border-color: var(--w5);
+    color: var(--w5);
+  }
+  .fb-feedback {
+    margin-top: 8px;
+    font-size: 0.9em;
+    min-height: 20px;
+  }
+  .fb-feedback.correct {
+    color: var(--correct);
+  }
+  .fb-feedback.wrong {
+    color: var(--wrong);
+  }
+  @media (max-width: 768px) {
+    .fill-blank-score-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .fb-score-fill-track {
+      width: 100%;
+    }
+    .fb-blank-wrapper {
+      display: flex;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .fb-input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  let fbCorrect = 0;
+  const fbItems = document.querySelectorAll('.fill-blank-item');
+  const fbTotal = fbItems.length;
+
+  function updateFbScore() {
+    const scoreEl = document.querySelector('.fb-score-correct');
+    const fillEl = document.querySelector('.fb-score-fill');
+    const totalEl = document.querySelector('.fb-score-total');
+    if (scoreEl) scoreEl.textContent = fbCorrect;
+    if (totalEl) totalEl.textContent = fbTotal;
+    if (fillEl && fbTotal > 0) {
+      fillEl.style.width = Math.round((fbCorrect / fbTotal) * 100) + '%';
+    }
+  }
+
+  window.showHint = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const answer = item.dataset.answer.toLowerCase();
+
+    if (input.value.length === 0) {
+      const hint = answer.charAt(0).toUpperCase() + '_'.repeat(Math.max(0, answer.length - 1));
+      input.placeholder = hint;
+      input.focus();
+    } else {
+      const currentLen = input.value.length;
+      if (currentLen < answer.length) {
+        input.value = answer.substring(0, currentLen + 1);
+        input.focus();
+      }
+    }
+  };
+
+  window.checkBlank = function(btn) {
+    const item = btn.closest('.fill-blank-item');
+    const input = item.querySelector('.fb-input');
+    const feedback = item.querySelector('.fb-feedback');
+    const answer = item.dataset.answer.toLowerCase();
+    const altAnswers = item.dataset.alt ? item.dataset.alt.toLowerCase().split(',') : [];
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if (item.classList.contains('checked')) return;
+
+    const isCorrect = userAnswer === answer || altAnswers.includes(userAnswer);
+
+    item.classList.add('checked');
+    input.disabled = true;
+
+    if (isCorrect) {
+      item.classList.add('correct');
+      input.classList.add('correct');
+      feedback.classList.add('correct');
+      feedback.innerHTML = '<strong>Correct!</strong>';
+      fbCorrect++;
+    } else {
+      item.classList.add('wrong');
+      input.classList.add('wrong');
+      feedback.classList.add('wrong');
+      feedback.innerHTML = '<strong>Correct answer:</strong> ' + item.dataset.answer;
+    }
+
+    updateFbScore();
+  };
+
+  window.checkAllBlanks = function() {
+    fbItems.forEach(item => {
+      if (!item.classList.contains('checked')) {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  };
+
+  window.resetAllBlanks = function() {
+    fbCorrect = 0;
+    fbItems.forEach(item => {
+      item.classList.remove('checked', 'correct', 'wrong');
+      const input = item.querySelector('.fb-input');
+      const feedback = item.querySelector('.fb-feedback');
+      input.value = '';
+      input.disabled = false;
+      input.classList.remove('correct', 'wrong');
+      input.placeholder = '________';
+      feedback.innerHTML = '';
+      feedback.classList.remove('correct', 'wrong');
+    });
+    updateFbScore();
+  };
+
+  fbItems.forEach(item => {
+    const input = item.querySelector('.fb-input');
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const btn = item.querySelector('.fb-check-btn');
+        checkBlank(btn);
+      }
+    });
+  });
+
+  updateFbScore();
+})();
+</script>
+
+<!-- MATCH THE TERMS SECTION -->
+<div class="container">
+<div class="matching-section">
+  <h2>Match the Terms</h2>
+  <p class="matching-instructions">Click a term, then click its matching definition.</p>
+  <div class="matching-score">
+    <span>Matched: <span class="match-correct">0</span> / <span class="match-total">6</span></span>
+    <button class="matching-reset-btn" onclick="resetMatching()">Reset</button>
+  </div>
+  <div class="matching-container">
+    <div class="matching-terms">
+      <div class="match-term" data-match="1">Barn Door Property</div>
+      <div class="match-term" data-match="2">Cognitive Walkthrough</div>
+      <div class="match-term" data-match="3">Why Cryptosystems Fail</div>
+      <div class="match-term" data-match="4">Earn or Give, But Never Assume, Trust</div>
+      <div class="match-term" data-match="5">OWASP Crypto Failures</div>
+      <div class="match-term" data-match="6">Quill Pen Icon</div>
+    </div>
+    <div class="matching-definitions">
+      <div class="match-def" data-match="3">Over 90% of failures are implementation errors, not broken algorithms</div>
+      <div class="match-def" data-match="5">Loss of confidentiality, non-repudiation failure, failed integrity checks</div>
+      <div class="match-def" data-match="1">Once a secret is exposed, you can't un-expose it</div>
+      <div class="match-def" data-match="6">Failed to communicate private key was being used for signing</div>
+      <div class="match-def" data-match="4">Never offload security from server to client</div>
+      <div class="match-def" data-match="2">Expert evaluation of learnability without actual users</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  .matching-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 2px solid var(--page-color); }
+  .matching-section h2 { color: var(--page-color); margin-bottom: 8px; font-size: 1.3em; }
+  .matching-instructions { color: #aaa; font-size: 0.95em; margin-bottom: 16px; }
+  .matching-score { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; flex-wrap: wrap; }
+  .matching-score span { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .matching-reset-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid #666; background: transparent; color: #aaa; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .matching-reset-btn:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.1); }
+  .matching-container { display: flex; gap: 24px; flex-wrap: wrap; }
+  .matching-terms, .matching-definitions { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; }
+  .match-term, .match-def { padding: 12px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .match-term:hover, .match-def:hover { background: rgba(255,255,255,0.1); }
+  .match-term.selected, .match-def.selected { border-color: var(--page-color); background: rgba(255,255,255,0.1); }
+  .match-term.matched, .match-def.matched { border-color: var(--correct); background: rgba(81,207,102,0.15); pointer-events: none; opacity: 0.7; }
+  .match-term.wrong, .match-def.wrong { border-color: var(--wrong); animation: shake 0.3s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<script>
+(function() {
+  let selectedTerm = null;
+  let matchedCount = 0;
+  const totalMatches = document.querySelectorAll('.match-term').length;
+
+  document.querySelector('.match-total').textContent = totalMatches;
+
+  document.querySelectorAll('.match-term').forEach(term => {
+    term.addEventListener('click', function() {
+      if (this.classList.contains('matched')) return;
+      document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTerm = this;
+    });
+  });
+
+  document.querySelectorAll('.match-def').forEach(def => {
+    def.addEventListener('click', function() {
+      if (this.classList.contains('matched') || !selectedTerm) return;
+
+      if (selectedTerm.dataset.match === this.dataset.match) {
+        selectedTerm.classList.remove('selected');
+        selectedTerm.classList.add('matched');
+        this.classList.add('matched');
+        matchedCount++;
+        document.querySelector('.match-correct').textContent = matchedCount;
+        selectedTerm = null;
+      } else {
+        this.classList.add('wrong');
+        selectedTerm.classList.add('wrong');
+        setTimeout(() => {
+          this.classList.remove('wrong');
+          selectedTerm.classList.remove('wrong');
+        }, 300);
+      }
+    });
+  });
+
+  window.resetMatching = function() {
+    matchedCount = 0;
+    selectedTerm = null;
+    document.querySelector('.match-correct').textContent = '0';
+    document.querySelectorAll('.match-term, .match-def').forEach(el => {
+      el.classList.remove('matched', 'selected', 'wrong');
+    });
+  };
+})();
+</script>
+
+</body>
+</html>
