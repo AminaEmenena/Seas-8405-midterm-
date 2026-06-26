@@ -484,95 +484,6 @@
       </ul>
     </div>
 
-    <!-- WEEK 6: THREAT MODELING -->
-    <div class="section">
-      <h2>WEEK 6: Threat Modeling</h2>
-
-      <h3>STRIDE</h3>
-      <table>
-        <tr><th>Threat</th><th>Mitigation</th></tr>
-        <tr><td><strong>S</strong>poofing</td><td>Strong auth (MFA)</td></tr>
-        <tr><td><strong>T</strong>ampering</td><td>Integrity checks/hashing</td></tr>
-        <tr><td><strong>R</strong>epudiation</td><td>Audit logs, signatures</td></tr>
-        <tr><td><strong>I</strong>nfo Disclosure</td><td>Encryption, access controls</td></tr>
-        <tr><td><strong>D</strong>oS</td><td>Rate limiting, redundancy</td></tr>
-        <tr><td><strong>E</strong>levation of Priv</td><td>Least privilege, input validation</td></tr>
-      </table>
-
-      <h3>PASTA (7 Stages)</h3>
-      <div class="mnemonic">1.Business Obj → 2.Tech Scope → 3.Decomposition → 4.Threat Analysis → 5.Vuln Analysis → 6.Attack Modeling → 7.Risk/Impact</div>
-
-      <h3>Attack Trees</h3>
-      <p>Hierarchical diagrams: root=goal, branches=approaches, leaves=actions</p>
-
-      <h3>Scope Management</h3>
-      <ul>
-        <li><strong>Empty Scope Problem</strong> - Undefined = everything in scope = paralysis</li>
-        <li><strong>Scope is iterative</strong> - Will evolve as understanding deepens</li>
-      </ul>
-
-      <h3>Four-Step Scope Process <span class="new-tag">NEW</span></h3>
-      <ol>
-        <li>Consider High-Level Goals (ALL stakeholders)</li>
-        <li>Review Contextual Constraints</li>
-        <li>Set Initial Scope (in/out/middle)</li>
-        <li>Validate and Refine</li>
-      </ol>
-
-      <h3>Scope-Setting Catch-22 <span class="new-tag">NEW</span></h3>
-      <p>Can't finalize scope without stakeholders, can't organize without scope. Solution: <strong>Draft. Discuss. Refine. Repeat.</strong></p>
-
-      <h3>Modularity</h3>
-      <p>Design as composable building blocks (ABBs). Loose coupling = flexible scope.</p>
-    </div>
-
-    <!-- WEEK 7: DECISION-MAKING -->
-    <div class="section">
-      <h2>WEEK 7: Decision-Making</h2>
-
-      <h3>Trade-offs</h3>
-      <ul>
-        <li>Security vs Usability</li>
-        <li>Cost vs Coverage</li>
-        <li>Complexity vs Maintainability</li>
-        <li>Speed vs Thoroughness</li>
-        <li>Centralization vs Autonomy</li>
-      </ul>
-
-      <h3>ADRs (Architecture Decision Records)</h3>
-      <p>Format: Title → Status → Context → Decision → Consequences → Alternatives</p>
-
-      <h3>Decision-Making Traps <span class="new-tag">NEW</span></h3>
-      <ul>
-        <li><strong>Premature Convergence</strong> - Jumping to solutions too fast</li>
-        <li><strong>Status Quo Bias</strong> - Baseline must be compared</li>
-        <li><strong>Incomplete Info</strong> - Must decide before all facts known</li>
-      </ul>
-
-      <h3>Weighted Scoring Matrix <span class="new-tag">NEW</span></h3>
-      <p>Systematic evaluation: assign weights to criteria, score each option</p>
-
-      <h3>Framework vs Mandate</h3>
-      <ul>
-        <li><strong>Framework</strong> = Guidance, voluntary adoption (decentralized orgs)</li>
-        <li><strong>Mandate</strong> = Policy enforcement, compliance required (regulated)</li>
-      </ul>
-
-      <h3>Decision Checklist</h3>
-      <ul>
-        <li>✓ Stakeholders consulted?</li>
-        <li>✓ Requirements prioritized (MoSCoW)?</li>
-        <li>✓ Root cause found (Seven Whys)?</li>
-        <li>✓ Options evaluated (4 dimensions)?</li>
-        <li>✓ Trade-offs documented?</li>
-        <li>✓ Decision defensible with evidence?</li>
-        <li>✓ PoC conducted?</li>
-        <li>✓ ADR created?</li>
-        <li>✓ Rollback/exit plan exists?</li>
-        <li>✓ Success metrics defined?</li>
-      </ul>
-    </div>
-
     <!-- CISA ZT MATURITY MODEL -->
     <div class="section">
       <h2>CISA Zero Trust Maturity Model v2</h2>
@@ -872,7 +783,7 @@
         <li><strong>14</strong> ATT&CK Tactics</li>
         <li><strong>5</strong> D3FEND Categories</li>
         <li><strong>6</strong> SABSA Layers</li>
-        <li><strong>7</strong> PASTA Stages</li>
+
         <li><strong>7</strong> NIST 800-207 Tenets</li>
         <li><strong>5</strong> CISA ZT Pillars</li>
         <li><strong>4</strong> CISA ZT Maturity Levels</li>
