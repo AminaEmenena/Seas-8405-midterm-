@@ -226,7 +226,7 @@
   </div>
 </nav>
 
-<div class="sheet-title">SEAS 8415 MIDTERM CHEAT SHEET (W1&ndash;6) &mdash; Prof Fossaceca &mdash; Applied Crypto &amp; Data Protection &mdash; 2hrs | Closed book | 1 sheet (both sides) + scratch | Honorlock + side cam | 35% of grade</div>
+<div class="sheet-title">SEAS 8415 MIDTERM CHEAT SHEET (W1&ndash;5) &mdash; Prof Fossaceca &mdash; Applied Crypto &amp; Data Protection &mdash; 2hrs | Closed book | 1 sheet (both sides) + scratch | Honorlock + side cam | 35% of grade</div>
 
 <div class="columns">
 
@@ -354,35 +354,6 @@
         <li><b>EO 14028 + OMB M-22-09:</b> Executive Order 14028: comprehensive cybersecurity initiatives for US govt. 7 provisions: (1) ZTA, (2) Improved cybersecurity standards, (3) Incident response/remediation, (4) Software supply chain security, (5) Cybersecurity Review Board, (6) Information sharing, (7) Federal contracting requirements. OMB M-22-09 (Jan 26, 2022): requires agencies meet specific cybersecurity standards by end of FY2024. Strategic goals align with CISA 5 pillars: Identity (phishing-resistant MFA), Devices (complete inventory), Networks (encrypt all DNS/HTTP), Applications (internet-connected, empirical testing), Data (thorough categorization).</li>
         <li><b>CISA ZT MATURITY MODEL v2.0 (Apr 2023):</b> 5 pillars + 3 cross-cutting capabilities (Visibility/Analytics, Automation/Orchestration, Governance). Four maturity levels: Traditional &rarr; Initial &rarr; Advanced &rarr; Optimal. Each pillar has specific capabilities at each level. One of many roadmaps for ZT transition.</li>
         <li><b>ZT BENEFITS:</b> Allow conditional access while restricting high-value resources to managed devices. Prevent lateral movement with stolen credentials. Enable productivity (work anywhere). Identity = control plane. "If-this-then-that" automation. Can enable new business outcomes.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 6 -->
-  <div class="week w6">
-    <div class="week-header">W6 &mdash; AES &amp; Algorithm Selection [BONUS — NOT ON MIDTERM]</div>
-    <div class="week-body">
-      <ul>
-        <li><b>DES TO AES:</b> DES (1977): 56-bit key, 64-bit block. Vulnerable to brute force by 1990s. 3DES: applied DES 3x with 2-3 keys, slower but more secure. NIST announced need for new standard 1997.</li>
-        <li><b>AES COMPETITION (1997-2001):</b> Open, transparent international competition. 15 initial candidates. Evaluation: security, performance, efficiency, flexibility, simplicity. 5 finalists: Rijndael, Serpent, Twofish, RC6, MARS. Rijndael selected Oct 2000 by Joan Daemen + Vincent Rijmen (Belgium). Open process = opposite of DES (NSA behind closed doors).</li>
-        <li><b>WHY RIJNDAEL WON:</b> Best balance of security + performance + simplicity. Efficient in hardware AND software. Low memory (smart cards). Variable key sizes: 128/192/256. Clean math: Galois field arithmetic.</li>
-        <li><b>AES INTERNALS:</b> Block = 128 bits (always). Keys: 128 (10 rounds), 192 (12 rounds), 256 (14 rounds). Four operations per round: (1) SubBytes &mdash; non-linear substitution via S-box (confusion), (2) ShiftRows &mdash; cyclic shift of rows (diffusion), (3) MixColumns &mdash; matrix multiplication (further diffusion), (4) AddRoundKey &mdash; XOR with round key. SPN structure &mdash; NOT Feistel.</li>
-        <li><b>BLOCK CIPHER MODES:</b> ECB = each block independent &rarr; INSECURE (patterns visible, penguin example). CBC = XOR with previous ciphertext + IV &rarr; fixes patterns. CTR = turns block into stream cipher, parallelizable, no padding. GCM = CTR + auth tag &rarr; confidentiality + integrity (AEAD). CFB/OFB = stream-like modes.</li>
-        <li><b>FEISTEL vs SPN:</b> Feistel (DES): split block in half, apply round function to one half, XOR with other, swap. Same structure for enc/dec (reverse key schedule). SPN (AES/Rijndael): apply sub+perm to entire block. Different operations for enc vs dec (compute inverses). Both use multiple rounds.</li>
-        <li><b>S-BOXES:</b> Non-linear lookup tables. Provide "confusion" (Shannon): complex relationship between key and ciphertext. DES S-boxes: 6 bits in, 4 out (NSA designed, initially controversial). AES S-box: 8 bits in, 8 out, based on multiplicative inverse in GF(2^8). Critical: weak S-boxes = entire cipher vulnerable.</li>
-        <li><b>CONFUSION &amp; DIFFUSION (Shannon):</b> Confusion = each ciphertext bit depends on several key parts (achieved by substitution/S-boxes). Diffusion = each plaintext bit affects many ciphertext bits (achieved by permutation/ShiftRows/MixColumns). Modern block ciphers achieve both through multiple rounds of substitution-permutation.</li>
-        <li><b>KEY SIZES &amp; QUANTUM:</b> AES-128 = 2^128 keys (currently secure). AES-192 = extra margin. AES-256 = recommended for classified, quantum margin. AES-128 &asymp; RSA-3072. Grover's algorithm: halves effective key length &rarr; AES-256 = 128-bit post-quantum. NIST recommends AES-256 for long-term.</li>
-        <li><b>ALGORITHM SELECTION CRITERIA:</b> Security margin (beyond known attacks). Performance (speed on different platforms). Simplicity (easier to analyze/implement correctly). Flexibility (multiple key/block sizes). Resource requirements (memory, power). Existing cryptanalysis (how well studied). Standardization + peer review = essential (Kerckhoffs').</li>
-        <li><b>CTR MODE DETAIL:</b> Counter mode encrypts sequential counter values, XORs result with plaintext. Each block uses unique counter &rarr; no chaining dependency. Parallelizable (unlike CBC). Random access to any block. No padding needed. Pre-computable. Combined with GMAC = GCM mode.</li>
-        <li><b>CBC MODE DETAIL:</b> Each plaintext block XORed with previous ciphertext block before encryption. First block uses IV (Initialization Vector). IV must be unpredictable (random). Error in one block affects current + next block. Sequential (not parallelizable for encryption). Padding required (PKCS#7).</li>
-        <li><b>AES S-BOX CONSTRUCTION:</b> Built from multiplicative inverse in GF(2^8) followed by affine transformation. Provides maximum non-linearity. No fixed points (S(x) &ne; x for any x). No opposite fixed points (S(x) &ne; x&#773; for any x). Algebraically complex &mdash; resists linear and differential cryptanalysis.</li>
-        <li><b>GALOIS FIELD GF(2^8):</b> Finite field with 256 elements used in AES. Addition = XOR. Multiplication = polynomial multiplication modulo irreducible polynomial x^8+x^4+x^3+x+1. All AES math operations defined over this field. Enables efficient hardware implementation.</li>
-        <li><b>ROUND KEY GENERATION:</b> AES key schedule expands cipher key into array of round keys. Uses RotWord (circular byte shift), SubWord (S-box substitution), XOR with round constant (Rcon). Each round key derived from previous. Independent subkeys prevent related-key attacks.</li>
-        <li><b>DES DETAILS:</b> 64-bit input, 56-bit effective key (8 parity bits discarded). 16 rounds of Feistel. Initial/final permutation (IP/FP). Each round: expansion (32&rarr;48 bits), XOR with subkey, S-box substitution (48&rarr;32 bits), permutation. Key schedule generates 16 48-bit subkeys. Broken by EFF "Deep Crack" in 22 hours (1998).</li>
-        <li><b>3DES VARIANTS:</b> EDE (Encrypt-Decrypt-Encrypt). Two-key (K1=K3): effective 112-bit security. Three-key (K1&ne;K2&ne;K3): effective 168-bit security. Meet-in-the-middle attack reduces two-key to ~80-bit effective. 3x slower than single DES. Block size still 64 bits (vulnerability to birthday attacks at 2^32 blocks).</li>
-        <li><b>BIRTHDAY PARADOX/ATTACK:</b> Collision probability for n-bit hash &asymp; 2^(n/2) attempts (not 2^n). MD5 (128-bit): collision in ~2^64 ops. SHA-256: ~2^128 ops. This is why hash output must be at least 2x the desired security level. Named after birthday problem: only 23 people needed for 50% chance of shared birthday in a room.</li>
-        <li><b>AES FINALISTS COMPARISON:</b> Rijndael: best balance, efficient HW+SW, low memory, clean math &mdash; WINNER. Serpent: considered MORE SECURE but significantly SLOWER (conservative design, 32 rounds). Twofish: Bruce Schneier's entry, complex key schedule, competitive performance. RC6: from RSA Labs, simple design, used multiplication. MARS: IBM entry, complex, variable structure. Rijndael won on performance+simplicity+security balance.</li>
-        <li><b>PLAYFAIR CIPHER:</b> Digraph substitution cipher (encrypts pairs of letters using 5x5 grid). More secure than monoalphabetic (26^2=676 digraphs vs 26 letters). Not polyalphabetic &mdash; still vulnerable to frequency analysis of digraphs. May appear as distractor answer on exam.</li>
       </ul>
     </div>
   </div>
