@@ -455,6 +455,27 @@
     </div>
   </div>
 
+  <!-- WHAT PROVIDES WHAT -->
+  <div class="week" style="border-color: #4a148c;">
+    <div class="week-header" style="background: #4a148c; color: #fff;">WHAT PROVIDES WHAT? (EXAM TRAPS)</div>
+    <div class="week-body" style="background: #F3E5F5;">
+      <ul>
+        <li><b>HMAC:</b> Integrity &#10003; | Authentication &#10003; | Confidentiality &#10007; | Non-repudiation &#10007; (both parties share key).</li>
+        <li><b>DIGITAL SIGNATURES:</b> Integrity &#10003; | Authentication &#10003; | Non-repudiation &#10003; | Confidentiality &#10007;.</li>
+        <li><b>ENCRYPTION (symmetric):</b> Confidentiality &#10003; | Integrity &#10007; | Authentication &#10007;. Add HMAC or GCM mode for integrity.</li>
+        <li><b>HASHING:</b> Integrity &#10003; | Confidentiality &#10007; | Authentication &#10007; (no key). One-way &amp; irreversible.</li>
+        <li><b>OTP:</b> Perfect secrecy &#10003; | Practical &#10007;. Key must be: truly random, &ge; message length, used ONCE, kept secret.</li>
+        <li><b>OWASP CRYPTO FAILURE CATEGORIES:</b> (1) Loss of confidentiality, (2) Non-repudiation failure, (3) Failed integrity. Access control = SEPARATE category (NOT crypto failure).</li>
+        <li><b>FEISTEL (DES):</b> Split block in half, same structure enc/dec. <b>SPN (AES):</b> Full block sub+perm, different ops for enc vs dec.</li>
+        <li><b>CONFUSION (Shannon):</b> Complex key&harr;ciphertext relationship (S-boxes). <b>DIFFUSION:</b> Each plaintext bit affects many ciphertext bits (ShiftRows/MixColumns).</li>
+        <li><b>SYMMETRIC:</b> Same key, fast (100-1000x), bulk data, N users = N(N-1)/2 keys. <b>ASYMMETRIC:</b> Pub/priv pair, slow, solves key distribution, N users = 2N keys.</li>
+        <li><b>SNARKs:</b> Trusted setup, ECC-based, ~100s bytes, ~10ms verify, quantum VULNERABLE. <b>STARKs:</b> No trusted setup, hash-based, ~100s KB, 50-100ms, quantum RESISTANT.</li>
+        <li><b>PERIMETER MODEL:</b> Static boundary, role-based trust, persistent access. <b>ZERO TRUST:</b> Dynamic per-transaction, attribute-based, temporal access, re-evaluated.</li>
+        <li><b>ZTN vs SDP:</b> ZTN = philosophy (continuous auth, micro-seg). SDP = framework (controllers/gateways, hides resources from public internet).</li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 
 </body>
