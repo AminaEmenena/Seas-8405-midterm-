@@ -472,6 +472,17 @@
         <li><b>SNARKs:</b> Trusted setup, ECC-based, ~100s bytes, ~10ms verify, quantum VULNERABLE. <b>STARKs:</b> No trusted setup, hash-based, ~100s KB, 50-100ms, quantum RESISTANT.</li>
         <li><b>PERIMETER MODEL:</b> Static boundary, role-based trust, persistent access. <b>ZERO TRUST:</b> Dynamic per-transaction, attribute-based, temporal access, re-evaluated.</li>
         <li><b>ZTN vs SDP:</b> ZTN = philosophy (continuous auth, micro-seg). SDP = framework (controllers/gateways, hides resources from public internet).</li>
+        <li><b>CAESAR vs VIGENERE:</b> Caesar = monoalphabetic (one shift for all letters, broken by frequency analysis). Vigenere = polyalphabetic (repeating keyword, broken by Kasiski examination).</li>
+        <li><b>INTERACTIVE vs NON-INTERACTIVE ZKP:</b> Interactive = back-and-forth between prover/verifier. Non-interactive = single proof message, anyone can verify. Fiat-Shamir heuristic converts interactive to non-interactive using hash function.</li>
+        <li><b>ARCHITECTURE vs ENGINEERING:</b> Architect = WHAT and WHY (strategic, blueprints). Engineer = HOW (implementation, code/configs).</li>
+        <li><b>QUANTUM RESISTANT vs QUANTUM PROOF:</b> Resistant = like water-resistant watch (resists to a depth). Proof = waterproof (impervious). Can only claim RESISTANCE until true quantum capabilities known.</li>
+        <li><b>SALTING vs SEEDING:</b> Salt = random value added before hashing (unique per user, prevents rainbow tables). Seed = starting value for PRNG (determines output sequence). NOT interchangeable.</li>
+        <li><b>FLAW vs BUG:</b> Flaw = design mistake (architectural). Bug = implementation issue (coding error). Both can cause crypto failures.</li>
+        <li><b>ECC vs RSA:</b> ECC-256 approx RSA-3072 security. ECC = smaller keys, faster, less power (ideal for IoT/mobile). RSA = larger keys, must keep growing, still 90% of SSL. CAB Forum requires RSA minimum 3072 bits now.</li>
+        <li><b>BLOCK CIPHER MODES:</b> ECB = each block independent, NEVER USE (patterns visible, penguin example). CBC = XOR with previous block + IV. CTR = counter mode, parallelizable, no padding. GCM = CTR + auth tag (confidentiality + integrity). GCM is the gold standard.</li>
+        <li><b>DATA PROTECTION BY STATE:</b> At Rest = AES encryption. In Transit = TLS/SSL. In Use = secure enclaves, homomorphic encryption (hardest to protect).</li>
+        <li><b>HASH SIZES:</b> MD5 = 128-bit (BROKEN). SHA-1 = 160-bit (deprecated). SHA-256 = 256-bit (current standard). SHA-512 = 512-bit. Birthday attack: collision in ~2^(n/2) attempts, not 2^n.</li>
+        <li><b>POST-QUANTUM WINNERS (NIST):</b> CRYSTALS-Kyber (key exchange), CRYSTALS-Dilithium (signatures), SPHINCS+ (hash-based sigs). All lattice-based except SPHINCS+. SIKE was BROKEN in 2022. Migration target: 2035.</li>
       </ul>
     </div>
   </div>
