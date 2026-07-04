@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4 - User Security Data Visualizations & Hypothesis Testing Concepts</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #69DB7C;
+    --page-tint: rgba(105,219,124,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #FF8787;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(105,219,124,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed { padding: 5px; }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none;
+    transition: all 0.2s; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table, details > section {
+    padding: 16px 20px; background: var(--page-tint);
+  }
+
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  .concept-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--accent1); }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  .highlight-red, .prof-note { background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .highlight-blue { background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .highlight-green { background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mnemonic { background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15)); border: 2px dashed var(--accent1); border-radius: 12px; padding: 20px; margin: 16px 0; text-align: center; }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
+
+  .diagram-box, pre { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0; text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5; overflow-x: auto; white-space: pre; color: #ddd; }
+
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem { background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15)); border: 2px dashed #0ea5e9; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center; }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #0ea5e9; font-size: 1.2em; }
+
+  .prof { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .ascii-diagram { background: rgba(0,0,0,0.4); border: 1px solid var(--page-color); border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.4; overflow-x: auto; white-space: pre; color: var(--page-color); margin: 16px 0; }
+  .ascii-diagram-title { color: var(--page-color); font-weight: 700; font-size: 0.9em; margin-bottom: 8px; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step { background: rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.15); }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4 active">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 4 -- User Security Data Visualizations &amp; Hypothesis Testing</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 4 Key Points</div>
+  <ul>
+    <li><strong>User</strong> = any entity (human or non-human) with a user ID and system permissions, includes bots and APIs</li>
+    <li><strong>Verizon DBIR 2024</strong> -- 68% human element, 32% ransomware/extortion, 28% errors, 15% third party</li>
+    <li><strong>Internal actors</strong> expose 10x more records than external -- insider threat is real</li>
+    <li><strong>Hypothesis Test</strong> = courtroom for data. H0 = boring default (innocent). H1 = your claim (guilty)</li>
+    <li><strong>Never "accept H0"</strong> -- you can only "fail to reject." Never proven innocent, just not enough evidence</li>
+    <li><strong>Type I (alpha)</strong> = false alarm = reject true H0. Type II (beta) = missed detection = fail to reject false H0</li>
+    <li><strong>Power = 1 - beta</strong> = ability to catch a real effect. Bigger samples reduce both error types</li>
+    <li><strong>6-Step Procedure</strong> -- State H0/H1, pick alpha, choose test stat, find distribution, locate rejection region, decide</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: What is a User -->
+<details>
+  <summary>&#128100; 1. What is a User?</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Definition:</strong> A <em>user</em> is any entity (human or non-human) that possesses a user ID and system permissions. This includes human users, service accounts, bots, and APIs.</div>
+
+    <div class="red"><strong>KEY INSIGHT:</strong> Non-human users (bots, APIs, service accounts) often have elevated privileges and are prime targets for attackers. They are harder to monitor because their behavior is automated.</div>
+  </div>
+</details>
+
+<!-- Section 2: Verizon DBIR Stats -->
+<details>
+  <summary>&#128202; 2. Verizon DBIR Statistics</summary>
+  <div class="content-section">
+    <h3 style="margin-top: 0; color: #58a6ff;">2024 DBIR Findings</h3>
+    <table>
+      <tr><th>Finding</th><th>Percentage</th></tr>
+      <tr><td>Human element involved</td><td><strong>68%</strong></td></tr>
+      <tr><td>Ransomware / extortion</td><td>32%</td></tr>
+      <tr><td>Errors (misconfig, misdelivery)</td><td>28%</td></tr>
+      <tr><td>Third-party involvement</td><td>15%</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">2025 DBIR Findings</h3>
+    <table>
+      <tr><th>Finding</th><th>Percentage</th></tr>
+      <tr><td>Human element involved</td><td><strong>60%</strong></td></tr>
+      <tr><td>Third-party involvement</td><td>30%</td></tr>
+      <tr><td>Espionage motivation</td><td>17%</td></tr>
+    </table>
+
+    <h4>2025 Initial Access Vectors</h4>
+    <ul>
+      <li><strong>Credential abuse:</strong> 22%</li>
+      <li><strong>Vulnerability exploitation:</strong> 20%</li>
+      <li><strong>Phishing:</strong> 16%</li>
+    </ul>
+
+    <h4>2025 Breach Patterns</h4>
+    <ul>
+      <li><strong>System intrusion:</strong> 53% of breaches</li>
+    </ul>
+
+    <div class="red"><strong>Internal actors expose 10x more records than external actors.</strong> Insider threats are disproportionately damaging even though external attacks are more frequent.</div>
+  </div>
+</details>
+
+<!-- Section 3: User Security Data Sources -->
+<details>
+  <summary>&#128193; 3. User Security Data Sources</summary>
+  <div class="content-section">
+    <h3 style="margin-top: 0; color: #58a6ff;">Core Security Data Sources</h3>
+    <ul>
+      <li><strong>Authentication/Access logs</strong> -- login attempts, session management</li>
+      <li><strong>User account info</strong> -- roles, permissions, group memberships</li>
+      <li><strong>Network traffic</strong> -- flow data, connection patterns</li>
+      <li><strong>Firewall logs</strong> -- allowed/denied connections</li>
+      <li><strong>IDS/IPS alerts</strong> -- signature and anomaly-based detections</li>
+      <li><strong>Endpoint security logs</strong> -- AV alerts, EDR telemetry</li>
+      <li><strong>Application logs</strong> -- business application activity</li>
+      <li><strong>SIEM</strong> -- aggregated and correlated events</li>
+      <li><strong>Incident response records</strong> -- past investigation data</li>
+      <li><strong>Vulnerability assessments</strong> -- scan results, patch status</li>
+      <li><strong>Security policies</strong> -- compliance requirements</li>
+      <li><strong>Threat intelligence</strong> -- IOCs, TTPs, threat feeds</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Developer Data Sources</h3>
+    <ul>
+      <li><strong>Code repo logs</strong> -- Git/SVN commits, branch activity</li>
+      <li><strong>CI/CD logs</strong> -- build/deploy pipeline activity</li>
+      <li><strong>APM data</strong> -- application performance monitoring</li>
+      <li><strong>Change management records</strong> -- approved vs. unauthorized changes</li>
+      <li><strong>Privileged access logs</strong> -- admin actions, sudo usage</li>
+      <li><strong>ACLs / RBAC configs</strong> -- access control configurations</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Mobile Data Sources</h3>
+    <ul>
+      <li>App usage logs</li>
+      <li>Device location data</li>
+      <li>Communication logs</li>
+      <li>Social media activity</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 4: Privacy Laws -->
+<details>
+  <summary>&#128220; 4. Privacy Laws &amp; Regulations</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Law</th><th>Region</th><th>Key Rights/Principles</th></tr>
+      <tr><td><strong>GDPR</strong></td><td>EU</td><td>Consent, data minimization, right to access/correct/delete</td></tr>
+      <tr><td><strong>CCPA</strong></td><td>California</td><td>Right to know, right to delete, right to opt-out of sale</td></tr>
+      <tr><td><strong>PIPEDA</strong></td><td>Canada</td><td>Consent-based, purpose limitation</td></tr>
+      <tr><td><strong>LGPD</strong></td><td>Brazil</td><td>Similar to GDPR, consent and legitimate interest</td></tr>
+      <tr><td><strong>DPA 2018</strong></td><td>UK</td><td>Post-Brexit UK implementation of GDPR principles</td></tr>
+    </table>
+
+    <div class="green"><strong>Best Practice:</strong> When collecting user security data, always consider privacy implications. Data minimization (collect only what you need) is a core principle across all frameworks.</div>
+  </div>
+</details>
+
+<!-- Section 5: Hypothesis Testing - The Courtroom Analogy -->
+<details>
+  <summary>&#9878;&#65039; 5. Hypothesis Testing -- The Courtroom Analogy</summary>
+  <div class="content-section">
+    <div class="mem"><small>Remember This Analogy</small><br><strong>Hypothesis Test = Courtroom Trial | H0 = Innocent (default) | H1 = Guilty (your claim)</strong></div>
+
+    <div class="blue">
+      <strong>H0 (Null Hypothesis):</strong> The boring default. "Nothing interesting is happening." Always contains the equals sign (=, &le;, &ge;).
+    </div>
+    <div class="blue">
+      <strong>H1 (Alternative Hypothesis):</strong> Your claim. "Something IS happening." Contains the inequality (&ne;, <, >).
+    </div>
+
+    <div class="red"><strong>CRITICAL RULE:</strong> You NEVER "accept H0." You can only <em>fail to reject</em> it. Just as a defendant is never "proven innocent" -- there is just "not enough evidence to convict."</div>
+
+    <div class="key"><strong>H0 always has the = sign.</strong> H1 has the inequality. H1 is what the researcher is trying to PROVE.</div>
+  </div>
+</details>
+
+<!-- Section 6: One-Tailed vs Two-Tailed -->
+<details>
+  <summary>&#128072; 6. One-Tailed vs Two-Tailed Tests</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Type</th><th>H1 Form</th><th>Rejection Region</th></tr>
+      <tr><td><strong>Two-tailed</strong></td><td>H1: mu &ne; value</td><td>Both tails (split alpha/2 each side)</td></tr>
+      <tr><td><strong>Right-tailed</strong></td><td>H1: mu > value</td><td>Right tail only (all alpha in right)</td></tr>
+      <tr><td><strong>Left-tailed</strong></td><td>H1: mu < value</td><td>Left tail only (all alpha in left)</td></tr>
+    </table>
+
+    <div class="mem"><small>Key Rule</small><br><strong>H1 decides WHERE the rejection region goes. Alpha decides HOW BIG it is.</strong></div>
+
+    <div class="ascii-diagram-title">Rejection Regions</div>
+<div class="ascii-diagram">TWO-TAILED (H1: mu != value)
+  Reject |  Fail to Reject  | Reject
+  alpha/2|                   | alpha/2
+  -------|===================|-------
+         critical           critical
+
+RIGHT-TAILED (H1: mu > value)
+         Fail to Reject     | Reject
+                            | alpha
+  ==========================|-------
+                           critical
+
+LEFT-TAILED (H1: mu < value)
+  Reject |     Fail to Reject
+  alpha  |
+  -------|==========================
+        critical</div>
+  </div>
+</details>
+
+<!-- Section 7: Type I and Type II Errors -->
+<details>
+  <summary>&#128680; 7. Type I &amp; Type II Errors</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Error</th><th>Symbol</th><th>What Happens</th><th>Security Analogy</th></tr>
+      <tr><td><strong>Type I</strong></td><td>alpha</td><td>Reject a TRUE H0 (false alarm)</td><td>IDS screams "ATTACK!" during normal traffic</td></tr>
+      <tr><td><strong>Type II</strong></td><td>beta</td><td>Fail to reject a FALSE H0 (missed detection)</td><td>Real attack slips through silently</td></tr>
+    </table>
+
+    <div class="red"><strong>Power = 1 - beta</strong> = the probability of correctly detecting a real effect. Higher power = better at catching real attacks.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">The Fundamental Tradeoff</h3>
+    <div class="warn">
+      <strong>More sensitivity (lower threshold) &rarr; more false alarms (Type I)</strong><br>
+      <strong>Quieter alarms (higher threshold) &rarr; miss real attacks (Type II)</strong><br><br>
+      <strong>Solution:</strong> Bigger samples reduce BOTH error types simultaneously.
+    </div>
+
+    <div class="mem"><small>IDS Analogy</small><br><strong>Type I = False Positive (crying wolf) | Type II = False Negative (sleeping through a break-in)</strong></div>
+  </div>
+</details>
+
+<!-- Section 8: The 6-Step Procedure -->
+<details>
+  <summary>&#128221; 8. The 6-Step Hypothesis Testing Procedure</summary>
+  <div class="content-section">
+    <ol>
+      <li><strong>State H0 and H1</strong> -- define what you are testing</li>
+      <li><strong>Pick alpha</strong> -- significance level (0.01, 0.05, or 0.10). MUST be chosen BEFORE looking at data</li>
+      <li><strong>Choose the test statistic</strong> -- Z, t, chi-square, F, etc.</li>
+      <li><strong>Find its distribution</strong> -- under assumption that H0 is true</li>
+      <li><strong>Locate rejection region and critical point</strong> -- based on H1 direction and alpha</li>
+      <li><strong>Compute test statistic and decide</strong> -- if test stat falls in rejection region, reject H0</li>
+    </ol>
+
+    <div class="flow">
+      <div class="flow-step">State H0/H1</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">Pick alpha</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">Choose stat</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">Find distribution</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">Rejection region</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">Decide</div>
+    </div>
+
+    <div class="warn"><strong>Exam Trap:</strong> Alpha must be chosen BEFORE looking at the data. Choosing alpha after seeing results is called "p-hacking" and invalidates the test.</div>
+  </div>
+</details>
+
+<!-- Section 9: Common Alpha Levels -->
+<details>
+  <summary>&#127919; 9. Significance Levels &amp; Decision Rules</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Alpha</th><th>Confidence</th><th>Strictness</th><th>Use Case</th></tr>
+      <tr><td>0.01</td><td>99%</td><td>Very strict</td><td>Medical, safety-critical</td></tr>
+      <tr><td>0.05</td><td>95%</td><td>Standard</td><td>Most research, security thresholds</td></tr>
+      <tr><td>0.10</td><td>90%</td><td>Lenient</td><td>Exploratory, low-stakes</td></tr>
+    </table>
+
+    <div class="key"><strong>Decision Rule:</strong> If the test statistic falls in the rejection region (beyond the critical point), reject H0. Otherwise, fail to reject H0.</div>
+
+    <div class="green"><strong>Security Application:</strong> Setting alpha for an IDS is like choosing sensitivity. Alpha = 0.01 means fewer false alarms but you might miss attacks. Alpha = 0.10 catches more threats but triggers more false positives.</div>
+  </div>
+</details>
+
+<!-- Section 10: Exam Traps -->
+<details>
+  <summary>&#9888;&#65039; 10. Common Exam Traps</summary>
+  <div class="content-section">
+    <div class="red"><strong>Watch out for these mistakes:</strong></div>
+    <ol>
+      <li><strong>Saying "accept H0"</strong> -- WRONG. You can only "fail to reject H0." The absence of evidence is not evidence of absence.</li>
+      <li><strong>Mixing up Type I and Type II</strong> -- Type I = false alarm (reject true H0). Type II = missed detection (fail to reject false H0).</li>
+      <li><strong>Putting rejection region in wrong tail</strong> -- H1 determines direction. H1: mu > value = right tail. H1: mu < value = left tail.</li>
+      <li><strong>Choosing alpha AFTER seeing data</strong> -- alpha must be set before analysis begins. Otherwise it is p-hacking.</li>
+      <li><strong>Confusing alpha with beta</strong> -- alpha = P(Type I error). beta = P(Type II error). Power = 1 - beta.</li>
+      <li><strong>Forgetting that bigger samples help</strong> -- larger n reduces both Type I and Type II error rates.</li>
+    </ol>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+  <h2>&#127919; Quiz -- Test Your Knowledge</h2>
+  <div class="quiz-score-bar">
+    <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span></span>
+    <div class="score-fill-track"><div class="score-fill"></div></div>
+    <button class="quiz-reset-btn">Reset Quiz</button>
+  </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> According to the 2024 Verizon DBIR, what percentage of breaches involved the human element?</p>
+      <div class="options">
+        <div class="opt">42%</div>
+        <div class="opt">55%</div>
+        <div class="opt">68%</div>
+        <div class="opt">82%</div>
+      </div>
+      <div class="explanation">The 2024 Verizon DBIR found that 68% of breaches involved the human element -- including errors, social engineering, and misuse of credentials. This dropped to 60% in the 2025 report.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> In hypothesis testing, what does H0 represent?</p>
+      <div class="options">
+        <div class="opt">The researcher's claim that something interesting is happening</div>
+        <div class="opt">The boring default assumption -- nothing unusual is happening</div>
+        <div class="opt">The probability of making an error</div>
+        <div class="opt">The sample size needed for significance</div>
+      </div>
+      <div class="explanation">H0 (null hypothesis) is the boring default -- "innocent until proven guilty." It states that nothing unusual or interesting is happening. The burden of proof falls on H1 to overthrow it.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> A Type I error in security is analogous to:</p>
+      <div class="options">
+        <div class="opt">An IDS generating a false alarm during normal traffic</div>
+        <div class="opt">A real attack passing undetected through defenses</div>
+        <div class="opt">A firewall blocking legitimate traffic by accident</div>
+        <div class="opt">A patch failing to install correctly</div>
+      </div>
+      <div class="explanation">Type I error = rejecting a true H0 = false alarm. In security, this is the IDS screaming "ATTACK!" when traffic is actually normal. It wastes analyst time and causes alert fatigue.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> Why must you NEVER say "accept H0"?</p>
+      <div class="options">
+        <div class="opt">Because H0 is always false</div>
+        <div class="opt">Because the test only works one direction</div>
+        <div class="opt">Because alpha prevents acceptance</div>
+        <div class="opt">Because lack of evidence to reject is not the same as proof that H0 is true</div>
+      </div>
+      <div class="explanation">Just as a court verdict of "not guilty" does not mean "proven innocent," failing to reject H0 simply means there is insufficient evidence against it -- not that it is confirmed true.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">5</span> For H1: mu > 50, where is the rejection region?</p>
+      <div class="options">
+        <div class="opt">In both tails</div>
+        <div class="opt">In the left tail only</div>
+        <div class="opt">In the right tail only</div>
+        <div class="opt">At the center of the distribution</div>
+      </div>
+      <div class="explanation">H1 determines the direction. H1: mu > value means we reject H0 only if our test statistic is large enough (in the right tail). All of alpha goes into the right tail.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">6</span> What determines HOW BIG the rejection region is?</p>
+      <div class="options">
+        <div class="opt">The sample size</div>
+        <div class="opt">Alpha (the significance level)</div>
+        <div class="opt">The test statistic value</div>
+        <div class="opt">The population mean</div>
+      </div>
+      <div class="explanation">H1 decides WHERE the rejection region goes (which tail). Alpha decides HOW BIG it is. A larger alpha = larger rejection region = easier to reject H0 = more Type I errors.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">7</span> Power = 1 - beta represents:</p>
+      <div class="options">
+        <div class="opt">The probability of a false alarm</div>
+        <div class="opt">The probability of accepting H0 when it is true</div>
+        <div class="opt">The significance level of the test</div>
+        <div class="opt">The probability of correctly detecting a real effect</div>
+      </div>
+      <div class="explanation">Power = 1 - beta = P(reject H0 when H0 is actually false). In security terms, it is the probability your detection system catches a real attack. Higher power = better detection capability.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> According to Verizon DBIR, internal actors are notable because they:</p>
+      <div class="options">
+        <div class="opt">Expose 10x more records than external actors</div>
+        <div class="opt">Are responsible for 90% of all breaches</div>
+        <div class="opt">Only target financial data</div>
+        <div class="opt">Always use sophisticated tools</div>
+      </div>
+      <div class="explanation">While external attacks are more frequent, internal actors (insiders) expose 10x more records per incident. They already have legitimate access, making their actions harder to detect and more damaging.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> Which is a valid initial access vector from the 2025 DBIR?</p>
+      <div class="options">
+        <div class="opt">Physical break-in (45%)</div>
+        <div class="opt">DNS poisoning (30%)</div>
+        <div class="opt">Credential abuse (22%)</div>
+        <div class="opt">Bluetooth exploitation (18%)</div>
+      </div>
+      <div class="explanation">The 2025 DBIR found the top initial access vectors were: credential abuse (22%), vulnerability exploitation (20%), and phishing (16%). Credential abuse remains the leading entry point for attackers.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> What reduces BOTH Type I and Type II errors simultaneously?</p>
+      <div class="options">
+        <div class="opt">Lowering alpha to 0.01</div>
+        <div class="opt">Increasing sample size</div>
+        <div class="opt">Switching from two-tailed to one-tailed</div>
+        <div class="opt">Choosing a different test statistic</div>
+      </div>
+      <div class="explanation">Bigger samples reduce both error types. With more data, the test becomes more precise -- you can detect real effects (fewer Type II) without increasing false alarms (Type I). Lowering alpha only reduces Type I at the cost of increasing Type II.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    function updateProgress() {
+      const topCorrect = document.querySelectorAll('.progress-bar-container .score-correct');
+      const topTotal = document.querySelectorAll('.progress-bar-container .score-total');
+      const topFill = document.getElementById('progressFill');
+      topCorrect.forEach(el => el.textContent = correct);
+      topTotal.forEach(el => el.textContent = qs.length);
+      if (topFill && qs.length > 0) {
+        topFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+          updateProgress();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+        updateProgress();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

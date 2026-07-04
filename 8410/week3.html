@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 - Endpoint Security Visualizations & Numeric Measures</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #FFD43B;
+    --page-tint: rgba(255,212,59,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #FF8787;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed { padding: 5px; }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none;
+    transition: all 0.2s; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table, details > section {
+    padding: 16px 20px; background: var(--page-tint);
+  }
+
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  .concept-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--accent1); }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  .highlight-red, .prof-note { background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .highlight-blue { background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .highlight-green { background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4); padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mnemonic { background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15)); border: 2px dashed var(--accent1); border-radius: 12px; padding: 20px; margin: 16px 0; text-align: center; }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
+
+  .diagram-box, pre { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0; text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5; overflow-x: auto; white-space: pre; color: #ddd; }
+
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem { background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15)); border: 2px dashed #0ea5e9; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center; }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #0ea5e9; font-size: 1.2em; }
+
+  .prof { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .ascii-diagram { background: rgba(0,0,0,0.4); border: 1px solid var(--page-color); border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.4; overflow-x: auto; white-space: pre; color: var(--page-color); margin: 16px 0; }
+  .ascii-diagram-title { color: var(--page-color); font-weight: 700; font-size: 0.9em; margin-bottom: 8px; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step { background: rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.15); }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3 active">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 3 -- Endpoint Security Visualizations &amp; Numeric Measures</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 3 Key Points</div>
+  <ul>
+    <li><strong>Endpoints</strong> = desktops, laptops, servers, IoT, smartphones, tablets -- any device connecting to the network</li>
+    <li><strong>Data Pipeline</strong> -- Dataset -> Cleaning -> Feature Engineering -> Training Data -> Model -> Evaluate</li>
+    <li><strong>Garbage In, Garbage Out</strong> -- bad data = bad models. Cleaning is Step Zero</li>
+    <li><strong>Outlier Detection</strong> -- Z-scores (bell curve) or IQR method (Q1-1.5*IQR to Q3+1.5*IQR)</li>
+    <li><strong>Center</strong> -- Mean (sensitive to outliers), Median (robust), Mode (works on nominal)</li>
+    <li><strong>Spread</strong> -- Range (quick), Variance S^2 (squared gaps / n-1), SD S (sqrt of variance)</li>
+    <li><strong>Empirical Rule</strong> -- 68-95-99.7% within 1-2-3 SDs. Bell-shaped ONLY. 3-sigma = anomaly detection</li>
+    <li><strong>"The mean chases the tail"</strong> -- right-skewed: mean > median > mode. Left-skewed: mean < median < mode</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: What is an Endpoint -->
+<details>
+  <summary>&#128421; 1. Endpoints &amp; Endpoint Security Data</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Definition:</strong> An <em>endpoint</em> is any device that connects to and communicates on a network -- desktops, laptops, servers, IoT devices, smartphones, tablets.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Endpoint Security Data Sources</h3>
+    <ul>
+      <li><strong>Authentication logs</strong> -- login attempts, failed auth, session tokens</li>
+      <li><strong>Access logs</strong> -- file access, privilege escalation, resource requests</li>
+      <li><strong>Process logs</strong> -- running processes, parent-child relationships</li>
+      <li><strong>Network connections</strong> -- outbound connections, ports, protocols</li>
+    </ul>
+
+    <div class="red"><strong>KEY IDEA:</strong> Endpoint data is the foundation of threat detection. If you cannot see what is happening on endpoints, you cannot detect attacks.</div>
+  </div>
+</details>
+
+<!-- Section 2: Data Preprocessing Pipeline -->
+<details>
+  <summary>&#9881;&#65039; 2. Data Preprocessing Pipeline</summary>
+  <div class="content-section">
+    <div class="mem"><small>Remember This Flow</small><br><strong>Dataset -> Clean -> Feature Engineer -> Train -> Model -> Score -> Evaluate</strong></div>
+
+    <div class="ascii-diagram-title">ML Pipeline for Security Analytics</div>
+<div class="ascii-diagram">Dataset --> Data Cleaning --> Feature Engineering --> Training Data
+                                                              |
+                                                              v
+                                                      Learning Algorithm
+                                                              |
+                                                              v
+                                                         Train Model
+                                                              |
+New Data --> Score Model --> Evaluate Model                    |
+                                ^                             |
+                                |_____________________________|</div>
+
+    <div class="red"><strong>"Garbage In, Garbage Out"</strong> -- If your input data is messy, incomplete, or biased, your model output will be unreliable. Data quality is non-negotiable.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Step Zero: Data Exploration</h3>
+    <ul>
+      <li><code>df.describe()</code> -- summary statistics (count, mean, std, min, quartiles, max)</li>
+      <li><strong>Data Dictionary</strong> -- document each column's meaning, type, and expected range</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 3: Data Cleaning -->
+<details>
+  <summary>&#128481;&#65039; 3. Data Cleaning Techniques</summary>
+  <div class="content-section">
+    <h3 style="margin-top: 0; color: #58a6ff;">Missing Data</h3>
+    <table>
+      <tr><th>Method</th><th>Code</th><th>Use Case</th></tr>
+      <tr><td>Drop all NaN rows</td><td><code>df.dropna()</code></td><td>Few missing values, large dataset</td></tr>
+      <tr><td>Drop NaN in specific cols</td><td><code>df.dropna(subset=['col'])</code></td><td>Critical columns only</td></tr>
+      <tr><td>Fill with value</td><td><code>df.fillna(value)</code></td><td>Known default or computed value</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Duplicates</h3>
+    <ul>
+      <li><code>df.duplicated().any()</code> -- check if duplicates exist</li>
+      <li><code>df.drop_duplicates()</code> -- remove duplicate rows</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Data Transformation</h3>
+    <ul>
+      <li><code>df.replace(old, new)</code> -- replace specific values</li>
+      <li><code>df.reset_index(drop=True)</code> -- reset index after dropping rows</li>
+      <li><code>df.astype(type)</code> -- convert column data types</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Text Cleaning</h3>
+    <ul>
+      <li><code>str.replace()</code> -- replace substrings</li>
+      <li><code>str.lower()</code> / <code>str.upper()</code> -- normalize case</li>
+      <li><code>str.strip()</code> -- remove leading/trailing whitespace</li>
+    </ul>
+
+    <div class="green"><strong>Best Practice:</strong> Always clean text fields before comparing or grouping. "Admin" vs "admin" vs " admin " are three different values to a computer.</div>
+  </div>
+</details>
+
+<!-- Section 4: Outlier Detection -->
+<details>
+  <summary>&#128200; 4. Outlier Detection Methods</summary>
+  <div class="content-section">
+    <div class="key"><strong>Why outliers matter in security:</strong> Anomalous behavior (outliers) often signals attacks -- unusual login times, abnormal data transfers, unexpected process executions.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Z-Score Method (Bell Curve)</h3>
+    <p>Z = (X - mean) / SD. Values beyond +/-3 are considered outliers. Works best on normally distributed data.</p>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">IQR Method (Box Plot)</h3>
+    <ul>
+      <li>IQR = Q3 - Q1 (interquartile range)</li>
+      <li>Lower fence = Q1 - 1.5 * IQR</li>
+      <li>Upper fence = Q3 + 1.5 * IQR</li>
+      <li>Values outside fences = outliers</li>
+    </ul>
+
+    <div class="warn"><strong>Caution:</strong> Z-score assumes bell-shaped data. For skewed distributions, the IQR method is more robust.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">df.loc for Filtering</h3>
+    <p><code>df.loc[condition]</code> -- filter rows based on boolean condition. Example: <code>df.loc[df['login_count'] > 100]</code> to find high-activity users.</p>
+  </div>
+</details>
+
+<!-- Section 5: Imputation Methods -->
+<details>
+  <summary>&#128295; 5. Imputation Methods</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Method</th><th>Pros</th><th>Cons</th></tr>
+      <tr><td>Mean / Median / Mode</td><td>Simple, fast</td><td>Underestimates variability</td></tr>
+      <tr><td>Constant Value</td><td>Clear intent</td><td>May introduce bias</td></tr>
+      <tr><td>Linear Interpolation</td><td>Good for time series</td><td>Assumes linear trend</td></tr>
+      <tr><td>Forward Fill</td><td>Preserves last known state</td><td>Stale data risk</td></tr>
+      <tr><td>Backward Fill</td><td>Future-aware</td><td>Not always logical</td></tr>
+      <tr><td>KNN Imputation</td><td>Uses similar records</td><td>Computationally expensive</td></tr>
+      <tr><td>Model-based (regression, decision tree, neural net)</td><td>Most accurate</td><td>Complex, risk of overfitting</td></tr>
+    </table>
+
+    <div class="warn"><strong>Exam Trap:</strong> Mean/Median/Mode imputation underestimates variability -- the filled values cluster around the center, making the distribution look artificially narrow.</div>
+  </div>
+</details>
+
+<!-- Section 6: Feature Engineering -->
+<details>
+  <summary>&#128161; 6. Feature Engineering</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Feature engineering is the "secret sauce" of machine learning. It creates new informative features from existing data and requires <em>domain knowledge</em>.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Security Examples</h3>
+    <ul>
+      <li>Login time -> "is_after_hours" boolean flag</li>
+      <li>Source IP + Destination IP -> "is_internal_to_external" flag</li>
+      <li>Timestamp -> day_of_week, hour_of_day features</li>
+      <li>Bytes transferred -> bytes_per_second rate feature</li>
+      <li>Failed logins -> rolling_failed_count over time window</li>
+    </ul>
+
+    <div class="green"><strong>Best Practice:</strong> The best features encode domain expertise. A security analyst knows that logins at 3 AM or massive data transfers to unknown IPs are suspicious -- encode that knowledge as features.</div>
+  </div>
+</details>
+
+<!-- Section 7: Measures of Center -->
+<details>
+  <summary>&#127919; 7. Measures of Center (Ch 2)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Two Questions Statistics Answers:</strong> (1) Where is the center? (2) How spread out is the data?</div>
+
+    <table>
+      <tr><th>Measure</th><th>Formula</th><th>Properties</th></tr>
+      <tr><td><strong>Mean (X-bar)</strong></td><td>sum(Xi) / n</td><td>Sensitive to outliers, uses every value</td></tr>
+      <tr><td><strong>Median</strong></td><td>Middle value at rank (n+1)/2</td><td>Robust to outliers, ignores extreme values</td></tr>
+      <tr><td><strong>Mode</strong></td><td>Most frequent value</td><td>Works on nominal (categorical) data</td></tr>
+    </table>
+
+    <div class="mem"><small>Parameter vs Statistic</small><br><strong>Parameter = Population (Greek: mu, sigma) | Statistic = Sample (Latin: X-bar, S)</strong></div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Shape from Center Relationships</h3>
+    <div class="key">
+      <strong>"The mean chases the tail"</strong>
+      <ul>
+        <li><strong>Symmetric:</strong> mean = median = mode</li>
+        <li><strong>Right-skewed:</strong> mode < median < mean (tail on right, large values pull mean up)</li>
+        <li><strong>Left-skewed:</strong> mean < median < mode (tail on left, small values pull mean down)</li>
+      </ul>
+    </div>
+
+    <div class="warn"><strong>Exam Trap:</strong> Using the mean for skewed data gives a misleading picture of "typical." Use the median for skewed distributions (e.g., income data, network latencies with outliers).</div>
+  </div>
+</details>
+
+<!-- Section 8: Measures of Spread -->
+<details>
+  <summary>&#128207; 8. Measures of Spread (Ch 2)</summary>
+  <div class="content-section">
+    <table>
+      <tr><th>Measure</th><th>Formula</th><th>Notes</th></tr>
+      <tr><td><strong>Range</strong></td><td>max - min</td><td>Quick but rough, affected by single outlier</td></tr>
+      <tr><td><strong>Variance (S^2)</strong></td><td>sum(Xi - X-bar)^2 / (n-1)</td><td>Units are squared (hard to interpret)</td></tr>
+      <tr><td><strong>Standard Deviation (S)</strong></td><td>sqrt(S^2)</td><td>Same units as data, most useful measure</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Why Square the Gaps?</h3>
+    <div class="key"><strong>Plain gaps (Xi - X-bar) cancel to zero</strong> because positive and negative deviations balance out. Squaring ensures all gaps are positive and penalizes larger deviations more.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Why Divide by n-1 (not n)?</h3>
+    <div class="key"><strong>Bessel's Correction:</strong> Using n-1 corrects the bias in sample variance. Samples tend to underestimate population variance because they are closer to their own mean than to the population mean.</div>
+
+    <div class="warn"><strong>Exam Trap:</strong> Variance is in SQUARED UNITS. If measuring seconds, variance is in seconds-squared. SD brings it back to original units.</div>
+  </div>
+</details>
+
+<!-- Section 9: Empirical Rule & Chebyshev's -->
+<details>
+  <summary>&#128290; 9. Empirical Rule &amp; Chebyshev's Theorem</summary>
+  <div class="content-section">
+    <div class="red"><strong>Empirical Rule (68-95-99.7) -- BELL-SHAPED DATA ONLY</strong></div>
+
+    <div class="ascii-diagram-title">Empirical Rule for Normal Distribution</div>
+<div class="ascii-diagram">         |    68%    |
+      |      95%       |
+   |       99.7%          |
+---+---+---+---+---+---+---+---
+  -3  -2  -1   0  +1  +2  +3   (SDs from mean)
+
+1 SD = 68% of data
+2 SD = 95% of data
+3 SD = 99.7% of data  --> 3-sigma = ANOMALY DETECTION threshold</div>
+
+    <div class="green"><strong>Security Application:</strong> 3-sigma rule in anomaly detection -- if a value falls beyond 3 standard deviations from the mean, flag it as potentially malicious. Only 0.3% of normal data should be that extreme.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Chebyshev's Theorem</h3>
+    <div class="blue"><strong>Works for ANY shape distribution.</strong> At least (1 - 1/k^2) of data falls within k SDs of the mean. Example: k=2 -> at least 75%, k=3 -> at least 89%.</div>
+    <p>Chebyshev gives <em>looser bounds</em> than the Empirical Rule because it makes no assumptions about shape.</p>
+
+    <div class="warn"><strong>Exam Trap:</strong> Do NOT apply the Empirical Rule to non-bell-shaped (skewed, bimodal) data. For non-normal data, use Chebyshev's theorem instead.</div>
+  </div>
+</details>
+
+<!-- Section 10: Exam Traps -->
+<details>
+  <summary>&#9888;&#65039; 10. Common Exam Traps</summary>
+  <div class="content-section">
+    <div class="red"><strong>Watch out for these mistakes:</strong></div>
+    <ol>
+      <li><strong>Using mean for skewed data</strong> -- median is more appropriate when outliers or skewness exist</li>
+      <li><strong>Forgetting variance is in squared units</strong> -- always take the square root (SD) for interpretation</li>
+      <li><strong>Dividing by n for sample variance</strong> -- samples use n-1 (Bessel's correction), populations use N</li>
+      <li><strong>Applying Empirical Rule to non-bell data</strong> -- it only works for approximately normal (bell-shaped) distributions</li>
+      <li><strong>Confusing parameters and statistics</strong> -- mu/sigma = population, X-bar/S = sample</li>
+      <li><strong>Ignoring data cleaning before analysis</strong> -- garbage in, garbage out</li>
+    </ol>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+  <h2>&#127919; Quiz -- Test Your Knowledge</h2>
+  <div class="quiz-score-bar">
+    <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span></span>
+    <div class="score-fill-track"><div class="score-fill"></div></div>
+    <button class="quiz-reset-btn">Reset Quiz</button>
+  </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">1</span> What does "Garbage In, Garbage Out" emphasize?</p>
+      <div class="options">
+        <div class="opt">Models should discard all outliers automatically</div>
+        <div class="opt">If input data is poor quality, model output will be unreliable</div>
+        <div class="opt">Garbage collection in Python prevents memory leaks</div>
+        <div class="opt">Data should be deleted after model training</div>
+      </div>
+      <div class="explanation">GIGO means that the quality of your output is determined by the quality of your input. Bad data leads to bad models, regardless of how sophisticated the algorithm is.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">2</span> Which measure of center is MOST robust to outliers?</p>
+      <div class="options">
+        <div class="opt">Mean</div>
+        <div class="opt">Mode</div>
+        <div class="opt">Median</div>
+        <div class="opt">Range</div>
+      </div>
+      <div class="explanation">The median is the middle value and is not affected by extreme values. The mean gets pulled toward outliers, making the median the better choice for skewed data.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> In a right-skewed distribution, which relationship holds?</p>
+      <div class="options">
+        <div class="opt">mode < median < mean</div>
+        <div class="opt">mean < median < mode</div>
+        <div class="opt">mean = median = mode</div>
+        <div class="opt">median < mode < mean</div>
+      </div>
+      <div class="explanation">"The mean chases the tail." In a right-skewed distribution, the tail extends to the right (large values), pulling the mean higher than the median, which is higher than the mode.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> Why does sample variance divide by n-1 instead of n?</p>
+      <div class="options">
+        <div class="opt">To make the calculation faster</div>
+        <div class="opt">Because one data point is always the mean itself</div>
+        <div class="opt">To reduce the variance value</div>
+        <div class="opt">To correct the bias -- samples underestimate population variance</div>
+      </div>
+      <div class="explanation">Bessel's correction (n-1) accounts for the fact that a sample is closer to its own mean than the population mean, causing variance to be underestimated if we divide by n.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> The IQR method flags outliers beyond which bounds?</p>
+      <div class="options">
+        <div class="opt">mean +/- 2*SD</div>
+        <div class="opt">Q1 - 1.5*IQR and Q3 + 1.5*IQR</div>
+        <div class="opt">min - range and max + range</div>
+        <div class="opt">median +/- 3*IQR</div>
+      </div>
+      <div class="explanation">The IQR method defines fences at Q1 - 1.5*IQR (lower) and Q3 + 1.5*IQR (upper). Any value outside these fences is flagged as an outlier. This is what box plots visualize.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> The Empirical Rule (68-95-99.7) applies to:</p>
+      <div class="options">
+        <div class="opt">Any distribution regardless of shape</div>
+        <div class="opt">Only uniform distributions</div>
+        <div class="opt">Bell-shaped (approximately normal) distributions only</div>
+        <div class="opt">Only distributions with no outliers</div>
+      </div>
+      <div class="explanation">The Empirical Rule ONLY works for bell-shaped (normal) distributions. For other shapes, use Chebyshev's theorem which gives looser but universally valid bounds.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> What does feature engineering require that makes it the "secret sauce" of ML?</p>
+      <div class="options">
+        <div class="opt">Domain knowledge to create informative new features from existing data</div>
+        <div class="opt">A GPU cluster for parallel processing</div>
+        <div class="opt">Removing all categorical variables</div>
+        <div class="opt">Using only raw unprocessed data</div>
+      </div>
+      <div class="explanation">Feature engineering transforms raw data into features that better represent the underlying problem. In security, domain knowledge (knowing what "suspicious" looks like) drives creation of features like is_after_hours or failed_login_rate.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> In security anomaly detection, the "3-sigma rule" flags events that are:</p>
+      <div class="options">
+        <div class="opt">Within 1 SD of the mean</div>
+        <div class="opt">Between 2 and 3 SDs from the mean</div>
+        <div class="opt">Exactly at the mean</div>
+        <div class="opt">More than 3 SDs from the mean (only 0.3% of normal data)</div>
+      </div>
+      <div class="explanation">The 3-sigma rule says that 99.7% of normal data falls within 3 SDs. Anything beyond that threshold has only a 0.3% chance of being normal, making it a strong candidate for an anomaly alert.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> Which imputation method underestimates variability?</p>
+      <div class="options">
+        <div class="opt">KNN imputation</div>
+        <div class="opt">Mean / Median / Mode imputation</div>
+        <div class="opt">Linear interpolation</div>
+        <div class="opt">Model-based imputation</div>
+      </div>
+      <div class="explanation">Mean/Median/Mode imputation fills missing values with a single central value, clustering imputed data around the center. This artificially narrows the distribution and underestimates the true variability in the data.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">10</span> A population uses mu and sigma. A sample uses X-bar and S. This distinction is between:</p>
+      <div class="options">
+        <div class="opt">Nominal and ordinal data</div>
+        <div class="opt">Discrete and continuous variables</div>
+        <div class="opt">Parameters and statistics</div>
+        <div class="opt">Dependent and independent variables</div>
+      </div>
+      <div class="explanation">Parameters describe populations (Greek letters: mu, sigma) and are typically unknown. Statistics describe samples (Latin letters: X-bar, S) and are calculated from collected data to estimate the parameters.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    // Also update the progress bar at top
+    function updateProgress() {
+      const topCorrect = document.querySelectorAll('.progress-bar-container .score-correct');
+      const topTotal = document.querySelectorAll('.progress-bar-container .score-total');
+      const topFill = document.getElementById('progressFill');
+      topCorrect.forEach(el => el.textContent = correct);
+      topTotal.forEach(el => el.textContent = qs.length);
+      if (topFill && qs.length > 0) {
+        topFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+          updateProgress();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+        updateProgress();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

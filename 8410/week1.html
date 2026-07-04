@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 - Visualization Fundamentals & Perception</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #FF6B6B;
+    --page-tint: rgba(255,107,107,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #38D9A9;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary) */
+  details {
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--page-color);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  details[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.15em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+    color: #000;
+  }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+    background: var(--page-tint);
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC */
+  .mem {
+    background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: var(--accent1); font-size: 1.2em; }
+
+  /* QUIZ STYLING */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar {
+    display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+    margin: 0 0 16px; padding: 10px 0;
+  }
+  .expand-collapse-bar button {
+    background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .expand-collapse-bar button:hover {
+    background: var(--page-color); color: #000; border-color: var(--page-color);
+  }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1 active">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 1 -- Visualization Fundamentals &amp; Perception</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 1 Key Points</div>
+  <ul>
+    <li><strong>Visual Perception</strong> -- humans process visuals pre-attentively (color, shape, size, position detected in milliseconds before conscious thought)</li>
+    <li><strong>Chart Types</strong> -- bar (compare categories), scatter (relationships), line (trends over time), pie (part-of-whole), histogram (distribution), heatmap (density/correlation)</li>
+    <li><strong>Data-Ink Ratio</strong> -- maximize ink used for actual data, minimize chartjunk (Tufte's principle)</li>
+    <li><strong>Color Power</strong> -- color draws attention fastest; use sequential palettes for numeric, categorical palettes for groups; avoid red-green only</li>
+    <li><strong>Right Chart for Data</strong> -- categorical = bar/pie; numeric = histogram/scatter; time-series = line; multivariate = heatmap/parallel coordinates</li>
+    <li><strong>Perception Guidelines</strong> -- position is most accurate, then length, angle, area, color intensity (Cleveland & McGill ranking)</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Visual Perception -->
+<details>
+  <summary>&#128065; 1. How Visuals Are Perceived</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> The human visual system processes certain attributes <em>pre-attentively</em> -- before conscious thought kicks in. Effective visualizations exploit this.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Pre-Attentive Visual Attributes</h3>
+    <table>
+      <tr><th>Attribute</th><th>What It Means</th><th>Use Case</th></tr>
+      <tr><td><strong>Color Hue</strong></td><td>Different colors pop out instantly</td><td>Categorizing groups</td></tr>
+      <tr><td><strong>Size</strong></td><td>Larger items draw the eye</td><td>Showing magnitude</td></tr>
+      <tr><td><strong>Orientation</strong></td><td>Tilted items stand out from aligned ones</td><td>Highlighting anomalies</td></tr>
+      <tr><td><strong>Position</strong></td><td>Spatial placement on axes</td><td>Most accurate quantitative encoding</td></tr>
+      <tr><td><strong>Shape</strong></td><td>Different shapes are distinguished quickly</td><td>Categorization (limited to ~5 shapes)</td></tr>
+    </table>
+
+    <div class="key">
+      <strong>Cleveland & McGill Perceptual Ranking (most to least accurate):</strong><br>
+      Position on common scale > Position on unaligned scales > Length > Angle/Slope > Area > Volume > Color intensity
+    </div>
+
+    <div class="warn">
+      <strong>Perception Trap:</strong> Humans are terrible at judging areas and volumes accurately. Avoid bubble charts for precise comparisons. Pie charts rely on angle -- less accurate than bar length.
+    </div>
+
+    <div class="green">
+      <strong>Best Practice:</strong> When accuracy matters, encode data as position (scatter/bar). When you just need to show a pattern or category, color and shape work fine.
+    </div>
+  </div>
+</details>
+
+<!-- Section 2: Common Visualization Types -->
+<details>
+  <summary>&#128202; 2. Common Visualization Types</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Each chart type is designed for a specific data relationship. Picking the wrong chart obscures the message.</div>
+
+    <table>
+      <tr><th>Chart Type</th><th>Best For</th><th>Data Type</th><th>Watch Out</th></tr>
+      <tr><td><strong>Bar Chart</strong></td><td>Comparing categories</td><td>Categorical x, Numeric y</td><td>Always start y-axis at 0</td></tr>
+      <tr><td><strong>Scatter Plot</strong></td><td>Showing relationships between 2 variables</td><td>Numeric x, Numeric y</td><td>Overplotting with large datasets</td></tr>
+      <tr><td><strong>Line Chart</strong></td><td>Trends over time</td><td>Time x, Numeric y</td><td>Only for continuous/ordered x-axis</td></tr>
+      <tr><td><strong>Pie Chart</strong></td><td>Part-of-whole (few slices)</td><td>Categorical proportions</td><td>Useless with >5 categories; bar is usually better</td></tr>
+      <tr><td><strong>Histogram</strong></td><td>Distribution of numeric data</td><td>Continuous numeric</td><td>Bin width changes the story</td></tr>
+      <tr><td><strong>Heatmap</strong></td><td>Density, correlation matrices</td><td>Two categorical axes + numeric intensity</td><td>Color scale choice is critical</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>Bar = Categories | Line = Time | Scatter = Relationships | Histogram = Distribution</strong>
+    </div>
+
+    <div class="warn">
+      <strong>Bar Chart vs Histogram:</strong> Bar charts have gaps (discrete categories). Histograms have touching bars (continuous numeric ranges/bins). This is a common exam confusion.
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: The Power of Color -->
+<details>
+  <summary>&#127912; 3. The Power of Color in Data Presentation</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Color is the <em>fastest</em> pre-attentive attribute but also the most misused. It can clarify or confuse.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Three Types of Color Palettes</h3>
+    <table>
+      <tr><th>Palette Type</th><th>Use When</th><th>Example</th></tr>
+      <tr><td><strong>Sequential</strong></td><td>Data goes from low to high (one direction)</td><td>Light blue to dark blue for temperature</td></tr>
+      <tr><td><strong>Diverging</strong></td><td>Data has a meaningful midpoint</td><td>Red-white-blue for profit/loss around zero</td></tr>
+      <tr><td><strong>Categorical</strong></td><td>Data has distinct groups with no order</td><td>Different hues for different departments</td></tr>
+    </table>
+
+    <div class="green">
+      <strong>Best Practice:</strong> Use colorblind-friendly palettes. ~8% of males are red-green colorblind. Use tools like ColorBrewer. Add redundant encoding (shape + color) when possible.
+    </div>
+
+    <div class="warn">
+      <strong>Caution:</strong> Rainbow color maps (jet colormap) are perceptually non-uniform -- they create false boundaries and hide real patterns. Prefer perceptually uniform palettes like viridis.
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: Data-Ink Ratio & Chart Junk -->
+<details>
+  <summary>&#9999;&#65039; 4. Data-Ink Ratio &amp; Chart Junk</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Edward Tufte's <em>Data-Ink Ratio</em> = (Ink used to display data) / (Total ink used in the graphic). Goal: maximize this ratio.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">What Is Chart Junk?</h3>
+    <ul>
+      <li><strong>Unnecessary gridlines</strong> -- keep only what helps reading values</li>
+      <li><strong>3D effects</strong> -- distort perception, add no information</li>
+      <li><strong>Decorative illustrations</strong> -- clip art, background images that don't encode data</li>
+      <li><strong>Redundant labels</strong> -- labeling what's already on the axis</li>
+      <li><strong>Heavy borders/shading</strong> -- draw attention away from data points</li>
+    </ul>
+
+    <div class="mem">
+      <small>Tufte's Rule</small>
+      <strong>"Above all else, show the data." -- Erase non-data ink. Erase redundant data ink.</strong>
+    </div>
+
+    <div class="green">
+      <strong>Practical Tips:</strong> Remove chart borders. Lighten gridlines. Remove backgrounds. Let data speak. Every pixel should earn its place.
+    </div>
+
+    <div class="warn">
+      <strong>The Counterargument:</strong> Some chart junk can aid memorability (Bateman et al. 2010). But for analytical dashboards, clean wins.
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: Choosing the Right Chart -->
+<details>
+  <summary>&#127919; 5. Choosing the Right Chart for the Data Type</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> The data type and the question you're answering dictate the chart. Wrong chart = misleading or useless.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Decision Framework</h3>
+    <table>
+      <tr><th>Question You're Answering</th><th>Best Chart</th></tr>
+      <tr><td>How do categories compare?</td><td>Bar chart (horizontal for many categories)</td></tr>
+      <tr><td>How does something change over time?</td><td>Line chart</td></tr>
+      <tr><td>What is the distribution?</td><td>Histogram or box plot</td></tr>
+      <tr><td>What is the relationship between two variables?</td><td>Scatter plot</td></tr>
+      <tr><td>What is the composition/part-of-whole?</td><td>Stacked bar or pie (few slices only)</td></tr>
+      <tr><td>What are correlations across many variables?</td><td>Heatmap / correlation matrix</td></tr>
+    </table>
+
+    <div class="key">
+      <strong>Security Analytics Context:</strong> Time-series line charts for attack trends, bar charts for top attack types, heatmaps for port scan activity by hour, scatter plots for anomaly detection (normal vs outlier clusters).
+    </div>
+
+    <div class="prof">
+      <strong>Exam Relevance:</strong> You will be asked "which chart is best for X" -- always think: what type is the data (categorical vs numeric vs time) and what relationship am I showing (comparison, trend, distribution, correlation).
+    </div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+    <h2>Week 1 Quiz -- Visualization Fundamentals &amp; Perception</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">1</span> According to Cleveland & McGill's perceptual ranking, which visual encoding is MOST accurately perceived by humans?</p>
+      <div class="options">
+        <div class="opt">Color intensity</div>
+        <div class="opt">Position on a common scale</div>
+        <div class="opt">Area</div>
+        <div class="opt">Angle</div>
+      </div>
+      <div class="explanation">Position on a common scale (like a bar chart axis) is the most accurately perceived encoding. This is why bar charts and scatter plots are generally more effective than pie charts (angle) or bubble charts (area).</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">2</span> What does "pre-attentive processing" mean in visualization?</p>
+      <div class="options">
+        <div class="opt">Processing that requires focused concentration</div>
+        <div class="opt">Processing done by specialized software before display</div>
+        <div class="opt">Visual attributes detected automatically before conscious thought</div>
+        <div class="opt">Preparing data before creating a chart</div>
+      </div>
+      <div class="explanation">Pre-attentive processing refers to visual attributes (color, size, orientation, shape) that the brain detects in under 250ms without conscious effort. Effective visualizations exploit these channels.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> Tufte's Data-Ink Ratio principle states you should:</p>
+      <div class="options">
+        <div class="opt">Maximize the proportion of ink used to display actual data</div>
+        <div class="opt">Use as many colors as possible to make charts engaging</div>
+        <div class="opt">Add 3D effects to make data more memorable</div>
+        <div class="opt">Include detailed gridlines for precise reading</div>
+      </div>
+      <div class="explanation">Tufte's principle: Data-Ink Ratio = data ink / total ink. Maximize it by removing chartjunk (unnecessary gridlines, 3D effects, decorative elements). "Above all else, show the data."</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> Which chart type is BEST for showing trends over time?</p>
+      <div class="options">
+        <div class="opt">Pie chart</div>
+        <div class="opt">Scatter plot</div>
+        <div class="opt">Histogram</div>
+        <div class="opt">Line chart</div>
+      </div>
+      <div class="explanation">Line charts are specifically designed for time-series data because the connected points imply continuity and direction over an ordered (time) axis. Scatter plots don't imply order; pie charts show composition at one point in time.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> What is the key visual difference between a bar chart and a histogram?</p>
+      <div class="options">
+        <div class="opt">Bar charts are vertical, histograms are horizontal</div>
+        <div class="opt">Bar charts have gaps between bars (discrete categories), histograms have touching bars (continuous ranges)</div>
+        <div class="opt">Histograms use color, bar charts do not</div>
+        <div class="opt">Bar charts show time data, histograms show categorical data</div>
+      </div>
+      <div class="explanation">Bar charts display discrete categories with gaps between bars. Histograms display continuous numeric data grouped into bins with touching bars (since the ranges are continuous). This is a common exam distinction.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> A sequential color palette is best used when:</p>
+      <div class="options">
+        <div class="opt">You have distinct unordered categories</div>
+        <div class="opt">Data has a meaningful midpoint (like profit/loss around zero)</div>
+        <div class="opt">Data ranges from low to high in one direction</div>
+        <div class="opt">You want maximum contrast between all values</div>
+      </div>
+      <div class="explanation">Sequential palettes map a single direction of magnitude (low to high) using a gradient from light to dark. Diverging palettes are for data with a meaningful midpoint. Categorical palettes are for distinct unordered groups.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> Why are rainbow (jet) colormaps considered problematic?</p>
+      <div class="options">
+        <div class="opt">They are perceptually non-uniform, creating false boundaries and hiding real patterns</div>
+        <div class="opt">They use too few colors</div>
+        <div class="opt">They only work on dark backgrounds</div>
+        <div class="opt">They are patented and expensive to use</div>
+      </div>
+      <div class="explanation">Rainbow/jet colormaps are perceptually non-uniform -- the human eye perceives some color transitions (like green-to-yellow) as larger jumps than others (like blue-to-cyan), creating artificial boundaries in the data that don't exist.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> Which of the following is an example of "chart junk" according to Tufte?</p>
+      <div class="options">
+        <div class="opt">A clearly labeled axis</div>
+        <div class="opt">Data points on a scatter plot</div>
+        <div class="opt">A legend identifying data series</div>
+        <div class="opt">3D effects on a bar chart that add no information</div>
+      </div>
+      <div class="explanation">Chart junk includes visual elements that do not convey data: 3D effects, heavy gridlines, decorative illustrations, and redundant labels. Axes, data points, and legends are functional elements that earn their ink.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> For a security dashboard showing which ports are being scanned most frequently across 24 hours, the best visualization would be:</p>
+      <div class="options">
+        <div class="opt">Pie chart</div>
+        <div class="opt">Line chart</div>
+        <div class="opt">Heatmap (port vs hour, color = frequency)</div>
+        <div class="opt">Scatter plot</div>
+      </div>
+      <div class="explanation">A heatmap with ports on one axis, hours on the other, and color intensity showing scan frequency reveals temporal patterns across multiple ports simultaneously. This is a common security analytics visualization.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> Why should you avoid using pie charts when you have more than 5 categories?</p>
+      <div class="options">
+        <div class="opt">Pie charts can only technically display 5 slices</div>
+        <div class="opt">Humans poorly judge small angle differences, making many similar slices indistinguishable</div>
+        <div class="opt">Pie charts with many slices crash visualization software</div>
+        <div class="opt">Color palettes only have 5 distinct colors</div>
+      </div>
+      <div class="explanation">Pie charts encode data as angles, which humans perceive poorly (Cleveland & McGill ranking). With many slices, small angle differences become indistinguishable. A bar chart using position/length is far more effective for many categories.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    // Also update the progress bar at top
+    const progressFill = document.getElementById('progressFill');
+    const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+    const progressTotal = document.querySelector('.progress-bar-container .score-total');
+    if (progressTotal) progressTotal.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
+      }
+      if (progressFill && qs.length > 0) {
+        progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

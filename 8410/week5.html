@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 - Code Security Data Visualizations & Hypothesis Testing Mechanics</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #4DABF7;
+    --page-tint: rgba(77,171,247,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F06595; --w8: #20C997;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px; background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+    font-size: 0.55em; backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item, .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+  @media (max-width: 1100px) {
+    .color-legend { position: static; transform: none; margin: 0 0 20px; flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px; }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* TOPIC CARDS */
+  details { margin: 20px 0; border-radius: 12px; overflow: hidden; border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s; }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none;
+    transition: all 0.2s; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .prof { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  /* MNEMONIC */
+  .mem { background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15)); border: 2px dashed #0ea5e9; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center; }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #0ea5e9; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM */
+  .ascii-diagram { background: rgba(0,0,0,0.4); border: 1px solid var(--page-color); border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.4; overflow-x: auto; white-space: pre; color: var(--page-color); margin: 16px 0; }
+  .ascii-diagram-title { color: var(--page-color); font-weight: 700; font-size: 0.9em; margin-bottom: 8px; }
+
+  /* CODE */
+  code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  /* QUIZ */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* STREAK */
+  .streak-display { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,0.06); font-weight: 700; font-size: 0.95em; }
+  .streak-display.on-fire { background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3)); animation: pulse 0.5s ease-in-out infinite alternate; }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+
+  /* Confetti */
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 40px; border-radius: 16px; background: linear-gradient(135deg, #51cf66, #37b24d); color: #fff; font-size: 1.5em; font-weight: 800; z-index: 10000; animation: pop-in 0.5s ease-out forwards; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* EXPAND/COLLAPSE */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5 active">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 5 -- Code Security Data Visualizations &amp; Hypothesis Testing Mechanics</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 5 Key Points</div>
+  <ul>
+    <li><strong>Code Security</strong> = identifying, assessing, mitigating vulnerabilities in code to ensure CIA</li>
+    <li><strong>Heartbleed (2014)</strong> -- CVE-2014-0160, missing bounds check in OpenSSL heartbeat extension leaked server memory</li>
+    <li><strong>XZ Utils (2024)</strong> -- CVE-2024-3094, deliberate social engineering backdoor by "Jia Tan" over 3 years, most critical code security incident</li>
+    <li><strong>CrowdStrike (2024)</strong> -- SQA-as-security case study, single defective config update caused BSOD on 8.5M Windows systems</li>
+    <li><strong>Z test statistic</strong> -- Z = (X-bar - mu0) / (sigma / sqrt(n)), measures how far sample mean is from claimed value in standard-error units</li>
+    <li><strong>p-value</strong> -- probability of result as extreme as yours assuming H0 true; small p = evidence against H0</li>
+    <li><strong>Decision rule</strong> -- p-value &lt; alpha: reject H0; p-value &ge; alpha: do not reject H0</li>
+    <li><strong>Rule</strong> -- No Security Scans &amp; Reviews -> No Code to Production</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: What is Code & Code Security -->
+<details>
+  <summary>&#128187; 1. What is Code &amp; Code Security</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Code:</strong> Instructions written in any programming language that tell a computer what to do.</div>
+
+    <div class="red"><strong>Code Security:</strong> The practice of identifying, assessing, and mitigating vulnerabilities in source code. Ensures <em>Confidentiality, Integrity, and Availability (CIA)</em>.</div>
+
+    <h3>Von Neumann Architecture</h3>
+    <p>The foundational computing model consisting of:</p>
+    <ul>
+      <li><strong>CPU</strong> -- Control Unit + Arithmetic Logic Unit (ALU)</li>
+      <li><strong>Memory Unit</strong> -- stores data and instructions</li>
+      <li><strong>I/O Devices</strong> -- interface with external world</li>
+    </ul>
+
+    <div class="ascii-diagram-title">Von Neumann Architecture</div>
+<div class="ascii-diagram">+-------------------+
+|       CPU         |
+| +------+ +-----+ |
+| |Control| | ALU | |
+| | Unit  | |     | |
+| +------+ +-----+ |
++--------+----------+
+         |
+    +----+----+
+    | Memory  |
+    |  Unit   |
+    +---------+
+         |
+    +----+----+
+    |   I/O   |
+    | Devices |
+    +---------+</div>
+
+    <div class="key"><strong>Why it matters for security:</strong> Von Neumann architecture stores code and data in the same memory space -- this fundamental design enables buffer overflow attacks, code injection, and many other vulnerability classes.</div>
+  </div>
+</details>
+
+<!-- Section 2: Major Code Security Incidents -->
+<details>
+  <summary>&#128680; 2. Major Code Security Incidents</summary>
+  <div class="content-section">
+
+    <h3>Heartbleed (2014)</h3>
+    <div class="red">
+      <strong>CVE-2014-0160</strong> -- OpenSSL TLS heartbeat extension vulnerability
+    </div>
+    <ul>
+      <li><strong>Root cause:</strong> Missing bounds check on payload length</li>
+      <li><strong>Attack:</strong> Attacker sends small payload claiming large length</li>
+      <li><strong>Result:</strong> Server returns payload + extra memory (passwords, private keys, session tokens)</li>
+      <li><strong>Fix:</strong> Validate payload length before responding</li>
+    </ul>
+
+    <div class="ascii-diagram-title">Heartbleed Attack Flow</div>
+<div class="ascii-diagram">Client: "Echo back 'hello' (I claim it's 65,535 bytes)"
+Server: "hello" + 65,530 bytes of whatever was in memory
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                  passwords, keys, session data leaked!</div>
+
+    <h3>Equifax (2017)</h3>
+    <div class="red">
+      <strong>CVE-2017-5638</strong> -- Apache Struts vulnerability
+    </div>
+    <ul>
+      <li><strong>Impact:</strong> 147 million people affected</li>
+      <li><strong>Root cause:</strong> Failed to apply patch in timely manner</li>
+      <li><strong>Lesson:</strong> Vulnerability management and timely patching are critical</li>
+    </ul>
+
+    <h3>XZ Utils (2024)</h3>
+    <div class="red">
+      <strong>CVE-2024-3094</strong> -- The most critical code security incident in history
+    </div>
+    <ul>
+      <li><strong>"Jia Tan"</strong> spent 3 years becoming a trusted maintainer through social engineering</li>
+      <li><strong>Backdoor mechanism:</strong> Multi-stage backdoor in liblzma exploiting glibc IFUNC to intercept RSA decryption in OpenSSH daemon (sshd)</li>
+      <li><strong>Potential impact:</strong> Remote Code Execution on millions of Linux servers</li>
+      <li><strong>Why most critical:</strong> It was <em>deliberate social engineering</em>, not an accidental coding mistake</li>
+    </ul>
+
+    <h3>CrowdStrike Outage (2024)</h3>
+    <div class="warn">
+      <strong>Not a breach but an SQA-as-security case study</strong>
+    </div>
+    <ul>
+      <li><strong>Channel File 291</strong> config update contained a bug causing out-of-bounds memory read</li>
+      <li><strong>Content Validator</strong> (designed to check updates) had its own bug</li>
+      <li><strong>Result:</strong> BSOD on 8.5 million Windows systems</li>
+      <li><strong>Lesson:</strong> A single line of defective code can cause global Denial of Service</li>
+    </ul>
+
+    <div class="mem"><small>Remember This</small><br><strong>Heartbleed = bounds check. Equifax = unpatched. XZ Utils = social engineering (worst). CrowdStrike = SQA failure (global DoS)</strong></div>
+  </div>
+</details>
+
+<!-- Section 3: Vulnerability Management -->
+<details>
+  <summary>&#128737; 3. Vulnerability Cataloging &amp; Management</summary>
+  <div class="content-section">
+    <div class="blue"><strong>CVE (Common Vulnerabilities and Exposures):</strong> A MITRE program that catalogs publicly disclosed vulnerabilities with unique identifiers (e.g., CVE-2024-3094).</div>
+
+    <div class="blue"><strong>NIST:</strong> Provides standards and guidelines for organizations to manage cybersecurity risk.</div>
+
+    <h3>Software Supply Chain Attacks</h3>
+    <div class="red"><strong>Definition:</strong> Threat actors tamper with third-party components to compromise downstream applications.</div>
+    <ul>
+      <li><strong>Check Point research:</strong> 925 attacks per week per organization</li>
+      <li><strong>Exposed secrets in source code:</strong> credit cards, passwords, API tokens, private keys</li>
+    </ul>
+
+    <div class="warn"><strong>Key insight:</strong> You are only as secure as your weakest dependency. Supply chain attacks exploit the trust relationships in software ecosystems.</div>
+  </div>
+</details>
+
+<!-- Section 4: 10 Steps to Secure Code -->
+<details>
+  <summary>&#128221; 4. Ten Steps to Secure Code</summary>
+  <div class="content-section">
+    <div class="red"><strong>Rule:</strong> No Security Scans &amp; Reviews -> No Code to Production</div>
+
+    <table>
+      <tr><th>#</th><th>Step</th><th>Details</th></tr>
+      <tr><td>1</td><td><strong>Adopt Secure Coding Practices</strong></td><td>Input validation, error handling, least privilege, secure session management</td></tr>
+      <tr><td>2</td><td><strong>Perform Code Reviews</strong></td><td>Peer review for security flaws before merge</td></tr>
+      <tr><td>3</td><td><strong>Use SAST and DAST Tools</strong></td><td>Static + Dynamic testing in pipeline</td></tr>
+      <tr><td>4</td><td><strong>Implement Vulnerability Management</strong></td><td>Track, prioritize, remediate known vulns</td></tr>
+      <tr><td>5</td><td><strong>Keep Dependencies Updated</strong></td><td>Patch third-party libraries promptly</td></tr>
+      <tr><td>6</td><td><strong>Incorporate Security Testing in SDLC</strong></td><td>Shift left -- test early and often</td></tr>
+      <tr><td>7</td><td><strong>Use Threat Modeling</strong></td><td>Identify threats during design phase</td></tr>
+      <tr><td>8</td><td><strong>Establish Secure Deployment Practices</strong></td><td>CI/CD with security gates</td></tr>
+      <tr><td>9</td><td><strong>Monitor and Audit</strong></td><td>Continuous monitoring in production</td></tr>
+      <tr><td>10</td><td><strong>Foster Security Culture</strong></td><td>Training, awareness, shared responsibility</td></tr>
+    </table>
+
+    <h3>SAST vs DAST</h3>
+    <table>
+      <tr><th>Feature</th><th>SAST</th><th>DAST</th></tr>
+      <tr><td><strong>What</strong></td><td>Static Application Security Testing</td><td>Dynamic Application Security Testing</td></tr>
+      <tr><td><strong>How</strong></td><td>Examines code without executing it</td><td>Tests the running application</td></tr>
+      <tr><td><strong>When</strong></td><td>During development (white-box)</td><td>After deployment (black-box)</td></tr>
+    </table>
+
+    <div class="mem"><small>Remember This</small><br><strong>SAST = look at the code (static). DAST = poke the app (dynamic). Both needed for defense in depth.</strong></div>
+  </div>
+</details>
+
+<!-- Section 5: Hypothesis Testing - Z Test -->
+<details>
+  <summary>&#128202; 5. Hypothesis Testing -- The Z Test Statistic</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Z test statistic formula:</strong></div>
+    <div class="ascii-diagram-title">Z Test Formula</div>
+<div class="ascii-diagram">        X-bar - mu0
+Z = -------------------
+      sigma / sqrt(n)
+
+Where:
+  X-bar  = sample average
+  mu0    = H0 claimed value (null hypothesis)
+  sigma  = population standard deviation
+  n      = sample size
+  sigma / sqrt(n) = standard error (SE)</div>
+
+    <div class="key"><strong>Key insight:</strong> Standard error shrinks with larger samples. The same gap between X-bar and mu0 becomes more convincing with more data.</div>
+
+    <ul>
+      <li><strong>Z of 0.5</strong> = nothing special (data is close to what H0 predicts)</li>
+      <li><strong>Z of 3</strong> = big deal (data is 3 standard errors away from H0 claim)</li>
+    </ul>
+
+    <div class="mem"><small>Remember This</small><br><strong>Z tells you: "How many standard errors is my sample mean from the claimed value?" Bigger |Z| = stronger evidence against H0.</strong></div>
+  </div>
+</details>
+
+<!-- Section 6: p-values and Decision Rules -->
+<details>
+  <summary>&#127919; 6. p-Values &amp; Decision Rules</summary>
+  <div class="content-section">
+    <div class="red"><strong>p-value:</strong> The probability of getting a result at least as extreme as yours, assuming H0 is true. It is the smallest alpha at which H0 would be rejected.</div>
+
+    <ul>
+      <li><strong>Small p</strong> = surprising data = evidence against H0</li>
+      <li><strong>Large p</strong> = data is consistent with H0 (not surprising)</li>
+    </ul>
+
+    <h3>Decision Rule</h3>
+    <div class="green">
+      <strong>p-value &lt; alpha</strong> --> Reject H0 (result too surprising for chance)<br>
+      <strong>p-value &ge; alpha</strong> --> Do not reject H0 (result consistent with boring default)
+    </div>
+
+    <h3>Tail Direction Matters</h3>
+    <table>
+      <tr><th>Type</th><th>Hypothesis</th><th>p-value Calculation</th></tr>
+      <tr><td><strong>Left-sided</strong></td><td>H1: mu &lt; mu0</td><td>p = P(Z &le; z)</td></tr>
+      <tr><td><strong>Right-sided</strong></td><td>H1: mu &gt; mu0</td><td>p = P(Z &ge; z)</td></tr>
+      <tr><td><strong>Two-sided</strong></td><td>H1: mu &ne; mu0</td><td>p = 2 * P(Z &ge; |z|)</td></tr>
+    </table>
+
+    <div class="key"><strong>p-value method vs rejection-region method:</strong> Always give the same answer. The p-value method is usually faster because software gives it directly.</div>
+
+    <div class="warn"><strong>Common mistake:</strong> Reading a large p-value as "H0 is proven true." It only means there is not enough evidence to reject H0 -- absence of evidence is not evidence of absence.</div>
+  </div>
+</details>
+
+<!-- Section 7: Worked Example -->
+<details>
+  <summary>&#128295; 7. Worked Example -- Wire Tensile Strength</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Setup:</strong> 16 wires tested, X-bar = 967.8, sigma = 128. Test H0: mu = 1000 vs H1: mu &lt; 1000, alpha = 0.05</div>
+
+    <div class="ascii-diagram-title">Solution Steps</div>
+<div class="ascii-diagram">Step 1: Standard Error
+  SE = sigma / sqrt(n) = 128 / sqrt(16) = 128 / 4 = 32
+
+Step 2: Critical value approach
+  k = mu0 - SE * z_alpha = 1000 - 32(1.645) = 947.36
+  X-bar = 967.8 is NOT below 947.36
+  --> Do not reject H0
+
+Step 3: p-value approach (same answer)
+  Z = (967.8 - 1000) / 32 = -32.2 / 32 = -1.006
+  p = P(Z <= -1.006) = 0.1562
+  0.1562 >= 0.05 --> Do not reject H0
+
+Conclusion: Not enough evidence to say wires are weaker than spec.</div>
+
+    <div class="green"><strong>Both methods agree:</strong> The sample mean (967.8) is below 1000, but not far enough below to be statistically significant at alpha = 0.05.</div>
+  </div>
+</details>
+
+<!-- Section 8: Exam Traps -->
+<details>
+  <summary>&#9888;&#65039; 8. Exam Traps -- Hypothesis Testing</summary>
+  <div class="content-section">
+    <div class="red"><strong>Common exam mistakes to avoid:</strong></div>
+    <ul>
+      <li><strong>Forgetting to divide sigma by sqrt(n)</strong> -- You need standard error (sigma/sqrt(n)), not sigma alone!</li>
+      <li><strong>Not doubling p for two-sided tests</strong> -- Two-sided means p = 2 * P(Z &ge; |z|)</li>
+      <li><strong>Reading large p as "H0 is proven true"</strong> -- It only means not enough evidence to reject</li>
+      <li><strong>Comparing p to wrong alpha</strong> -- Make sure you know what significance level is specified</li>
+    </ul>
+
+    <div class="mem"><small>Remember This</small><br><strong>SE = sigma / sqrt(n), NOT just sigma. Two-sided = DOUBLE the tail. Large p = "can't reject" NOT "H0 is true."</strong></div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+    <h2>Week 5 Quiz -- Code Security &amp; Hypothesis Testing</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">1</span> What was the root cause of the Heartbleed vulnerability (CVE-2014-0160)?</p>
+      <div class="options">
+        <div class="opt">Use of deprecated encryption algorithm</div>
+        <div class="opt">Missing bounds check on payload length in the heartbeat extension</div>
+        <div class="opt">Weak random number generation</div>
+        <div class="opt">SQL injection in the authentication module</div>
+      </div>
+      <div class="explanation">Heartbleed was caused by a missing bounds check -- the server didn't validate that the claimed payload length matched the actual payload size, allowing attackers to read extra memory.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">2</span> Why is the XZ Utils backdoor (CVE-2024-3094) considered the most critical code security incident?</p>
+      <div class="options">
+        <div class="opt">It affected more systems than any other vulnerability</div>
+        <div class="opt">It exploited a zero-day in the Linux kernel</div>
+        <div class="opt">It was deliberate social engineering over 3 years, not an accidental mistake</div>
+        <div class="opt">It could not be patched</div>
+      </div>
+      <div class="explanation">XZ Utils is considered the most critical because "Jia Tan" deliberately infiltrated the project over 3 years through social engineering to become a trusted maintainer before inserting the backdoor -- a fundamentally different threat than accidental bugs.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> The CrowdStrike outage of 2024 demonstrates that:</p>
+      <div class="options">
+        <div class="opt">A single line of defective code can cause global Denial of Service</div>
+        <div class="opt">Antivirus software is inherently dangerous</div>
+        <div class="opt">Windows is fundamentally insecure</div>
+        <div class="opt">Cloud-based security tools should be avoided</div>
+      </div>
+      <div class="explanation">The CrowdStrike outage shows that software quality assurance IS a security concern -- Channel File 291's single defective config update caused BSOD on 8.5 million Windows systems, effectively a global DoS.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> SAST (Static Application Security Testing) works by:</p>
+      <div class="options">
+        <div class="opt">Testing the running application with crafted inputs</div>
+        <div class="opt">Monitoring network traffic for anomalies</div>
+        <div class="opt">Comparing code against a database of known malware</div>
+        <div class="opt">Examining source code without executing it</div>
+      </div>
+      <div class="explanation">SAST examines code without executing it (white-box testing). It analyzes source code, bytecode, or binaries for patterns that indicate vulnerabilities. DAST is the one that tests running applications.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> In the Z test formula Z = (X-bar - mu0) / (sigma / sqrt(n)), the denominator represents:</p>
+      <div class="options">
+        <div class="opt">The population standard deviation</div>
+        <div class="opt">The standard error of the sample mean</div>
+        <div class="opt">The margin of error</div>
+        <div class="opt">The confidence interval width</div>
+      </div>
+      <div class="explanation">The denominator sigma/sqrt(n) is the standard error -- it measures how much sample means typically vary from the true population mean. It shrinks with larger n, making the same gap more significant.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">6</span> A p-value of 0.03 with alpha = 0.05 means:</p>
+      <div class="options">
+        <div class="opt">Reject H0 -- the result is statistically significant</div>
+        <div class="opt">Do not reject H0 -- insufficient evidence</div>
+        <div class="opt">The test is inconclusive</div>
+        <div class="opt">H0 has a 3% chance of being true</div>
+      </div>
+      <div class="explanation">Since p-value (0.03) &lt; alpha (0.05), we reject H0. The result is too surprising to be explained by chance alone at the 5% significance level.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">7</span> For a two-sided hypothesis test (H1: mu &ne; mu0), the p-value is calculated as:</p>
+      <div class="options">
+        <div class="opt">P(Z &le; z)</div>
+        <div class="opt">P(Z &ge; z)</div>
+        <div class="opt">2 * P(Z &ge; |z|)</div>
+        <div class="opt">P(Z = z)</div>
+      </div>
+      <div class="explanation">For two-sided tests, you must double the one-tail probability: p = 2 * P(Z &ge; |z|). This accounts for extreme values in BOTH directions being evidence against H0.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> In the wire tensile strength example (n=16, sigma=128), the standard error equals:</p>
+      <div class="options">
+        <div class="opt">128</div>
+        <div class="opt">64</div>
+        <div class="opt">8</div>
+        <div class="opt">32</div>
+      </div>
+      <div class="explanation">SE = sigma / sqrt(n) = 128 / sqrt(16) = 128 / 4 = 32. A common exam trap is forgetting to divide by sqrt(n) and using 128 directly.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> The Equifax breach (2017) was primarily caused by:</p>
+      <div class="options">
+        <div class="opt">A zero-day vulnerability with no available patch</div>
+        <div class="opt">Failure to apply a known patch for Apache Struts in a timely manner</div>
+        <div class="opt">An insider threat from a disgruntled employee</div>
+        <div class="opt">A phishing attack on executive leadership</div>
+      </div>
+      <div class="explanation">Equifax failed to apply the patch for CVE-2017-5638 (Apache Struts) in a timely manner, despite the patch being available. This affected 147 million people and highlights the critical importance of vulnerability management.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">10</span> A large p-value (e.g., p = 0.45) in a hypothesis test means:</p>
+      <div class="options">
+        <div class="opt">H0 is definitely true</div>
+        <div class="opt">H1 is definitely false</div>
+        <div class="opt">There is not enough evidence to reject H0</div>
+        <div class="opt">The sample size was too large</div>
+      </div>
+      <div class="explanation">A large p-value means the data is consistent with H0 -- there is not enough evidence to reject it. It does NOT prove H0 is true. Absence of evidence is not evidence of absence.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      // Update progress bar
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressText = document.querySelector('.progress-text .score-correct');
+      if (progressText) progressText.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

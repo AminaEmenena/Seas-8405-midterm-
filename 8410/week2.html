@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 - Data Sources, Storage & Visualization Tools + Describing Data</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #FFA94D;
+    --page-tint: rgba(255,169,77,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #38D9A9;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(255,169,77,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary) */
+  details {
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--page-color);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  details[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.15em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+    color: #000;
+  }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+    background: var(--page-tint);
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC */
+  .mem {
+    background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: var(--accent1); font-size: 1.2em; }
+
+  /* QUIZ STYLING */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  .quiz-q {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar {
+    display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+    margin: 0 0 16px; padding: 10px 0;
+  }
+  .expand-collapse-bar button {
+    background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .expand-collapse-bar button:hover {
+    background: var(--page-color); color: #000; border-color: var(--page-color);
+  }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+  pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 16px; margin: 12px 0;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2 active">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 2 -- Data Sources, Storage &amp; Tools + Describing Data</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 2 Key Points</div>
+  <ul>
+    <li><strong>Data Sources</strong> -- security logs (SIEM, firewall, IDS), network flows, threat intel feeds, vulnerability scanners, cloud APIs</li>
+    <li><strong>Storage</strong> -- CSV (simple), relational DBs (structured queries), big data (Hadoop/Spark for scale)</li>
+    <li><strong>Tools</strong> -- Excel (quick), Power BI/Tableau (dashboards), Python pandas+matplotlib+seaborn (custom), Splunk (security-focused)</li>
+    <li><strong>Python Essentials</strong> -- pd.read_csv(), df.describe(), pd.read_sql(), mysql.connector for DB access</li>
+    <li><strong>4 Data Types</strong> -- Nominal (labels, no order), Ordinal (labels, ordered), Interval (numbers, no true zero), Ratio (numbers, true zero)</li>
+    <li><strong>Sampling</strong> -- Simple Random, Stratified (from every group), Systematic (every m-th), Cluster (whole random groups)</li>
+    <li><strong>Frequency Tables</strong> -- frequency, relative freq (f/total), percentage, cumulative. Classes: m = 1+3.3*log(n)</li>
+    <li><strong>Exam Trap</strong> -- Stratified samples FROM every group vs Cluster takes ALL of a few groups. Temperature is interval NOT ratio.</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Data Sources for Security Analytics -->
+<details>
+  <summary>&#128451; 1. Data Sources for Security Analytics</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Security visualization starts with knowing <em>where your data lives</em>. Different sources answer different questions.</div>
+
+    <table>
+      <tr><th>Source</th><th>What It Provides</th><th>Example Tools</th></tr>
+      <tr><td><strong>SIEM Logs</strong></td><td>Aggregated security events, correlations</td><td>Splunk, QRadar, Sentinel</td></tr>
+      <tr><td><strong>Firewall Logs</strong></td><td>Allow/deny decisions, source/dest IPs, ports</td><td>Palo Alto, Fortinet</td></tr>
+      <tr><td><strong>IDS/IPS</strong></td><td>Detected attack signatures, anomalies</td><td>Snort, Suricata</td></tr>
+      <tr><td><strong>Network Flows</strong></td><td>Traffic volume, connections, timing</td><td>NetFlow, sFlow</td></tr>
+      <tr><td><strong>Vulnerability Scanners</strong></td><td>CVEs, risk scores, patch status</td><td>Nessus, Qualys</td></tr>
+      <tr><td><strong>Threat Intel Feeds</strong></td><td>Known bad IPs, domains, IOCs</td><td>MISP, AlienVault OTX</td></tr>
+    </table>
+
+    <div class="green">
+      <strong>The Data Story:</strong> Raw data is not insight. The visualization pipeline: Collect -> Store -> Clean -> Transform -> Visualize -> Decide.
+    </div>
+  </div>
+</details>
+
+<!-- Section 2: Storage Technologies -->
+<details>
+  <summary>&#128190; 2. Storage Technologies</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> How you store data determines how fast you can query and visualize it.</div>
+
+    <table>
+      <tr><th>Storage Type</th><th>Best For</th><th>Limitations</th></tr>
+      <tr><td><strong>CSV / Flat Files</strong></td><td>Small datasets, quick sharing, prototyping</td><td>No indexing, slow at scale, no types</td></tr>
+      <tr><td><strong>Relational DB (SQL)</strong></td><td>Structured data, complex queries, joins</td><td>Schema-rigid, vertical scaling</td></tr>
+      <tr><td><strong>NoSQL (MongoDB, Elastic)</strong></td><td>Unstructured/semi-structured, flexible schema</td><td>Less consistency, complex joins</td></tr>
+      <tr><td><strong>Big Data (Hadoop/Spark)</strong></td><td>Massive scale, distributed processing</td><td>Infrastructure complexity</td></tr>
+    </table>
+
+    <div class="key">
+      <strong>Security Context:</strong> Splunk uses its own indexed store optimized for time-series log data. Elastic/OpenSearch is popular for SIEM because it handles unstructured JSON logs well.
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: Visualization Tools -->
+<details>
+  <summary>&#128295; 3. Visualization Tools</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Match the tool to the audience and complexity. Quick insight = Excel/Tableau. Custom analysis = Python. Security ops = Splunk.</div>
+
+    <table>
+      <tr><th>Tool</th><th>Strengths</th><th>When to Use</th></tr>
+      <tr><td><strong>Excel</strong></td><td>Ubiquitous, quick pivot tables</td><td>Small data, quick exploration</td></tr>
+      <tr><td><strong>Power BI</strong></td><td>Enterprise dashboards, DAX, auto-refresh</td><td>Business reporting, executive dashboards</td></tr>
+      <tr><td><strong>Tableau</strong></td><td>Drag-and-drop, beautiful charts</td><td>Interactive exploration, presentations</td></tr>
+      <tr><td><strong>Python (pandas, matplotlib, seaborn)</strong></td><td>Full control, reproducible, scriptable</td><td>Custom analysis, ML pipelines</td></tr>
+      <tr><td><strong>Splunk</strong></td><td>Real-time log search, SPL queries</td><td>Security operations, incident response</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Python Essentials</h3>
+    <pre>import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load data
+df = pd.read_csv('security_logs.csv')
+
+# Quick stats
+df.describe()
+
+# Database connection
+import mysql.connector
+conn = mysql.connector.connect(host='...', user='...', password='...', database='...')
+df = pd.read_sql('SELECT * FROM events', conn)</pre>
+
+    <div class="green">
+      <strong>"Getting the Visualization Done":</strong> Don't just show data -- tell the data story. What's the question? What's the answer? What action should the viewer take?
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: Statistics Foundations -->
+<details>
+  <summary>&#128200; 4. Descriptive vs Inferential Statistics</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> <em>Descriptive</em> statistics summarize what you have. <em>Inferential</em> statistics draw conclusions about a population from a sample.</div>
+
+    <table>
+      <tr><th>Type</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td><strong>Descriptive</strong></td><td>Summarize and describe data you collected</td><td>Mean salary of surveyed employees</td></tr>
+      <tr><td><strong>Inferential</strong></td><td>Make predictions/conclusions about a larger population from a sample</td><td>Estimating all employees' salary from a sample</td></tr>
+    </table>
+
+    <div class="key">
+      <strong>Population vs Sample:</strong> Population = everything you want to study. Sample = the slice you actually measure. Target population (what you want) vs Sampled population (what you actually get access to).
+    </div>
+
+    <div class="warn">
+      <strong>Why can't you measure everything?</strong> The light bulb example: to test lifespan, you'd destroy every bulb. Measuring the whole population is often impossible, destructive, or too expensive.
+    </div>
+
+    <div class="red">
+      <strong>Non-representative sample = WRONG ANSWER.</strong> If your sample doesn't reflect the population, your conclusions are invalid. Fix: use Simple Random Sampling (every item has equal chance of selection).
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: Sampling Designs -->
+<details>
+  <summary>&#127922; 5. Four Sampling Designs</summary>
+  <div class="content-section">
+    <div class="red"><strong>EXAM CRITICAL:</strong> Know the four designs and especially the difference between Stratified and Cluster sampling.</div>
+
+    <table>
+      <tr><th>Design</th><th>How It Works</th><th>When to Use</th></tr>
+      <tr><td><strong>Simple Random</strong></td><td>Every item has equal chance of selection</td><td>Population is homogeneous, accessible</td></tr>
+      <tr><td><strong>Stratified</strong></td><td>Divide into groups (strata), sample a bit FROM EVERY group</td><td>Population has known subgroups you want represented</td></tr>
+      <tr><td><strong>Systematic</strong></td><td>Pick every m-th item (m = N/n)</td><td>Ordered list available, no periodicity in data</td></tr>
+      <tr><td><strong>Cluster</strong></td><td>Divide into groups, randomly select WHOLE groups, measure everyone in selected groups</td><td>Population spread geographically, costly to reach all</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Critical Distinction</small>
+      <strong>Stratified = a little from EVERY group | Cluster = EVERYTHING from a few groups</strong>
+    </div>
+
+    <div class="key">
+      <strong>Key Terms:</strong>
+      <ul>
+        <li><em>Sampling unit</em> -- the individual item being selected</li>
+        <li><em>Sampling frame</em> -- the list of all possible units to select from</li>
+        <li><em>Variable</em> -- the characteristic you're measuring</li>
+      </ul>
+    </div>
+
+    <div class="warn">
+      <strong>Exam Trap:</strong> Students confuse stratified and cluster. Remember: STRATified = STRands from every layer. CLUSTer = grab a whole CLUmp.
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: Four Data Types -->
+<details>
+  <summary>&#128290; 6. Four Data Types (NOIR)</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Data type determines which statistics and charts are valid. Using the wrong analysis for the wrong type = meaningless results.</div>
+
+    <table>
+      <tr><th>Type</th><th>Properties</th><th>Examples</th><th>Valid Operations</th></tr>
+      <tr><td><strong>Nominal</strong></td><td>Categories, no order</td><td>Eye color, gender, attack type</td><td>Count, mode, bar chart</td></tr>
+      <tr><td><strong>Ordinal</strong></td><td>Categories, ordered</td><td>Satisfaction (low/med/high), severity rating</td><td>Median, percentile, bar chart</td></tr>
+      <tr><td><strong>Interval</strong></td><td>Numbers, no true zero</td><td>Temperature (C/F), calendar year, IQ score</td><td>Mean, std dev, +/- but NOT ratios</td></tr>
+      <tr><td><strong>Ratio</strong></td><td>Numbers, true zero</td><td>Height, weight, age, income, count of attacks</td><td>All operations including ratios</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Decision Tree</small>
+      <strong>Number or Label? Label -> Order? No=Nominal, Yes=Ordinal. Number -> Zero=Nothing? Yes=Ratio, No=Interval</strong>
+    </div>
+
+    <div class="warn">
+      <strong>Exam Trap:</strong> Temperature in Celsius/Fahrenheit is INTERVAL, not ratio. 0 degrees C does not mean "no temperature." But temperature in Kelvin IS ratio (0K = absolute zero = no thermal energy).
+    </div>
+
+    <div class="prof">
+      <strong>Why It Matters:</strong> You can't say "80F is twice as hot as 40F" (interval). But you CAN say "80kg is twice as heavy as 40kg" (ratio). The true zero makes ratios meaningful.
+    </div>
+  </div>
+</details>
+
+<!-- Section 7: Frequency Tables & Classes -->
+<details>
+  <summary>&#128202; 7. Frequency Tables &amp; Building Classes</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Frequency tables organize raw data into a structured summary showing how often values occur.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Components of a Frequency Table</h3>
+    <table>
+      <tr><th>Column</th><th>Formula</th><th>What It Tells You</th></tr>
+      <tr><td><strong>Frequency (f)</strong></td><td>Count of items in category</td><td>How many in this group</td></tr>
+      <tr><td><strong>Relative Frequency</strong></td><td>f / total</td><td>Proportion of total</td></tr>
+      <tr><td><strong>Percentage</strong></td><td>Relative freq * 100</td><td>Same as above, in %</td></tr>
+      <tr><td><strong>Cumulative Frequency</strong></td><td>Running total of f</td><td>How many at or below this point</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Building Classes for Numeric Data</h3>
+    <div class="key">
+      <strong>Steps:</strong>
+      <ol>
+        <li>Find Range: R = max - min</li>
+        <li>Number of classes: m = 1 + 3.3 * log(n), rounded</li>
+        <li>Class width: width = R / m, rounded UP</li>
+        <li>Use bracket notation: [110, 117) means 110 included, 117 excluded</li>
+      </ol>
+    </div>
+
+    <div class="green">
+      <strong>Example:</strong> n=50 data points, min=110, max=180.<br>
+      R = 180-110 = 70. m = 1 + 3.3*log(50) = 1 + 3.3*1.699 = 6.6, round to 7.<br>
+      Width = 70/7 = 10. Classes: [110,120), [120,130), ... [170,180].
+    </div>
+  </div>
+</details>
+
+<!-- Section 8: Charts for Describing Data -->
+<details>
+  <summary>&#128202; 8. Charts for Describing Data</summary>
+  <div class="content-section">
+    <div class="blue"><strong>From Chapter 2:</strong> Each chart type serves a specific data description purpose.</div>
+
+    <table>
+      <tr><th>Chart</th><th>Data Type</th><th>Key Feature</th></tr>
+      <tr><td><strong>Dot Plot</strong></td><td>Small numeric datasets</td><td>Each value is a dot on a number line</td></tr>
+      <tr><td><strong>Pie Chart</strong></td><td>Categorical (part-of-whole)</td><td>Angle = relative frequency * 360</td></tr>
+      <tr><td><strong>Bar Chart</strong></td><td>Categorical</td><td>Bars with GAPS between them</td></tr>
+      <tr><td><strong>Histogram</strong></td><td>Numeric ranges</td><td>Bars TOUCH (continuous bins)</td></tr>
+      <tr><td><strong>Line Graph</strong></td><td>Time series</td><td>Shows trends over ordered time</td></tr>
+      <tr><td><strong>Stem-and-Leaf</strong></td><td>Small datasets</td><td>Keeps original digits, shows shape</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Key Distinction</small>
+      <strong>Bar chart = categories + GAPS | Histogram = numeric ranges + bars TOUCH</strong>
+    </div>
+
+    <div class="warn">
+      <strong>Exam Traps:</strong>
+      <ul>
+        <li>Using a pie chart for numeric data (wrong -- pie is for categories/proportions)</li>
+        <li>Confusing bar chart and histogram (bars touch vs gaps)</li>
+        <li>Pie chart angle formula: angle = relative frequency * 360 (not percentage * 360)</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+    <h2>Week 2 Quiz -- Data Sources, Tools &amp; Describing Data</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> The key difference between stratified and cluster sampling is:</p>
+      <div class="options">
+        <div class="opt">Stratified is random, cluster is not</div>
+        <div class="opt">Stratified uses larger samples than cluster</div>
+        <div class="opt">Stratified samples from EVERY group; cluster takes EVERYTHING from a few randomly chosen groups</div>
+        <div class="opt">Cluster sampling requires more resources than stratified</div>
+      </div>
+      <div class="explanation">Stratified sampling takes a proportional sample from EVERY stratum (subgroup) to ensure representation. Cluster sampling randomly selects entire groups (clusters) and measures everyone within them. Stratified = a bit from all; Cluster = all from a few.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> Temperature measured in Celsius is which data type?</p>
+      <div class="options">
+        <div class="opt">Ratio</div>
+        <div class="opt">Interval</div>
+        <div class="opt">Ordinal</div>
+        <div class="opt">Nominal</div>
+      </div>
+      <div class="explanation">Celsius temperature is interval because 0 degrees C does NOT mean "no temperature" -- it's an arbitrary reference point (water freezing). Without a true zero, ratios are meaningless (80C is not "twice as hot" as 40C). Kelvin would be ratio.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> In Python pandas, which method gives you count, mean, std, min, max, and quartiles of a DataFrame?</p>
+      <div class="options">
+        <div class="opt">df.describe()</div>
+        <div class="opt">df.summary()</div>
+        <div class="opt">df.stats()</div>
+        <div class="opt">df.info()</div>
+      </div>
+      <div class="explanation">df.describe() generates descriptive statistics including count, mean, std, min, 25%, 50%, 75%, and max for all numeric columns. df.info() shows data types and null counts but not statistics.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> The visual difference between a bar chart and a histogram is:</p>
+      <div class="options">
+        <div class="opt">Bar charts are always vertical, histograms horizontal</div>
+        <div class="opt">Histograms use color, bar charts do not</div>
+        <div class="opt">Bar charts show numeric data, histograms show categories</div>
+        <div class="opt">Bar charts have gaps between bars (categories), histograms have touching bars (continuous ranges)</div>
+      </div>
+      <div class="explanation">Bar charts display discrete categories with gaps between bars. Histograms display continuous numeric data grouped into bins with touching bars, because the ranges are continuous with no gaps between them.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> To determine the number of classes (m) for a frequency table with n observations, you use:</p>
+      <div class="options">
+        <div class="opt">m = n / 2</div>
+        <div class="opt">m = 1 + 3.3 * log(n)</div>
+        <div class="opt">m = sqrt(n)</div>
+        <div class="opt">m = n / 10</div>
+      </div>
+      <div class="explanation">The Sturges formula: m = 1 + 3.3 * log10(n), then round to the nearest integer. This gives a reasonable number of classes that reveals the data's shape without too many or too few bins.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> Which storage technology is most commonly used for security log analysis in enterprise SOCs?</p>
+      <div class="options">
+        <div class="opt">CSV flat files</div>
+        <div class="opt">Traditional relational databases (MySQL/PostgreSQL)</div>
+        <div class="opt">Indexed search engines (Elasticsearch/Splunk)</div>
+        <div class="opt">Hadoop HDFS</div>
+      </div>
+      <div class="explanation">Splunk and Elasticsearch are optimized for time-series log data with fast full-text search and real-time indexing. They handle unstructured/semi-structured security logs far better than relational databases for SOC use cases.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> "Satisfaction level: Low, Medium, High" is an example of which data type?</p>
+      <div class="options">
+        <div class="opt">Ordinal</div>
+        <div class="opt">Nominal</div>
+        <div class="opt">Interval</div>
+        <div class="opt">Ratio</div>
+      </div>
+      <div class="explanation">Satisfaction levels have a clear order (Low < Medium < High) but the "distance" between them isn't measurable numerically. That makes it ordinal -- categories WITH a meaningful order, but without measurable intervals.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> In systematic sampling with a population of 1000 and desired sample of 50, you select every:</p>
+      <div class="options">
+        <div class="opt">50th item</div>
+        <div class="opt">10th item</div>
+        <div class="opt">100th item</div>
+        <div class="opt">20th item (m = N/n = 1000/50 = 20)</div>
+      </div>
+      <div class="explanation">Systematic sampling: pick a random start point, then select every m-th item where m = N/n. With N=1000 and n=50, m = 1000/50 = 20. You pick every 20th item from the list.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> Why can you NOT measure an entire population in many real-world studies?</p>
+      <div class="options">
+        <div class="opt">Populations are always infinite</div>
+        <div class="opt">Ethics boards always prohibit it</div>
+        <div class="opt">It may be destructive, too expensive, or physically impossible (e.g., testing every light bulb destroys them all)</div>
+        <div class="opt">Statistical laws require samples</div>
+      </div>
+      <div class="explanation">The light bulb example: testing the lifespan of every bulb destroys the entire inventory. Similarly, measuring every customer, every network packet, or every transaction may be too costly, time-consuming, or physically impossible.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> The correct formula for a pie chart slice angle is:</p>
+      <div class="options">
+        <div class="opt">frequency * 360</div>
+        <div class="opt">relative frequency * 360</div>
+        <div class="opt">percentage / 100</div>
+        <div class="opt">frequency / total * 100</div>
+      </div>
+      <div class="explanation">Pie chart angle = relative frequency * 360 degrees. Relative frequency = f/total (a proportion between 0 and 1). Multiplying by 360 converts the proportion to an angle in the circle.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    // Also update the progress bar at top
+    const progressFill = document.getElementById('progressFill');
+    const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+    const progressTotal = document.querySelector('.progress-bar-container .score-total');
+    if (progressTotal) progressTotal.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
+      }
+      if (progressFill && qs.length > 0) {
+        progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

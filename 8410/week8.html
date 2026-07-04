@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 8 - Cloud Security Analytics & Parametric vs Non-Parametric Tests</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #00897B;
+    --page-tint: rgba(0,137,123,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #00897B;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #fff; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(0,137,123,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none; transition: all 0.2s;
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre; color: #ddd;
+  }
+
+  /* QUIZ STYLING */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8 active">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 8 -- Cloud Security Analytics &amp; Parametric vs Non-Parametric Tests</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics -- Summer 2026</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 8 Key Points</div>
+  <ul>
+    <li><strong>Cloud environments</strong> (IaaS, PaaS, SaaS) generate massive security data: audit logs, access logs, API call logs, network flow logs</li>
+    <li><strong>Cloud visualization challenges</strong> -- scale, multi-tenancy, ephemeral infrastructure</li>
+    <li><strong>CrowdStrike 2025</strong> -- avg breakout time 48 min (fastest 51 sec), vishing up 442%, China-nexus activity up 150%</li>
+    <li><strong>Parametric tests</strong> assume normal distribution, use means/SDs, more power when assumptions hold (Z-test, t-test)</li>
+    <li><strong>Non-parametric tests</strong> are distribution-free, use ranks/signs, robust to outliers, trade a little power for fewer assumptions</li>
+    <li><strong>Sign Test</strong> -- simplest non-parametric test, checks claim about the MEDIAN (not mean!) by counting plus/minus signs</li>
+  </ul>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Cloud Security Analytics -->
+<details>
+  <summary>&#9729;&#65039; 1. Cloud Security Analytics -- Scaling Visualization</summary>
+  <div>
+    <div class="blue"><strong>CORE IDEA:</strong> Scaling visualization with cloud security analytics -- applying visual analysis techniques to the massive, dynamic data generated by cloud environments.</div>
+
+    <h3>Cloud Environments</h3>
+    <table>
+      <tr><th>Model</th><th>What You Manage</th><th>Examples</th></tr>
+      <tr><td><strong>IaaS</strong> (Infrastructure as a Service)</td><td>OS, apps, data</td><td>AWS EC2, Azure VMs</td></tr>
+      <tr><td><strong>PaaS</strong> (Platform as a Service)</td><td>Apps and data only</td><td>Heroku, Google App Engine</td></tr>
+      <tr><td><strong>SaaS</strong> (Software as a Service)</td><td>Nothing -- just use it</td><td>Office 365, Salesforce</td></tr>
+    </table>
+
+    <h3>Cloud Security Data Sources</h3>
+    <ul>
+      <li><strong>Cloud audit logs</strong> -- who did what, when</li>
+      <li><strong>Access logs</strong> -- authentication and authorization events</li>
+      <li><strong>API call logs</strong> -- every API interaction recorded</li>
+      <li><strong>Network flow logs</strong> -- traffic patterns between resources</li>
+    </ul>
+
+    <h3>Cloud-Native Visualization Challenges</h3>
+    <ul>
+      <li><strong>Scale</strong> -- enormous volume of data from distributed resources</li>
+      <li><strong>Multi-tenancy</strong> -- shared infrastructure complicates isolation and attribution</li>
+      <li><strong>Ephemeral infrastructure</strong> -- resources spin up/down rapidly, making persistent monitoring difficult</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 2: CrowdStrike 2025 -->
+<details>
+  <summary>&#128680; 2. CrowdStrike 2025 Global Threat Report -- Key Stats</summary>
+  <div>
+    <div class="red"><strong>KNOW THESE NUMBERS:</strong> These stats demonstrate why speed in detection and visualization matters.</div>
+
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td><strong>Average breakout time</strong></td><td>48 minutes (fastest: 51 seconds)</td></tr>
+      <tr><td><strong>Vishing attacks</strong></td><td>Up 442%</td></tr>
+      <tr><td><strong>Initial access through vulnerabilities</strong></td><td>52%</td></tr>
+      <tr><td><strong>Access broker advertisements</strong></td><td>Up 50%</td></tr>
+      <tr><td><strong>China-nexus cyber activity</strong></td><td>Up 150%</td></tr>
+      <tr><td><strong>GenAI usage</strong></td><td>Used by FAMOUS CHOLLIMA (North Korea) for fake IT worker campaigns</td></tr>
+    </table>
+
+    <div class="warn"><strong>Why this matters for visualization:</strong> With average breakout time of 48 minutes, analysts need dashboards and visual tools that surface threats in seconds, not hours. If you can't see it fast enough, you can't stop it.</div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"48 minutes to break out, 51 seconds at fastest" -- every second of analyst time matters</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: Parametric vs Non-Parametric -->
+<details>
+  <summary>&#128200; 3. Parametric vs Non-Parametric Tests -- Core Difference</summary>
+  <div>
+    <div class="red"><strong>KEY DISTINCTION:</strong> Parametric tests assume data follows a known distribution (usually normal/bell curve). Non-parametric tests make almost no assumptions about data shape -- also called "distribution-free."</div>
+
+    <h3>Comparison Table</h3>
+    <table>
+      <tr><th>Feature</th><th>Parametric</th><th>Non-Parametric</th></tr>
+      <tr><td>Assumes distribution?</td><td>Yes (normal)</td><td>No</td></tr>
+      <tr><td>Works on what data?</td><td>Numeric, bell-shaped</td><td>Any shape, ordinal is fine</td></tr>
+      <tr><td>Based on?</td><td>Means, standard deviations</td><td>Order/ranks/signs</td></tr>
+      <tr><td>Power when assumptions hold?</td><td>Higher</td><td>Slightly lower</td></tr>
+      <tr><td>Robust to outliers?</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Example</td><td>Z-test, t-test (mean)</td><td>Sign test (median)</td></tr>
+    </table>
+
+    <h3>How to Choose</h3>
+    <div class="green"><strong>Decision rule:</strong> Is data roughly bell-shaped and numeric? If yes, use parametric (more power). If data is skewed, has heavy outliers, or is only ordinal (rankings, ratings), use non-parametric. You trade a little power for not pretending your data is normal when it's not.</div>
+
+    <div class="key"><strong>The Z-test from Week 5 is parametric.</strong> It assumes a normal distribution.</div>
+
+    <h3>Non-Parametric Tests Still Have Assumptions!</h3>
+    <ul>
+      <li>Variable is <em>continuous</em></li>
+      <li>Measured on at least <em>ordinal scale</em> (you can rank values)</li>
+      <li>They just don't assume a specific distribution shape</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 4: The Sign Test -->
+<details>
+  <summary>&#10133; 4. The Sign Test -- Simplest Non-Parametric Test</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> The Sign Test checks a claim about the <em>MEDIAN</em> (not mean!) by counting how many data points fall above vs below a hypothesized value.</div>
+
+    <h3>Setup</h3>
+    <p>Sample from continuous distribution with unknown median M. Want to test if M equals some value m0.</p>
+
+    <h3>Hypotheses (mirror Week 4 but about median)</h3>
+    <table>
+      <tr><th>Type</th><th>H0</th><th>H1</th></tr>
+      <tr><td>Left-sided</td><td>M = m0</td><td>M &lt; m0</td></tr>
+      <tr><td>Right-sided</td><td>M = m0</td><td>M &gt; m0</td></tr>
+      <tr><td>Two-sided</td><td>M = m0</td><td>M != m0</td></tr>
+    </table>
+
+    <h3>Why It's Called the SIGN Test</h3>
+    <div class="key">Subtract m0 from each data point and look only at the <em>sign</em>. Above m0 gets a plus (+), below gets a minus (-).</div>
+
+    <h3>How It Runs</h3>
+    <ol>
+      <li><strong>Step 1:</strong> For each Xi, record 1 if Xi - m0 > 0 (plus), 0 if negative (minus). If any value equals m0 exactly, <em>discard it and shrink n</em></li>
+      <li><strong>Step 2:</strong> Test statistic R = count of plus signs</li>
+      <li><strong>Step 3:</strong> Under H0, R follows a <em>Binomial distribution with p = 1/2</em> (coin-flip). Too few or too many pluses (depending on tail) means reject H0</li>
+    </ol>
+
+    <div class="green"><strong>Intuition:</strong> If true median is m0, about half should be above and half below (50/50 coin flip). If way off from half, the median is probably not m0.</div>
+
+    <h3>Security Relevance</h3>
+    <p>Security data is often skewed (login times, packet sizes, dwell times have heavy tails). Non-parametric tests let you test claims without pretending the data is normal.</p>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Sign test = MEDIAN test = coin flip (p=0.5)" -- count the pluses, compare to what a fair coin would give</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: Exam Traps -->
+<details>
+  <summary>&#128683; 5. Exam Traps -- Don't Fall For These</summary>
+  <div>
+    <div class="warn"><strong>COMMON MISTAKES:</strong>
+      <ul>
+        <li>Saying non-parametric tests have NO assumptions -- they still need continuous, at-least-ordinal data</li>
+        <li>Thinking the sign test is about the <em>mean</em> -- it's about the <em>MEDIAN</em></li>
+        <li>Forgetting to discard values exactly equal to m0 and adjust n</li>
+        <li>Using a parametric test on clearly non-normal data just out of habit</li>
+        <li>Confusing "distribution-free" with "assumption-free" -- non-parametric still has assumptions, just fewer</li>
+      </ul>
+    </div>
+
+    <div class="red"><strong>REMEMBER:</strong> Under H0, the sign test statistic R ~ Binomial(n, 0.5). It's literally a coin-flip model.</div>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+<div class="quiz-section">
+    <h2>Week 8 Quiz -- Cloud Security &amp; Parametric vs Non-Parametric</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">1</span> The Sign Test is used to test claims about the:</p>
+      <div class="options">
+        <div class="opt">Mean</div>
+        <div class="opt">Median</div>
+        <div class="opt">Mode</div>
+        <div class="opt">Standard deviation</div>
+      </div>
+      <div class="explanation">The Sign Test is the simplest non-parametric test and checks claims about the MEDIAN, not the mean. This is a key distinction from parametric tests like the Z-test.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">2</span> According to CrowdStrike's 2025 Global Threat Report, the average breakout time is:</p>
+      <div class="options">
+        <div class="opt">24 hours</div>
+        <div class="opt">4 hours</div>
+        <div class="opt">12 minutes</div>
+        <div class="opt">48 minutes</div>
+      </div>
+      <div class="explanation">CrowdStrike reported an average breakout time of 48 minutes, with the fastest being just 51 seconds. This underscores why rapid visual detection is critical.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">3</span> Which type of test assumes data follows a normal (bell curve) distribution?</p>
+      <div class="options">
+        <div class="opt">Non-parametric</div>
+        <div class="opt">Distribution-free</div>
+        <div class="opt">Parametric</div>
+        <div class="opt">Sign test</div>
+      </div>
+      <div class="explanation">Parametric tests assume data follows a known distribution (usually normal/bell curve). Non-parametric tests are "distribution-free" and make almost no assumptions about data shape.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">4</span> Under H0, the Sign Test statistic R follows a:</p>
+      <div class="options">
+        <div class="opt">Binomial distribution with p = 1/2</div>
+        <div class="opt">Normal distribution</div>
+        <div class="opt">Poisson distribution</div>
+        <div class="opt">Uniform distribution</div>
+      </div>
+      <div class="explanation">Under H0, R (count of plus signs) follows a Binomial distribution with p = 1/2. It's literally a coin-flip model -- if the true median equals m0, about half the observations should be above and half below.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> Which is NOT a cloud-native visualization challenge?</p>
+      <div class="options">
+        <div class="opt">Scale</div>
+        <div class="opt">Data normality assumptions</div>
+        <div class="opt">Multi-tenancy</div>
+        <div class="opt">Ephemeral infrastructure</div>
+      </div>
+      <div class="explanation">The three cloud-native visualization challenges are scale, multi-tenancy, and ephemeral infrastructure. Data normality assumptions are a statistical concept, not a cloud visualization challenge.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> In the Sign Test, if a data point exactly equals m0, you should:</p>
+      <div class="options">
+        <div class="opt">Count it as a plus sign</div>
+        <div class="opt">Count it as a minus sign</div>
+        <div class="opt">Discard it and reduce n</div>
+        <div class="opt">Count it as both plus and minus</div>
+      </div>
+      <div class="explanation">If any value equals m0 exactly, you discard it and shrink n. This is a common exam trap -- forgetting to adjust the sample size when ties occur.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">7</span> Non-parametric tests are preferred over parametric tests when data is:</p>
+      <div class="options">
+        <div class="opt">Perfectly bell-shaped</div>
+        <div class="opt">Large and numeric</div>
+        <div class="opt">Normally distributed with no outliers</div>
+        <div class="opt">Skewed with heavy outliers</div>
+      </div>
+      <div class="explanation">Non-parametric tests are preferred when data is skewed, has heavy outliers, or is only ordinal. They are robust to outliers and don't assume a specific distribution shape.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> CrowdStrike reported that vishing attacks increased by:</p>
+      <div class="options">
+        <div class="opt">442%</div>
+        <div class="opt">150%</div>
+        <div class="opt">50%</div>
+        <div class="opt">52%</div>
+      </div>
+      <div class="explanation">Vishing attacks were up 442% according to the CrowdStrike 2025 Global Threat Report. China-nexus activity was up 150%, and access broker ads were up 50%.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> Which statement about non-parametric tests is FALSE?</p>
+      <div class="options">
+        <div class="opt">They are also called distribution-free tests</div>
+        <div class="opt">They have absolutely no assumptions at all</div>
+        <div class="opt">They work well with ordinal data</div>
+        <div class="opt">They are robust to outliers</div>
+      </div>
+      <div class="explanation">Non-parametric tests DO still have assumptions: the variable must be continuous and measured on at least an ordinal scale. They just don't assume a specific distribution shape.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">10</span> Which North Korean threat group was reported using GenAI for fake IT worker campaigns?</p>
+      <div class="options">
+        <div class="opt">Lazarus Group</div>
+        <div class="opt">APT38</div>
+        <div class="opt">FAMOUS CHOLLIMA</div>
+        <div class="opt">Kimsuky</div>
+      </div>
+      <div class="explanation">FAMOUS CHOLLIMA (North Korea) was reported by CrowdStrike as using GenAI for fake IT worker campaigns in their 2025 Global Threat Report.</div>
+    </div>
+</div>
+</div>
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#00897B'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++; streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

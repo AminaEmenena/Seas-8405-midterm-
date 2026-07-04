@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 - Application Security, Dashboards & Outlier Detection</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #9775FA;
+    --page-tint: rgba(151,117,250,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F06595; --w8: #20C997;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(151,117,250,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px; background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+    font-size: 0.55em; backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item, .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #9775FA; }
+  @media (max-width: 1100px) {
+    .color-legend { position: static; transform: none; margin: 0 0 20px; flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px; }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* TOPIC CARDS */
+  details { margin: 20px 0; border-radius: 12px; overflow: hidden; border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s; }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none;
+    transition: all 0.2s; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .prof { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  /* MNEMONIC */
+  .mem { background: linear-gradient(135deg, rgba(151,117,250,0.15), rgba(15,52,96,0.15)); border: 2px dashed #9775FA; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center; }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #9775FA; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM */
+  .ascii-diagram { background: rgba(0,0,0,0.4); border: 1px solid var(--page-color); border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.4; overflow-x: auto; white-space: pre; color: var(--page-color); margin: 16px 0; }
+  .ascii-diagram-title { color: var(--page-color); font-weight: 700; font-size: 0.9em; margin-bottom: 8px; }
+
+  /* CODE */
+  code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  /* QUIZ */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* STREAK */
+  .streak-display { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,0.06); font-weight: 700; font-size: 0.95em; }
+  .streak-display.on-fire { background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3)); animation: pulse 0.5s ease-in-out infinite alternate; }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+
+  /* Confetti */
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 40px; border-radius: 16px; background: linear-gradient(135deg, #51cf66, #37b24d); color: #fff; font-size: 1.5em; font-weight: 800; z-index: 10000; animation: pop-in 0.5s ease-out forwards; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* EXPAND/COLLAPSE */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6 active">W6</a>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 6 -- Application Security, Dashboards &amp; Outlier Detection</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 6 Key Points</div>
+  <ul>
+    <li><strong>Application Security</strong> = protecting apps from threats throughout lifecycle (design -> development -> deployment -> maintenance)</li>
+    <li><strong>Dashboard (Stephen Few)</strong> -- visual display of most important info on a single screen, monitored at a glance</li>
+    <li><strong>Mackinlay Criterion</strong> -- Expressiveness (shows ALL and ONLY the facts) + Effectiveness (readily perceived)</li>
+    <li><strong>13 Anti-Patterns</strong> -- scrolling, no context, too much detail, wrong chart type, 3D charts, cluttered decoration, bad color usage</li>
+    <li><strong>Outlier</strong> -- a value far from the rest; mean is fragile, median is tough</li>
+    <li><strong>IQR Rule</strong> -- Mild: past 1.5*IQR from Q1/Q3; Extreme: past 3*IQR from Q1/Q3</li>
+    <li><strong>Security Angle</strong> -- In stats, outlier = noise to remove. In security, outlier = the attack you're hunting</li>
+    <li><strong>Bar chart &gt; Pie chart</strong> for comparison (easier to interpret accurately)</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: What is an Application -->
+<details>
+  <summary>&#128241; 1. What is an Application &amp; Application Security</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Application:</strong> Software, hardware, or API designed for specific tasks. Includes desktop, web, mobile, and API applications. Components: frontend + backend + data storage + communication channels.</div>
+
+    <div class="red"><strong>Application Security:</strong> Protecting applications from threats throughout their entire lifecycle -- <em>design, development, deployment, and maintenance</em>. Ensures CIA (Confidentiality, Integrity, Availability).</div>
+
+    <div class="key"><strong>Lifecycle coverage is critical:</strong> Security cannot be bolted on at the end. It must be integrated from the design phase through maintenance. Each phase introduces different threat surfaces.</div>
+  </div>
+</details>
+
+<!-- Section 2: Dashboard Design -->
+<details>
+  <summary>&#128202; 2. Dashboard Design -- Stephen Few</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Dashboard Definition (Stephen Few, <em>Information Dashboard Design</em>, 2006):</strong><br>
+    "A visual display of the most important information needed to achieve one or more objectives, consolidated in a single computer screen [or printed page] so it can be monitored at a glance."</div>
+
+    <h3>Mackinlay Criterion</h3>
+    <div class="red"><strong>Two requirements for good visualization:</strong></div>
+    <table>
+      <tr><th>Criterion</th><th>Meaning</th></tr>
+      <tr><td><strong>Expressiveness</strong></td><td>Visualization shows ALL and ONLY the facts in the data (nothing more, nothing less)</td></tr>
+      <tr><td><strong>Effectiveness</strong></td><td>Information is more readily perceived (uses the best visual encoding for the data type)</td></tr>
+    </table>
+
+    <div class="green"><strong>Key principle:</strong> Bar chart &gt; Pie chart for comparison. Bar charts allow more accurate comparison of values because humans are better at judging length than angle.</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Mackinlay = Expressiveness (ALL and ONLY) + Effectiveness (readily perceived). Dashboard = single screen, at a glance.</strong></div>
+  </div>
+</details>
+
+<!-- Section 3: 13 Dashboard Anti-Patterns -->
+<details>
+  <summary>&#128683; 3. Thirteen Dashboard Anti-Patterns (Stephen Few)</summary>
+  <div class="content-section">
+    <div class="red"><strong>These are the 13 ways dashboards commonly fail:</strong></div>
+
+    <table>
+      <tr><th>#</th><th>Anti-Pattern</th><th>Why It Fails</th></tr>
+      <tr><td>1</td><td><strong>Exceeding boundaries of a single screen</strong></td><td>Scrolling/switching loses context; short-term memory is limited</td></tr>
+      <tr><td>2</td><td><strong>Supplying inadequate context</strong></td><td>Gauges give numbers/colors without context -- compared to what?</td></tr>
+      <tr><td>3</td><td><strong>Displaying excessive detail or precision</strong></td><td>10+ significant digits on a dashboard overwhelms</td></tr>
+      <tr><td>4</td><td><strong>Choosing a deficient measure</strong></td><td>Showing raw budget/actual when variance is what matters</td></tr>
+      <tr><td>5</td><td><strong>Choosing inappropriate display visualization type</strong></td><td>Pie chart when bar chart is easier to interpret</td></tr>
+      <tr><td>6</td><td><strong>Introducing meaningless variety</strong></td><td>Mixing chart types for no reason -- confuses readers</td></tr>
+      <tr><td>7</td><td><strong>Using poorly designed display visualization type</strong></td><td>3D charts, confusing layouts distort data</td></tr>
+      <tr><td>8</td><td><strong>Encoding quantitative data inaccurately</strong></td><td>Y-axis not starting at 0, misleading proportions</td></tr>
+      <tr><td>9</td><td><strong>Arranging the data poorly</strong></td><td>Top-left is prime real estate; related data should be near each other</td></tr>
+      <tr><td>10</td><td><strong>Highlighting important data ineffectively or not at all</strong></td><td>Everything looks equally important -- nothing stands out</td></tr>
+      <tr><td>11</td><td><strong>Cluttering the display with useless decoration</strong></td><td>Electronic panel look for a sales dashboard -- pure noise</td></tr>
+      <tr><td>12</td><td><strong>Misusing or overusing color</strong></td><td>Haphazard color usage with no meaning attached</td></tr>
+      <tr><td>13</td><td><strong>Designing an unattractive visual display</strong></td><td>Poor aesthetics reduce engagement and trust</td></tr>
+    </table>
+
+    <div class="mem"><small>Remember This</small><br><strong>Top offenders to remember: single screen (1), context (2), wrong chart (5), 3D = bad (7), Y-axis at 0 (8), top-left = important (9), no chart junk (11)</strong></div>
+  </div>
+</details>
+
+<!-- Section 4: Outliers - Impact on Statistics -->
+<details>
+  <summary>&#128200; 4. Outliers -- Impact on Mean vs Median</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Outlier:</strong> A value far from the rest of the data.</div>
+
+    <h3>Salary Example</h3>
+    <p>10 employees, salaries include CEO at $1,000K (outlier):</p>
+    <table>
+      <tr><th>Statistic</th><th>WITH Outlier</th><th>WITHOUT Outlier</th><th>Impact</th></tr>
+      <tr><td><strong>Mean</strong></td><td>$260K (26.0 units)</td><td>$177.8K (17.78 units)</td><td>Dragged up ~50% by one value!</td></tr>
+      <tr><td><strong>Median</strong></td><td>17.5</td><td>17.0</td><td>Barely budged</td></tr>
+    </table>
+
+    <div class="red"><strong>Mean is fragile, median is tough.</strong> One value out of ten dragged the average up ~50%, but the median barely moved.</div>
+
+    <div class="warn"><strong>Saying "average salary is $260K" is technically true but deeply misleading.</strong> When data is skewed, median is the appropriate measure of center.</div>
+  </div>
+</details>
+
+<!-- Section 5: Boxplot & IQR Rule -->
+<details>
+  <summary>&#128230; 5. Boxplot &amp; the IQR Rule</summary>
+  <div class="content-section">
+    <div class="blue"><strong>Boxplot:</strong> Draws the middle 50% as a box, marks anything unusually far out. Built from quartiles (rank-based), so it is itself outlier-resistant.</div>
+
+    <h3>Boxplot Components</h3>
+    <table>
+      <tr><th>Component</th><th>Definition</th></tr>
+      <tr><td><strong>Q1</strong></td><td>First quartile, 25th percentile</td></tr>
+      <tr><td><strong>Median / Q2</strong></td><td>50th percentile</td></tr>
+      <tr><td><strong>Q3</strong></td><td>Third quartile, 75th percentile</td></tr>
+      <tr><td><strong>IQR</strong></td><td>Q3 - Q1 (width of the middle 50%)</td></tr>
+    </table>
+
+    <div class="ascii-diagram-title">Boxplot Structure</div>
+<div class="ascii-diagram">  Extreme    Mild                              Mild    Extreme
+  outlier    outlier                           outlier  outlier
+    *          o    |------[====|====]------|    o        *
+               |    Q1     Med     Q3      |
+          3*IQR below Q1              3*IQR above Q3
+               1.5*IQR                1.5*IQR</div>
+
+    <h3>IQR Fence Rule</h3>
+    <div class="red"><strong>Mild outlier fences:</strong> Q1 - 1.5*IQR and Q3 + 1.5*IQR</div>
+    <div class="red"><strong>Extreme outlier fences:</strong> Q1 - 3*IQR and Q3 + 3*IQR</div>
+
+    <div class="mem"><small>Remember This</small><br><strong>"Step out 1.5 box-widths past each edge = mildly weird. Step out 3 = seriously weird."</strong></div>
+
+    <h3>What To Do With Outliers</h3>
+    <table>
+      <tr><th>Type</th><th>Action</th><th>Reasoning</th></tr>
+      <tr><td><strong>Extreme</strong> (past 3*IQR)</td><td>Usually discard</td><td>Badly skew results</td></tr>
+      <tr><td><strong>Mild</strong> (past 1.5*IQR)</td><td>Investigate first</td><td>Could be error, glitch, or real rare event</td></tr>
+    </table>
+
+    <div class="green"><strong>When you can't delete:</strong> Down-weight or use robust statistics (median, MAD, Huber or Bisquare loss).</div>
+  </div>
+</details>
+
+<!-- Section 6: Security Angle on Outliers -->
+<details>
+  <summary>&#128737; 6. The Security Angle -- Outliers as Signals</summary>
+  <div class="content-section">
+    <div class="red"><strong>CRITICAL DISTINCTION:</strong></div>
+
+    <table>
+      <tr><th>Context</th><th>Outlier Means</th><th>Action</th></tr>
+      <tr><td><strong>Statistics</strong></td><td>Noise to remove</td><td>Discard or down-weight</td></tr>
+      <tr><td><strong>Security</strong></td><td>Frequently the whole point</td><td>INVESTIGATE before discarding</td></tr>
+    </table>
+
+    <div class="warn"><strong>Examples of security-relevant outliers:</strong>
+    <ul>
+      <li>The login from another continent</li>
+      <li>The process spawning 10,000 connections</li>
+      <li>The user downloading 50GB at 3am</li>
+      <li>The DNS query to a never-seen-before domain</li>
+    </ul>
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>In security, the outlier might be the attack you're hunting. Never auto-discard without investigation!</strong></div>
+  </div>
+</details>
+
+<!-- Section 7: Exam Traps -->
+<details>
+  <summary>&#9888;&#65039; 7. Exam Traps -- Outliers &amp; Dashboards</summary>
+  <div class="content-section">
+    <div class="red"><strong>Common exam mistakes to avoid:</strong></div>
+    <ul>
+      <li><strong>Mixing up 1.5*IQR and 3*IQR fences</strong> -- 1.5 = mild, 3 = extreme</li>
+      <li><strong>Reporting mean for skewed data</strong> -- Use median instead</li>
+      <li><strong>Computing IQR as max - min</strong> -- That's the RANGE! IQR = Q3 - Q1</li>
+      <li><strong>Auto-deleting all outliers without checking</strong> -- In security, they may be the signal</li>
+      <li><strong>Confusing expressiveness with effectiveness</strong> -- Expressiveness = correct facts; Effectiveness = best encoding</li>
+    </ul>
+
+    <div class="mem"><small>Remember This</small><br><strong>IQR = Q3 - Q1 (NOT max - min). 1.5 = mild, 3 = extreme. Skewed data -> use median. Security outliers -> investigate first.</strong></div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+    <h2>Week 6 Quiz -- App Security, Dashboards &amp; Outliers</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> According to Stephen Few, a dashboard should consolidate information:</p>
+      <div class="options">
+        <div class="opt">Across multiple linked screens</div>
+        <div class="opt">In a detailed report with scrolling capability</div>
+        <div class="opt">On a single screen so it can be monitored at a glance</div>
+        <div class="opt">In a database query interface</div>
+      </div>
+      <div class="explanation">Few's definition explicitly states a dashboard must be "consolidated in a single computer screen [or printed page] so it can be monitored at a glance." Exceeding one screen is Anti-Pattern #1.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> The Mackinlay Criterion of "Expressiveness" means a visualization:</p>
+      <div class="options">
+        <div class="opt">Uses the most visually appealing colors</div>
+        <div class="opt">Shows ALL and ONLY the facts in the data</div>
+        <div class="opt">Is perceived quickly by the viewer</div>
+        <div class="opt">Uses interactive elements for exploration</div>
+      </div>
+      <div class="explanation">Expressiveness means the visualization shows ALL the facts in the data and ONLY the facts -- nothing more, nothing less. "Readily perceived" describes Effectiveness, the other half of the criterion.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> Why is a bar chart generally preferred over a pie chart for comparisons?</p>
+      <div class="options">
+        <div class="opt">Humans judge length more accurately than angle</div>
+        <div class="opt">Pie charts cannot display more than 5 categories</div>
+        <div class="opt">Bar charts use less screen space</div>
+        <div class="opt">Pie charts require color which may not be accessible</div>
+      </div>
+      <div class="explanation">Bar charts are preferred because humans are much better at comparing lengths (bars) than comparing angles or areas (pie slices). This is a core principle of effective data visualization.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> Dashboard Anti-Pattern #8 (encoding quantitative data inaccurately) includes:</p>
+      <div class="options">
+        <div class="opt">Using too many decimal places</div>
+        <div class="opt">Choosing the wrong chart type</div>
+        <div class="opt">Not labeling axes</div>
+        <div class="opt">Y-axis not starting at 0, creating misleading proportions</div>
+      </div>
+      <div class="explanation">Anti-Pattern #8 is about inaccurate encoding of quantitative data. The classic example is a truncated Y-axis that doesn't start at 0, making small differences appear dramatic and misleading the viewer.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> In the salary example with a CEO outlier, the mean was dragged up ~50% but the median barely moved. This demonstrates that:</p>
+      <div class="options">
+        <div class="opt">The median is always more accurate than the mean</div>
+        <div class="opt">The mean is fragile (sensitive to outliers) while the median is robust</div>
+        <div class="opt">Outliers should always be removed before analysis</div>
+        <div class="opt">The CEO salary is an error in the data</div>
+      </div>
+      <div class="explanation">The mean is fragile -- a single extreme value can dramatically shift it. The median is robust because it depends on rank order, not magnitude. For skewed data, median better represents the "typical" value.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">6</span> The IQR (Interquartile Range) is calculated as:</p>
+      <div class="options">
+        <div class="opt">Q3 - Q1</div>
+        <div class="opt">Max - Min</div>
+        <div class="opt">Mean - Median</div>
+        <div class="opt">Q2 - Q1</div>
+      </div>
+      <div class="explanation">IQR = Q3 - Q1, which represents the width of the middle 50% of the data. A common exam trap is confusing IQR with the range (max - min). IQR is specifically the distance between the 75th and 25th percentiles.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">7</span> A data point is classified as an "extreme outlier" by the IQR rule if it falls:</p>
+      <div class="options">
+        <div class="opt">Beyond 1.5*IQR from Q1 or Q3</div>
+        <div class="opt">Beyond 2*IQR from Q1 or Q3</div>
+        <div class="opt">Beyond 3*IQR from Q1 or Q3</div>
+        <div class="opt">Beyond 4*IQR from Q1 or Q3</div>
+      </div>
+      <div class="explanation">Extreme outlier fences are at Q1 - 3*IQR and Q3 + 3*IQR. Mild outlier fences are at 1.5*IQR. Remember: 1.5 = mildly weird, 3 = seriously weird.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> In a security context, an outlier (like a login from an unusual location) should be:</p>
+      <div class="options">
+        <div class="opt">Automatically discarded as noise</div>
+        <div class="opt">Down-weighted in the statistical model</div>
+        <div class="opt">Replaced with the median value</div>
+        <div class="opt">Investigated before any action -- it might be the attack you're hunting</div>
+      </div>
+      <div class="explanation">In security, outliers are frequently the signal, not the noise. The login from another continent or the process spawning thousands of connections could be the attack you're looking for. Never auto-discard without investigation.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> Application Security covers which phases of the application lifecycle?</p>
+      <div class="options">
+        <div class="opt">Only development and testing</div>
+        <div class="opt">Design, development, deployment, and maintenance</div>
+        <div class="opt">Only deployment and maintenance</div>
+        <div class="opt">Only the initial design phase</div>
+      </div>
+      <div class="explanation">Application Security must cover the entire lifecycle: design (threat modeling), development (secure coding), deployment (hardened configs), and maintenance (patching, monitoring). Security cannot be bolted on at a single phase.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">10</span> When data is heavily skewed, the appropriate measure of center to report is:</p>
+      <div class="options">
+        <div class="opt">Median (robust to extreme values)</div>
+        <div class="opt">Mean (always the best summary statistic)</div>
+        <div class="opt">Mode (most common value)</div>
+        <div class="opt">Range (spread of the data)</div>
+      </div>
+      <div class="explanation">When data is skewed, the median is the appropriate measure of center because it is robust -- it is not pulled by extreme values. Reporting the mean for skewed data is misleading (as the salary example demonstrates).</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressText = document.querySelector('.progress-text .score-correct');
+      if (progressText) progressText.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

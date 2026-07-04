@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 - Log Security Data Visualizations, Gestalt Principles & Decision Trees</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #F783AC;
+    --page-tint: rgba(247,131,172,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #00897B;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #fff; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(247,131,172,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none; transition: all 0.2s;
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre; color: #ddd;
+  }
+
+  /* QUIZ STYLING */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week7.html" class="w7 active">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 7 -- Log Security Data Visualizations, Gestalt Principles &amp; Decision Trees</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics -- Summer 2026</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 7 Key Points</div>
+  <ul>
+    <li><strong>Logs</strong> = chronological records of events from IT components (OS, apps, network devices, security tools) -- foundation of security monitoring</li>
+    <li><strong>Log Visualization</strong> -- transforming raw log data into charts/graphs so analysts can quickly spot incidents and track progression</li>
+    <li><strong>Gestalt Principles</strong> -- 6 principles of visual perception (Proximity, Similarity, Closure, Continuity, Enclosure, Connection). Strength order: Enclosure > Connection > Proximity/Similarity</li>
+    <li><strong>Decision Trees</strong> -- flowchart classifiers: root node (top), internal nodes (questions), branches (answers), leaf nodes (final labels). Easy to explain to non-technical people</li>
+    <li><strong>Overfitting</strong> -- tree too deep memorizes noise. Fix with early stopping or pruning (bottom-up preferred)</li>
+    <li><strong>CART</strong> -- binary splits only, handles numeric + categorical, prunes by cost-complexity. ID3 can do multi-way splits</li>
+  </ul>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: What is a Log -->
+<details>
+  <summary>&#128220; 1. What is a Log &amp; Log Security Visualization</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> A log is a <em>chronological record</em> of events, activities, and messages generated by IT components (OS, applications, network devices, security tools). Logs track behavior and state of components, providing insights into performance, security, and potential issues.</div>
+
+    <h3>Log Entry Contents</h3>
+    <ul>
+      <li><strong>Timestamp</strong> -- when the event occurred</li>
+      <li><strong>Event type</strong> -- what category of event</li>
+      <li><strong>Source</strong> -- which component generated it</li>
+      <li><strong>Other relevant info</strong> -- user, IP, severity, etc.</li>
+    </ul>
+
+    <h3>Log Security Visualization</h3>
+    <div class="key"><strong>Core idea:</strong> Transforming raw log data into charts, graphs, and visual formats so security analysts can <em>quickly identify potential incidents</em>, track their progression, and respond accordingly.</div>
+  </div>
+</details>
+
+<!-- Section 2: Log Types -->
+<details>
+  <summary>&#128202; 2. Types of Logs</summary>
+  <div>
+    <table>
+      <tr><th>Log Type</th><th>What It Records</th><th>Security Use</th></tr>
+      <tr><td><strong>System Logs</strong></td><td>OS/hardware events: startups, shutdowns, hardware changes, software installs, updates, error messages</td><td>Identify unauthorized access, system failures</td></tr>
+      <tr><td><strong>Application Logs</strong></td><td>App-specific events: errors, user activities, performance issues, config changes</td><td>Detect unusual user behavior, app vulnerabilities</td></tr>
+      <tr><td><strong>Network Logs</strong></td><td>Network activities: data transmissions, connections, traffic patterns (from routers, switches, firewalls, IDS/IPS)</td><td>Identify unauthorized access attempts, network attacks, data exfiltration</td></tr>
+      <tr><td><strong>Security Logs</strong></td><td>Security-specific events from antivirus, IDS, SIEM: login attempts, policy violations, detected threats</td><td>Crucial for incident response</td></tr>
+      <tr><td><strong>Audit Logs</strong></td><td>User activities and system events for compliance, security, forensics: user logins, file access, config changes</td><td>Identify unauthorized access, policy violations</td></tr>
+      <tr><td><strong>Web Server Logs</strong></td><td>Web server activities: client requests, server responses, error messages (from IIS/Apache)</td><td>Identify web app attacks, unauthorized access</td></tr>
+      <tr><td><strong>Database Logs</strong></td><td>DBMS activities: user queries, data modifications, schema changes, security events, performance issues</td><td>Identify unauthorized data access, SQL injection</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>S-A-N-S-A-W-D: "SANS A Web Database" -- System, Application, Network, Security, Audit, Web Server, Database</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: Gestalt Principles -->
+<details>
+  <summary>&#128065; 3. Gestalt 6 Principles of Visual Perception</summary>
+  <div>
+    <div class="red"><strong>SOURCE:</strong> Stephen Few, <em>Information Dashboard Design</em></div>
+
+    <table>
+      <tr><th>Principle</th><th>What It Means</th><th>Design Implication</th></tr>
+      <tr><td><strong>Proximity</strong></td><td>Nearby objects perceived as belonging to same group</td><td>Directs scanning direction (horizontal spacing = left-to-right reading, vertical = top-to-bottom)</td></tr>
+      <tr><td><strong>Similarity</strong></td><td>Objects with similar visual characteristics (color, size, shape) perceived as same group</td><td>Use same color for related data across charts</td></tr>
+      <tr><td><strong>Closure</strong></td><td>We perceive incomplete shapes as complete</td><td>Ambiguous stimuli seen as closed, whole, regular forms</td></tr>
+      <tr><td><strong>Continuity</strong></td><td>Aligned objects seen as single entity extending from each other</td><td>Dashed line perceived as one continuous line, not separate segments</td></tr>
+      <tr><td><strong>Enclosure</strong></td><td>Objects within a visual border (line, color field) grouped together</td><td>STRONGEST grouping principle</td></tr>
+      <tr><td><strong>Connection</strong></td><td>Linked objects (connected by lines) perceived as grouped</td><td>Stronger than proximity or similarity, but WEAKER than enclosure</td></tr>
+    </table>
+
+    <div class="red"><strong>GROUPING STRENGTH ORDER:</strong> Enclosure > Connection > Proximity/Similarity</div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Every Cool Person Sees Connections Clearly" -- Enclosure (strongest), Connection, Proximity, Similarity, Continuity, Closure</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: Decision Trees -->
+<details>
+  <summary>&#127795; 4. Decision Trees -- The Flowchart Classifier</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> A decision tree is a <em>flowchart</em> -- each box asks a question, each branch is an answer, follow down to a final label.</div>
+
+    <h3>Parts of a Decision Tree</h3>
+    <table>
+      <tr><th>Part</th><th>Description</th></tr>
+      <tr><td><strong>Root Node</strong></td><td>Top of tree, no parent -- first question asked</td></tr>
+      <tr><td><strong>Internal Node</strong></td><td>A question that splits into branches</td></tr>
+      <tr><td><strong>Branch</strong></td><td>One answer/path from a node</td></tr>
+      <tr><td><strong>Leaf Node</strong></td><td>End -- no children, gives the final class label</td></tr>
+      <tr><td><strong>Depth</strong></td><td>Longest path from root to leaf</td></tr>
+    </table>
+
+    <div class="green"><strong>Mental model:</strong> Like "Which character are you?" quizzes -- start at top, answer questions, land on a result.</div>
+
+    <h3>How Trees Are Built</h3>
+    <p><strong>Recursive partitioning:</strong> At each node, pick the split that <em>maximizes purity gain</em> (reduces impurity most). Repeat on each resulting group.</p>
+    <p><strong>Purity:</strong> A good split sends mostly one class down each branch. 100% one class = a "pure" leaf.</p>
+
+    <h3>Why People Like Decision Trees</h3>
+    <ul>
+      <li>No distributional assumptions (don't need normal data)</li>
+      <li>Handles big data</li>
+      <li>Works with both numeric and categorical variables</li>
+      <li>Flowchart is easy to explain to non-technical people (huge for security reporting)</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 5: Overfitting & Pruning -->
+<details>
+  <summary>&#9888;&#65039; 5. Overfitting &amp; Pruning</summary>
+  <div>
+    <div class="warn"><strong>OVERFITTING:</strong> Tree grown too deep memorizes training data including random noise. Show it fresh data and it flops. An overly large tree is over-fit and unreliable.</div>
+
+    <h3>Fixes for Overfitting</h3>
+    <table>
+      <tr><th>Method</th><th>How It Works</th><th>Trade-off</th></tr>
+      <tr><td><strong>Early Stopping</strong></td><td>Stop growing when node has too few observations</td><td>Saves compute but may stop too soon</td></tr>
+      <tr><td><strong>Pruning</strong></td><td>Grow full tree, then cut unhelpful splits</td><td>More thorough, more common</td></tr>
+    </table>
+
+    <h3>Pruning Approaches</h3>
+    <ul>
+      <li><strong>Top-down pruning:</strong> Risky -- a bad split at the top throws away whole subtree that might contain good splits below</li>
+      <li><strong>Bottom-up pruning:</strong> Start at leaves, move up -- avoids that risk, more common</li>
+    </ul>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Prune from the Bottom Up" -- like trimming a real tree: start at the tips, work inward</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: CART & ID3 -->
+<details>
+  <summary>&#129302; 6. Tree Algorithms -- CART &amp; ID3</summary>
+  <div>
+    <table>
+      <tr><th>Algorithm</th><th>Year</th><th>Key Features</th></tr>
+      <tr><td><strong>CART</strong> (Breiman et al.)</td><td>1984</td><td>Binary splits only. Handles numeric + categorical. Grows big tree, then prunes by cost-complexity</td></tr>
+      <tr><td><strong>ID3</strong> (Quinlan)</td><td>1986</td><td>One of the first tree algorithms. Can do multi-way splits. Later expanded into C4.5</td></tr>
+    </table>
+
+    <h3>Classification vs Regression Trees</h3>
+    <ul>
+      <li><strong>Classification tree:</strong> Target is a category (spam/not spam, attack/normal). Leaves give class labels</li>
+      <li><strong>Regression tree:</strong> Target is a number. Leaves give predicted values</li>
+    </ul>
+
+    <div class="warn"><strong>EXAM TRAPS:</strong>
+      <ul>
+        <li>Confusing root (top, no parent) with leaf (bottom, no children)</li>
+        <li>Thinking bigger tree is always better (it overfits!)</li>
+        <li>Forgetting trees need NO normality assumption unlike hypothesis tests</li>
+        <li>Mixing up classification (categorical target) and regression (numeric target) trees</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+<div class="quiz-section">
+    <h2>Week 7 Quiz -- Logs, Gestalt &amp; Decision Trees</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> Which Gestalt principle is the STRONGEST grouping principle?</p>
+      <div class="options">
+        <div class="opt">Connection</div>
+        <div class="opt">Proximity</div>
+        <div class="opt">Enclosure</div>
+        <div class="opt">Similarity</div>
+      </div>
+      <div class="explanation">Enclosure is the strongest grouping principle. The strength order is: Enclosure > Connection > Proximity/Similarity.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> In a decision tree, the node at the top with no parent is called the:</p>
+      <div class="options">
+        <div class="opt">Leaf node</div>
+        <div class="opt">Root node</div>
+        <div class="opt">Internal node</div>
+        <div class="opt">Branch node</div>
+      </div>
+      <div class="explanation">The root node is at the top of the tree and has no parent. Leaf nodes are at the bottom with no children.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> Which log type records activities from antivirus, IDS, and SIEM systems and is crucial for incident response?</p>
+      <div class="options">
+        <div class="opt">Security Logs</div>
+        <div class="opt">Audit Logs</div>
+        <div class="opt">System Logs</div>
+        <div class="opt">Network Logs</div>
+      </div>
+      <div class="explanation">Security logs record security-specific events from antivirus, IDS, and SIEM, including login attempts, policy violations, and detected threats. They are crucial for incident response.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> A decision tree that has been grown too deep and memorizes training noise is said to be:</p>
+      <div class="options">
+        <div class="opt">Underfitting</div>
+        <div class="opt">Pruned</div>
+        <div class="opt">Validated</div>
+        <div class="opt">Overfitting</div>
+      </div>
+      <div class="explanation">Overfitting occurs when a tree is grown too deep and memorizes the training data including random noise. It performs poorly on new data.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> The Gestalt principle of Connection is stronger than proximity but weaker than:</p>
+      <div class="options">
+        <div class="opt">Similarity</div>
+        <div class="opt">Enclosure</div>
+        <div class="opt">Continuity</div>
+        <div class="opt">Closure</div>
+      </div>
+      <div class="explanation">Connection is stronger than proximity or similarity, but weaker than enclosure. Grouping strength: Enclosure > Connection > Proximity/Similarity.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> Which pruning approach is more common because it avoids throwing away good splits below a bad one?</p>
+      <div class="options">
+        <div class="opt">Top-down pruning</div>
+        <div class="opt">Random pruning</div>
+        <div class="opt">Bottom-up pruning</div>
+        <div class="opt">Cost-complexity pruning</div>
+      </div>
+      <div class="explanation">Bottom-up pruning starts at the leaves and moves up, avoiding the risk of top-down pruning where cutting a bad split at the top throws away an entire subtree that might contain good splits below.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> Which algorithm uses binary splits only and prunes by cost-complexity?</p>
+      <div class="options">
+        <div class="opt">CART</div>
+        <div class="opt">ID3</div>
+        <div class="opt">C4.5</div>
+        <div class="opt">Random Forest</div>
+      </div>
+      <div class="explanation">CART (Classification and Regression Trees, Breiman et al. 1984) uses binary splits only, handles numeric and categorical data, and prunes by cost-complexity.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> A key advantage of decision trees over parametric tests is that trees:</p>
+      <div class="options">
+        <div class="opt">Always produce higher accuracy</div>
+        <div class="opt">Require normally distributed data</div>
+        <div class="opt">Only work with categorical variables</div>
+        <div class="opt">Make no distributional assumptions about the data</div>
+      </div>
+      <div class="explanation">Decision trees require no distributional assumptions -- they don't need normal data. This is a major advantage and makes them easy to apply to security data which is often non-normal.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> Log security visualization primarily helps analysts by:</p>
+      <div class="options">
+        <div class="opt">Encrypting log data for storage</div>
+        <div class="opt">Quickly identifying potential incidents and tracking their progression</div>
+        <div class="opt">Automatically remediating threats</div>
+        <div class="opt">Replacing the need for SIEM tools</div>
+      </div>
+      <div class="explanation">Log security visualization transforms raw log data into charts, graphs, and visual formats so analysts can quickly identify potential incidents, track their progression, and respond accordingly.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">10</span> When a decision tree's target variable is a number (not a category), it is called a:</p>
+      <div class="options">
+        <div class="opt">Classification tree</div>
+        <div class="opt">Binary tree</div>
+        <div class="opt">Regression tree</div>
+        <div class="opt">Clustering tree</div>
+      </div>
+      <div class="explanation">A regression tree has a numeric target variable and leaves give predicted values. A classification tree has a categorical target (like spam/not spam) and leaves give class labels.</div>
+    </div>
+</div>
+</div>
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++; streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

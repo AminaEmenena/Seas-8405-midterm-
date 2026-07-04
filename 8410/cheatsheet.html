@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8410 - Midterm Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      font-size: 9px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 8px;
+      background: #0ea5e9;
+      border-radius: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    nav .nav-brand { color: #fff; font-size: 11px; font-weight: bold; }
+    nav .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav a { color: #e0f2fe; text-decoration: none; font-size: 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    nav a.active { color: #ffd740; border-bottom: 2px solid #ffd740; }
+    .print-btn {
+      background: #ffd740; color: #0c4a6e; border: none; padding: 3px 8px;
+      border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 9px;
+    }
+    .print-btn:hover { background: #ffca28; }
+
+    /* HEADER */
+    .sheet-title {
+      text-align: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #0ea5e9;
+      margin: 1px 0 2px 0;
+      padding: 1px 0;
+      border-bottom: 1px solid #0ea5e9;
+      border-top: 1px solid #0ea5e9;
+      letter-spacing: 0.2px;
+    }
+
+    /* COLUMNS LAYOUT */
+    .columns {
+      column-count: 3;
+      column-gap: 4px;
+      column-rule: 1px solid #ccc;
+    }
+
+    /* WEEK SECTIONS */
+    .week {
+      margin-bottom: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 0.5px solid #bbb;
+    }
+
+    .week-header {
+      padding: 1px 3px;
+      font-size: 8px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .week-body {
+      padding: 1px 2px 1px 2px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .week-body ul {
+      margin: 0;
+      padding-left: 7px;
+      list-style: disc;
+    }
+
+    .week-body li {
+      margin-bottom: 0;
+    }
+
+    .week-body li b {
+      font-weight: 700;
+    }
+
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 8px;
+      background: rgba(0,0,0,0.05);
+      padding: 0 1px;
+      border-radius: 1px;
+    }
+
+    /* WEEK 1 - Red */
+    .w1 .week-header { background: #dc2626; color: #fff; }
+    .w1 .week-body { background: #fef2f2; }
+    .w1 { border-color: #dc2626; }
+
+    /* WEEK 2 - Orange */
+    .w2 .week-header { background: #ea580c; color: #fff; }
+    .w2 .week-body { background: #fff7ed; }
+    .w2 { border-color: #ea580c; }
+
+    /* WEEK 3 - Amber */
+    .w3 .week-header { background: #d97706; color: #fff; }
+    .w3 .week-body { background: #fffbeb; }
+    .w3 { border-color: #d97706; }
+
+    /* WEEK 4 - Green */
+    .w4 .week-header { background: #16a34a; color: #fff; }
+    .w4 .week-body { background: #f0fdf4; }
+    .w4 { border-color: #16a34a; }
+
+    /* WEEK 5 - Blue */
+    .w5 .week-header { background: #2563eb; color: #fff; }
+    .w5 .week-body { background: #eff6ff; }
+    .w5 { border-color: #2563eb; }
+
+    /* WEEK 6 - Purple */
+    .w6 .week-header { background: #7c3aed; color: #fff; }
+    .w6 .week-body { background: #f5f3ff; }
+    .w6 { border-color: #7c3aed; }
+
+    /* PRINT STYLES */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.12in;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        padding: 0;
+      }
+      nav { display: none !important; }
+      .print-btn { display: none !important; }
+
+      .sheet-title {
+        font-size: 6pt;
+        margin: 0;
+        padding: 0;
+        border-width: 0.5px;
+      }
+
+      .columns {
+        column-count: 3;
+        column-gap: 3px;
+        column-rule: 0.4px solid #999;
+      }
+
+      .week {
+        margin-bottom: 1px;
+        border-width: 0.4px;
+      }
+
+      .week-header {
+        padding: 0px 2px;
+        font-size: 5.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body {
+        padding: 0px 1px 0px 1px;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body ul {
+        padding-left: 5px;
+      }
+
+      code {
+        font-size: 5pt;
+      }
+
+      .week-body li {
+        margin-bottom: 0;
+      }
+
+      .w1 .week-header { background: #dc2626 !important; color: #fff !important; }
+      .w1 .week-body { background: #fef2f2 !important; }
+      .w2 .week-header { background: #ea580c !important; color: #fff !important; }
+      .w2 .week-body { background: #fff7ed !important; }
+      .w3 .week-header { background: #d97706 !important; color: #fff !important; }
+      .w3 .week-body { background: #fffbeb !important; }
+      .w4 .week-header { background: #16a34a !important; color: #fff !important; }
+      .w4 .week-body { background: #f0fdf4 !important; }
+      .w5 .week-header { background: #2563eb !important; color: #fff !important; }
+      .w5 .week-body { background: #eff6ff !important; }
+      .w6 .week-header { background: #7c3aed !important; color: #fff !important; }
+      .w6 .week-body { background: #f5f3ff !important; }
+    }
+
+    @media (max-width: 900px) {
+      .columns { column-count: 2; }
+    }
+    @media (max-width: 550px) {
+      .columns { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">SEAS 8410 MIDTERM</span>
+  <div class="nav-links">
+    <a href="week1.html">W1</a>
+    <a href="week2.html">W2</a>
+    <a href="week3.html">W3</a>
+    <a href="week4.html">W4</a>
+    <a href="week5.html">W5</a>
+    <a href="week6.html">W6</a>
+    <a href="cheatsheet.html" class="active">Cheat Sheet</a>
+    <a href="mega.html">Mega Review</a>
+    <a href="../index.html">Home</a>
+    <button class="print-btn" onclick="window.print()">Print</button>
+  </div>
+</nav>
+
+<div class="sheet-title">SEAS 8410 MIDTERM CHEAT SHEET (Weeks 1&ndash;6) | 25-30 MC | Lectures 1-6 | ~1.5 hrs | 1 cheat sheet (8.5x11 both sides) | Calculator + Excel available</div>
+
+<div class="columns">
+
+  <!-- WEEK 1 -->
+  <div class="week w1">
+    <div class="week-header">W1 - Visualization Fundamentals</div>
+    <div class="week-body">
+      <ul>
+        <li><b>CHART TYPES - WHEN TO USE:</b> Bar (compare categories, GAPS between bars), Scatter (2 variables, correlations, no line connecting), Line (trends over TIME, connected points), Pie (parts of whole - AVOID, hard to read, angle=rel.freq*360, 25%=90 degrees), Histogram (distribution of ONE numeric variable, bars TOUCH, x-axis=number ranges), Heatmap (matrix values, color intensity shows magnitude), Dot plot (small datasets, individual values), Stem-and-leaf (small datasets, preserves actual digits, stem=tens, leaf=ones).</li>
+        <li><b>BAR vs HISTOGRAM:</b> Bar = categories with GAPS between bars. Histogram = numeric ranges, bars TOUCH. If x-axis has labels = bar chart. If x-axis has number ranges = histogram. NEVER confuse these on exam.</li>
+        <li><b>WORD CLOUD:</b> Most repetitive word drawn BIGGER. Good for customer feedback/text analysis. Size proportional to frequency.</li>
+        <li><b>PERCEPTION HIERARCHY:</b> Position > Length > Angle > Area > Color for accuracy of human judgment. Use position-based encodings (bar charts) over area-based (pie charts) when precision matters.</li>
+        <li><b>PRE-ATTENTIVE ATTRIBUTES:</b> Color, size, orientation, shape - processed BEFORE conscious thought (within 200ms). Use for highlighting important data. Limited to ~4 distinct pre-attentive features before cognitive overload.</li>
+        <li><b>DATA-INK RATIO (Tufte):</b> = Data-ink / Total ink used. MAXIMIZE data ink, MINIMIZE chart junk. Remove: unnecessary gridlines, borders, backgrounds, 3D effects, decorative elements. "Above all else, show the data." Every drop of ink should present new info.</li>
+        <li><b>COLOR USE:</b> Sequential palette (low-to-high, single hue gradient), Diverging (center point, two hues diverge - good for pos/neg), Categorical (distinct unrelated groups, max ~7 colors). ~8% males colorblind (red-green most common). Tableau/Power BI can swap palettes for accessibility. Use color PURPOSEFULLY not haphazardly.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week w2">
+    <div class="week-header">W2 - Data Sources, Tools &amp; Statistical Foundations</div>
+    <div class="week-body">
+      <ul>
+        <li><b>SECURITY DATA SOURCES:</b> Network devices (switches, routers), firewalls, IDS/IPS, endpoint security (Norton etc), servers/apps, IAM/MFA/SSO, DLP, vulnerability scanners, threat intel feeds, honeypots, SIEM, cloud logs (AWS CloudWatch, Azure Defender/Sentinel), cloud access security brokers (CASB).</li>
+        <li><b>DATA FORMATS:</b> JSON (name-value pairs, current standard, replaced XML), CSV (legacy, simple flat files), Parquet (columnar, big data).</li>
+        <li><b>STORAGE - RELATIONAL SQL:</b> Oracle, MySQL, MS SQL, PostgreSQL. Structured, ACID transactions, star schema for reporting.</li>
+        <li><b>STORAGE - NoSQL:</b> MongoDB (document/JSON store), Redis (in-memory key-value cache), Cassandra (column-based, highly resilient), Neo4j (graph DB - nodes + relationships).</li>
+        <li><b>GRAPH DB:</b> Nodes + relationships. Natural for reasoning, social networks, fraud detection. "Friends within 5 hops" = trivial query (extremely hard in SQL with JOINs). Augments LLMs for reasoning/knowledge graphs.</li>
+        <li><b>HDFS (Hadoop):</b> Files chunked into 128MB blocks, replicated 3x across machines. Compute moves to data (not data to compute). Spark = execution engine. Linearly scalable - add nodes for more capacity.</li>
+        <li><b>OTHER STORAGE:</b> Object (S3, Azure Blob - versioning), Time-series (InfluxDB - indexed by timestamp), In-memory (Redis, SAP HANA - fuses transactional + reporting), Search/Log (Splunk = proprietary/Cisco, ELK = open source).</li>
+        <li><b>STAR SCHEMA:</b> Dimension tables (WHO/WHAT/WHERE/WHEN) + Fact tables (measurements/metrics). Optimized for reporting/analytics. Power BI and Tableau designed to read star schemas. Kimball methodology.</li>
+        <li><b>TOOLS - GENERAL PURPOSE (GP):</b> Swiss army knife. Power BI (drag-drop, connects to anything, PowerPoint integration, marketplace components, desktop+cloud, scheduling, free GWU license). Tableau (interactive, Data Flow for ETL, strong visual storytelling). Looker (Google). GP features: drag-drop, cloud+desktop, marketplace, connect to anything incl HDFS, scheduling, embed in presentations, predefined dashboards, ETL built-in.</li>
+        <li><b>TOOLS - SPECIALIZED:</b> Excel (quick analysis, pivots, ~1.5M row limit), Python (pandas/matplotlib/seaborn, most flexible, LLMs write code for you), Splunk (SIEM, file/index-based, event queries, results update as searched, now Cisco), ELK (open source: Elasticsearch+Logstash+Kibana), Grafana (time-series dashboards), ArcGIS (geospatial).</li>
+        <li><b>GARTNER MAGIC QUADRANT:</b> Leaders = Salesforce/Tableau, Microsoft/Power BI, Google/Looker. Evaluates vision + execution ability.</li>
+        <li><b>TELLING THE STORY:</b> Who is audience? What action should they take? What data supports the message? Structure: context -> insight -> action. "Getting the Visualization Done."</li>
+        <li><b>DESCRIPTIVE vs INFERENTIAL:</b> Descriptive = summarize data (mean, median, charts, tables). Inferential = use sample to draw conclusions about population (hypothesis tests, confidence intervals).</li>
+        <li><b>POPULATION vs SAMPLE:</b> Population = everything of interest. Sample = slice actually measured. Target pop (want to study) vs Sampled pop (actually measured). Can't measure everything (too expensive, impossible, destructive). Fix: take representative sample. Non-representative sample = wrong conclusions.</li>
+        <li><b>4 SAMPLING METHODS:</b> Simple Random (equal chance for each unit, default gold standard), Stratified (split into groups by characteristic, sample a BIT from EVERY group - ensures representation), Systematic (random start, then every m-th item, m=N/n), Cluster (pick a FEW whole groups randomly, take EVERYTHING in those groups).</li>
+        <li><b>STRATIFIED vs CLUSTER (EXAM TRAP):</b> Stratified = sample FROM every group (bit from each). Cluster = sample WHOLE groups (everything from a few). Example: stratified = sample students from every department. Cluster = pick 3 departments, survey ALL students in those 3.</li>
+        <li><b>SAMPLING TERMS:</b> Sampling unit (thing you pick/select), Sampling frame (complete list of all units), Variable (characteristic you measure on each unit).</li>
+        <li><b>4 DATA TYPES (NOIR):</b> Nominal (labels, NO order: eye color, gender, IP address, protocol, port number), Ordinal (labels, CAN order: satisfaction, severity low/med/high, military rank), Interval (numbers, no TRUE zero: temp C/F, dates, pH - 0 degrees C is NOT "no temperature"), Ratio (numbers, TRUE zero: height, weight, age, packet size, duration - 0 = none of it, ratios meaningful like "twice as heavy").</li>
+        <li><b>TYPE DECISION TREE:</b> Step 1: Label or Number? LABEL -> Step 2: Can you order/rank? No = NOMINAL. Yes = ORDINAL. NUMBER -> Step 3: Does zero mean "nothing/absence"? Yes = RATIO. No = INTERVAL. NOIR = increasing info: Nominal &lt; Ordinal &lt; Interval &lt; Ratio.</li>
+        <li><b>TRICKY EXAMPLES:</b> Port numbers = NOMINAL (not ratio! arithmetic on port numbers meaningless - port 80 is not "twice" port 40). Temperature C/F = INTERVAL (not ratio! 0 degrees C is not "no temperature"). Height/weight/age = RATIO. IP address = NOMINAL.</li>
+        <li><b>FREQUENCY TABLE:</b> Frequency f, relative freq = f/total, percentage = rel*100, cumulative freq = running sum. Class recipe: Range R = max - min. Number of classes m = 1 + 3.3*log10(n), rounded. Width = R/m, rounded UP. Bracket notation: [110,117) means 110 included, 117 excluded.</li>
+        <li><b>PIE CHART ANGLE:</b> Angle = relative frequency * 360 degrees. 25% of data = 0.25 * 360 = 90 degree slice.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week w3">
+    <div class="week-header">W3 - Endpoint Security, Preprocessing &amp; Numeric Measures</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ENDPOINT:</b> Any device on network - desktop, laptop, server, smartphone, IoT device, tablet. Each = potential attack vector. Data sources: antivirus/EDR logs, quarantined files, process execution logs.</li>
+        <li><b>ML PIPELINE:</b> Dataset -> Cleaning -> Feature Engineering -> Training Data -> Algorithm -> Model | New Data -> Score -> Evaluate. "Garbage In, Garbage Out" - data prep = 80% of ML work.</li>
+        <li><b>STEP ZERO - EXPLORE FIRST:</b> <code>df.describe()</code> (stats summary: count, mean, std, min, quartiles, max), <code>df.info()</code> (dtypes, null counts, memory), data dictionary. Understand shape, types, distributions BEFORE cleaning.</li>
+        <li><b>CLEANING COMMANDS:</b> <code>df.dropna(inplace=True)</code> drop all rows with any null, <code>df.dropna(subset=['col'])</code> drop only if specific col is null, <code>df.fillna(value)</code> fill nulls, <code>df.duplicated().any()</code> check for dupes, <code>df.drop_duplicates(inplace=True)</code>, <code>df.replace(old, new)</code>, <code>df.reset_index(drop=True)</code>, <code>df.astype(type)</code> convert types.</li>
+        <li><b>TEXT OPS:</b> <code>str.replace()</code>, <code>str.lower()</code>, <code>str.upper()</code>, <code>str.strip()</code> (remove leading/trailing whitespace).</li>
+        <li><b>df.loc:</b> <code>df.loc[row, col]</code> access by label, <code>df.loc[df['col']>5]</code> boolean mask filtering, <code>df.loc[0:5, 'A':'C']</code> slicing rows and columns by label.</li>
+        <li><b>IMPUTATION METHODS:</b> Mean/Median/Mode (simple, fast, underestimates variability), Constant Value (0, "Unknown" - good for categorical), Linear Interpolation (time-series with smooth trends), Forward Fill ffill (carry last known value forward), Backward Fill bfill (carry next known backward), KNN (average of k nearest neighbors, preserves relationships, O(n^2) slow), Model-based (regression/decision tree/neural net, best accuracy, most complex).</li>
+        <li><b>FEATURE ENGINEERING:</b> Create NEW features from existing data. "Secret sauce" of ML. Requires domain knowledge. Examples: time-of-day from timestamp, login frequency, failed-to-success ratio, financial stability index (combines income+education+balance). Transforms raw data into predictive signals.</li>
+        <li><b>NORMALIZATION:</b> Scale features so no single feature dominates due to unit differences. Accelerates model training. Ensures all features contribute equally regardless of original scale.</li>
+        <li><b>CENTER - MEAN:</b> X-bar = sum(Xi)/n. Arithmetic average. SENSITIVE to outliers - one billionaire in room of 10 makes "average income" misleading. Use for symmetric data.</li>
+        <li><b>CENTER - MEDIAN:</b> Middle value at rank position (n+1)/2. If n is even, average the two middle values. ROBUST to outliers (barely moves). Use for skewed data (income, home prices, salaries).</li>
+        <li><b>CENTER - MODE:</b> Most frequent value. Only center measure that works for NOMINAL/categorical data. Can be unimodal (1 peak), bimodal (2 peaks), multimodal (3+ peaks). A dataset CAN have no mode if all values appear equally.</li>
+        <li><b>SHAPE FROM CENTER:</b> Mean = Median = Mode -> symmetric (bell curve). Mode &lt; Median &lt; Mean -> RIGHT-skewed (tail stretches right, few large values pull mean up). Mean &lt; Median &lt; Mode -> LEFT-skewed (tail stretches left). MEMORY: "The mean chases the tail" - mean always pulled toward the long tail.</li>
+        <li><b>SPREAD - RANGE:</b> Range = max - min. Quick overview but uses only 2 data points. Very sensitive to outliers.</li>
+        <li><b>SPREAD - VARIANCE:</b> S^2 = sum(Xi - X-bar)^2 / (n-1). Why SQUARE deviations? Plain gaps would cancel to zero (positives and negatives cancel). Why n-1 (not n)? Bessel's correction - corrects underestimation bias in sample. Population variance uses N (no correction needed). VARIANCE IS IN SQUARED UNITS (e.g., inches^2).</li>
+        <li><b>SPREAD - STANDARD DEVIATION:</b> S = sqrt(S^2). Returns spread to ORIGINAL units. Tells you typical distance from mean. SD calculation: Data 4,2,5,1,3,6,2,4,3,5. Sum=35. Mean=3.5. Sum of Xi^2=145. S^2=(1/(n-1))*(SumXi^2 - n*X-bar^2) = (1/9)*(145-122.5) = 2.5. S=sqrt(2.5)=1.58.</li>
+        <li><b>PARAMETER vs STATISTIC:</b> Parameter = population measure, Greek letters (mu for mean, sigma for SD, sigma^2 for variance). Statistic = sample measure, Latin letters (X-bar for mean, S for SD, S^2 for variance). Same concept, different notation depending on population vs sample.</li>
+        <li><b>EMPIRICAL RULE (bell-shaped ONLY):</b> Within 1 SD = 68% of data. Within 2 SD = 95%. Within 3 SD = 99.7%. Security application: anything beyond 3 sigma = anomaly flag. "3 sigma out = this is weird, investigate it."</li>
+        <li><b>CHEBYSHEV'S THEOREM:</b> Works for ANY shape distribution (not just bell). At least 1 - 1/k^2 of data within k SDs of mean. k=2: at least 75%. k=3: at least 88.9%. Always gives LOOSER (more conservative) bounds than Empirical Rule.</li>
+        <li><b>Z-SCORE:</b> Z = (Xi - mean) / SD. How many SDs a value is from the mean. UNITLESS (allows comparison across different scales). |Z| > 3 = likely outlier in bell-shaped data. Z=0 means value equals the mean.</li>
+        <li><b>COVARIANCE:</b> Measures linear association between two variables. Positive = move together (both up or both down). Negative = move opposite. Units = product of original units (hard to interpret magnitude).</li>
+        <li><b>CORRELATION r:</b> r = Cov(X,Y) / (Sx * Sy). Standardized covariance. Range: [-1, +1]. +1 = perfect positive linear, -1 = perfect negative linear, 0 = no LINEAR relationship. UNITLESS. Correlation does NOT imply causation. Only measures LINEAR relationships (can miss curves).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week w4">
+    <div class="week-header">W4 - User Security &amp; Hypothesis Testing</div>
+    <div class="week-body">
+      <ul>
+        <li><b>USER DEFINED:</b> Any entity (human OR non-human) with user ID and system permissions. Includes bots, APIs, service accounts, automated processes. Not just people.</li>
+        <li><b>VERIZON DBIR 2025:</b> 60% breaches involve human element, 30% third-party involvement, 17% espionage-motivated. Initial access vectors: credential abuse 22%, vulnerability exploitation 20%, phishing 16%.</li>
+        <li><b>BREACH PATTERNS:</b> System Intrusion 53% (most common), Misc Errors, Social Engineering, Basic Web App Attacks, Privilege Misuse. Internal actors compromise 10x MORE records than external actors.</li>
+        <li><b>USER SECURITY DATA SOURCES:</b> Auth/access logs, user account info, network traffic logs, firewall logs, IDS/IPS logs, endpoint security logs, application logs, SIEM logs, incident response records, vulnerability assessment reports, security policies, external threat intel.</li>
+        <li><b>DEV DATA SOURCES:</b> Code repo logs (Git/SVN), CI/CD pipeline logs, APM (Application Performance Monitoring) data, change management records, privileged access logs, ACLs/RBAC configs.</li>
+        <li><b>MOBILE DATA:</b> App usage logs, device location, communication logs, social media activity.</li>
+        <li><b>PRIVACY LAWS:</b> GDPR (EU - consent required, data minimization, right to access/correct/delete, 72hr breach notification). CCPA (California - right to know/delete/opt-out of sale of personal info). PIPEDA (Canada). LGPD (Brazil). DPA 2018 (UK, post-Brexit GDPR equivalent).</li>
+        <li><b>HYPOTHESIS TESTING = COURTROOM:</b> Assume "nothing interesting" (H0), ask if evidence strong enough to overturn. Like a trial: defendant starts innocent (H0), prosecution must prove guilt (reject H0).</li>
+        <li><b>H0 (NULL HYPOTHESIS):</b> Boring default = status quo. ALWAYS contains = sign (e.g., mu = 1000, mu >= 500). Like "defendant is innocent." You NEVER "accept H0." You either REJECT H0 or FAIL TO REJECT H0. Never "proven innocent" - just "not enough evidence to convict."</li>
+        <li><b>H1 (ALTERNATIVE HYPOTHESIS):</b> Your claim/suspicion. Contains inequality (!=, &lt;, >). Like "defendant is guilty." H1 is what you're trying to gather evidence FOR.</li>
+        <li><b>ONE-TAILED vs TWO-TAILED:</b> One-tailed (H1: mu > mu0 or H1: mu &lt; mu0): rejection region in ONE tail only. Two-tailed (H1: mu != mu0): rejection regions in BOTH tails (alpha/2 in each). H1 decides WHERE rejection region goes. Alpha decides HOW BIG it is.</li>
+        <li><b>TEST COMPONENTS:</b> Test statistic = single number computed from sample data. Rejection region = range of values extreme enough to reject H0. Critical point = boundary between reject/don't reject regions. Acceptance region = where you fail to reject (NOT "accept").</li>
+        <li><b>TYPE I ERROR (alpha):</b> FALSE ALARM = reject a TRUE H0. IDS screams "attack!" but it was normal traffic. Probability = alpha (significance level). You CHOOSE alpha before looking at data.</li>
+        <li><b>TYPE II ERROR (beta):</b> MISSED DETECTION = fail to reject a FALSE H0. Real attack slips through undetected. Probability = beta.</li>
+        <li><b>POWER = 1 - beta:</b> Ability to correctly detect a real effect/difference. Higher power = better test. Want power >= 0.80 typically.</li>
+        <li><b>TRADEOFF:</b> Increase sensitivity -> more false alarms (Type I up). Quiet the alarms -> miss real attacks (Type II up). BIGGER SAMPLES reduce BOTH error types simultaneously.</li>
+        <li><b>ALPHA (SIGNIFICANCE LEVEL):</b> Probability of Type I error you're willing to tolerate. Common values: 0.01 (strict), 0.05 (standard), 0.10 (lenient). Chosen BEFORE looking at data, NEVER after.</li>
+        <li><b>6-STEP PROCEDURE:</b> 1. State H0 and H1 clearly 2. Pick significance level alpha 3. Choose a suitable test statistic 4. Identify the test statistic's probability distribution 5. Locate the rejection region(s) and critical point(s) 6. Compute the statistic from data and make decision (reject or fail to reject).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week w5">
+    <div class="week-header">W5 - Code Security &amp; Hypothesis Mechanics</div>
+    <div class="week-body">
+      <ul>
+        <li><b>CODE SECURITY:</b> Identifying, assessing, mitigating vulnerabilities in software code. Goal: prevent unauthorized access, data breaches. Ensures CIA (Confidentiality, Integrity, Availability). Code = instructions in any programming language.</li>
+        <li><b>VON NEUMANN ARCHITECTURE:</b> CPU (Control Unit + ALU) + Memory Unit + I/O devices. Instructions and data SHARE same memory. Fundamental vulnerability: data can become instructions (basis for ALL code injection attacks - SQL injection, buffer overflow, XSS).</li>
+        <li><b>HEARTBLEED (2014):</b> CVE-2014-0160. OpenSSL TLS heartbeat extension. Missing BOUNDS CHECK on payload length field. Attacker sends small payload but CLAIMS large length -> server returns payload + up to 64KB extra memory (private keys, passwords, session tokens). Fix: validate payload length before returning data. Affected ~17% of web servers globally.</li>
+        <li><b>SOFTWARE SUPPLY CHAIN ATTACK:</b> Threat actors tamper with third-party code to compromise downstream applications. Check Point: 925 attacks/week per org. Exposed secrets: credit cards, passwords, API tokens, certificates, private keys.</li>
+        <li><b>EQUIFAX (2017):</b> CVE-2017-5638. Apache Struts framework vulnerability. Patch available March 2017, breach discovered September 2017 (6 months!). 147 million people affected. Root cause: FAILED TO APPLY PATCH in timely manner. Lesson: patch management is critical.</li>
+        <li><b>XZ UTILS (2024):</b> CVE-2024-3094. "Jia Tan" (pseudonym) spent 3 YEARS becoming trusted maintainer through social engineering. Introduced multi-stage backdoor into liblzma library. Exploited glibc IFUNC mechanism to intercept RSA decryption calls in OpenSSH daemon (sshd). Potential RCE on millions of Linux servers. Most critical because it was DELIBERATE, not a mistake. Supply chain attack via trust exploitation.</li>
+        <li><b>CROWDSTRIKE GLOBAL OUTAGE (2024):</b> NOT a breach/hack but SQA-as-security case study. Channel File 291 configuration update contained bug causing out-of-bounds memory read in Windows sensor client. The "Content Validator" (code designed to CHECK if update was safe) had its OWN bug, allowing malformed data through to kernel driver. Result: BSOD on 8.5 million Windows systems globally. Lesson: single line of defective code = global "Denial of Service." SQA IS security.</li>
+        <li><b>CVE:</b> MITRE program. Identify, define, catalog publicly disclosed cybersecurity vulnerabilities. cve.mitre.org. NIST: National Institute of Standards and Technology - standards/guidelines for organizations.</li>
+        <li><b>10 STEPS TO SECURE CODE:</b> 1. Adopt secure coding practices (input validation, proper error handling, least privilege, secure session mgmt) 2. Perform code reviews (peer + automated) 3. Use SAST and DAST tools 4. Implement vulnerability management (track, prioritize, remediate) 5. Keep dependencies updated 6. Incorporate security testing in SDLC early 7. Use threat modeling 8. Establish secure deployment (environment hardening, access controls) 9. Monitor and audit continuously 10. Foster security culture.</li>
+        <li><b>SAST vs DAST:</b> SAST = Static Application Security Testing. Examines code WITHOUT executing. White-box (sees source). Finds bugs early in development. DAST = Dynamic Application Security Testing. Tests app WHILE RUNNING. Black-box (no source access). Finds runtime vulnerabilities. RULE: No Security Scans and Reviews -> No Code to Production.</li>
+        <li><b>Z-TEST STATISTIC:</b> Z = (X-bar - mu0) / (sigma / sqrt(n)). X-bar = sample mean. mu0 = value claimed by H0. sigma = known population SD. n = sample size. sigma/sqrt(n) = STANDARD ERROR.</li>
+        <li><b>STANDARD ERROR:</b> SE = sigma / sqrt(n). Measures how much sample means naturally wobble around true mean. Bigger n -> smaller SE -> same gap between X-bar and mu0 becomes MORE convincing. Z of 0.5 = meh. Z of 3 = very significant.</li>
+        <li><b>P-VALUE:</b> Probability of getting a result AT LEAST AS EXTREME as yours, ASSUMING H0 is true. The smallest alpha at which H0 would be rejected. Small p = data is surprising under H0 = evidence AGAINST H0. P-value is NOT P(H0 is true)!</li>
+        <li><b>DECISION RULE:</b> p-value &lt; alpha -> REJECT H0 (result too surprising to be chance, effect looks real). p-value >= alpha -> DO NOT REJECT H0 (result consistent with boring default, insufficient evidence).</li>
+        <li><b>P-VALUE vs REJECTION REGION:</b> Two methods, ALWAYS give same answer. P-value usually faster because software gives p directly.</li>
+        <li><b>TAIL DIRECTION FOR P-VALUE:</b> Left-sided (H1: mu &lt; mu0): p = P(Z &lt;= z_computed). Right-sided (H1: mu > mu0): p = P(Z >= z_computed). Two-sided (H1: mu != mu0): p = 2 * P(Z >= |z_computed|) -- DOUBLE the one-tail probability.</li>
+        <li><b>WORKED EXAMPLE:</b> Wire tensile strength. n=16, X-bar=967.8 psi, sigma=128 psi. Test H0: mu=1000 vs H1: mu&lt;1000, alpha=0.05. SE = 128/sqrt(16) = 128/4 = 32. Z = (967.8-1000)/32 = -32.2/32 = -1.006. Critical value (left-tail, alpha=0.05): z_crit = -1.645. Since -1.006 > -1.645 (NOT in rejection region), do not reject H0. P-value: P(Z &lt;= -1.006) = 0.1562. Since 0.1562 >= 0.05, do not reject. Both methods agree.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week w6">
+    <div class="week-header">W6 - App Security, Dashboards &amp; Outlier Detection</div>
+    <div class="week-body">
+      <ul>
+        <li><b>APPLICATION:</b> Any system (software/hardware) or API for specific tasks. Components: frontend + backend + data storage + communication channels. Application Security = protecting apps throughout lifecycle (design -> development -> deployment -> maintenance). Ensures CIA.</li>
+        <li><b>DASHBOARD DEFINITION (Stephen Few, 2006):</b> "A visual display of the most important information needed to achieve one or more objectives that has been consolidated in a single computer screen [or printed page] so it can be monitored at a glance." Key: SINGLE SCREEN, AT A GLANCE, most IMPORTANT info.</li>
+        <li><b>MACKINLAY CRITERION:</b> Two requirements: EXPRESSIVENESS (visualization shows ALL and ONLY the facts in the data - no more, no less) + EFFECTIVENESS (information conveyed is more readily perceived than in alternative visualizations - choose the BEST encoding).</li>
+        <li><b>13 DASHBOARD ANTI-PATTERNS (Stephen Few):</b> 1. Exceeding boundaries of single screen (scrolling/switching loses context, short-term memory holds only few chunks) 2. Supplying inadequate context (gauges without comparison - "compared to WHAT? forecast? industry?") 3. Displaying excessive detail or precision (10+ significant digits) 4. Choosing a deficient measure (raw budget vs actual when VARIANCE is what matters) 5. Choosing inappropriate visualization type (pie chart when bar easier to interpret) 6. Introducing meaningless variety (mixing chart types for no reason) 7. Using poorly designed visualization type (3D charts, confusing layouts) 8. Encoding quantitative data inaccurately (Y-axis NOT starting at 0, misleading proportions) 9. Arranging data poorly (top-left corner = prime real estate, related data far apart) 10. Highlighting important data ineffectively or not at all (everything equally prominent = nothing stands out) 11. Cluttering display with useless decoration (electronic panel look for sales dashboard) 12. Misusing or overusing color (haphazard, no purpose) 13. Designing an unattractive visual display.</li>
+        <li><b>BAR > PIE:</b> Humans judge LENGTH more accurately than ANGLE or AREA. Bar chart always better than pie for comparison. Pie chart only acceptable for showing simple proportions (and even then, bar is usually clearer).</li>
+        <li><b>DESIGN PRINCIPLES:</b> Top-left corner = most important info (eye starts there). Don't throw info on dashboard "just because you can." Related metrics near each other. Use consistent color coding throughout.</li>
+        <li><b>OUTLIER DEFINED:</b> A value FAR from the rest of the dataset. Can completely DISTORT an average. Salary example: 10 employees including CEO at $100K. Mean WITH outlier = $26K per person. Mean WITHOUT outlier = $17.78K. One value dragged average up ~50%.</li>
+        <li><b>MEAN vs MEDIAN WITH OUTLIERS:</b> Mean is FRAGILE (outliers drag it dramatically). Median is TOUGH/ROBUST (barely moves with outliers: 17.5 vs 17.0 in salary example). ALWAYS report median for skewed data (salaries, home prices, net worth).</li>
+        <li><b>BOXPLOT:</b> Visual outlier detector built from QUARTILES (rank-based, so itself outlier-resistant). Components: Q1 (first quartile, 25th percentile), Median/Q2 (50th percentile - line in box), Q3 (third quartile, 75th percentile). Box spans Q1 to Q3. IQR = Q3 - Q1 (width of middle 50% of data). Whiskers extend to last data point within fences.</li>
+        <li><b>IQR RULE - FENCES:</b> Mild outlier fence: below Q1 - 1.5*IQR or above Q3 + 1.5*IQR ("step 1.5 box-widths past each edge = mildly weird"). Extreme outlier fence: below Q1 - 3*IQR or above Q3 + 3*IQR ("step 3 box-widths = seriously weird"). TRAP: fences calculated from Q1/Q3, NOT from min/max!</li>
+        <li><b>WHAT TO DO WITH OUTLIERS:</b> Extreme (past 3xIQR) -> usually discard (badly skew results, keep only if clearly genuine and meaningful). Mild (past 1.5xIQR) -> investigate first (could be data-entry error, sensor glitch, or real rare event - don't auto-delete).</li>
+        <li><b>WHEN YOU CAN'T DELETE:</b> Down-weight observations or use ROBUST statistics: median (instead of mean), MAD (Median Absolute Deviation), Huber loss, Bisquare loss, trimmed mean. These methods aren't thrown off by extreme values.</li>
+        <li><b>SECURITY ANGLE ON OUTLIERS:</b> In stats class, outlier = noise to remove. In SECURITY, outlier = often THE WHOLE POINT. The login from another continent, the process spawning 10,000 connections, the 3AM data exfiltration. INVESTIGATE before discarding. The outlier might be the attack you're hunting.</li>
+        <li><b>IQR WORKED EXAMPLE:</b> Q1=10, Q3=30. IQR = 30-10 = 20. Mild fence: [10 - 1.5*20, 30 + 1.5*20] = [10-30, 30+30] = [-20, 60]. Extreme fence: [10 - 3*20, 30 + 3*20] = [10-60, 30+60] = [-50, 90]. Value of 65: outside mild fence (65>60) but inside extreme fence (65&lt;90) = MILD outlier. Value of 95: outside extreme fence (95>90) = EXTREME outlier.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- KEY FORMULAS -->
+  <div class="week" style="border-color: #1565C0;">
+    <div class="week-header" style="background: #1565C0; color: #fff;">KEY FORMULAS</div>
+    <div class="week-body" style="background: #e3f2fd;">
+      <ul>
+        <li><b>Z-TEST:</b> Z = (X-bar - mu0) / (sigma / sqrt(n)). Reject if |Z| > Z_alpha/2 (two-tail) or Z > Z_alpha (right-tail) or Z &lt; -Z_alpha (left-tail). Common critical values: Z_0.05 = 1.645 (one-tail), Z_0.025 = 1.96 (two-tail at alpha=0.05).</li>
+        <li><b>VARIANCE:</b> S^2 = sum(Xi - X-bar)^2 / (n-1) [SAMPLE, use n-1]. sigma^2 = sum(Xi - mu)^2 / N [POPULATION, use N]. Variance is in SQUARED units.</li>
+        <li><b>STANDARD DEVIATION:</b> S = sqrt(S^2). Back in original units. Typical distance from mean.</li>
+        <li><b>STANDARD ERROR:</b> SE = sigma / sqrt(n). Larger n -> smaller SE -> more precise estimate of population mean. Measures wobble of sample means.</li>
+        <li><b>IQR FENCES:</b> IQR = Q3 - Q1. Mild: [Q1 - 1.5*IQR, Q3 + 1.5*IQR]. Extreme: [Q1 - 3*IQR, Q3 + 3*IQR]. Points outside = outliers.</li>
+        <li><b>CLASS RECIPE:</b> R = max - min. m = 1 + 3.3*log10(n), round. Width = R/m, round UP. Brackets: [lower, upper).</li>
+        <li><b>EMPIRICAL RULE:</b> 68-95-99.7% within 1-2-3 SD. Bell-shaped data ONLY. Chebyshev: at least 1-1/k^2 within k SD (ANY shape). k=2: 75%. k=3: 88.9%.</li>
+        <li><b>CV (Coefficient of Variation):</b> CV = (S / X-bar) * 100%. Compares variability across different units/scales. Higher CV = more relative spread.</li>
+        <li><b>CORRELATION:</b> r = Cov(X,Y) / (Sx * Sy). Range [-1, +1]. Unitless. r = 0 means no LINEAR relationship. Correlation != causation.</li>
+        <li><b>MEDIAN POSITION:</b> Rank = (n+1)/2. If n is even, average the two middle values. Robust to outliers.</li>
+        <li><b>Z-SCORE:</b> Z = (Xi - mean) / SD. Unitless. |Z| > 3 = likely outlier (bell-shaped). Z = 0 means at the mean.</li>
+        <li><b>PIE ANGLE:</b> Angle = relative frequency * 360 degrees. Relative freq = count / total.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DATA TYPES DECISION FLOW -->
+  <div class="week" style="border-color: #e65100;">
+    <div class="week-header" style="background: #e65100; color: #fff;">DATA TYPES DECISION FLOW</div>
+    <div class="week-body" style="background: #fff3e0;">
+      <ul>
+        <li><b>STEP 1:</b> Is it a NUMBER or a LABEL? LABEL -> Step 2. NUMBER -> Step 3.</li>
+        <li><b>STEP 2 (Label):</b> Can you ORDER/RANK them? NO = NOMINAL (gender, blood type, IP, protocol, port#). YES = ORDINAL (severity low/med/high, satisfaction, military rank).</li>
+        <li><b>STEP 3 (Number):</b> Does ZERO mean "nothing/absence"? YES = RATIO (age, weight, height, packets, bytes, duration, income). NO = INTERVAL (temp C/F, dates, pH, calendar year).</li>
+        <li><b>NOIR HIERARCHY:</b> Nominal &lt; Ordinal &lt; Interval &lt; Ratio = increasing information. Ratio is richest (all arithmetic operations valid: +, -, *, /).</li>
+        <li><b>SECURITY TRICKY CASES:</b> IP address = NOMINAL (label, no meaningful order). Port number = NOMINAL (NOT ratio - port 80 is not "twice" port 40, arithmetic meaningless). Severity rating = ORDINAL. Timestamp/date = INTERVAL. Packet size in bytes = RATIO. Duration in seconds = RATIO. Temperature C/F = INTERVAL (0 degrees is NOT absence of temperature).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAM TRAPS -->
+  <div class="week" style="border-color: #b71c1c;">
+    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS - 20 MOST LIKELY MISTAKES</div>
+    <div class="week-body" style="background: #ffebee;">
+      <ul>
+        <li><b>1.</b> "Accept H0" is WRONG. Correct: "fail to reject H0" or "insufficient evidence to reject."</li>
+        <li><b>2.</b> Z-test tests the MEAN (not median). Use median for skewed data descriptions, but z-test is about mu.</li>
+        <li><b>3.</b> Use n-1 for SAMPLE variance (Bessel correction). Use N for population variance. Get this wrong = wrong answer.</li>
+        <li><b>4.</b> P-value is NOT P(H0 is true). It IS P(getting data this extreme OR more extreme | H0 is true).</li>
+        <li><b>5.</b> Large p-value does NOT "prove H0 true." It means insufficient evidence to reject. Absence of evidence != evidence of absence.</li>
+        <li><b>6.</b> Pie chart BAD for comparison (angle/area perception poor). Bar chart ALWAYS better for comparing values.</li>
+        <li><b>7.</b> "Mean chases the tail." Right-skew -> mean > median > mode. Left-skew -> mean &lt; median &lt; mode.</li>
+        <li><b>8.</b> Port numbers are NOMINAL not ratio. Arithmetic on port numbers is meaningless.</li>
+        <li><b>9.</b> IQR fence = 1.5*IQR added/subtracted from Q1 and Q3 (NOT from min/max, NOT 1.5*Q1).</li>
+        <li><b>10.</b> Type I = false alarm (alpha, reject true H0). Type II = missed detection (beta, fail to reject false H0). Power = 1 - beta.</li>
+        <li><b>11.</b> SAST = static, no execution, WHITE-box, early dev. DAST = dynamic, app running, BLACK-box, runtime.</li>
+        <li><b>12.</b> Data-ink ratio: MAXIMIZE (more data, less junk). Tufte says remove everything that doesn't show data.</li>
+        <li><b>13.</b> Stratified = sample FROM every group (bit from each). Cluster = take WHOLE groups (everything from few). EASY TO CONFUSE.</li>
+        <li><b>14.</b> Temperature C/F = INTERVAL (not ratio). 0 degrees C does NOT mean "no temperature." Height/weight/age = RATIO.</li>
+        <li><b>15.</b> Bar chart has GAPS between bars (categories). Histogram bars TOUCH (continuous numeric ranges).</li>
+        <li><b>16.</b> Variance is in SQUARED units. That's why we take sqrt to get SD back in original units.</li>
+        <li><b>17.</b> Alpha chosen BEFORE looking at data, never after. H1 determines WHERE rejection region goes, alpha determines HOW BIG.</li>
+        <li><b>18.</b> Two-sided test: DOUBLE the tail probability. p = 2 * P(Z >= |z|). Forgetting to double = wrong p-value.</li>
+        <li><b>19.</b> Heartbleed fix = validate payload length. Equifax = apply patch timely. XZ = trust exploitation over 3 years.</li>
+        <li><b>20.</b> Correlation does NOT mean causation. r only measures LINEAR relationships. Non-linear pattern can have r near 0.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- IMPUTATION & CLEANING -->
+  <div class="week" style="border-color: #0f766e;">
+    <div class="week-header" style="background: #0f766e; color: #fff;">IMPUTATION METHODS COMPARISON</div>
+    <div class="week-body" style="background: #f0fdfa;">
+      <ul>
+        <li><b>MEAN/MEDIAN/MODE:</b> Simplest. Fast. Drawback: underestimates variability (makes data look less spread). Use for: MCAR data, small % missing, quick-and-dirty.</li>
+        <li><b>CONSTANT VALUE:</b> Replace all missing with fixed value (0, "Unknown", "N/A"). Use for: categorical data, when missingness itself is informative.</li>
+        <li><b>LINEAR INTERPOLATION:</b> Estimate between two known data points using straight line. Use for: time-series with smooth, gradual trends.</li>
+        <li><b>FORWARD FILL (ffill):</b> Carry last known value forward in time. Use for: time-series, status data, sensor readings. Assumes "stays the same until changed."</li>
+        <li><b>BACKWARD FILL (bfill):</b> Carry next known value backward. Use for: when future value is better estimate than past value.</li>
+        <li><b>KNN IMPUTATION:</b> Average of k nearest neighbors (using distance in feature space). Better: preserves relationships between variables. Slower: O(n^2) computational complexity. Good for: moderate missing data with complex patterns.</li>
+        <li><b>MODEL-BASED:</b> Use regression, decision tree, or neural net to PREDICT missing values from other features. Best accuracy. Most complex to implement. Use for: large datasets with many features, when accuracy critical.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TOOL CAPABILITIES -->
+  <div class="week" style="border-color: #6d28d9;">
+    <div class="week-header" style="background: #6d28d9; color: #fff;">TOOL CAPABILITIES &amp; DATA STORAGE QUICK REF</div>
+    <div class="week-body" style="background: #f5f3ff;">
+      <ul>
+        <li><b>GENERAL-PURPOSE (GP) TOOLS:</b> Power BI, Tableau, Looker = Swiss army knife. Features: drag-drop interface, cloud + desktop deployment, marketplace/gallery of community components, connect to ANY data source (including HDFS/Hadoop), scheduling/refresh, embed in PowerPoint/web, predefined dashboard templates, built-in ETL/data prep.</li>
+        <li><b>POWER BI SPECIFICS:</b> Microsoft. Desktop app (free) + Cloud service. DAX formula language. Connects to 100+ data sources. Real-time dashboards. Natural language Q&A. Free license through GWU. PowerPoint integration for presentations.</li>
+        <li><b>TABLEAU SPECIFICS:</b> Salesforce. Known for visual storytelling. Tableau Prep = ETL tool (Data Flow). Interactive filtering, drill-down. Designed to read star schemas. Gartner Leader.</li>
+        <li><b>SPLUNK:</b> SIEM tool. Now owned by Cisco. Proprietary (not open source). File/index-based storage. SPL (Search Processing Language). Event-based queries - results update AS index is searched. Real-time monitoring. Expensive licensing.</li>
+        <li><b>ELK STACK:</b> Open-source alternative to Splunk. Elasticsearch (search/analytics engine) + Logstash (data ingestion/transform) + Kibana (visualization). Free but requires more setup/maintenance.</li>
+        <li><b>PYTHON:</b> pandas (dataframes, read_csv, describe, groupby), matplotlib (base plotting), seaborn (statistical viz, built on matplotlib). Most flexible tool. LLMs can generate code. No licensing cost.</li>
+        <li><b>EXCEL:</b> Quick first-look analysis. Pivot tables for aggregation. ~1.5M row limit. Good for small datasets and ad-hoc exploration. Calculator available on exam.</li>
+        <li><b>SPECIALIZED TOOLS:</b> Grafana (time-series dashboards, infrastructure monitoring), ArcGIS (geospatial/map visualization), D3.js (custom web-based viz).</li>
+        <li><b>HDFS DETAILS:</b> Hadoop Distributed File System. 128MB block size. 3x replication factor (fault tolerance). "Compute moves to data" paradigm (not data to compute). Spark = in-memory execution engine (replaced MapReduce). Linearly scalable: add nodes = add capacity.</li>
+        <li><b>GRAPH DB (Neo4j):</b> Stores nodes + relationships natively. Natural for: social networks, fraud rings, attack paths, knowledge graphs. "Friends within 5 hops" = simple query (extremely complex JOIN chain in SQL). Augments LLMs for structured reasoning.</li>
+        <li><b>SAP HANA:</b> In-memory database. FUSES transactional (OLTP) + reporting/analytics (OLAP) into one system. No need for separate data warehouse. Extremely fast for both workloads.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECURITY DATA SOURCES -->
+  <div class="week" style="border-color: #0369a1;">
+    <div class="week-header" style="background: #0369a1; color: #fff;">SECURITY DATA SOURCES BY DOMAIN</div>
+    <div class="week-body" style="background: #e0f2fe;">
+      <ul>
+        <li><b>NETWORK:</b> Switches, routers, firewalls (allow/deny logs), IDS/IPS (signature + anomaly alerts), NetFlow/packet captures, DNS query logs, proxy logs, port scan detection.</li>
+        <li><b>ENDPOINT:</b> Antivirus/EDR (CrowdStrike, Carbon Black) logs, quarantined files, process execution/creation logs, USB device connections, file integrity monitoring, registry changes.</li>
+        <li><b>IDENTITY/AUTH:</b> IAM logs, MFA challenge/response, SSO events, failed login attempts, privilege escalation, RBAC/ACL configuration changes, service account activity.</li>
+        <li><b>APPLICATION:</b> App event/error logs, API call logs (who called what when), user session data, configuration changes, performance metrics (APM), database query logs.</li>
+        <li><b>CLOUD:</b> AWS CloudWatch/GuardDuty/CloudTrail, Azure Defender/Sentinel/Activity Log, GCP Security Command Center. Cloud audit trails, API call logs, resource creation/deletion.</li>
+        <li><b>VULNERABILITY:</b> Scanner output (Nessus, Qualys, Rapid7), patch compliance status, CVE databases (MITRE), penetration test results, bug bounty reports.</li>
+        <li><b>THREAT INTEL:</b> External indicator feeds (IOCs: IPs, hashes, domains), TTPs (MITRE ATT&CK), honeypot captures, dark web monitoring, ISAC sharing, STIX/TAXII feeds.</li>
+        <li><b>DLP &amp; MAIL:</b> Data Loss Prevention alerts, email gateway logs, sensitive file movement tracking, USB copy attempts, cloud upload monitoring.</li>
+        <li><b>SIEM:</b> Aggregates ALL above sources. Correlation engine. Can be collector AND source. Multi-tier: domain SIEM -> enterprise SIEM. Examples: Splunk, IBM QRadar, Microsoft Sentinel, Elastic SIEM.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BREACHES & CVEs -->
+  <div class="week" style="border-color: #dc2626;">
+    <div class="week-header" style="background: #dc2626; color: #fff;">KEY BREACHES, CVEs &amp; CASE STUDIES</div>
+    <div class="week-body" style="background: #fef2f2;">
+      <ul>
+        <li><b>HEARTBLEED (2014):</b> CVE-2014-0160. OpenSSL. Missing bounds check on TLS heartbeat payload length. Returns up to 64KB extra memory per request. ~17% web servers affected. Fix = validate length. Lesson: one missing check = catastrophic data leak.</li>
+        <li><b>EQUIFAX (2017):</b> CVE-2017-5638. Apache Struts. 147M records. Patch available MONTHS before breach. Lesson: patch management failure. Most preventable major breach.</li>
+        <li><b>XZ UTILS (2024):</b> CVE-2024-3094. 3-year social engineering to become trusted maintainer. Backdoor in liblzma targeting sshd via glibc IFUNC. Deliberate (not accident). Supply chain. Caught by accident (Andres Freund noticed 500ms SSH delay).</li>
+        <li><b>CROWDSTRIKE (2024):</b> Config update (Channel File 291). Content Validator had its own bug. 8.5M Windows BSOD. NOT a hack - software quality failure. Single defective line = global outage. Lesson: QA/testing IS security.</li>
+        <li><b>SOLARWINDS (2020):</b> SUNBURST backdoor inserted into Orion build process. 18,000+ orgs received compromised update. US govt agencies breached. Supply chain attack via build system compromise.</li>
+        <li><b>CVE PROGRAM:</b> MITRE maintains. Unique ID for each public vulnerability (CVE-YEAR-NUMBER). NIST NVD adds severity scores (CVSS). Used industry-wide for tracking/communication.</li>
+        <li><b>SUPPLY CHAIN ATTACKS:</b> Tamper with third-party code/tools to compromise downstream users. Growing trend: 925 attacks/week per org (Check Point). Trust in open-source maintainers = vulnerability. Dependencies = attack surface.</li>
+        <li><b>SECURE CODE RULE:</b> No Security Scans and Reviews -> No Code to Production. Period. Both SAST (static, before deploy) and DAST (dynamic, after deploy) required.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CORRELATION & WORKED EXAMPLES -->
+  <div class="week" style="border-color: #0891b2;">
+    <div class="week-header" style="background: #0891b2; color: #fff;">WORKED EXAMPLES &amp; CALCULATIONS</div>
+    <div class="week-body" style="background: #ecfeff;">
+      <ul>
+        <li><b>SD CALCULATION:</b> Data: 4,2,5,1,3,6,2,4,3,5 (n=10). Sum=35. Mean=3.5. Sum of Xi^2 = 16+4+25+1+9+36+4+16+9+25 = 145. S^2 = (1/9)*(145 - 35^2/10) = (1/9)*(145-122.5) = (1/9)*22.5 = 2.5. S = sqrt(2.5) = 1.58.</li>
+        <li><b>Z-SCORE EXAMPLE:</b> Mean=42, SD=11. Data point=53. Z = (53-42)/11 = 11/11 = 1.0. This point is exactly 1 SD above mean. Within normal range (68% band). Not an outlier.</li>
+        <li><b>IQR EXAMPLE:</b> Data quartiles: Q1=10, Q3=30. IQR = 30-10 = 20. Mild fence: [10-30, 30+30] = [-20, 60]. Extreme fence: [10-60, 30+60] = [-50, 90]. Test value 65: mild outlier (outside 60 but inside 90). Test value 95: extreme outlier (outside 90).</li>
+        <li><b>CLASS RECIPE EXAMPLE:</b> n=40 observations, min=110, max=152. R = 152-110 = 42. m = 1 + 3.3*log10(40) = 1 + 3.3*1.602 = 1 + 5.29 = 6.29, round to 6 classes. Width = 42/6 = 7. Classes: [110,117), [117,124), [124,131), [131,138), [138,145), [145,152].</li>
+        <li><b>Z-TEST EXAMPLE:</b> H0: mu=1000, H1: mu&lt;1000 (left-tail), alpha=0.05. n=16, X-bar=967.8, sigma=128. SE = 128/4 = 32. Z = (967.8-1000)/32 = -1.006. Critical value = -1.645. Since -1.006 > -1.645, do NOT reject H0. p = P(Z &lt;= -1.006) = 0.1562 > 0.05, same conclusion.</li>
+        <li><b>CHEBYSHEV EXAMPLE:</b> Mean=100, SD=15. k=2: at least 1-1/4=75% of data within [70, 130]. k=3: at least 1-1/9=88.9% within [55, 145]. Works regardless of distribution shape.</li>
+        <li><b>EMPIRICAL RULE EXAMPLE:</b> Bell-shaped data, mean=500, SD=50. 68% within [450, 550]. 95% within [400, 600]. 99.7% within [350, 650]. Value of 360 = within 3 SD (normal). Value of 340 = beyond 3 SD (anomaly flag).</li>
+        <li><b>VARIANCE SHORTCUT:</b> S^2 = [sum(Xi^2) - n*(X-bar)^2] / (n-1). Faster than computing each deviation separately. Same answer.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HYPOTHESIS TESTING SUMMARY -->
+  <div class="week" style="border-color: #475569;">
+    <div class="week-header" style="background: #475569; color: #fff;">HYPOTHESIS TESTING - COMPLETE REFERENCE</div>
+    <div class="week-body" style="background: #f8fafc;">
+      <ul>
+        <li><b>SETUP:</b> H0 always has = (mu=value, mu>=value, mu&lt;=value). H1 has inequality (!=, &lt;, >). H1 is what researcher suspects/wants to prove.</li>
+        <li><b>LEFT-TAIL TEST:</b> H1: mu &lt; mu0. Rejection region on LEFT. Reject if Z &lt; -Z_alpha. p = P(Z &lt;= z_computed). Example: "mean is LESS than claimed."</li>
+        <li><b>RIGHT-TAIL TEST:</b> H1: mu > mu0. Rejection region on RIGHT. Reject if Z > Z_alpha. p = P(Z >= z_computed). Example: "mean is GREATER than claimed."</li>
+        <li><b>TWO-TAIL TEST:</b> H1: mu != mu0. Rejection regions on BOTH sides. Reject if |Z| > Z_alpha/2. p = 2*P(Z >= |z_computed|). Example: "mean DIFFERS from claimed (either direction)."</li>
+        <li><b>COMMON CRITICAL VALUES:</b> alpha=0.10: Z=1.28 (one-tail), 1.645 (two-tail). alpha=0.05: Z=1.645 (one-tail), 1.96 (two-tail). alpha=0.01: Z=2.33 (one-tail), 2.576 (two-tail).</li>
+        <li><b>P-VALUE INTERPRETATION:</b> p &lt; 0.01 = very strong evidence against H0. 0.01 &lt; p &lt; 0.05 = moderate evidence. 0.05 &lt; p &lt; 0.10 = weak evidence. p > 0.10 = little/no evidence against H0. Always compare to YOUR chosen alpha.</li>
+        <li><b>SECURITY ANALOGY:</b> H0 = "system is secure/normal." Type I (alpha) = false alarm (alert on normal traffic, wastes analyst time). Type II (beta) = missed attack (real intrusion goes undetected, catastrophic). In security, Type II is usually WORSE (miss a breach vs false alarm).</li>
+        <li><b>INCREASING POWER:</b> Increase sample size n (most effective), increase alpha (accept more false alarms), increase true effect size (can't control), decrease variability (better measurements). Bigger n reduces BOTH Type I and Type II errors.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DASHBOARD ANTI-PATTERNS EXPANDED -->
+  <div class="week" style="border-color: #475569;">
+    <div class="week-header" style="background: #374151; color: #fff;">13 ANTI-PATTERNS - EXPANDED WITH EXAMPLES</div>
+    <div class="week-body" style="background: #f9fafb;">
+      <ul>
+        <li><b>#1 EXCEEDING SCREEN:</b> Scrolling/tab-switching = context lost. Short-term memory holds ~4 chunks. If user must scroll, most important info may be invisible. Solution: prioritize ruthlessly, remove non-essential.</li>
+        <li><b>#2 NO CONTEXT:</b> Gauge showing "85%" means nothing alone. Compared to WHAT? Last month? Industry average? Target? Always provide comparison baseline (forecast, budget, historical, benchmark).</li>
+        <li><b>#3 EXCESSIVE PRECISION:</b> Revenue "$1,234,567.89" on a dashboard. Nobody needs 9 digits at a glance. Round to meaningful precision: "$1.2M" conveys same insight faster.</li>
+        <li><b>#4 DEFICIENT MEASURE:</b> Showing "Budget: $500K, Actual: $480K" when what matters is the VARIANCE ($20K under, 4% savings). Choose the measure that directly answers the question.</li>
+        <li><b>#5 WRONG VIZ TYPE:</b> Using pie chart to compare 12 categories (impossible to read small slices). Using line chart for categorical data. Match chart type to data relationship.</li>
+        <li><b>#6 MEANINGLESS VARIETY:</b> Using bar, line, pie, gauge, and scatter on same dashboard for no analytical reason. Variety for variety's sake = cognitive load. Use different types only when data REQUIRES it.</li>
+        <li><b>#7 BAD VIZ DESIGN:</b> 3D bar charts (depth distorts height perception). Exploded pie charts. Circular gauge when linear scale clearer. Keep it simple and 2D.</li>
+        <li><b>#8 INACCURATE ENCODING:</b> Y-axis starting at 50 instead of 0 makes 5% difference look like 500% difference. Truncated axes MISLEAD. Dual-axis charts can also mislead if scales differ wildly.</li>
+        <li><b>#9 POOR ARRANGEMENT:</b> Most important info should be TOP-LEFT (where eye goes first). Related metrics should be NEAR each other. Don't make user hunt for context across the screen.</li>
+        <li><b>#10 BAD HIGHLIGHTING:</b> If everything is bold/colored/large, NOTHING stands out. Highlight only what needs immediate attention. Use color/size sparingly for alerts and KPIs.</li>
+        <li><b>#11 DECORATION CLUTTER:</b> Faux-metal gauge borders, gradient backgrounds, decorative images. Every pixel should earn its place by conveying data or aiding comprehension.</li>
+        <li><b>#12 COLOR MISUSE:</b> Random colors with no meaning. Red for "good" and green for "bad" (reversed convention). Too many colors (>7 categories = hard to distinguish). Be intentional.</li>
+        <li><b>#13 UGLY DESIGN:</b> Poor alignment, inconsistent fonts, clashing colors, cramped layout. Aesthetics matter for credibility and usability. Clean design = trusted dashboard.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PRIVACY LAWS & DBIR -->
+  <div class="week" style="border-color: #16a34a;">
+    <div class="week-header" style="background: #065f46; color: #fff;">PRIVACY LAWS, DBIR &amp; SAMPLING QUICK REF</div>
+    <div class="week-body" style="background: #ecfdf5;">
+      <ul>
+        <li><b>GDPR (EU):</b> General Data Protection Regulation. Consent required. Data minimization (collect only what needed). Rights: access, correct, delete ("right to be forgotten"), portability. 72-hour breach notification. Fines up to 4% global revenue or 20M EUR.</li>
+        <li><b>CCPA (California):</b> Right to KNOW what data collected. Right to DELETE. Right to OPT-OUT of SALE of personal info. Applies to businesses meeting revenue/data thresholds. California Privacy Rights Act (CPRA) expanded it.</li>
+        <li><b>OTHER LAWS:</b> PIPEDA (Canada - consent-based, similar to GDPR). LGPD (Brazil - modeled after GDPR). DPA 2018 (UK - post-Brexit GDPR equivalent, maintains similar protections).</li>
+        <li><b>DBIR KEY STATS:</b> 60% breaches = human element. 30% = third-party involvement. 17% = espionage-motivated. Credential abuse = 22% of initial access. Vulnerability exploitation = 20%. Phishing = 16%. System Intrusion = 53% of breach patterns. Internal actors = 10x more records than external.</li>
+        <li><b>SAMPLING DECISION:</b> Want representation of ALL subgroups? -> Stratified. Limited budget, groups are geographically scattered? -> Cluster. No special requirements? -> Simple Random. Have ordered list? -> Systematic (every m-th).</li>
+        <li><b>SIMPLE RANDOM:</b> Every unit has EQUAL chance of selection. Gold standard. Use random number generator or lottery. Requires complete sampling frame (list of all units).</li>
+        <li><b>SYSTEMATIC:</b> Pick random start, then every m-th item. m = N/n (population size / desired sample size). Risk: if data has hidden periodicity matching m, sample is biased.</li>
+        <li><b>NON-REPRESENTATIVE SAMPLE:</b> Leads to WRONG conclusions about population. Sample MUST represent the population it claims to describe. Selection bias = biggest threat to validity.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
