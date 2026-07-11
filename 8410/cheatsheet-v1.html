@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEAS 8410 - Midterm Cheat Sheet v2</title>
+  <title>SEAS 8410 - Midterm Cheat Sheet</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -219,7 +219,7 @@
 <body>
 
 <nav>
-  <span class="nav-brand">SEAS 8410 MIDTERM v2</span>
+  <span class="nav-brand">SEAS 8410 MIDTERM</span>
   <div class="nav-links">
     <a href="week1.html">W1</a>
     <a href="week2.html">W2</a>
@@ -227,14 +227,14 @@
     <a href="week4.html">W4</a>
     <a href="week5.html">W5</a>
     <a href="week6.html">W6</a>
-    <a href="cheatsheet-v2.html" class="active">Cheat Sheet v2</a>
+    <a href="cheatsheet.html" class="active">Cheat Sheet</a>
     <a href="mega.html">Mega Review</a>
     <a href="../index.html">Home</a>
     <button class="print-btn" onclick="window.print()">Print</button>
   </div>
 </nav>
 
-<div class="sheet-title">SEAS 8410 MIDTERM CHEAT SHEET v2 (Weeks 1&ndash;6) | 25-30 MC | Lectures 1-6 | ~1.5 hrs | 1 cheat sheet (8.5x11 both sides) | Calculator + Excel available</div>
+<div class="sheet-title">SEAS 8410 MIDTERM CHEAT SHEET (Weeks 1&ndash;6) | 25-30 MC | Lectures 1-6 | ~1.5 hrs | 1 cheat sheet (8.5x11 both sides) | Calculator + Excel available</div>
 
 <div class="columns">
 
@@ -477,17 +477,17 @@
     <div class="week-header" style="background: #6d28d9; color: #fff;">TOOL CAPABILITIES &amp; DATA STORAGE QUICK REF</div>
     <div class="week-body" style="background: #f5f3ff;">
       <ul>
-        <li><b>Excel:</b> Pivot tables, ~1.5M row limit, quick first-look analysis, calculator on exam.</li>
-        <li><b>Power BI:</b> GP tool, drag-drop, cloud+desktop, PowerPoint integration, free GWU license, DAX language, Gartner Leader (Microsoft).</li>
-        <li><b>Tableau:</b> GP tool, interactive visual storytelling, Data Flow = ETL, star schema optimized, Gartner Leader (Salesforce).</li>
-        <li><b>Splunk:</b> SIEM, file/index-based, owned by Cisco, NOT open source, SPL queries, results update as searched, expensive.</li>
-        <li><b>ELK:</b> Open-source alternative to Splunk. Elasticsearch (search) + Logstash (ingest) + Kibana (viz).</li>
-        <li><b>Python:</b> pandas/matplotlib/seaborn, most flexible, LLMs write code for you, no license cost.</li>
-        <li><b>GP vs SPECIALIZED:</b> GP = Swiss army knife (Power BI, Tableau, Looker) - drag-drop, connect to anything, scheduling, marketplace. Specialized = domain-specific (Splunk=SIEM, Grafana=time-series).</li>
-        <li><b>HDFS:</b> 128MB blocks, 3x replication, compute moves to data (not data to compute), Spark engine, linearly scalable.</li>
-        <li><b>Graph DB:</b> Nodes + relationships, "5 hops" query easy (hard in SQL JOINs), fraud/social/attack paths, augments LLMs.</li>
-        <li><b>Star Schema:</b> Dimension tables (WHO/WHAT/WHERE/WHEN) + Fact tables (metrics). Kimball method. Power BI/Tableau designed for them.</li>
-        <li><b>JSON:</b> Replaced XML as standard data format. Name-value pairs. CSV = legacy flat. Parquet = columnar big data.</li>
+        <li><b>GENERAL-PURPOSE (GP) TOOLS:</b> Power BI, Tableau, Looker = Swiss army knife. Features: drag-drop interface, cloud + desktop deployment, marketplace/gallery of community components, connect to ANY data source (including HDFS/Hadoop), scheduling/refresh, embed in PowerPoint/web, predefined dashboard templates, built-in ETL/data prep.</li>
+        <li><b>POWER BI SPECIFICS:</b> Microsoft. Desktop app (free) + Cloud service. DAX formula language. Connects to 100+ data sources. Real-time dashboards. Natural language Q&A. Free license through GWU. PowerPoint integration for presentations.</li>
+        <li><b>TABLEAU SPECIFICS:</b> Salesforce. Known for visual storytelling. Tableau Prep = ETL tool (Data Flow). Interactive filtering, drill-down. Designed to read star schemas. Gartner Leader.</li>
+        <li><b>SPLUNK:</b> SIEM tool. Now owned by Cisco. Proprietary (not open source). File/index-based storage. SPL (Search Processing Language). Event-based queries - results update AS index is searched. Real-time monitoring. Expensive licensing.</li>
+        <li><b>ELK STACK:</b> Open-source alternative to Splunk. Elasticsearch (search/analytics engine) + Logstash (data ingestion/transform) + Kibana (visualization). Free but requires more setup/maintenance.</li>
+        <li><b>PYTHON:</b> pandas (dataframes, read_csv, describe, groupby), matplotlib (base plotting), seaborn (statistical viz, built on matplotlib). Most flexible tool. LLMs can generate code. No licensing cost.</li>
+        <li><b>EXCEL:</b> Quick first-look analysis. Pivot tables for aggregation. ~1.5M row limit. Good for small datasets and ad-hoc exploration. Calculator available on exam.</li>
+        <li><b>SPECIALIZED TOOLS:</b> Grafana (time-series dashboards, infrastructure monitoring), ArcGIS (geospatial/map visualization), D3.js (custom web-based viz).</li>
+        <li><b>HDFS DETAILS:</b> Hadoop Distributed File System. 128MB block size. 3x replication factor (fault tolerance). "Compute moves to data" paradigm (not data to compute). Spark = in-memory execution engine (replaced MapReduce). Linearly scalable: add nodes = add capacity.</li>
+        <li><b>GRAPH DB (Neo4j):</b> Stores nodes + relationships natively. Natural for: social networks, fraud rings, attack paths, knowledge graphs. "Friends within 5 hops" = simple query (extremely complex JOIN chain in SQL). Augments LLMs for structured reasoning.</li>
+        <li><b>SAP HANA:</b> In-memory database. FUSES transactional (OLTP) + reporting/analytics (OLAP) into one system. No need for separate data warehouse. Extremely fast for both workloads.</li>
       </ul>
     </div>
   </div>
@@ -497,23 +497,32 @@
     <div class="week-header" style="background: #0369a1; color: #fff;">SECURITY DATA SOURCES BY DOMAIN</div>
     <div class="week-body" style="background: #e0f2fe;">
       <ul>
-        <li><b>DOMAINS:</b> Network (firewalls, IDS/IPS, NetFlow, DNS) | Endpoint (AV/EDR, process logs, USB, registry) | Identity (IAM, MFA, SSO, failed logins, privilege escalation) | App (API logs, error logs, APM, session data) | Cloud (AWS CloudWatch/GuardDuty, Azure Defender/Sentinel, GCP SCC) | Vuln scanners (Nessus, Qualys) | Threat intel feeds (IOCs, MITRE ATT&amp;CK, STIX/TAXII) | DLP (file movement, USB copy, cloud upload) | SIEM (aggregates ALL sources, correlation engine, examples: Splunk, QRadar, Sentinel).</li>
+        <li><b>NETWORK:</b> Switches, routers, firewalls (allow/deny logs), IDS/IPS (signature + anomaly alerts), NetFlow/packet captures, DNS query logs, proxy logs, port scan detection.</li>
+        <li><b>ENDPOINT:</b> Antivirus/EDR (CrowdStrike, Carbon Black) logs, quarantined files, process execution/creation logs, USB device connections, file integrity monitoring, registry changes.</li>
+        <li><b>IDENTITY/AUTH:</b> IAM logs, MFA challenge/response, SSO events, failed login attempts, privilege escalation, RBAC/ACL configuration changes, service account activity.</li>
+        <li><b>APPLICATION:</b> App event/error logs, API call logs (who called what when), user session data, configuration changes, performance metrics (APM), database query logs.</li>
+        <li><b>CLOUD:</b> AWS CloudWatch/GuardDuty/CloudTrail, Azure Defender/Sentinel/Activity Log, GCP Security Command Center. Cloud audit trails, API call logs, resource creation/deletion.</li>
+        <li><b>VULNERABILITY:</b> Scanner output (Nessus, Qualys, Rapid7), patch compliance status, CVE databases (MITRE), penetration test results, bug bounty reports.</li>
+        <li><b>THREAT INTEL:</b> External indicator feeds (IOCs: IPs, hashes, domains), TTPs (MITRE ATT&CK), honeypot captures, dark web monitoring, ISAC sharing, STIX/TAXII feeds.</li>
+        <li><b>DLP &amp; MAIL:</b> Data Loss Prevention alerts, email gateway logs, sensitive file movement tracking, USB copy attempts, cloud upload monitoring.</li>
+        <li><b>SIEM:</b> Aggregates ALL above sources. Correlation engine. Can be collector AND source. Multi-tier: domain SIEM -> enterprise SIEM. Examples: Splunk, IBM QRadar, Microsoft Sentinel, Elastic SIEM.</li>
       </ul>
     </div>
   </div>
 
   <!-- BREACHES & CVEs -->
   <div class="week" style="border-color: #dc2626;">
-    <div class="week-header" style="background: #dc2626; color: #fff;">KEY BREACHES &amp; CVEs</div>
+    <div class="week-header" style="background: #dc2626; color: #fff;">KEY BREACHES, CVEs &amp; CASE STUDIES</div>
     <div class="week-body" style="background: #fef2f2;">
       <ul>
-        <li><b>Heartbleed 2014:</b> CVE-2014-0160 | OpenSSL missing bounds check | 64KB memory leak/request | Fix: validate payload length</li>
-        <li><b>Equifax 2017:</b> CVE-2017-5638 | Apache Struts unpatched 6mo | 147M records | Patch mgmt failure</li>
-        <li><b>XZ Utils 2024:</b> CVE-2024-3094 | 3yr social engineering | Backdoor in liblzma->sshd | Supply chain via trust</li>
-        <li><b>CrowdStrike 2024:</b> Channel File 291 | Content Validator bug | 8.5M BSOD | NOT a hack - SQA=security</li>
-        <li><b>SolarWinds 2020:</b> SUNBURST in Orion build | 18K+ orgs | Supply chain via build system compromise</li>
-        <li><b>CVE Program:</b> MITRE maintains (CVE-YEAR-NUMBER). NIST NVD adds CVSS scores. Supply chain attacks: 925/week/org (Check Point).</li>
-        <li><b>RULE:</b> No Security Scans (SAST+DAST) and Reviews -> No Code to Production.</li>
+        <li><b>HEARTBLEED (2014):</b> CVE-2014-0160. OpenSSL. Missing bounds check on TLS heartbeat payload length. Returns up to 64KB extra memory per request. ~17% web servers affected. Fix = validate length. Lesson: one missing check = catastrophic data leak.</li>
+        <li><b>EQUIFAX (2017):</b> CVE-2017-5638. Apache Struts. 147M records. Patch available MONTHS before breach. Lesson: patch management failure. Most preventable major breach.</li>
+        <li><b>XZ UTILS (2024):</b> CVE-2024-3094. 3-year social engineering to become trusted maintainer. Backdoor in liblzma targeting sshd via glibc IFUNC. Deliberate (not accident). Supply chain. Caught by accident (Andres Freund noticed 500ms SSH delay).</li>
+        <li><b>CROWDSTRIKE (2024):</b> Config update (Channel File 291). Content Validator had its own bug. 8.5M Windows BSOD. NOT a hack - software quality failure. Single defective line = global outage. Lesson: QA/testing IS security.</li>
+        <li><b>SOLARWINDS (2020):</b> SUNBURST backdoor inserted into Orion build process. 18,000+ orgs received compromised update. US govt agencies breached. Supply chain attack via build system compromise.</li>
+        <li><b>CVE PROGRAM:</b> MITRE maintains. Unique ID for each public vulnerability (CVE-YEAR-NUMBER). NIST NVD adds severity scores (CVSS). Used industry-wide for tracking/communication.</li>
+        <li><b>SUPPLY CHAIN ATTACKS:</b> Tamper with third-party code/tools to compromise downstream users. Growing trend: 925 attacks/week per org (Check Point). Trust in open-source maintainers = vulnerability. Dependencies = attack surface.</li>
+        <li><b>SECURE CODE RULE:</b> No Security Scans and Reviews -> No Code to Production. Period. Both SAST (static, before deploy) and DAST (dynamic, after deploy) required.</li>
       </ul>
     </div>
   </div>
@@ -552,115 +561,41 @@
     </div>
   </div>
 
+  <!-- DASHBOARD ANTI-PATTERNS EXPANDED -->
+  <div class="week" style="border-color: #475569;">
+    <div class="week-header" style="background: #374151; color: #fff;">13 ANTI-PATTERNS - EXPANDED WITH EXAMPLES</div>
+    <div class="week-body" style="background: #f9fafb;">
+      <ul>
+        <li><b>#1 EXCEEDING SCREEN:</b> Scrolling/tab-switching = context lost. Short-term memory holds ~4 chunks. If user must scroll, most important info may be invisible. Solution: prioritize ruthlessly, remove non-essential.</li>
+        <li><b>#2 NO CONTEXT:</b> Gauge showing "85%" means nothing alone. Compared to WHAT? Last month? Industry average? Target? Always provide comparison baseline (forecast, budget, historical, benchmark).</li>
+        <li><b>#3 EXCESSIVE PRECISION:</b> Revenue "$1,234,567.89" on a dashboard. Nobody needs 9 digits at a glance. Round to meaningful precision: "$1.2M" conveys same insight faster.</li>
+        <li><b>#4 DEFICIENT MEASURE:</b> Showing "Budget: $500K, Actual: $480K" when what matters is the VARIANCE ($20K under, 4% savings). Choose the measure that directly answers the question.</li>
+        <li><b>#5 WRONG VIZ TYPE:</b> Using pie chart to compare 12 categories (impossible to read small slices). Using line chart for categorical data. Match chart type to data relationship.</li>
+        <li><b>#6 MEANINGLESS VARIETY:</b> Using bar, line, pie, gauge, and scatter on same dashboard for no analytical reason. Variety for variety's sake = cognitive load. Use different types only when data REQUIRES it.</li>
+        <li><b>#7 BAD VIZ DESIGN:</b> 3D bar charts (depth distorts height perception). Exploded pie charts. Circular gauge when linear scale clearer. Keep it simple and 2D.</li>
+        <li><b>#8 INACCURATE ENCODING:</b> Y-axis starting at 50 instead of 0 makes 5% difference look like 500% difference. Truncated axes MISLEAD. Dual-axis charts can also mislead if scales differ wildly.</li>
+        <li><b>#9 POOR ARRANGEMENT:</b> Most important info should be TOP-LEFT (where eye goes first). Related metrics should be NEAR each other. Don't make user hunt for context across the screen.</li>
+        <li><b>#10 BAD HIGHLIGHTING:</b> If everything is bold/colored/large, NOTHING stands out. Highlight only what needs immediate attention. Use color/size sparingly for alerts and KPIs.</li>
+        <li><b>#11 DECORATION CLUTTER:</b> Faux-metal gauge borders, gradient backgrounds, decorative images. Every pixel should earn its place by conveying data or aiding comprehension.</li>
+        <li><b>#12 COLOR MISUSE:</b> Random colors with no meaning. Red for "good" and green for "bad" (reversed convention). Too many colors (>7 categories = hard to distinguish). Be intentional.</li>
+        <li><b>#13 UGLY DESIGN:</b> Poor alignment, inconsistent fonts, clashing colors, cramped layout. Aesthetics matter for credibility and usability. Clean design = trusted dashboard.</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- PRIVACY LAWS & DBIR -->
   <div class="week" style="border-color: #16a34a;">
-    <div class="week-header" style="background: #065f46; color: #fff;">PRIVACY LAWS &amp; DBIR</div>
+    <div class="week-header" style="background: #065f46; color: #fff;">PRIVACY LAWS, DBIR &amp; SAMPLING QUICK REF</div>
     <div class="week-body" style="background: #ecfdf5;">
       <ul>
-        <li><b>GDPR (EU):</b> Consent required. Data minimization. Rights: access, correct, delete ("right to be forgotten"), portability. 72hr breach notification. Fines: 4% global revenue or 20M EUR.</li>
-        <li><b>CCPA (California):</b> Right to KNOW, DELETE, OPT-OUT of SALE. CPRA expanded it. Applies to businesses meeting revenue/data thresholds.</li>
-        <li><b>OTHER:</b> PIPEDA (Canada), LGPD (Brazil), DPA 2018 (UK post-Brexit GDPR equivalent).</li>
-        <li><b>DBIR 2025:</b> 60% breaches = human element. 30% third-party. 17% espionage. Initial access: credential abuse 22%, vuln exploitation 20%, phishing 16%. System Intrusion = 53%. Internal actors = 10x more records than external.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WHAT CHART TO USE -->
-  <div class="week" style="border-color: #0d9488;">
-    <div class="week-header" style="background: #0d9488; color: #fff;">WHAT CHART TO USE - DECISION TABLE</div>
-    <div class="week-body" style="background: #f0fdfa;">
-      <ul>
-        <li><b>Compare categories:</b> Bar chart (GAPS between bars)</li>
-        <li><b>Categories as % of whole:</b> Pie chart (angle = rel.freq * 360, but bar is BETTER)</li>
-        <li><b>Numeric distribution:</b> Histogram (bars TOUCH, no gaps, x-axis = number ranges)</li>
-        <li><b>Trend over time:</b> Line chart (connected points)</li>
-        <li><b>2 variables relationship:</b> Scatter plot (no connecting line)</li>
-        <li><b>Small numeric dataset:</b> Dot plot or Stem-and-leaf (preserves actual digits)</li>
-        <li><b>Matrix/correlation:</b> Heatmap (color intensity = magnitude)</li>
-        <li><b>Text frequency:</b> Word cloud (size proportional to frequency)</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Z-TABLE COMMON VALUES -->
-  <div class="week" style="border-color: #7c3aed;">
-    <div class="week-header" style="background: #7c3aed; color: #fff;">Z-TABLE COMMON VALUES</div>
-    <div class="week-body" style="background: #f5f3ff;">
-      <ul>
-        <li><b>Z=1.28:</b> Area=0.8997 (one-tail alpha=0.10)</li>
-        <li><b>Z=1.645:</b> Area=0.9500 (one-tail alpha=0.05, two-tail alpha=0.10)</li>
-        <li><b>Z=1.96:</b> Area=0.9750 (one-tail alpha=0.025, two-tail alpha=0.05)</li>
-        <li><b>Z=2.33:</b> Area=0.9901 (one-tail alpha=0.01, two-tail alpha=0.02)</li>
-        <li><b>Z=2.576:</b> Area=0.9950 (one-tail alpha=0.005, two-tail alpha=0.01)</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- QUICK DECISION GUIDE -->
-  <div class="week" style="border-color: #b45309;">
-    <div class="week-header" style="background: #b45309; color: #fff;">QUICK DECISION GUIDE - EXAM QUESTION PATTERNS</div>
-    <div class="week-body" style="background: #fffbeb;">
-      <ul>
-        <li><b>"Which center for skewed data?"</b> -> Median (robust to outliers)</li>
-        <li><b>"Which measure works for nominal data?"</b> -> Mode (only center for categories)</li>
-        <li><b>"Sample or population notation?"</b> -> Sample: X-bar, S, n-1. Population: mu, sigma, N</li>
-        <li><b>"Outlier detected, what to do?"</b> -> Investigate first (especially in security), don't auto-delete</li>
-        <li><b>"Data not bell-shaped, which rule?"</b> -> Chebyshev (not Empirical Rule - that needs bell shape)</li>
-        <li><b>"Correlation r=0.85, does X cause Y?"</b> -> NO. Correlation != causation. Ever.</li>
-        <li><b>"p=0.03, alpha=0.05, decision?"</b> -> Reject H0 (0.03 &lt; 0.05)</li>
-        <li><b>"p=0.08, alpha=0.05, decision?"</b> -> Fail to reject H0 (0.08 >= 0.05)</li>
-        <li><b>"IDS misses real attack - what error?"</b> -> Type II (beta, missed detection)</li>
-        <li><b>"IDS flags normal traffic - what error?"</b> -> Type I (alpha, false alarm)</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- PYTHON COMMANDS CHEAT SHEET -->
-  <div class="week" style="border-color: #1d4ed8;">
-    <div class="week-header" style="background: #1d4ed8; color: #fff;">PYTHON/PANDAS COMMANDS YOU SHOULD KNOW</div>
-    <div class="week-body" style="background: #eff6ff;">
-      <ul>
-        <li><b>LOAD:</b> <code>df = pd.read_csv('file.csv')</code> | <code>pd.read_sql(query, connection)</code> | <code>mysql.connector.connect(host, user, password, database)</code></li>
-        <li><b>EXPLORE:</b> <code>df.describe()</code> (count, mean, std, min, Q1, median, Q3, max) | <code>df.info()</code> (dtypes, nulls, memory) | <code>df.shape</code> (rows, cols) | <code>df.head()</code></li>
-        <li><b>CLEAN:</b> <code>df.dropna()</code> drop nulls | <code>df.dropna(subset=['col'])</code> | <code>df.fillna(value)</code> | <code>df.drop_duplicates()</code> | <code>df.duplicated().any()</code></li>
-        <li><b>TRANSFORM:</b> <code>df.replace(old, new)</code> | <code>df.astype(type)</code> | <code>df.reset_index(drop=True)</code> | <code>str.lower()</code> | <code>str.strip()</code> | <code>str.replace()</code></li>
-        <li><b>FILTER:</b> <code>df.loc[df['col'] > 5]</code> boolean mask | <code>df.loc[0:5, 'A':'C']</code> slice by label | <code>df[df['status']=='failed']</code></li>
-        <li><b>VISUALIZE:</b> <code>plt.bar()</code> | <code>plt.scatter()</code> | <code>plt.plot()</code> (line) | <code>plt.hist()</code> | <code>sns.heatmap()</code> | <code>sns.boxplot()</code> | <code>sns.pairplot()</code></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- VOCAB GLOSSARY -->
-  <div class="week" style="border-color: #334155;">
-    <div class="week-header" style="background: #334155; color: #fff;">KEY VOCAB - IF YOU SEE THIS WORD, THINK THIS</div>
-    <div class="week-body" style="background: #f1f5f9;">
-      <ul>
-        <li><b>EXPRESSIVENESS:</b> Viz shows ALL and ONLY the facts (Mackinlay) | <b>EFFECTIVENESS:</b> Info readily perceived (Mackinlay) | <b>DATA-INK RATIO:</b> Maximize data, minimize junk (Tufte)</li>
-        <li><b>DESCRIPTIVE:</b> Summarize what you HAVE (mean, charts) | <b>INFERENTIAL:</b> Generalize from sample to population (hypothesis tests, CI)</li>
-        <li><b>PARAMETER:</b> Population measure (Greek: mu, sigma) | <b>STATISTIC:</b> Sample measure (Latin: X-bar, S) | <b>STANDARD ERROR:</b> Wobble of sample means (sigma/sqrt(n))</li>
-        <li><b>FEATURE ENGINEERING:</b> Create NEW features from existing data (secret sauce, requires domain knowledge) | <b>NORMALIZATION:</b> Scale features so none dominates</li>
-        <li><b>IQR:</b> Q3-Q1 (middle 50% width) | <b>ROBUST:</b> Resistant to outliers (median, MAD) | <b>FRAGILE:</b> Sensitive to outliers (mean, variance)</li>
-        <li><b>SIEM:</b> Security Info & Event Mgmt (Splunk, QRadar, Sentinel) - aggregates all logs | <b>DLP:</b> Data Loss Prevention | <b>EDR:</b> Endpoint Detection & Response</li>
-        <li><b>SAST:</b> Static (white-box, no execution, early) | <b>DAST:</b> Dynamic (black-box, running app, runtime) | <b>CIA:</b> Confidentiality, Integrity, Availability</li>
-        <li><b>VON NEUMANN:</b> CPU+Memory+I/O, shared memory = injection attacks possible | <b>SUPPLY CHAIN ATTACK:</b> Compromise upstream to infect downstream users</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- ADDITIONAL WORKED EXAMPLES -->
-  <div class="week" style="border-color: #0891b2;">
-    <div class="week-header" style="background: #0891b2; color: #fff;">MORE WORKED EXAMPLES FOR PRACTICE</div>
-    <div class="week-body" style="background: #ecfeff;">
-      <ul>
-        <li><b>MEDIAN (ODD n):</b> Data: 3,7,1,9,5. Sort: 1,3,5,7,9. n=5. Rank=(5+1)/2=3rd value. Median=5.</li>
-        <li><b>MEDIAN (EVEN n):</b> Data: 3,7,1,9,5,2. Sort: 1,2,3,5,7,9. n=6. Rank=(6+1)/2=3.5. Average 3rd and 4th: (3+5)/2=4. Median=4.</li>
-        <li><b>RIGHT-TAIL Z-TEST:</b> H0: mu=50, H1: mu>50, alpha=0.05. n=25, X-bar=54, sigma=10. SE=10/5=2. Z=(54-50)/2=2.0. Z_crit(0.05,right)=1.645. Since 2.0>1.645, REJECT H0. p=P(Z>=2.0)=0.0228. 0.0228&lt;0.05, same conclusion.</li>
-        <li><b>TWO-TAIL Z-TEST:</b> H0: mu=100, H1: mu!=100, alpha=0.05. n=36, X-bar=105, sigma=18. SE=18/6=3. Z=(105-100)/3=1.667. Z_crit(0.025)=1.96. Since 1.667&lt;1.96, FAIL TO REJECT H0. p=2*P(Z>=1.667)=2*0.0478=0.0956. 0.0956>=0.05, same.</li>
-        <li><b>FREQUENCY TABLE:</b> Data: A,B,A,C,B,A,B,C,A,B. f(A)=4, f(B)=4, f(C)=2. Total=10. Rel.freq: A=0.4, B=0.4, C=0.2. Percent: A=40%, B=40%, C=20%. Cumulative: A=40%, A+B=80%, A+B+C=100%. Mode=A and B (bimodal).</li>
-        <li><b>PIE ANGLE:</b> Category has 15 out of 60 observations. Rel.freq=15/60=0.25. Angle=0.25*360=90 degrees.</li>
-        <li><b>CHEBYSHEV k=2:</b> Mean=200, SD=25. At least 1-1/4=75% of data between 200-50=150 and 200+50=250. Works for ANY distribution shape.</li>
-        <li><b>WHICH SAMPLING?</b> Survey all departments proportionally -> Stratified. Pick 3 random offices, survey everyone there -> Cluster. Every 10th customer -> Systematic.</li>
+        <li><b>GDPR (EU):</b> General Data Protection Regulation. Consent required. Data minimization (collect only what needed). Rights: access, correct, delete ("right to be forgotten"), portability. 72-hour breach notification. Fines up to 4% global revenue or 20M EUR.</li>
+        <li><b>CCPA (California):</b> Right to KNOW what data collected. Right to DELETE. Right to OPT-OUT of SALE of personal info. Applies to businesses meeting revenue/data thresholds. California Privacy Rights Act (CPRA) expanded it.</li>
+        <li><b>OTHER LAWS:</b> PIPEDA (Canada - consent-based, similar to GDPR). LGPD (Brazil - modeled after GDPR). DPA 2018 (UK - post-Brexit GDPR equivalent, maintains similar protections).</li>
+        <li><b>DBIR KEY STATS:</b> 60% breaches = human element. 30% = third-party involvement. 17% = espionage-motivated. Credential abuse = 22% of initial access. Vulnerability exploitation = 20%. Phishing = 16%. System Intrusion = 53% of breach patterns. Internal actors = 10x more records than external.</li>
+        <li><b>SAMPLING DECISION:</b> Want representation of ALL subgroups? -> Stratified. Limited budget, groups are geographically scattered? -> Cluster. No special requirements? -> Simple Random. Have ordered list? -> Systematic (every m-th).</li>
+        <li><b>SIMPLE RANDOM:</b> Every unit has EQUAL chance of selection. Gold standard. Use random number generator or lottery. Requires complete sampling frame (list of all units).</li>
+        <li><b>SYSTEMATIC:</b> Pick random start, then every m-th item. m = N/n (population size / desired sample size). Risk: if data has hidden periodicity matching m, sample is biased.</li>
+        <li><b>NON-REPRESENTATIVE SAMPLE:</b> Leads to WRONG conclusions about population. Sample MUST represent the population it claims to describe. Selection bias = biggest threat to validity.</li>
       </ul>
     </div>
   </div>
