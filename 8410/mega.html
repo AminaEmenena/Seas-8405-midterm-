@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEAS 8410 Security Data Visualization & Analytics — MEGA REVIEW</title>
+<title>SEAS 8410 Midterm Review — 60 Questions (Weeks 1-6)</title>
 <style>
   :root {
     --bg: #1a1a2e;
@@ -14,7 +14,7 @@
     --page-color: #0ea5e9;
     --page-tint: rgba(14,165,233,0.12);
     --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
-    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #20C997;
+    --w5: #4DABF7; --w6: #9775FA;
     --correct: #51cf66; --wrong: #ff6b6b;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,8 +50,6 @@
   .topnav a.w4 { background: var(--w4); color: #000; }
   .topnav a.w5 { background: var(--w5); color: #000; }
   .topnav a.w6 { background: var(--w6); color: #000; }
-  .topnav a.w7 { background: var(--w7); color: #000; }
-  .topnav a.w8 { background: var(--w8); color: #000; }
   .topnav a.cs { background: #20C997; color: #000; }
   .topnav a.mega { background: var(--accent1); color: #fff; }
   .topnav a.home { background: rgba(255,255,255,0.1); }
@@ -217,18 +215,14 @@
   <a href="#w4" class="w4">W4</a>
   <a href="#w5" class="w5">W5</a>
   <a href="#w6" class="w6">W6</a>
-  <a href="#w7" class="w7" style="opacity:0.6;font-size:12px">W7 (Final)</a>
-  <a href="#w8" class="w8" style="opacity:0.6;font-size:12px">W8 (Final)</a>
   <a href="mega.html" class="mega active">Mega Review</a>
   <a href="cheatsheet.html" class="cs">Cheat Sheet</a>
+  <a href="../index.html" class="home">All Courses</a>
 </nav>
 
 <div class="page-hero">
-  <h1>MEGA REVIEW — 80 Questions</h1>
-  <div class="sub">SEAS 8410 Security Data Visualization &amp; Analytics</div>
-  <div style="margin-top:10px;padding:8px 16px;background:rgba(255,212,59,0.15);border:1px solid #FFD43B;border-radius:8px;color:#FFD43B;font-weight:600;font-size:0.9em;display:inline-block;">
-    Midterm covers Weeks 1-6 (confirmed by professor). Weeks 7-8 included for final exam prep.
-  </div>
+  <h1>MEGA REVIEW — 60 Questions</h1>
+  <div class="sub">SEAS 8410 Security Data Visualization &amp; Analytics - Midterm Review - Lectures 1-6</div>
 </div>
 
 <div class="container">
@@ -242,7 +236,7 @@
         <span id="timer">1:40:00</span>
       </div>
       <div style="font-size: 0.9em; color: #aaa;">Time Remaining</div>
-      <div style="font-size: 0.7em; color: #888; margin-top:4px;">Actual midterm: 25-30 MC questions, ~1.5 hours.<br>This quiz has 80 questions for comprehensive review.</div>
+      <div style="font-size: 0.7em; color: #888; margin-top:4px;">Actual midterm: 25-30 MC questions, ~1.5 hours.<br>This quiz has 60 questions for comprehensive review.</div>
     </div>
   </div>
 
@@ -251,8 +245,7 @@
       <div class="progress-fill" id="progbar" style="width: 0%"></div>
     </div>
     <div class="progress-text">
-      <span id="progress">0/80 answered</span>
-      <span style="margin-left:12px;color:#FFD43B;font-size:0.85em;">Midterm material: Questions 1-60 (Weeks 1-6)</span>
+      <span id="progress">0/60 answered</span>
     </div>
   </div>
 
@@ -762,177 +755,6 @@
     <label onclick="pick(60,3)">D) Only operating systems</label>
   </div>
 
-  <!-- MIDTERM/FINAL DIVIDER -->
-  <div id="midterm-divider" style="margin:40px 0;padding:20px;background:linear-gradient(135deg,#FFD43B,#FFA94D);border-radius:12px;text-align:center;border:3px dashed #000;">
-    <div style="font-size:1.3em;font-weight:900;color:#000;letter-spacing:1px;">--- MIDTERM ENDS HERE ---</div>
-    <div style="font-size:1em;font-weight:700;color:#333;margin-top:6px;">Weeks 7-8 below are for FINAL EXAM only</div>
-  </div>
-
-  <!-- WEEK 7: Log Security, Gestalt Principles & Decision Trees (Ch11 p:499-511) -->
-  <div class="section-header" id="w7">Week 7: Log Security, Gestalt Principles &amp; Decision Trees (Questions 61-70)</div>
-
-  <div class="mq" id="mq61">
-    <p><span class="qnum">61</span> Which Gestalt principle states that objects enclosed within a visual border are perceived as a group, and is the STRONGEST grouping principle?</p>
-    <label onclick="pick(61,0)">A) Proximity</label>
-    <label onclick="pick(61,1)">B) Similarity</label>
-    <label onclick="pick(61,2)">C) Enclosure</label>
-    <label onclick="pick(61,3)">D) Continuity</label>
-  </div>
-
-  <div class="mq" id="mq62">
-    <p><span class="qnum">62</span> In a decision tree, the topmost node where the first split occurs is called the:</p>
-    <label onclick="pick(62,0)">A) Leaf node</label>
-    <label onclick="pick(62,1)">B) Root node</label>
-    <label onclick="pick(62,2)">C) Branch</label>
-    <label onclick="pick(62,3)">D) Internal node</label>
-  </div>
-
-  <div class="mq" id="mq63">
-    <p><span class="qnum">63</span> According to CrowdStrike's 2025 report, the average breakout time (time from initial access to lateral movement) is:</p>
-    <label onclick="pick(63,0)">A) 24 hours</label>
-    <label onclick="pick(63,1)">B) 48 minutes</label>
-    <label onclick="pick(63,2)">C) 5 minutes</label>
-    <label onclick="pick(63,3)">D) 1 week</label>
-  </div>
-
-  <div class="mq" id="mq64">
-    <p><span class="qnum">64</span> A decision tree that is too deep and memorizes training noise is suffering from:</p>
-    <label onclick="pick(64,0)">A) Underfitting</label>
-    <label onclick="pick(64,1)">B) Overfitting - fix with pruning (bottom-up preferred) or early stopping</label>
-    <label onclick="pick(64,2)">C) Missing data</label>
-    <label onclick="pick(64,3)">D) Feature engineering</label>
-  </div>
-
-  <div class="mq" id="mq65">
-    <p><span class="qnum">65</span> Which log type records queries, schema changes, and can help detect SQL injection attempts?</p>
-    <label onclick="pick(65,0)">A) System logs</label>
-    <label onclick="pick(65,1)">B) Network logs</label>
-    <label onclick="pick(65,2)">C) Database logs</label>
-    <label onclick="pick(65,3)">D) Web server logs</label>
-  </div>
-
-  <div class="mq" id="mq66">
-    <p><span class="qnum">66</span> A key advantage of decision trees over hypothesis tests is that decision trees:</p>
-    <label onclick="pick(66,0)">A) Always produce more accurate results</label>
-    <label onclick="pick(66,1)">B) Require no distributional assumptions (no normality needed) and handle both numeric and categorical predictors</label>
-    <label onclick="pick(66,2)">C) Can only work with numeric data</label>
-    <label onclick="pick(66,3)">D) Require normally distributed data</label>
-  </div>
-
-  <div class="mq" id="mq67">
-    <p><span class="qnum">67</span> CART (Breiman 1984) differs from ID3/C4.5 (Quinlan 1986) primarily in that CART:</p>
-    <label onclick="pick(67,0)">A) Uses multi-way splits at each node</label>
-    <label onclick="pick(67,1)">B) Always produces binary splits (exactly two branches per node)</label>
-    <label onclick="pick(67,2)">C) Cannot handle categorical data</label>
-    <label onclick="pick(67,3)">D) Does not use recursive partitioning</label>
-  </div>
-
-  <div class="mq" id="mq68">
-    <p><span class="qnum">68</span> Security logs specifically record:</p>
-    <label onclick="pick(68,0)">A) CPU temperature and fan speed</label>
-    <label onclick="pick(68,1)">B) Login attempts, policy violations, and detected threats from antivirus/IDS/SIEM</label>
-    <label onclick="pick(68,2)">C) Only successful transactions</label>
-    <label onclick="pick(68,3)">D) Marketing campaign performance</label>
-  </div>
-
-  <div class="mq" id="mq69">
-    <p><span class="qnum">69</span> A classification tree differs from a regression tree in that a classification tree:</p>
-    <label onclick="pick(69,0)">A) Predicts a categorical target (e.g., malicious/benign), while regression predicts a numeric target</label>
-    <label onclick="pick(69,1)">B) Can only have two leaf nodes</label>
-    <label onclick="pick(69,2)">C) Does not use splits</label>
-    <label onclick="pick(69,3)">D) Always has deeper trees than regression</label>
-  </div>
-
-  <div class="mq" id="mq70">
-    <p><span class="qnum">70</span> The Gestalt principle of Similarity is applied in security dashboards by:</p>
-    <label onclick="pick(70,0)">A) Using a different color for every single data point</label>
-    <label onclick="pick(70,1)">B) Using the same color for related data series so they are perceived as a group</label>
-    <label onclick="pick(70,2)">C) Making all charts exactly the same size</label>
-    <label onclick="pick(70,3)">D) Removing all labels and legends</label>
-  </div>
-
-  <!-- WEEK 8: Cloud Security Analytics & Non-Parametric Tests -->
-  <div class="section-header" id="w8">Week 8: Cloud Security Analytics &amp; Non-Parametric Tests (Questions 71-80)</div>
-
-  <div class="mq" id="mq71">
-    <p><span class="qnum">71</span> Parametric tests (like the Z-test) assume the data follows a normal distribution. Non-parametric tests are preferred when:</p>
-    <label onclick="pick(71,0)">A) The data is perfectly bell-shaped</label>
-    <label onclick="pick(71,1)">B) The data is skewed, ordinal, or contains outliers</label>
-    <label onclick="pick(71,2)">C) The sample size is very large</label>
-    <label onclick="pick(71,3)">D) You want maximum statistical power</label>
-  </div>
-
-  <div class="mq" id="mq72">
-    <p><span class="qnum">72</span> The Sign Test tests a hypothesis about the population:</p>
-    <label onclick="pick(72,0)">A) Mean</label>
-    <label onclick="pick(72,1)">B) Median</label>
-    <label onclick="pick(72,2)">C) Mode</label>
-    <label onclick="pick(72,3)">D) Standard deviation</label>
-  </div>
-
-  <div class="mq" id="mq73">
-    <p><span class="qnum">73</span> In the Sign Test, observations that exactly equal the hypothesized median (ties) should be:</p>
-    <label onclick="pick(73,0)">A) Counted as plus signs</label>
-    <label onclick="pick(73,1)">B) Counted as minus signs</label>
-    <label onclick="pick(73,2)">C) Discarded, and n is reduced accordingly</label>
-    <label onclick="pick(73,3)">D) Replaced with the mean value</label>
-  </div>
-
-  <div class="mq" id="mq74">
-    <p><span class="qnum">74</span> In cloud security analytics, which visualization is MOST effective for showing the geographic distribution of cloud resource access attempts?</p>
-    <label onclick="pick(74,0)">A) Pie chart</label>
-    <label onclick="pick(74,1)">B) Geographic heatmap or choropleth map</label>
-    <label onclick="pick(74,2)">C) Stem-and-leaf plot</label>
-    <label onclick="pick(74,3)">D) Box plot</label>
-  </div>
-
-  <div class="mq" id="mq75">
-    <p><span class="qnum">75</span> A common exam trap: "Non-parametric tests have NO assumptions." This is FALSE because non-parametric tests still assume:</p>
-    <label onclick="pick(75,0)">A) Normal distribution</label>
-    <label onclick="pick(75,1)">B) Continuous data and at-least-ordinal scale</label>
-    <label onclick="pick(75,2)">C) Equal variances across groups</label>
-    <label onclick="pick(75,3)">D) They truly have zero assumptions</label>
-  </div>
-
-  <div class="mq" id="mq76">
-    <p><span class="qnum">76</span> Parametric tests are generally MORE POWERFUL than non-parametric tests. "More powerful" means:</p>
-    <label onclick="pick(76,0)">A) They run faster on a computer</label>
-    <label onclick="pick(76,1)">B) They are better at detecting a real effect (rejecting a false H0) when assumptions are met</label>
-    <label onclick="pick(76,2)">C) They work with any data type</label>
-    <label onclick="pick(76,3)">D) They never produce errors</label>
-  </div>
-
-  <div class="mq" id="mq77">
-    <p><span class="qnum">77</span> In the Sign Test, R (the count of plus signs) follows which probability distribution under H0?</p>
-    <label onclick="pick(77,0)">A) Normal distribution</label>
-    <label onclick="pick(77,1)">B) Binomial distribution with p = 0.5</label>
-    <label onclick="pick(77,2)">C) Poisson distribution</label>
-    <label onclick="pick(77,3)">D) Uniform distribution</label>
-  </div>
-
-  <div class="mq" id="mq78">
-    <p><span class="qnum">78</span> A security analyst has response-time data that is heavily right-skewed with several extreme outliers. To test whether the center has shifted, the analyst should use:</p>
-    <label onclick="pick(78,0)">A) A Z-test on the mean (parametric)</label>
-    <label onclick="pick(78,1)">B) A Sign Test on the median (non-parametric, robust to skew and outliers)</label>
-    <label onclick="pick(78,2)">C) A pie chart comparison</label>
-    <label onclick="pick(78,3)">D) The Empirical Rule</label>
-  </div>
-
-  <div class="mq" id="mq79">
-    <p><span class="qnum">79</span> Non-parametric tests use which type of information from the data, rather than means and standard deviations?</p>
-    <label onclick="pick(79,0)">A) Colors and shapes</label>
-    <label onclick="pick(79,1)">B) Orders, ranks, and signs</label>
-    <label onclick="pick(79,2)">C) Frequencies only</label>
-    <label onclick="pick(79,3)">D) Logarithms of values</label>
-  </div>
-
-  <div class="mq" id="mq80">
-    <p><span class="qnum">80</span> When deciding between parametric and non-parametric tests: bell-shaped numeric data calls for parametric; skewed/ordinal/outlier-heavy data calls for non-parametric. Which is an example of a parametric test?</p>
-    <label onclick="pick(80,0)">A) Sign Test</label>
-    <label onclick="pick(80,1)">B) Wilcoxon Signed-Rank Test</label>
-    <label onclick="pick(80,2)">C) Z-test</label>
-    <label onclick="pick(80,3)">D) Mann-Whitney U Test</label>
-  </div>
 
   </div><!-- end questions-container -->
 
@@ -947,7 +769,7 @@
     var answers = {};
     var locked = {};
     var score = 0;
-    var correct = {1:1,2:1,3:2,4:2,5:1,6:1,7:2,8:1,9:1,10:1,11:2,12:2,13:1,14:1,15:2,16:1,17:2,18:0,19:2,20:1,21:1,22:1,23:1,24:1,25:1,26:1,27:0,28:1,29:1,30:1,31:1,32:2,33:1,34:2,35:1,36:1,37:1,38:2,39:1,40:1,41:0,42:2,43:1,44:2,45:1,46:1,47:2,48:1,49:1,50:1,51:1,52:1,53:1,54:1,55:1,56:1,57:1,58:1,59:1,60:2,61:2,62:1,63:1,64:1,65:2,66:1,67:1,68:1,69:0,70:1,71:1,72:1,73:2,74:1,75:1,76:1,77:1,78:1,79:1,80:2};
+    var correct = {1:1,2:1,3:2,4:2,5:1,6:1,7:2,8:1,9:1,10:1,11:2,12:2,13:1,14:1,15:2,16:1,17:2,18:0,19:2,20:1,21:1,22:1,23:1,24:1,25:1,26:1,27:0,28:1,29:1,30:1,31:1,32:2,33:1,34:2,35:1,36:1,37:1,38:2,39:1,40:1,41:0,42:2,43:1,44:2,45:1,46:1,47:2,48:1,49:1,50:1,51:1,52:1,53:1,54:1,55:1,56:1,57:1,58:1,59:1,60:2};
 
     var explanations = {
       1: "Line charts are ideal for showing trends over time. The x-axis represents time periods and the y-axis shows the count, making it easy to spot increases or decreases in phishing attempts across months.",
@@ -1009,27 +831,7 @@
       57: "When outliers cannot be removed, use robust statistics: Median instead of Mean (outlier-resistant center), MAD instead of SD (outlier-resistant spread), and Huber loss (a compromise that is less sensitive to extremes).",
       58: "Application security (AppSec) spans the entire SDLC: secure design (threat modeling), secure coding, testing (SAST/DAST), secure deployment, and ongoing monitoring/patching. Security is not a phase but a continuous practice.",
       59: "The $200K outlier pulls the mean to $75K (far from the typical $50K range), while the median stays at $51K. This is the classic example of why you should not use the mean for skewed data. Variance is also inflated and measured in squared units.",
-      60: "An 'application' in AppSec is broadly defined: web apps, mobile apps, APIs, microservices, desktop software, embedded firmware, and even hardware with programmable logic. All require security throughout their lifecycle.",
-      61: "Enclosure (common region) is the strongest Gestalt grouping principle. A border, shading, or background color around elements immediately signals they belong together - stronger than proximity, similarity, or connection.",
-      62: "The root node is the very top of the tree where the first split occurs. Leaf nodes are the terminal nodes with final predictions. Internal nodes are decision points in between. Confusing root and leaf is a common exam mistake.",
-      63: "CrowdStrike's 2025 Global Threat Report found average breakout time is 48 minutes (fastest: 51 seconds). This means defenders have less than an hour to detect and contain intrusions before lateral movement occurs.",
-      64: "Overfitting = tree memorizes noise in training data. Signs: very deep tree, high training accuracy but poor test accuracy. Fixes: pruning (remove branches bottom-up) or early stopping (limit depth). A bigger tree is NOT always better.",
-      65: "Database logs capture SQL queries, schema modifications, user access, and transaction details. Unusual query patterns or direct table access can indicate SQL injection attempts or unauthorized data exfiltration.",
-      66: "Decision trees require NO distributional assumptions (unlike Z-tests which need normality). They handle both numeric and categorical predictors through recursive partitioning - splitting on the variable that best reduces impurity.",
-      67: "CART (Classification And Regression Trees, Breiman 1984) always makes binary splits (two branches). ID3/C4.5 (Quinlan 1986) can make multi-way splits. Both use recursive partitioning to build the tree.",
-      68: "Security logs specifically capture security-relevant events: authentication attempts (success/failure), policy violations, malware detections, and threat alerts from security tools like antivirus, IDS, and SIEM platforms.",
-      69: "Classification trees predict categorical outcomes (malicious vs. benign, attack type A/B/C). Regression trees predict continuous numeric outcomes (predicted response time, risk score). Both use the same tree structure.",
-      70: "Similarity: elements sharing visual properties (color, shape, size) are perceived as belonging together. Using consistent colors for related data series (e.g., all critical alerts in red) leverages this principle.",
-      71: "Non-parametric tests are 'distribution-free' - they do not require normality. Use them when data is skewed, ordinal, or has outliers. They are slightly less powerful than parametric tests when normality holds, but more robust when it does not.",
-      72: "The Sign Test tests a hypothesis about the MEDIAN, not the mean. H0: M = m0. Thinking the Sign Test is about the mean is a common exam trap. Because the median is robust to outliers, this test works well with skewed data.",
-      73: "When an observation exactly equals the hypothesized median, it produces no sign (neither + nor -). Ties are DISCARDED and n is reduced. Forgetting to discard ties and shrink n is an exam trap.",
-      74: "Geographic heatmaps or choropleth maps show intensity of events across geographic regions, making them ideal for visualizing where cloud access attempts originate - helping identify suspicious geographic patterns.",
-      75: "Non-parametric tests are distribution-free but NOT assumption-free. They still assume: (1) data is continuous, and (2) measurement scale is at least ordinal. Saying they have 'no assumptions at all' is false.",
-      76: "Statistical power = ability to detect a real effect when it exists. Parametric tests have higher power when their assumptions (normality) are met. But when data is non-normal, non-parametric tests can actually perform better.",
-      77: "Under H0, each observation has a 50-50 chance of being above or below the median. So R (count of plus signs) follows a Binomial distribution with parameters n (sample size after discarding ties) and p = 0.5.",
-      78: "With heavily skewed data and extreme outliers, parametric tests (Z-test on the mean) are unreliable because the mean is dragged by outliers. The Sign Test on the median is the right choice - it is robust to both skewness and outliers.",
-      79: "Non-parametric tests work with orders, ranks, and signs rather than raw numeric values. This makes them robust to outliers and applicable to ordinal data. Parametric tests rely on means and standard deviations.",
-      80: "The Z-test is parametric (assumes normal distribution, tests means). The Sign Test, Wilcoxon, and Mann-Whitney are all non-parametric. Decision rule: bell-shaped numeric data -> parametric; skewed/ordinal/outliers -> non-parametric."
+      60: "An 'application' in AppSec is broadly defined: web apps, mobile apps, APIs, microservices, desktop software, embedded firmware, and even hardware with programmable logic. All require security throughout their lifecycle."
     };
 
     // 100-minute countdown timer
@@ -1107,8 +909,8 @@
       document.getElementById('mq' + q).appendChild(feedback);
 
       var answered = Object.keys(answers).length;
-      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 80 answered';
-      document.getElementById('progbar').style.width = (answered / 80 * 100) + '%';
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 60 answered';
+      document.getElementById('progbar').style.width = (answered / 60 * 100) + '%';
     }
 
     function gradeExam() {
@@ -1118,19 +920,6 @@
       var es = elapsed % 60;
       var timeStr = em + 'm ' + es + 's';
 
-      // Calculate midterm score (questions 1-60, Weeks 1-6)
-      var midtermScore = 0;
-      for (var q = 1; q <= 60; q++) {
-        if (answers[q] !== undefined && answers[q] === correct[q]) midtermScore++;
-      }
-      var midtermAnswered = 0;
-      for (var q2 = 1; q2 <= 60; q2++) {
-        if (answers[q2] !== undefined) midtermAnswered++;
-      }
-      var midtermPct = midtermAnswered > 0 ? Math.round(midtermScore / midtermAnswered * 100) : 0;
-      var midtermGrade = midtermPct >= 93 ? 'A' : midtermPct >= 90 ? 'A-' : midtermPct >= 87 ? 'B+' : midtermPct >= 83 ? 'B' : midtermPct >= 80 ? 'B-' : midtermPct >= 77 ? 'C+' : midtermPct >= 73 ? 'C' : midtermPct >= 70 ? 'C-' : midtermPct >= 60 ? 'D' : 'F';
-
-      // Full score (all 80)
       var pct = answered > 0 ? Math.round(score / answered * 100) : 0;
       var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
 
@@ -1144,9 +933,8 @@
       }
 
       var resultHTML = confetti;
-      resultHTML += '<div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:16px">';
-      resultHTML += '<div style="padding:16px 24px;background:rgba(255,212,59,0.1);border:2px solid #FFD43B;border-radius:12px;"><div style="font-size:0.85em;color:#FFD43B;font-weight:700;margin-bottom:4px">MIDTERM SCORE (Wks 1-6)</div><div style="font-size:2em;font-weight:700;color:#FFD43B">' + midtermScore + '/' + midtermAnswered + '</div><div style="color:#aaa">' + midtermPct + '% - ' + midtermGrade + '</div></div>';
-      resultHTML += '<div style="padding:16px 24px;background:rgba(14,165,233,0.1);border:2px solid var(--accent1);border-radius:12px;"><div style="font-size:0.85em;color:var(--accent1);font-weight:700;margin-bottom:4px">FULL SCORE (All 80)</div><div style="font-size:2em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="color:#aaa">' + pct + '% - ' + g + '</div></div>';
+      resultHTML += '<div style="margin-bottom:16px">';
+      resultHTML += '<div style="display:inline-block;padding:16px 24px;background:rgba(14,165,233,0.1);border:2px solid var(--accent1);border-radius:12px;"><div style="font-size:0.85em;color:var(--accent1);font-weight:700;margin-bottom:4px">SCORE (Weeks 1-6)</div><div style="font-size:2em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="color:#aaa">' + pct + '% - ' + g + '</div></div>';
       resultHTML += '</div>';
       resultHTML += '<div style="font-size:1.2em;color:#aaa">Completed in ' + timeStr + '</div>';
 
@@ -1187,7 +975,7 @@
         l.style.opacity = '';
       });
       document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
-      document.getElementById('progress').textContent = '0/80 answered';
+      document.getElementById('progress').textContent = '0/60 answered';
       document.getElementById('progbar').style.width = '0%';
       document.getElementById('result').style.display = 'none';
 
@@ -1244,7 +1032,7 @@
 
       var newHeader = document.createElement('div');
       newHeader.className = 'section-header';
-      newHeader.textContent = 'Randomized Questions (1-80)';
+      newHeader.textContent = 'Randomized Questions (1-60)';
       newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
       container.insertBefore(newHeader, container.firstChild);
 
