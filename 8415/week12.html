@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 - Wireless Cryptography & Stream Ciphers - SEAS 8415</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #51CF66;
+    --page-tint: rgba(81,207,102,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w8 { background: var(--w1); color: #000; }
+  .topnav a.w9 { background: var(--w2); color: #000; }
+  .topnav a.w10 { background: var(--w3); color: #000; }
+  .topnav a.w11 { background: var(--w4); color: #000; }
+  .topnav a.w12 { background: var(--w5); color: #000; }
+  .topnav a.w13 { background: var(--w6); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND - Floating Sidebar (Compact) */
+  .color-legend {
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed {
+    padding: 5px;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span {
+    display: none;
+  }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color);
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .color-legend-title:hover { opacity: 0.8; }
+  .legend-item {
+    display: flex; align-items: center; gap: 4px;
+    color: #aaa;
+  }
+  .legend-dot {
+    width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static;
+      transform: none;
+      margin: 0 0 20px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.65em;
+      padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Confetti celebration */
+  .celebration {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999;
+  }
+  .confetti {
+    position: absolute; width: 10px; height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Correct answer pop */
+  @keyframes correct-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .quiz-q.just-correct {
+    animation: correct-pop 0.3s ease-out;
+  }
+
+  /* Encouraging messages */
+  .encouragement {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* TOPIC CARDS (details/summary) */
+  details {
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--page-color);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  details[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  summary {
+    cursor: pointer;
+    font-size: 1.15em; font-weight: 700;
+    color: #fff;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color);
+    user-select: none;
+    transition: all 0.2s;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '\25B6'; font-size: 0.9em; color: var(--page-color);
+    transition: transform 0.3s;
+    font-weight: 800;
+  }
+  details[open] > summary {
+    background: var(--page-color);
+    color: #000;
+    border-left-color: rgba(0,0,0,0.2);
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+    color: #000;
+  }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > p, details > ul, details > ol, details > table,
+  details > section {
+    padding: 16px 20px;
+    background: var(--page-tint);
+  }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 {
+    color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em;
+  }
+  details h4 {
+    color: var(--accent1); margin: 12px 0 6px; font-size: 1em;
+  }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* CONCEPT BOXES */
+  .concept-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 16px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .concept-box h4 { color: var(--accent1); margin-bottom: 8px; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 16px 0; border-radius: 10px; overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: rgba(255,255,255,0.12); padding: 12px 16px;
+    text-align: left; font-weight: 700;
+  }
+  td {
+    padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* HIGHLIGHT BOXES */
+  .highlight-red, .prof-note {
+    background: rgba(233,69,96,0.15); border-left: 4px solid var(--accent1);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid var(--w5);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .highlight-green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid var(--w4);
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* MNEMONIC AIDS */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed var(--accent1);
+    border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center;
+  }
+  .mnemonic .label { font-size: 0.8em; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .mnemonic .content { font-size: 1.3em; font-weight: 800; color: var(--accent1); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 20px; margin: 16px 0; text-align: center;
+    font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    color: #ddd;
+  }
+
+  /* ORIGINAL DESIGN CLASSES */
+  .box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--accent1);
+  }
+  .box h4 { color: var(--accent1); margin-bottom: 8px; }
+  .box ul { padding-left: 20px; }
+  .box li { margin: 5px 0; }
+
+  .red {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .blue {
+    background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+  .green {
+    background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560;
+    border-radius: 12px; padding: 14px; margin: 14px 0;
+    text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  .fs {
+    background: rgba(255,255,255,0.08); padding: 8px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+  }
+  .fa { color: #e94560; font-weight: 800; font-size: 1.2em; }
+
+  /* Professor tips */
+  .prof {
+    background: rgba(233,69,96,0.15); border-left: 4px solid #e94560;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Warning callouts */
+  .warn {
+    background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Key term highlights */
+  .key {
+    background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7;
+    padding: 12px 16px; border-radius: 8px; margin: 10px 0;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px; margin: 12px 0;
+    border-left: 4px solid var(--page-color);
+  }
+  .compare-box h4 { color: var(--page-color); margin-bottom: 8px; }
+
+  /* ASCII DIAGRAM STYLING */
+  .ascii-diagram {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--page-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--page-color);
+    margin: 16px 0;
+  }
+  .ascii-diagram-title {
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* FLOW ARROWS */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); padding: 10px 18px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flow-arrow { color: var(--accent1); font-size: 1.3em; font-weight: 800; }
+
+  /* QUIZ STYLING */
+  .quiz-section, [class*="quiz"] > div {
+    margin: 24px 0; padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+
+  /* Quiz question blocks */
+  .quiz-q, .question {
+    margin: 16px 0; padding: 16px;
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+  }
+  .quiz-q p, .question p { font-weight: 600; margin-bottom: 12px; }
+
+  /* Quiz option buttons */
+  .opt, button[onclick*="showAns"], button[onclick*="pick"] {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    font-size: 0.95em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .opt:hover, button[onclick*="showAns"]:hover, button[onclick*="pick"]:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Correct / Wrong feedback */
+  .correct, .selected-correct {
+    background: rgba(81,207,102,0.2) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+    font-weight: 700;
+  }
+  .wrong, .selected-wrong {
+    background: rgba(255,107,107,0.2) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .show-correct {
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .explanation {
+    display: none; margin-top: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+  }
+  .explanation.show { display: block; }
+
+  /* QUIZ SECTION */
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+
+  /* Score boxes */
+  .score-box, #result, #scoreBox, [id*="score"] {
+    background: rgba(233,69,96,0.15);
+    border: 2px solid var(--accent1);
+    border-radius: 12px; padding: 20px;
+    margin: 20px 0; text-align: center;
+    font-size: 1.1em; font-weight: 700;
+  }
+
+  /* Progress bar */
+  .progress-bar, .progress-track {
+    background: #333; border-radius: 10px; height: 24px; overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--correct), #37b24d);
+    height: 100%; border-radius: 10px; transition: width 0.5s;
+  }
+
+  /* Timer */
+  .timer {
+    font-size: 1.5em; color: var(--accent1);
+    font-weight: 700; text-align: center;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-block; margin: 16px 0;
+    padding: 10px 20px; background: rgba(255,255,255,0.06);
+    color: var(--page-color); text-decoration: none;
+    border-radius: 8px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.12); }
+
+  /* Subtitle */
+  .subtitle { font-size: 1.1em; color: #aaa; margin-bottom: 20px; }
+
+  /* Code blocks */
+  code {
+    background: rgba(255,255,255,0.08); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.9em;
+  }
+
+  .qnum {
+    display: inline-block; min-width: 28px; height: 28px;
+    line-height: 28px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.75em; font-weight: 800; margin-right: 8px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+
+  /* FLASHCARD MODE */
+  .flashcard-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(77,171,247,0.1));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flashcard-toggle-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 2px solid var(--page-color);
+    background: transparent;
+    color: var(--page-color);
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-toggle-btn:hover {
+    background: var(--page-color);
+    color: #000;
+    transform: scale(1.02);
+  }
+  .flashcard-toggle-btn.active {
+    background: var(--page-color);
+    color: #000;
+  }
+  .flashcard-toggle-label {
+    font-size: 0.95em;
+    color: #aaa;
+  }
+
+  /* Flashcard Container */
+  .flashcard-mode {
+    display: none;
+    margin: 24px 0;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-mode.active {
+    display: block;
+  }
+  .flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .flashcard-title {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: var(--page-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flashcard-progress {
+    font-size: 1em;
+    font-weight: 600;
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .flashcard-progress .current {
+    color: var(--page-color);
+    font-weight: 800;
+  }
+
+  /* Flashcard Controls */
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .flashcard-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .flashcard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-btn.shuffle {
+    border-color: var(--w3);
+    color: var(--w3);
+  }
+  .flashcard-btn.shuffle:hover {
+    background: rgba(255,212,59,0.15);
+  }
+  .flashcard-btn.nav-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  .flashcard-btn.prev { border-color: var(--w5); color: var(--w5); }
+  .flashcard-btn.prev:hover { background: rgba(77,171,247,0.15); }
+  .flashcard-btn.next { border-color: var(--w4); color: var(--w4); }
+  .flashcard-btn.next:hover { background: rgba(105,219,124,0.15); }
+
+  /* The Card */
+  .flashcard-wrapper {
+    perspective: 1000px;
+    margin: 0 auto 20px;
+    max-width: 700px;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .flashcard-front {
+    background: linear-gradient(145deg, #1e3a5f, #16213e);
+    border: 2px solid var(--page-color);
+  }
+  .flashcard-back {
+    background: linear-gradient(145deg, #1a3a2e, #16213e);
+    border: 2px solid var(--w4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .flashcard-category.red { background: rgba(233,69,96,0.3); color: #e94560; }
+  .flashcard-category.blue { background: rgba(77,171,247,0.3); color: #4DABF7; }
+  .flashcard-category.green { background: rgba(105,219,124,0.3); color: #69DB7C; }
+  .flashcard-category.orange { background: rgba(255,169,77,0.3); color: #FFA94D; }
+  .flashcard-category.purple { background: rgba(151,117,250,0.3); color: #9775FA; }
+  .flashcard-hint {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.8em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flashcard-term {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    padding: 20px 0;
+  }
+  .flashcard-definition {
+    font-size: 1.05em;
+    color: #ddd;
+    line-height: 1.7;
+    padding: 20px 0;
+  }
+  .flashcard-label {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .flashcard-front .flashcard-label {
+    background: rgba(233,69,96,0.2);
+    color: var(--accent1);
+  }
+  .flashcard-back .flashcard-label {
+    background: rgba(105,219,124,0.2);
+    color: var(--w4);
+  }
+
+  /* Progress bar for flashcards */
+  .flashcard-progress-bar {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flashcard-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--page-color), var(--w4));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  /* Keyboard shortcut hints */
+  .flashcard-shortcuts {
+    text-align: center;
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 12px;
+  }
+  .flashcard-shortcuts kbd {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+
+  /* Responsive flashcards */
+  @media (max-width: 768px) {
+    .flashcard-toggle-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .flashcard-controls {
+      gap: 8px;
+    }
+    .flashcard-btn {
+      padding: 8px 14px;
+      font-size: 0.85em;
+    }
+    .flashcard-btn.nav-btn {
+      padding: 10px 18px;
+    }
+    .flashcard {
+      min-height: 320px;
+    }
+    .flashcard-face {
+      min-height: 320px;
+      padding: 20px;
+    }
+    .flashcard-term {
+      font-size: 1.1em;
+    }
+    .flashcard-definition {
+      font-size: 0.95em;
+    }
+    .flashcard-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* STUDY TIMER */
+  .study-timer-wrapper {
+    background: linear-gradient(135deg, rgba(13,27,42,0.98), rgba(26,26,46,0.98));
+    border-bottom: 2px solid var(--page-color);
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  .study-timer-wrapper.collapsed {
+    max-height: 48px !important;
+  }
+  .study-timer-wrapper.collapsed .timer-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .timer-header:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .timer-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 0.95em;
+  }
+  .timer-header-left .timer-icon {
+    font-size: 1.2em;
+  }
+  .timer-mini-display {
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .study-timer-wrapper.collapsed .timer-mini-display {
+    display: inline-block;
+  }
+  .timer-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--page-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s;
+  }
+  .study-timer-wrapper.collapsed .timer-toggle-btn {
+    transform: rotate(180deg);
+  }
+  .timer-content {
+    padding: 0 20px 20px;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .preset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85em;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .preset-btn.active {
+    border-color: var(--page-color);
+    color: var(--page-color);
+    background: rgba(255,255,255,0.1);
+  }
+  .timer-custom-inputs {
+    display: none;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .timer-custom-inputs.show {
+    display: flex;
+  }
+  .timer-custom-inputs label {
+    font-size: 0.85em;
+    color: #aaa;
+  }
+  .timer-custom-inputs input {
+    width: 60px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .timer-custom-inputs input:focus {
+    outline: none;
+    border-color: var(--page-color);
+  }
+  .timer-display-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .timer-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 3em;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.4);
+    padding: 10px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+    min-width: 200px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .timer-countdown.study-mode {
+    border-color: var(--page-color);
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+  .timer-countdown.break-mode {
+    border-color: var(--correct);
+    color: var(--correct);
+    box-shadow: 0 0 20px rgba(81,207,102,0.2);
+  }
+  .timer-countdown.paused {
+    opacity: 0.6;
+  }
+  .timer-status {
+    font-size: 0.9em;
+    color: #aaa;
+    text-align: center;
+    min-width: 120px;
+  }
+  .timer-status .status-label {
+    font-weight: 700;
+    color: var(--page-color);
+    font-size: 1.1em;
+  }
+  .timer-status .status-label.break {
+    color: var(--correct);
+  }
+  .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .timer-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timer-btn.start {
+    background: var(--page-color);
+    color: #000;
+  }
+  .timer-btn.start:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  .timer-btn.pause {
+    background: rgba(255,169,77,0.8);
+    color: #000;
+  }
+  .timer-btn.pause:hover {
+    background: rgba(255,169,77,1);
+  }
+  .timer-btn.reset {
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .timer-btn.reset:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .timer-btn.skip {
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em;
+    padding: 8px 16px;
+  }
+  .timer-btn.skip:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .timer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .timer-stat {
+    text-align: center;
+  }
+  .timer-stat .stat-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--page-color);
+    font-family: 'Courier New', monospace;
+  }
+  .timer-stat .stat-label {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .break-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .break-overlay.show {
+    display: flex;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .break-message {
+    background: linear-gradient(135deg, rgba(81,207,102,0.2), rgba(55,178,77,0.2));
+    border: 3px solid var(--correct);
+    border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 500px;
+    margin: 20px;
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .break-message h2 {
+    color: var(--correct);
+    font-size: 1.8em;
+    margin-bottom: 12px;
+  }
+  .break-message p {
+    color: #ccc;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .break-message .break-tip {
+    background: rgba(255,255,255,0.05);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 0.95em;
+    color: #aaa;
+  }
+  .break-message .break-countdown {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5em;
+    color: var(--correct);
+    margin: 16px 0;
+  }
+  .break-message button {
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: var(--correct);
+    color: #000;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .break-message button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .timer-countdown {
+      font-size: 2.2em;
+      padding: 8px 20px;
+      min-width: 150px;
+    }
+    .timer-display-section {
+      gap: 12px;
+    }
+    .timer-stats {
+      gap: 16px;
+    }
+    .break-message {
+      padding: 30px 24px;
+    }
+    .break-message h2 {
+      font-size: 1.4em;
+    }
+  }
+/* EXPAND/COLLAPSE ALL */
+.expand-collapse-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  margin: 0 0 16px; padding: 10px 0;
+}
+.expand-collapse-bar button {
+  background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.expand-collapse-bar button:hover {
+  background: var(--page-color); color: #000; border-color: var(--page-color);
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="title" style="text-decoration:none">SEAS 8415</span>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="week9.html" class="w9">W9</a>
+  <a href="week10.html" class="w10">W10</a>
+  <a href="week11.html" class="w11">W11</a>
+  <a href="week12.html" class="w12 active">W12</a>
+  <a href="week13.html" class="w13">W13</a>
+  <a href="mega.html" class="mega">MEGA EXAM</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="../index.html" style="background:rgba(255,255,255,0.1);">All Courses</a>
+</nav>
+
+<!-- ADHD-Friendly Study Timer -->
+<div class="study-timer-wrapper collapsed" id="studyTimerWrapper">
+  <div class="timer-header" onclick="toggleStudyTimer()">
+    <div class="timer-header-left">
+      <span class="timer-icon">&#9201;&#65039;</span>
+      <span>Study Timer</span>
+      <span class="timer-mini-display" id="timerMiniDisplay">25:00</span>
+    </div>
+    <button class="timer-toggle-btn" aria-label="Toggle timer">&#9660;</button>
+  </div>
+  <div class="timer-content">
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset('pomodoro')" data-preset="pomodoro">Pomodoro (25/5)</button>
+      <button class="preset-btn" onclick="setPreset('short')" data-preset="short">Short (15/3)</button>
+      <button class="preset-btn" onclick="setPreset('custom')" data-preset="custom">Custom</button>
+    </div>
+    <div class="timer-custom-inputs" id="customInputs">
+      <label>Study:</label>
+      <input type="number" id="customStudy" value="25" min="1" max="120"> min
+      <label>Break:</label>
+      <input type="number" id="customBreak" value="5" min="1" max="30"> min
+      <button class="preset-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="timer-display-section">
+      <div class="timer-status">
+        <div class="status-label" id="timerStatusLabel">READY</div>
+        <div id="timerStatusText">Click Start to begin</div>
+      </div>
+      <div class="timer-countdown" id="timerCountdown">25:00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="startPauseBtn" onclick="toggleTimer()">Start</button>
+      <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+      <button class="timer-btn skip" onclick="skipToBreak()" id="skipBtn">Skip to Break</button>
+    </div>
+    <div class="timer-stats">
+      <div class="timer-stat">
+        <div class="stat-value" id="totalStudyTime">0:00</div>
+        <div class="stat-label">Total Study Time</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="sessionsCompleted">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="timer-stat">
+        <div class="stat-value" id="currentStreak">0</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Break Overlay -->
+<div class="break-overlay" id="breakOverlay">
+  <div class="break-message">
+    <h2 id="breakTitle">Time for a Break!</h2>
+    <p id="breakEncouragement">Great focus session! You've earned this rest.</p>
+    <div class="break-tip" id="breakTip">Stand up, stretch, or grab some water.</div>
+    <div class="break-countdown" id="breakCountdown">5:00</div>
+    <button onclick="dismissBreak()">Back to Studying</button>
+  </div>
+</div>
+
+<div class="page-hero">
+  <h1>Week 12 -- Wireless Cryptography &amp; Stream Ciphers</h1>
+  <div class="sub">SEAS 8415 -- Summer 2026 -- Prof. Fossaceca -- GWU</div>
+</div>
+
+<!-- CAUTION BANNER -->
+<div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 20px 20px 0; max-width: 1000px; margin-left: auto; margin-right: auto;">
+  <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">
+    &#9888;&#65039; PRELIMINARY - TEXTBOOK ONLY
+  </div>
+  <div style="color:#aaa; font-size:0.9em; line-height:1.5;">
+    This study guide is based on the assigned textbook chapters. It will be updated when lecture slides and homework are released each week. Content may differ from what the professor emphasizes in class.
+  </div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 12 Key Points</div>
+  <ul>
+    <li><strong>Stream vs Block Ciphers</strong> -- Stream ciphers encrypt bit-by-bit using keystream XOR; block ciphers encrypt fixed-size blocks. Stream ciphers are faster for real-time/wireless</li>
+    <li><strong>LFSR</strong> -- Linear Feedback Shift Register: max period 2^n-1, but LINEAR = vulnerable to Berlekamp-Massey known-plaintext attack</li>
+    <li><strong>A5/1 (GSM)</strong> -- Three irregularly-clocked LFSRs (19+22+23=64 bits), broken with rainbow tables and known-plaintext attacks</li>
+    <li><strong>RC4</strong> -- Byte-oriented stream cipher (KSA+PRGA), biases in initial keystream bytes, prohibited in TLS 1.3</li>
+    <li><strong>ChaCha20-Poly1305</strong> -- Modern AEAD stream cipher, 256-bit key, 96-bit nonce, used in TLS 1.3 alongside AES-GCM</li>
+    <li><strong>WEP to WPA3</strong> -- WEP broken (24-bit IV, RC4), WPA (TKIP patch), WPA2 (AES-CCMP), WPA3 (SAE/Dragonfly, 192-bit enterprise)</li>
+    <li><strong>Bluetooth</strong> -- E0 stream cipher, pairing vulnerabilities, BlueBorne (remote code exec), KNOB attack (entropy reduction)</li>
+    <li><strong>5G Security</strong> -- SUPI/SUCI identity protection, 256-bit keys, network slicing isolation, mutual authentication</li>
+  </ul>
+  <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
+</div>
+
+<!-- COLOR LEGEND - Floating -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- FLASHCARD MODE TOGGLE -->
+<div class="flashcard-toggle-container">
+  <span class="flashcard-toggle-label">Study key concepts with interactive flashcards</span>
+  <button class="flashcard-toggle-btn" id="flashcardToggle" onclick="toggleFlashcardMode()">
+    <span>&#127924;</span> Flashcard Mode
+  </button>
+</div>
+
+<!-- FLASHCARD MODE CONTAINER -->
+<div class="flashcard-mode" id="flashcardMode">
+  <div class="flashcard-header">
+    <div class="flashcard-title">&#127924; Flashcard Mode</div>
+    <div class="flashcard-progress">
+      Card <span class="current" id="flashcardCurrent">1</span> of <span id="flashcardTotal">0</span>
+    </div>
+  </div>
+
+  <div class="flashcard-controls">
+    <button class="flashcard-btn prev nav-btn" id="flashcardPrev" onclick="prevFlashcard()">
+      &larr; Previous
+    </button>
+    <button class="flashcard-btn shuffle" id="flashcardShuffle" onclick="shuffleFlashcards()">
+      &#128256; Shuffle
+    </button>
+    <button class="flashcard-btn next nav-btn" id="flashcardNext" onclick="nextFlashcard()">
+      Next &rarr;
+    </button>
+  </div>
+
+  <div class="flashcard-progress-bar">
+    <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+  </div>
+
+  <div class="flashcard-wrapper">
+    <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+      <div class="flashcard-face flashcard-front">
+        <span class="flashcard-category red" id="flashcardCategory">Key Idea</span>
+        <span class="flashcard-label">Term</span>
+        <div class="flashcard-term" id="flashcardTerm">Loading...</div>
+        <div class="flashcard-hint">Click to flip <span>&circlearrowright;</span></div>
+      </div>
+      <div class="flashcard-face flashcard-back">
+        <span class="flashcard-label">Definition</span>
+        <div class="flashcard-definition" id="flashcardDefinition">Loading...</div>
+        <div class="flashcard-hint">Click to flip back <span>&circlearrowright;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flashcard-shortcuts">
+    <kbd>&larr;</kbd> Previous | <kbd>Space</kbd> Flip | <kbd>&rarr;</kbd> Next | <kbd>S</kbd> Shuffle
+  </div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Stream vs Block Ciphers -->
+<details>
+  <summary>&#128256; 1. Stream Ciphers vs Block Ciphers</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY CONCEPT:</strong> Stream ciphers encrypt data <em>one bit (or byte) at a time</em> by XORing plaintext with a pseudo-random keystream. Block ciphers encrypt <em>fixed-size blocks</em> (e.g., 128 bits) at a time.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Comparison</h3>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Stream Cipher</th>
+        <th>Block Cipher</th>
+      </tr>
+      <tr>
+        <td><strong>Unit of Encryption</strong></td>
+        <td>Bit or byte at a time</td>
+        <td>Fixed block (64, 128 bits)</td>
+      </tr>
+      <tr>
+        <td><strong>Operation</strong></td>
+        <td>XOR with keystream</td>
+        <td>Substitution-permutation network or Feistel</td>
+      </tr>
+      <tr>
+        <td><strong>Speed</strong></td>
+        <td>Very fast, low latency</td>
+        <td>Slower, needs full block</td>
+      </tr>
+      <tr>
+        <td><strong>Error Propagation</strong></td>
+        <td>Single bit (no propagation)</td>
+        <td>Entire block affected</td>
+      </tr>
+      <tr>
+        <td><strong>Use Case</strong></td>
+        <td>Wireless, real-time communication</td>
+        <td>File encryption, TLS bulk data</td>
+      </tr>
+      <tr>
+        <td><strong>Key Reuse</strong></td>
+        <td>NEVER reuse keystream -- catastrophic</td>
+        <td>Key reuse with different IVs is safer</td>
+      </tr>
+    </table>
+
+    <div class="key">
+      <strong>Stream Cipher Core Formula:</strong> C<sub>i</sub> = P<sub>i</sub> XOR K<sub>i</sub> -- Each plaintext bit is XORed with the corresponding keystream bit. Decryption is the same operation: P<sub>i</sub> = C<sub>i</sub> XOR K<sub>i</sub>.
+    </div>
+
+    <div class="warn">
+      <strong>Critical Warning -- Keystream Reuse:</strong> If the same keystream encrypts two messages, an attacker can XOR the ciphertexts to get P1 XOR P2, eliminating the key entirely. This is why <em>nonce/IV management</em> is essential.
+    </div>
+
+    <div class="ascii-diagram-title">Stream Cipher Operation</div>
+    <div class="ascii-diagram">Key + Nonce ---> Keystream Generator ---> K1, K2, K3, K4 ...
+                                                    |
+Plaintext:  P1, P2, P3, P4 ...                     |
+                  XOR  <----------------------------+
+Ciphertext: C1, C2, C3, C4 ...</div>
+  </div>
+</details>
+
+<!-- Section 2: LFSR -->
+<details>
+  <summary>&#9881;&#65039; 2. LFSR -- Linear Feedback Shift Register</summary>
+  <div class="content-section">
+    <div class="blue">
+      <strong>Definition:</strong> An LFSR is a shift register whose input bit is a linear function (XOR) of its previous state. With an n-bit register and a <em>primitive polynomial</em>, the maximum period is <em>2^n - 1</em>.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">How LFSRs Work</h3>
+    <ul>
+      <li><strong>Shift register</strong> -- n flip-flops holding bits, shifting right each clock cycle</li>
+      <li><strong>Feedback function</strong> -- XOR of selected "tap" positions feeds back to the input</li>
+      <li><strong>Feedback polynomial</strong> -- Determines which taps are used (e.g., x^4 + x + 1)</li>
+      <li><strong>Primitive polynomial</strong> -- Produces maximum-length sequence of period 2^n - 1</li>
+      <li><strong>Output</strong> -- The bit shifted out each cycle becomes the keystream bit</li>
+    </ul>
+
+    <div class="ascii-diagram-title">4-bit LFSR Example (x^4 + x + 1)</div>
+    <div class="ascii-diagram">  +----[XOR]<-----------+
+  |                      |
+  v                      |
+[b4] --> [b3] --> [b2] --> [b1] --> output (keystream bit)
+  ^
+  |    feedback taps at positions 4 and 1
+  +--- new bit fed back into register</div>
+
+    <div class="red">
+      <strong>FATAL FLAW -- Linearity:</strong> Because LFSRs are <em>linear</em>, the Berlekamp-Massey algorithm can reconstruct the entire LFSR (polynomial + state) from just <em>2n</em> bits of known keystream. This is a devastating known-plaintext attack.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Fixing LFSR Vulnerabilities</h3>
+    <div class="box">
+      <h4>Three Approaches to Nonlinearity</h4>
+      <ul>
+        <li><strong>Nonlinear Combining</strong> -- Combine outputs of multiple LFSRs through a nonlinear Boolean function (e.g., majority function)</li>
+        <li><strong>Clock-Controlled Generators</strong> -- Use one LFSR to control the clocking of another (irregular clocking breaks linearity)</li>
+        <li><strong>Nonlinear Filters</strong> -- Apply a nonlinear function to multiple internal bits of a single LFSR to produce output</li>
+      </ul>
+    </div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>LFSR = "Linear = Learnable" -- 2n bits is all an attacker needs</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: A5/1 (GSM) -->
+<details>
+  <summary>&#128241; 3. A5/1 -- GSM Stream Cipher</summary>
+  <div class="content-section">
+    <div class="red"><strong>BROKEN CIPHER:</strong> A5/1 was the encryption algorithm for GSM mobile phone communications. Despite being a military secret initially, it was reverse-engineered and is now <em>completely broken</em>.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">A5/1 Architecture</h3>
+    <ul>
+      <li><strong>Three LFSRs</strong> -- R1 (19 bits), R2 (22 bits), R3 (23 bits) = 64 bits total state</li>
+      <li><strong>Irregular clocking</strong> -- Each LFSR has a "clocking bit." At each step, the majority value of the 3 clocking bits is computed. Only LFSRs whose clocking bit agrees with the majority are actually clocked</li>
+      <li><strong>Output</strong> -- XOR of the three LFSR output bits</li>
+      <li><strong>Key</strong> -- 64-bit session key (but effectively 54 bits due to forced zero bits)</li>
+    </ul>
+
+    <div class="ascii-diagram-title">A5/1 Majority Clocking</div>
+    <div class="ascii-diagram">R1 (19 bits) --clk bit 8--+
+                           |
+R2 (22 bits) --clk bit 10-+--> MAJORITY --> clock only those
+                           |                 that match majority
+R3 (23 bits) --clk bit 10-+
+
+Output = R1[18] XOR R2[21] XOR R3[22]</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">How A5/1 Was Broken</h3>
+    <div class="box">
+      <h4>Attack Methods</h4>
+      <ul>
+        <li><strong>Rainbow tables</strong> -- Precomputed tables allow real-time decryption of GSM calls</li>
+        <li><strong>Known-plaintext</strong> -- GSM frames have predictable headers, providing known plaintext</li>
+        <li><strong>Time-memory tradeoff</strong> -- Practical attack in seconds with precomputation</li>
+        <li><strong>Small state space</strong> -- 64 bits total is too small by modern standards</li>
+      </ul>
+    </div>
+
+    <div class="warn">
+      <strong>A5/2 was even weaker</strong> -- deliberately weakened "export" version for non-Western countries. Broken in milliseconds. Both are deprecated; 3G/4G/5G use AES-based encryption.
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: RC4 -->
+<details>
+  <summary>&#128274; 4. RC4 -- Rivest Cipher 4</summary>
+  <div class="content-section">
+    <div class="blue">
+      <strong>Definition:</strong> RC4 is a <em>byte-oriented</em> stream cipher designed by Ron Rivest in 1987. It was the most widely used stream cipher (SSL/TLS, WEP, WPA-TKIP) but is now <em>prohibited in TLS 1.3</em> due to known biases.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">RC4 Two-Phase Design</h3>
+    <div class="box">
+      <h4>Phase 1: KSA (Key Scheduling Algorithm)</h4>
+      <ul>
+        <li>Initialize permutation array S[0..255] = {0, 1, 2, ..., 255}</li>
+        <li>Scramble S using the secret key (40-2048 bits)</li>
+        <li>Result: a key-dependent permutation of all 256 byte values</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4>Phase 2: PRGA (Pseudo-Random Generation Algorithm)</h4>
+      <ul>
+        <li>For each output byte: update indices i, j using S</li>
+        <li>Swap S[i] and S[j]</li>
+        <li>Output S[(S[i] + S[j]) mod 256] as the keystream byte</li>
+        <li>XOR keystream byte with plaintext byte to encrypt</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">RC4 Vulnerabilities</h3>
+    <div class="red">
+      <strong>Known Biases:</strong>
+      <ul style="margin-top: 8px;">
+        <li><strong>Second-byte bias</strong> -- P(second output byte = 0) = 2/256 instead of 1/256</li>
+        <li><strong>Initial keystream biases</strong> -- First ~256 bytes have detectable statistical biases</li>
+        <li><strong>Fluhrer-Mantin-Shamir (FMS) attack</strong> -- Exploits weak IVs in WEP to recover the key</li>
+        <li><strong>Royal Holloway attack</strong> -- Statistical biases allow plaintext recovery in TLS with ~2^30 ciphertexts</li>
+      </ul>
+    </div>
+
+    <div class="green">
+      <strong>Mitigation (historical):</strong> Drop the first 256 (or 3072) bytes of keystream output -- known as "RC4-drop[n]." But this is insufficient; RC4 should not be used in new systems.
+    </div>
+
+    <div class="prof">
+      <strong>Exam Note:</strong> RC4 is prohibited in TLS 1.3 (RFC 7465). Know the KSA/PRGA two-phase design and why initial byte biases make it insecure.
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: eSTREAM Competition -->
+<details>
+  <summary>&#127942; 5. eSTREAM Competition</summary>
+  <div class="content-section">
+    <div class="key">
+      <strong>eSTREAM (2004-2008):</strong> European competition to identify new stream ciphers, organized by the ECRYPT network. Two profiles: software-optimized and hardware-optimized.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">eSTREAM Winners</h3>
+    <table>
+      <tr>
+        <th>Profile</th>
+        <th>Cipher</th>
+        <th>Key Features</th>
+      </tr>
+      <tr>
+        <td rowspan="4"><strong>Software</strong></td>
+        <td><em>Rabbit</em></td>
+        <td>128-bit key, very fast on 32-bit CPUs</td>
+      </tr>
+      <tr>
+        <td><em>HC-128</em></td>
+        <td>128-bit key, large internal state (4 KB), strong security margin</td>
+      </tr>
+      <tr>
+        <td><em>Salsa20</em></td>
+        <td>256-bit key, by Daniel Bernstein. Basis for ChaCha20</td>
+      </tr>
+      <tr>
+        <td><em>SOSEMANUK</em></td>
+        <td>Derived from Serpent block cipher + SNOW stream cipher</td>
+      </tr>
+      <tr>
+        <td rowspan="3"><strong>Hardware</strong></td>
+        <td><em>Grain</em></td>
+        <td>80-bit key, LFSR + nonlinear FSR combination</td>
+      </tr>
+      <tr>
+        <td><em>MICKEY</em></td>
+        <td>80-bit key, mutual irregular clocking of two registers</td>
+      </tr>
+      <tr>
+        <td><em>Trivium</em></td>
+        <td>80-bit key, elegant 3-register design, very compact in hardware</td>
+      </tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid -- Software Winners</small>
+      <strong>"Rabbits Hop Smoothly on Salsa" -- Rabbit, HC-128, SOSEMANUK, Salsa20</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: ChaCha20-Poly1305 -->
+<details>
+  <summary>&#128737;&#65039; 6. ChaCha20-Poly1305 -- Modern AEAD</summary>
+  <div class="content-section">
+    <div class="green"><strong>MODERN STANDARD:</strong> ChaCha20-Poly1305 is an <em>Authenticated Encryption with Associated Data (AEAD)</em> construction used in TLS 1.3, WireGuard, and many modern protocols. It pairs the ChaCha20 stream cipher with the Poly1305 MAC.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">ChaCha20 Stream Cipher</h3>
+    <ul>
+      <li><strong>Designer</strong> -- Daniel Bernstein (variant of his Salsa20 from eSTREAM)</li>
+      <li><strong>Key size</strong> -- 256 bits</li>
+      <li><strong>Nonce</strong> -- 96 bits (must never repeat with same key)</li>
+      <li><strong>Block counter</strong> -- 32 bits (allows random access to keystream)</li>
+      <li><strong>State</strong> -- 512-bit state matrix (4x4 of 32-bit words)</li>
+      <li><strong>Operations</strong> -- Only ARX: Addition, Rotation, XOR (no S-boxes, no table lookups)</li>
+      <li><strong>Rounds</strong> -- 20 rounds (10 column rounds + 10 diagonal rounds)</li>
+    </ul>
+
+    <div class="box">
+      <h4>Why ChaCha20 over AES?</h4>
+      <ul>
+        <li><strong>No timing side channels</strong> -- ARX operations run in constant time (no cache-timing attacks)</li>
+        <li><strong>Fast in software</strong> -- Excellent performance without hardware AES-NI instructions</li>
+        <li><strong>Mobile devices</strong> -- Better performance on ARM processors without AES hardware</li>
+        <li><strong>Simpler implementation</strong> -- Less prone to implementation errors</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Poly1305 MAC</h3>
+    <ul>
+      <li><strong>One-time authenticator</strong> -- Produces a 128-bit authentication tag</li>
+      <li><strong>Mathematically proven</strong> -- Based on polynomial evaluation modulo a prime (2^130 - 5)</li>
+      <li><strong>Must use a unique key per message</strong> -- ChaCha20 derives a fresh Poly1305 key for each message</li>
+    </ul>
+
+    <div class="red">
+      <strong>TLS 1.3 AEAD Suites:</strong> Only two AEAD algorithms: <em>AES-GCM</em> and <em>ChaCha20-Poly1305</em>. All non-AEAD ciphers (including RC4, CBC mode) are removed.
+    </div>
+  </div>
+</details>
+
+<!-- Section 7: Wireless Security Evolution -->
+<details>
+  <summary>&#128225; 7. Wireless Security -- WEP to WPA3</summary>
+  <div class="content-section">
+    <div class="red"><strong>WEP IS CATASTROPHICALLY BROKEN.</strong> Understanding <em>why</em> it failed teaches fundamental lessons about cryptographic system design.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WEP -- Wired Equivalent Privacy (BROKEN)</h3>
+    <div class="box">
+      <h4>WEP Design Flaws</h4>
+      <ul>
+        <li><strong>24-bit IV</strong> -- Only 16.7 million possible IVs. On a busy network, IVs repeat in hours</li>
+        <li><strong>IV sent in plaintext</strong> -- Attacker can see the IV and correlate with known plaintext</li>
+        <li><strong>RC4 weak keys</strong> -- Certain IV values produce weak RC4 key schedules (FMS attack)</li>
+        <li><strong>CRC-32 integrity</strong> -- CRC is not cryptographically secure; attacker can modify ciphertext and fix the CRC without knowing the key</li>
+        <li><strong>Static shared key</strong> -- Same key for all users, rarely changed</li>
+        <li><strong>No mutual authentication</strong> -- Only client authenticates to AP, not vice versa</li>
+      </ul>
+    </div>
+
+    <div class="flow">
+      <span class="flow-step">WEP Key (40/104 bit)</span>
+      <span class="flow-arrow">+</span>
+      <span class="flow-step">24-bit IV</span>
+      <span class="flow-arrow">--></span>
+      <span class="flow-step">RC4 Keystream</span>
+      <span class="flow-arrow">XOR</span>
+      <span class="flow-step">Plaintext + CRC-32</span>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA -- Wi-Fi Protected Access</h3>
+    <div class="key">
+      <strong>WPA (2003):</strong> Temporary fix using <em>TKIP (Temporal Key Integrity Protocol)</em> -- designed to run on existing WEP hardware with firmware updates.
+      <ul style="margin-top: 8px;">
+        <li><strong>Per-packet keys</strong> -- Mixes IV + base key + MAC address to create unique per-packet keys</li>
+        <li><strong>48-bit IV</strong> -- Extended from 24 to 48 bits (no more IV exhaustion)</li>
+        <li><strong>MIC (Michael)</strong> -- Replaced CRC-32 with a cryptographic message integrity check</li>
+        <li><strong>Still uses RC4</strong> -- TKIP is a wrapper around RC4, so inherits some weaknesses</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA2 -- AES-CCMP</h3>
+    <div class="green">
+      <strong>WPA2 (2004, mandatory 2006):</strong> Full redesign using <em>AES-CCMP</em> (Counter mode with CBC-MAC Protocol).
+      <ul style="margin-top: 8px;">
+        <li><strong>AES-128</strong> in counter mode for confidentiality</li>
+        <li><strong>CBC-MAC</strong> for integrity and authentication</li>
+        <li><strong>48-bit packet number</strong> -- No IV reuse issues</li>
+        <li><strong>4-way handshake</strong> -- Derives per-session pairwise transient key (PTK)</li>
+        <li><strong>Vulnerability</strong> -- KRACK attack (2017): forces nonce reuse in the 4-way handshake</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA3 -- SAE/Dragonfly</h3>
+    <div class="green">
+      <strong>WPA3 (2018):</strong> Major security upgrade.
+      <ul style="margin-top: 8px;">
+        <li><strong>SAE (Simultaneous Authentication of Equals)</strong> -- Replaces PSK with Dragonfly key exchange (password-authenticated key agreement)</li>
+        <li><strong>Forward secrecy</strong> -- Compromising the password doesn't decrypt past traffic</li>
+        <li><strong>Protected Management Frames (PMF)</strong> -- Mandatory, prevents deauth attacks</li>
+        <li><strong>192-bit enterprise mode</strong> -- CNSA suite with AES-256-GCM, SHA-384, ECDH P-384</li>
+        <li><strong>OWE (Opportunistic Wireless Encryption)</strong> -- Encrypts open networks without passwords</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Evolution Summary</h3>
+    <table>
+      <tr>
+        <th>Protocol</th>
+        <th>Cipher</th>
+        <th>IV Size</th>
+        <th>Integrity</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td><strong>WEP</strong></td>
+        <td>RC4</td>
+        <td>24-bit</td>
+        <td>CRC-32</td>
+        <td style="color: var(--wrong)">BROKEN</td>
+      </tr>
+      <tr>
+        <td><strong>WPA</strong></td>
+        <td>RC4-TKIP</td>
+        <td>48-bit</td>
+        <td>Michael MIC</td>
+        <td style="color: #FFA94D">Deprecated</td>
+      </tr>
+      <tr>
+        <td><strong>WPA2</strong></td>
+        <td>AES-CCMP</td>
+        <td>48-bit PN</td>
+        <td>CBC-MAC</td>
+        <td style="color: var(--correct)">Current</td>
+      </tr>
+      <tr>
+        <td><strong>WPA3</strong></td>
+        <td>AES-CCMP/GCMP</td>
+        <td>48-bit PN</td>
+        <td>GMAC/CBC-MAC</td>
+        <td style="color: var(--correct)">Latest</td>
+      </tr>
+    </table>
+  </div>
+</details>
+
+<!-- Section 8: Bluetooth Security -->
+<details>
+  <summary>&#128264; 8. Bluetooth Security</summary>
+  <div class="content-section">
+    <div class="key">
+      <strong>Bluetooth</strong> uses the <em>E0 stream cipher</em> for encryption in Classic Bluetooth. Bluetooth Low Energy (BLE) uses AES-CCM. Both have known vulnerabilities.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">E0 Stream Cipher</h3>
+    <ul>
+      <li><strong>Four LFSRs</strong> -- Combined through a finite state machine (summation generator)</li>
+      <li><strong>128-bit key</strong> -- Derived from link key during pairing</li>
+      <li><strong>Re-keyed every 2745 bits</strong> -- Limits exposure per key</li>
+      <li><strong>Algebraic attacks</strong> -- Effective complexity reduced to ~2^38 (far below 128-bit security)</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Pairing Modes</h3>
+    <table>
+      <tr>
+        <th>Mode</th>
+        <th>Description</th>
+        <th>Security</th>
+      </tr>
+      <tr>
+        <td><strong>Just Works</strong></td>
+        <td>No user interaction</td>
+        <td style="color: var(--wrong)">Vulnerable to MITM</td>
+      </tr>
+      <tr>
+        <td><strong>Numeric Comparison</strong></td>
+        <td>Both devices display 6-digit number, user confirms match</td>
+        <td style="color: var(--correct)">MITM-protected</td>
+      </tr>
+      <tr>
+        <td><strong>Passkey Entry</strong></td>
+        <td>User enters PIN on one or both devices</td>
+        <td style="color: var(--correct)">MITM-protected</td>
+      </tr>
+      <tr>
+        <td><strong>Out of Band (OOB)</strong></td>
+        <td>Uses NFC or other channel for pairing data</td>
+        <td style="color: var(--correct)">MITM-protected</td>
+      </tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Notable Bluetooth Attacks</h3>
+    <div class="red">
+      <strong>BlueBorne (2017):</strong> Remote code execution over Bluetooth without pairing. Affected ~5.3 billion devices across Android, iOS, Windows, Linux. Attacker just needs Bluetooth enabled and in range -- no user interaction required.
+    </div>
+
+    <div class="red">
+      <strong>KNOB Attack (Key Negotiation of Bluetooth, 2019):</strong> Attacker forces Bluetooth devices to negotiate an encryption key with only <em>1 byte of entropy</em> (8 bits), making brute-force trivial. Exploits the fact that entropy negotiation was not authenticated.
+    </div>
+
+    <div class="warn">
+      <strong>BIAS Attack (2020):</strong> Bluetooth Impersonation AttackS -- allows an attacker to impersonate a previously paired device by exploiting flaws in the Secure Connections establishment.
+    </div>
+  </div>
+</details>
+
+<!-- Section 9: 5G Security -->
+<details>
+  <summary>&#128752; 9. 5G Security Improvements</summary>
+  <div class="content-section">
+    <div class="green"><strong>5G</strong> introduces significant security improvements over 4G/LTE, addressing known vulnerabilities in previous generations.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Key 5G Security Features</h3>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>4G/LTE</th>
+        <th>5G</th>
+      </tr>
+      <tr>
+        <td><strong>Identity Protection</strong></td>
+        <td>IMSI sent in plaintext (IMSI catchers)</td>
+        <td>SUPI encrypted as SUCI using ECIES</td>
+      </tr>
+      <tr>
+        <td><strong>Key Length</strong></td>
+        <td>128-bit</td>
+        <td>128 or 256-bit</td>
+      </tr>
+      <tr>
+        <td><strong>Authentication</strong></td>
+        <td>One-way (network authenticates UE)</td>
+        <td>Mutual authentication (5G-AKA, EAP-AKA')</td>
+      </tr>
+      <tr>
+        <td><strong>Integrity Protection</strong></td>
+        <td>User plane: optional</td>
+        <td>User plane: supported</td>
+      </tr>
+      <tr>
+        <td><strong>Network Slicing</strong></td>
+        <td>N/A</td>
+        <td>Isolated security per slice</td>
+      </tr>
+      <tr>
+        <td><strong>Roaming Security</strong></td>
+        <td>Limited inter-operator security</td>
+        <td>SEPP (Security Edge Protection Proxy)</td>
+      </tr>
+    </table>
+
+    <div class="key">
+      <strong>SUPI/SUCI:</strong> The Subscription Permanent Identifier (SUPI) is never sent over the air in plaintext. Instead, it is encrypted into a Subscription Concealed Identifier (SUCI) using the home network's public key with ECIES (Elliptic Curve Integrated Encryption Scheme). This prevents IMSI-catcher attacks.
+    </div>
+
+    <div class="box">
+      <h4>5G Encryption Algorithms</h4>
+      <ul>
+        <li><strong>NEA0</strong> -- Null (no encryption, for emergency calls)</li>
+        <li><strong>NEA1</strong> -- SNOW 3G (stream cipher)</li>
+        <li><strong>NEA2</strong> -- AES-CTR (128-bit)</li>
+        <li><strong>NEA3</strong> -- ZUC (Chinese stream cipher)</li>
+      </ul>
+    </div>
+
+    <div class="prof">
+      <strong>Why This Matters:</strong> Each wireless generation learned from the failures of the previous one -- WEP's broken RC4 led to AES in WPA2, IMSI catchers in 4G led to SUCI in 5G. The pattern: <em>security is iterative, driven by real-world attacks</em>.
+    </div>
+  </div>
+</details>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section">
+    <h2>Week 12 Quiz -- Wireless Cryptography &amp; Stream Ciphers</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">1</span> What is the fundamental difference between a stream cipher and a block cipher?</p>
+      <div class="options">
+        <div class="opt">Stream ciphers use public keys while block ciphers use symmetric keys</div>
+        <div class="opt">Stream ciphers encrypt bit-by-bit using a keystream XOR, while block ciphers encrypt fixed-size blocks</div>
+        <div class="opt">Block ciphers are faster than stream ciphers</div>
+        <div class="opt">Stream ciphers provide authentication while block ciphers do not</div>
+      </div>
+      <div class="explanation">Stream ciphers generate a pseudo-random keystream and XOR it with plaintext one bit or byte at a time. Block ciphers process fixed-size blocks (e.g., 128 bits) through substitution-permutation networks or Feistel structures.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">2</span> Why is a basic LFSR insecure as a standalone stream cipher?</p>
+      <div class="options">
+        <div class="opt">It produces too short a keystream period</div>
+        <div class="opt">It requires too much memory to implement</div>
+        <div class="opt">Its linearity allows the Berlekamp-Massey algorithm to reconstruct it from just 2n bits of known keystream</div>
+        <div class="opt">It can only generate binary output</div>
+      </div>
+      <div class="explanation">LFSRs are linear systems, meaning the Berlekamp-Massey algorithm can determine the feedback polynomial and initial state from just 2n consecutive keystream bits (where n is the register length). This is a devastating known-plaintext attack.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> How does A5/1 achieve nonlinearity despite using three LFSRs?</p>
+      <div class="options">
+        <div class="opt">Irregular (majority-based) clocking -- only LFSRs whose clocking bit matches the majority value are clocked each cycle</div>
+        <div class="opt">Using a nonlinear S-box on the output</div>
+        <div class="opt">Applying AES encryption to the LFSR outputs</div>
+        <div class="opt">Using prime-length registers to avoid periodicity</div>
+      </div>
+      <div class="explanation">A5/1 uses majority-based clocking: each LFSR has a designated clocking bit, and only those LFSRs whose clocking bit agrees with the majority of all three clocking bits are stepped. This irregular clocking introduces nonlinearity.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> What are the two phases of RC4's operation?</p>
+      <div class="options">
+        <div class="opt">Encryption phase and authentication phase</div>
+        <div class="opt">Key expansion and block processing</div>
+        <div class="opt">Initialization vector generation and stream output</div>
+        <div class="opt">KSA (Key Scheduling Algorithm) to initialize the permutation, then PRGA (Pseudo-Random Generation Algorithm) to produce keystream bytes</div>
+      </div>
+      <div class="explanation">RC4 works in two phases: KSA scrambles the 256-byte permutation array S using the secret key, then PRGA generates keystream bytes by continually swapping elements and outputting S[(S[i]+S[j]) mod 256].</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">5</span> Why was WEP's use of RC4 catastrophically flawed?</p>
+      <div class="options">
+        <div class="opt">RC4 was too slow for wireless networks</div>
+        <div class="opt">24-bit IVs caused rapid reuse, weak RC4 key schedules leaked key bytes, and CRC-32 is not a cryptographic integrity check</div>
+        <div class="opt">WEP used RC4 with 8-bit keys</div>
+        <div class="opt">RC4 requires hardware acceleration that access points lacked</div>
+      </div>
+      <div class="explanation">WEP combined multiple flaws: the 24-bit IV space exhausts quickly causing keystream reuse, certain IVs produce weak RC4 key schedules (FMS attack), CRC-32 allows undetected ciphertext modification, and the static shared key is rarely changed.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> What encryption does WPA2 use instead of RC4?</p>
+      <div class="options">
+        <div class="opt">Triple DES in CBC mode</div>
+        <div class="opt">ChaCha20-Poly1305</div>
+        <div class="opt">AES-CCMP (AES in Counter mode with CBC-MAC Protocol)</div>
+        <div class="opt">Blowfish in CTR mode</div>
+      </div>
+      <div class="explanation">WPA2 uses AES-CCMP -- AES-128 in counter mode for confidentiality combined with CBC-MAC for integrity and authentication. This was a complete redesign from WEP/WPA's RC4-based approach.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> What key improvement does WPA3's SAE (Dragonfly) provide over WPA2-PSK?</p>
+      <div class="options">
+        <div class="opt">Forward secrecy -- compromising the password does not allow decryption of previously captured traffic</div>
+        <div class="opt">Faster connection times</div>
+        <div class="opt">Support for longer passwords</div>
+        <div class="opt">Backward compatibility with WEP devices</div>
+      </div>
+      <div class="explanation">SAE (Simultaneous Authentication of Equals) uses the Dragonfly password-authenticated key exchange, which provides forward secrecy. Even if the password is later compromised, past captured sessions cannot be decrypted because each session derives unique keys.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">8</span> What advantage does ChaCha20 have over AES on devices without hardware AES support?</p>
+      <div class="options">
+        <div class="opt">ChaCha20 uses smaller keys</div>
+        <div class="opt">ChaCha20 is a block cipher and therefore more secure</div>
+        <div class="opt">ChaCha20 uses only ARX operations (add, rotate, XOR) which run in constant time without cache-timing side channels</div>
+        <div class="opt">ChaCha20 requires less memory than AES</div>
+      </div>
+      <div class="explanation">ChaCha20 uses only addition, rotation, and XOR (ARX) -- operations that execute in constant time on all processors. Software AES implementations without AES-NI are vulnerable to cache-timing side-channel attacks because of table lookups.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">9</span> What is the KNOB (Key Negotiation of Bluetooth) attack?</p>
+      <div class="options">
+        <div class="opt">An attack that jams Bluetooth signals</div>
+        <div class="opt">An attacker forces devices to negotiate an encryption key with only 1 byte of entropy, making brute-force trivial</div>
+        <div class="opt">A firmware exploit in Bluetooth chips</div>
+        <div class="opt">An attack that clones Bluetooth MAC addresses</div>
+      </div>
+      <div class="explanation">The KNOB attack exploits the fact that Bluetooth's entropy negotiation for the encryption key was not authenticated. An attacker can force both devices to agree on a key with only 1 byte (8 bits) of entropy, which can be brute-forced instantly.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">10</span> How does 5G protect subscriber identity compared to 4G?</p>
+      <div class="options">
+        <div class="opt">5G uses shorter identifiers that are harder to intercept</div>
+        <div class="opt">5G rotates identifiers every 30 seconds</div>
+        <div class="opt">5G does not transmit any identifier over the air</div>
+        <div class="opt">5G encrypts the SUPI into a SUCI using the home network's public key (ECIES), preventing IMSI-catcher attacks</div>
+      </div>
+      <div class="explanation">In 4G, the IMSI is sent in plaintext, enabling IMSI-catcher surveillance. In 5G, the Subscription Permanent Identifier (SUPI) is encrypted into a Subscription Concealed Identifier (SUCI) using Elliptic Curve Integrated Encryption Scheme (ECIES) with the home network's public key.</div>
+    </div>
+</div>
+
+</div><!-- end container -->
+
+<!-- QUIZ SCRIPT -->
+<script>
+(function() {
+  // Celebration functions
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // Initialize all quiz sections on the page
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) {
+        fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      }
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) {
+        streakDisplay.classList.toggle('on-fire', streak >= 3);
+      }
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++;
+            streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('UNSTOPPABLE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+<!-- FLASHCARD MODE SCRIPT -->
+<script>
+(function() {
+  let flashcards = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+
+  function getFlashcardData() {
+    return [
+      { term: "Stream Cipher vs Block Cipher", definition: "Stream ciphers encrypt bit-by-bit using keystream XOR (fast, low latency, no error propagation). Block ciphers encrypt fixed-size blocks (128 bits) using S-P networks or Feistel. Never reuse a stream cipher keystream.", category: "red", label: "Key Idea" },
+      { term: "LFSR (Linear Feedback Shift Register)", definition: "Shift register with XOR feedback taps. Primitive polynomial gives max period 2^n-1. Fatal flaw: linearity allows Berlekamp-Massey to reconstruct from just 2n known keystream bits.", category: "blue", label: "Definition" },
+      { term: "Fixing LFSR Linearity", definition: "Three approaches: (1) Nonlinear combining of multiple LFSRs, (2) Clock-controlled generators (one LFSR controls another's clocking), (3) Nonlinear filter functions on internal bits.", category: "blue", label: "Definition" },
+      { term: "A5/1 (GSM Cipher)", definition: "Three irregularly-clocked LFSRs (19+22+23=64 bits). Majority-based clocking for nonlinearity. Broken with rainbow tables and known-plaintext attacks. A5/2 was even weaker (export version).", category: "red", label: "Key Idea" },
+      { term: "RC4", definition: "Byte-oriented stream cipher by Rivest (1987). Two phases: KSA (key scheduling) and PRGA (keystream generation). Biases in initial bytes, prohibited in TLS 1.3 (RFC 7465).", category: "red", label: "Key Idea" },
+      { term: "eSTREAM Winners", definition: "Software: Rabbit, HC-128, Salsa20, SOSEMANUK. Hardware: Grain, MICKEY, Trivium. European competition (2004-2008) to find next-generation stream ciphers.", category: "green", label: "Reference" },
+      { term: "ChaCha20-Poly1305", definition: "Modern AEAD: ChaCha20 stream cipher (256-bit key, ARX operations, no side channels) + Poly1305 MAC (128-bit tag). Used in TLS 1.3 alongside AES-GCM. Ideal for devices without hardware AES.", category: "green", label: "Best Practice" },
+      { term: "WEP Failures", definition: "24-bit IV (repeats in hours), RC4 weak key schedules, CRC-32 not crypto-secure, static shared key, no mutual auth. Completely broken by FMS attack and aircrack-ng.", category: "orange", label: "Caution" },
+      { term: "WPA -> WPA2 -> WPA3", definition: "WPA: TKIP wrapper around RC4 (temporary fix). WPA2: AES-CCMP (proper fix). WPA3: SAE/Dragonfly (forward secrecy), PMF mandatory, 192-bit enterprise mode, OWE for open networks.", category: "red", label: "Key Idea" },
+      { term: "BlueBorne Attack", definition: "2017 Bluetooth RCE vulnerability. No pairing needed, no user interaction. Affected ~5.3 billion devices. Just needs Bluetooth enabled and in range.", category: "orange", label: "Caution" },
+      { term: "KNOB Attack", definition: "Key Negotiation of Bluetooth (2019). Forces encryption key entropy down to 1 byte (8 bits) because entropy negotiation was not authenticated. Brute-force becomes trivial.", category: "orange", label: "Caution" },
+      { term: "5G SUPI/SUCI", definition: "5G encrypts the permanent subscriber identity (SUPI) into a concealed identifier (SUCI) using ECIES with the home network's public key. Prevents IMSI-catcher attacks that plagued 4G.", category: "green", label: "Best Practice" },
+      { term: "Keystream Reuse Catastrophe", definition: "If same keystream encrypts two messages: C1 XOR C2 = P1 XOR P2 (key cancels out). Attacker gets relationship between plaintexts. This is why nonce/IV must NEVER repeat with the same key.", category: "orange", label: "Caution" },
+      { term: "ARX Operations (ChaCha20)", definition: "Addition, Rotation, XOR -- the only three operations ChaCha20 uses. All run in constant time on any processor, eliminating cache-timing side channels that affect software AES implementations.", category: "blue", label: "Definition" }
+    ];
+  }
+
+  function initFlashcards() {
+    flashcards = getFlashcardData();
+    document.getElementById('flashcardTotal').textContent = flashcards.length;
+    if (flashcards.length > 0) {
+      showFlashcard(0);
+    }
+  }
+
+  function showFlashcard(index) {
+    if (flashcards.length === 0) return;
+
+    currentIndex = index;
+    const card = flashcards[index];
+
+    isFlipped = false;
+    document.getElementById('flashcard').classList.remove('flipped');
+
+    document.getElementById('flashcardTerm').textContent = card.term;
+    document.getElementById('flashcardDefinition').textContent = card.definition;
+
+    const categoryEl = document.getElementById('flashcardCategory');
+    categoryEl.textContent = card.label;
+    categoryEl.className = 'flashcard-category ' + card.category;
+
+    document.getElementById('flashcardCurrent').textContent = index + 1;
+    const progressPercent = ((index + 1) / flashcards.length) * 100;
+    document.getElementById('flashcardProgressFill').style.width = progressPercent + '%';
+
+    document.getElementById('flashcardPrev').disabled = index === 0;
+    document.getElementById('flashcardNext').disabled = index === flashcards.length - 1;
+  }
+
+  window.flipFlashcard = function() {
+    isFlipped = !isFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  };
+
+  window.prevFlashcard = function() {
+    if (currentIndex > 0) {
+      showFlashcard(currentIndex - 1);
+    }
+  };
+
+  window.nextFlashcard = function() {
+    if (currentIndex < flashcards.length - 1) {
+      showFlashcard(currentIndex + 1);
+    }
+  };
+
+  window.shuffleFlashcards = function() {
+    for (let i = flashcards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+    }
+    showFlashcard(0);
+
+    const btn = document.getElementById('flashcardShuffle');
+    btn.textContent = 'Shuffled!';
+    setTimeout(() => {
+      btn.innerHTML = '&#128256; Shuffle';
+    }, 1000);
+  };
+
+  window.toggleFlashcardMode = function() {
+    const mode = document.getElementById('flashcardMode');
+    const btn = document.getElementById('flashcardToggle');
+    const isActive = mode.classList.toggle('active');
+    btn.classList.toggle('active', isActive);
+
+    if (isActive && flashcards.length === 0) {
+      initFlashcards();
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    const mode = document.getElementById('flashcardMode');
+    if (!mode.classList.contains('active')) return;
+
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        prevFlashcard();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextFlashcard();
+        break;
+      case ' ':
+        e.preventDefault();
+        flipFlashcard();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        shuffleFlashcards();
+        break;
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlashcards);
+  } else {
+    initFlashcards();
+  }
+})();
+</script>
+
+<!-- STUDY TIMER -->
+<script>
+(function() {
+  let timerState = {
+    studyMinutes: 25,
+    breakMinutes: 5,
+    secondsRemaining: 25 * 60,
+    isRunning: false,
+    isBreak: false,
+    totalStudySeconds: 0,
+    sessionsCompleted: 0,
+    currentStreak: 0,
+    intervalId: null
+  };
+
+  const presets = {
+    pomodoro: { study: 25, break: 5 },
+    short: { study: 15, break: 3 },
+    custom: { study: 25, break: 5 }
+  };
+
+  const breakMessages = [
+    { title: "Time for a Break!", text: "Great focus session! You've earned this rest." },
+    { title: "Awesome Work!", text: "Your brain needs rest to consolidate what you learned." },
+    { title: "Break Time!", text: "Step away, stretch, and come back refreshed." },
+    { title: "Well Done!", text: "Consistent study sessions build lasting knowledge." },
+    { title: "Rest Up!", text: "A short break now means better focus later." },
+    { title: "You Did It!", text: "Another session down! Keep up the great work." }
+  ];
+
+  const breakTips = [
+    "Stand up and stretch your legs for a minute.",
+    "Look away from the screen - focus on something 20 feet away.",
+    "Grab a glass of water to stay hydrated.",
+    "Do some shoulder rolls to release tension.",
+    "Take a few deep breaths to reset your focus.",
+    "Walk around the room or do some light movement.",
+    "Close your eyes and rest them for 30 seconds.",
+    "Snack on something healthy if you're hungry."
+  ];
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function formatTotalTime(seconds) {
+    if (seconds >= 3600) {
+      const hours = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${mins}m`;
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function updateDisplay() {
+    const countdown = document.getElementById('timerCountdown');
+    const miniDisplay = document.getElementById('timerMiniDisplay');
+    const statusLabel = document.getElementById('timerStatusLabel');
+    const statusText = document.getElementById('timerStatusText');
+    const startPauseBtn = document.getElementById('startPauseBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const totalStudyEl = document.getElementById('totalStudyTime');
+    const sessionsEl = document.getElementById('sessionsCompleted');
+    const streakEl = document.getElementById('currentStreak');
+    const breakCountdown = document.getElementById('breakCountdown');
+
+    const timeStr = formatTime(timerState.secondsRemaining);
+    countdown.textContent = timeStr;
+    miniDisplay.textContent = timeStr;
+
+    totalStudyEl.textContent = formatTotalTime(timerState.totalStudySeconds);
+    sessionsEl.textContent = timerState.sessionsCompleted;
+    streakEl.textContent = timerState.currentStreak;
+
+    countdown.classList.remove('study-mode', 'break-mode', 'paused');
+    if (timerState.isBreak) {
+      countdown.classList.add('break-mode');
+      statusLabel.textContent = 'BREAK';
+      statusLabel.classList.add('break');
+      statusText.textContent = 'Relax and recharge';
+      skipBtn.textContent = 'End Break';
+      breakCountdown.textContent = timeStr;
+    } else if (timerState.isRunning) {
+      countdown.classList.add('study-mode');
+      statusLabel.textContent = 'STUDYING';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Stay focused!';
+      skipBtn.textContent = 'Skip to Break';
+    } else if (!timerState.isRunning && timerState.secondsRemaining < timerState.studyMinutes * 60) {
+      countdown.classList.add('paused');
+      statusLabel.textContent = 'PAUSED';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to resume';
+    } else {
+      statusLabel.textContent = 'READY';
+      statusLabel.classList.remove('break');
+      statusText.textContent = 'Click Start to begin';
+    }
+
+    startPauseBtn.textContent = timerState.isRunning ? 'Pause' : 'Start';
+    startPauseBtn.classList.toggle('pause', timerState.isRunning);
+    startPauseBtn.classList.toggle('start', !timerState.isRunning);
+  }
+
+  function playNotification() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const playTone = (freq, startTime, duration) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+      };
+      const now = audioContext.currentTime;
+      playTone(523.25, now, 0.3);
+      playTone(659.25, now + 0.15, 0.3);
+      playTone(783.99, now + 0.3, 0.4);
+    } catch (e) {
+      const countdown = document.getElementById('timerCountdown');
+      countdown.style.animation = 'none';
+      setTimeout(() => {
+        countdown.style.animation = 'pulse 0.5s ease-in-out 3';
+      }, 10);
+    }
+  }
+
+  function showBreakOverlay() {
+    const overlay = document.getElementById('breakOverlay');
+    const titleEl = document.getElementById('breakTitle');
+    const textEl = document.getElementById('breakEncouragement');
+    const tipEl = document.getElementById('breakTip');
+
+    const message = breakMessages[Math.floor(Math.random() * breakMessages.length)];
+    const tip = breakTips[Math.floor(Math.random() * breakTips.length)];
+
+    titleEl.textContent = message.title;
+    textEl.textContent = message.text;
+    tipEl.textContent = tip;
+
+    overlay.classList.add('show');
+  }
+
+  function tick() {
+    if (!timerState.isRunning) return;
+
+    timerState.secondsRemaining--;
+
+    if (!timerState.isBreak) {
+      timerState.totalStudySeconds++;
+    }
+
+    updateDisplay();
+
+    if (timerState.secondsRemaining <= 0) {
+      playNotification();
+
+      if (timerState.isBreak) {
+        timerState.isBreak = false;
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+        timerState.currentStreak++;
+        dismissBreak();
+      } else {
+        timerState.sessionsCompleted++;
+        timerState.isBreak = true;
+        timerState.secondsRemaining = timerState.breakMinutes * 60;
+        showBreakOverlay();
+      }
+      updateDisplay();
+    }
+  }
+
+  window.toggleTimer = function() {
+    if (timerState.isRunning) {
+      timerState.isRunning = false;
+      clearInterval(timerState.intervalId);
+    } else {
+      timerState.isRunning = true;
+      timerState.intervalId = setInterval(tick, 1000);
+    }
+    updateDisplay();
+  };
+
+  window.resetTimer = function() {
+    timerState.isRunning = false;
+    timerState.isBreak = false;
+    clearInterval(timerState.intervalId);
+    timerState.secondsRemaining = timerState.studyMinutes * 60;
+    dismissBreak();
+    updateDisplay();
+  };
+
+  window.skipToBreak = function() {
+    if (timerState.isBreak) {
+      timerState.isBreak = false;
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+      timerState.currentStreak++;
+      dismissBreak();
+    } else {
+      timerState.sessionsCompleted++;
+      timerState.isBreak = true;
+      timerState.secondsRemaining = timerState.breakMinutes * 60;
+      showBreakOverlay();
+    }
+    updateDisplay();
+  };
+
+  window.dismissBreak = function() {
+    document.getElementById('breakOverlay').classList.remove('show');
+  };
+
+  window.setPreset = function(presetName) {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === presetName);
+    });
+
+    document.getElementById('customInputs').classList.toggle('show', presetName === 'custom');
+
+    if (presetName !== 'custom') {
+      const preset = presets[presetName];
+      timerState.studyMinutes = preset.study;
+      timerState.breakMinutes = preset.break;
+      if (!timerState.isRunning && !timerState.isBreak) {
+        timerState.secondsRemaining = timerState.studyMinutes * 60;
+      }
+      updateDisplay();
+    }
+  };
+
+  window.applyCustom = function() {
+    const studyInput = document.getElementById('customStudy');
+    const breakInput = document.getElementById('customBreak');
+
+    const study = Math.max(1, Math.min(120, parseInt(studyInput.value) || 25));
+    const breakTime = Math.max(1, Math.min(30, parseInt(breakInput.value) || 5));
+
+    studyInput.value = study;
+    breakInput.value = breakTime;
+
+    timerState.studyMinutes = study;
+    timerState.breakMinutes = breakTime;
+    presets.custom = { study, break: breakTime };
+
+    if (!timerState.isRunning && !timerState.isBreak) {
+      timerState.secondsRemaining = timerState.studyMinutes * 60;
+    }
+    updateDisplay();
+  };
+
+  window.toggleStudyTimer = function() {
+    document.getElementById('studyTimerWrapper').classList.toggle('collapsed');
+  };
+
+  updateDisplay();
+
+  setInterval(() => {
+    if (timerState.totalStudySeconds > 0) {
+      localStorage.setItem('studyTimerStats8415w12', JSON.stringify({
+        totalStudySeconds: timerState.totalStudySeconds,
+        sessionsCompleted: timerState.sessionsCompleted,
+        date: new Date().toDateString()
+      }));
+    }
+  }, 30000);
+
+  const saved = localStorage.getItem('studyTimerStats8415w12');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.date === new Date().toDateString()) {
+        timerState.totalStudySeconds = data.totalStudySeconds || 0;
+        timerState.sessionsCompleted = data.sessionsCompleted || 0;
+        updateDisplay();
+      }
+    } catch (e) {}
+  }
+})();
+</script>
+
+</body>
+</html>
