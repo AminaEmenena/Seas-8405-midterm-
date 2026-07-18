@@ -1021,6 +1021,105 @@ Individual salaries NEVER revealed
   </div>
 </details>
 
+<!-- INTERACTIVE: Secret Sharing Salary Calculator -->
+<div class="interactive-salary-calc" id="salaryCalc">
+<style>
+  .interactive-salary-calc {
+    background: #0d1b2e; border-radius: 14px; padding: 24px; margin: 24px 0;
+    border-left: 5px solid #69DB7C; border: 2px solid rgba(105,219,124,0.3);
+  }
+  .interactive-salary-calc h3 { color: #69DB7C; margin-bottom: 6px; font-size: 1.2em; }
+  .interactive-salary-calc .subtitle { color: #aaa; font-size: 0.85em; margin-bottom: 18px; }
+  .interactive-salary-calc label { color: #ccc; font-size: 0.9em; display: block; margin-bottom: 4px; }
+  .interactive-salary-calc input[type="number"] {
+    background: #1a1a2e; color: #fff; border: 1px solid #444; border-radius: 6px;
+    padding: 8px 12px; width: 120px; font-size: 1em; margin-bottom: 10px;
+  }
+  .interactive-salary-calc .input-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .interactive-salary-calc .input-group { display: flex; flex-direction: column; }
+  .interactive-salary-calc button {
+    background: #69DB7C; color: #000; border: none; border-radius: 8px;
+    padding: 10px 22px; font-weight: 700; font-size: 1em; cursor: pointer; transition: 0.2s;
+  }
+  .interactive-salary-calc button:hover { background: #51cf66; transform: scale(1.03); }
+  .salary-shares-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }
+  .salary-shares-table th, .salary-shares-table td {
+    padding: 8px 12px; border: 1px solid #333; text-align: center;
+  }
+  .salary-shares-table th { background: #1a1a2e; color: #69DB7C; }
+  .salary-shares-table .keep { background: rgba(105,219,124,0.15); color: #69DB7C; font-weight: 700; }
+  .salary-shares-table .distribute { background: rgba(233,69,96,0.1); color: #e94560; }
+  .salary-result { margin-top: 14px; padding: 14px; background: rgba(105,219,124,0.1); border-radius: 8px; border: 1px solid rgba(105,219,124,0.3); }
+  .salary-result p { margin: 4px 0; color: #ccc; }
+  .salary-result .highlight { color: #69DB7C; font-weight: 700; font-size: 1.05em; }
+</style>
+<h3>Try It Yourself: Secret Sharing Salary Calculator</h3>
+<p class="subtitle">See how additive secret sharing computes the average without revealing individual salaries</p>
+<div class="input-row">
+  <div class="input-group"><label>Sam's Salary ($K)</label><input type="number" id="salSam" value="40"></div>
+  <div class="input-group"><label>Bob's Salary ($K)</label><input type="number" id="salBob" value="50"></div>
+  <div class="input-group"><label>Cassy's Salary ($K)</label><input type="number" id="salCassy" value="60"></div>
+</div>
+<button onclick="generateShares()">Generate Shares</button>
+<div id="salaryOutput"></div>
+<script>
+function generateShares() {
+  const sam = parseInt(document.getElementById('salSam').value) || 0;
+  const bob = parseInt(document.getElementById('salBob').value) || 0;
+  const cassy = parseInt(document.getElementById('salCassy').value) || 0;
+
+  // Generate random shares for each person (3 shares that sum to their salary)
+  function splitIntoShares(val) {
+    const s1 = Math.floor(Math.random() * 80) - 30;
+    const s2 = Math.floor(Math.random() * 80) - 30;
+    const s3 = val - s1 - s2;
+    return [s1, s2, s3];
+  }
+
+  const samShares = splitIntoShares(sam);
+  const bobShares = splitIntoShares(bob);
+  const cassyShares = splitIntoShares(cassy);
+
+  // Column sums (each person sums their column)
+  const col1 = samShares[0] + bobShares[0] + cassyShares[0];
+  const col2 = samShares[1] + bobShares[1] + cassyShares[1];
+  const col3 = samShares[2] + bobShares[2] + cassyShares[2];
+  const total = col1 + col2 + col3;
+  const avg = (total / 3).toFixed(2);
+
+  let html = `<table class="salary-shares-table">
+    <tr><th></th><th>Sam's Column</th><th>Bob's Column</th><th>Cassy's Column</th><th>Row Sum</th></tr>
+    <tr><td><strong>Sam's shares</strong></td>
+      <td class="keep">$${samShares[0]}K (keeps)</td>
+      <td class="distribute">$${samShares[1]}K (to Bob)</td>
+      <td class="distribute">$${samShares[2]}K (to Cassy)</td>
+      <td>$${sam}K</td></tr>
+    <tr><td><strong>Bob's shares</strong></td>
+      <td class="distribute">$${bobShares[0]}K (to Sam)</td>
+      <td class="keep">$${bobShares[1]}K (keeps)</td>
+      <td class="distribute">$${bobShares[2]}K (to Cassy)</td>
+      <td>$${bob}K</td></tr>
+    <tr><td><strong>Cassy's shares</strong></td>
+      <td class="distribute">$${cassyShares[0]}K (to Sam)</td>
+      <td class="distribute">$${cassyShares[1]}K (to Bob)</td>
+      <td class="keep">$${cassyShares[2]}K (keeps)</td>
+      <td>$${cassy}K</td></tr>
+    <tr style="border-top:3px solid #69DB7C"><td><strong>Column Sum</strong></td>
+      <td><strong>$${col1}K</strong></td><td><strong>$${col2}K</strong></td><td><strong>$${col3}K</strong></td><td></td></tr>
+  </table>
+  <div class="salary-result">
+    <p>Sam announces column sum: <strong>$${col1}K</strong></p>
+    <p>Bob announces column sum: <strong>$${col2}K</strong></p>
+    <p>Cassy announces column sum: <strong>$${col3}K</strong></p>
+    <p>Total = $${col1}K + $${col2}K + $${col3}K = <strong>$${total}K</strong></p>
+    <p class="highlight">Average = $${total}K / 3 = $${avg}K</p>
+    <p class="highlight" style="margin-top:10px">Individual salaries were NEVER revealed, but the average is correct!</p>
+  </div>`;
+  document.getElementById('salaryOutput').innerHTML = html;
+}
+</script>
+</div>
+
 <!-- Section 4: Homomorphic Encryption Overview -->
 <details>
   <summary>&#128274; 4. Homomorphic Encryption (HE) -- Overview</summary>
@@ -1084,6 +1183,103 @@ Individual salaries NEVER revealed
   </div>
 </details>
 
+<!-- INTERACTIVE: Drag-and-Drop Match HE Types -->
+<div class="interactive-he-match" id="heMatchExercise">
+<style>
+  .interactive-he-match {
+    background: #0d1b2e; border-radius: 14px; padding: 24px; margin: 24px 0;
+    border-left: 5px solid #9775FA; border: 2px solid rgba(151,117,250,0.3);
+  }
+  .interactive-he-match h3 { color: #9775FA; margin-bottom: 6px; font-size: 1.2em; }
+  .interactive-he-match .subtitle { color: #aaa; font-size: 0.85em; margin-bottom: 18px; }
+  .he-match-container { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
+  .he-match-left, .he-match-right { display: flex; flex-direction: column; gap: 12px; }
+  .he-match-left .he-term {
+    background: #1a1a2e; padding: 14px 20px; border-radius: 8px; border: 2px solid #9775FA;
+    font-weight: 700; font-size: 1em; color: #fff; min-width: 120px; text-align: center;
+    position: relative;
+  }
+  .he-drop-zone {
+    min-height: 44px; min-width: 220px; border: 2px dashed #555; border-radius: 8px;
+    padding: 10px; margin-top: 6px; display: flex; align-items: center; justify-content: center;
+    transition: 0.2s; color: #666; font-size: 0.85em;
+  }
+  .he-drop-zone.drag-over { border-color: #9775FA; background: rgba(151,117,250,0.1); }
+  .he-drop-zone.correct { border-color: #69DB7C; background: rgba(105,219,124,0.15); }
+  .he-drop-zone.wrong { border-color: #e94560; background: rgba(233,69,96,0.1); animation: headShake 0.5s; }
+  @keyframes headShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  .he-drag-item {
+    background: rgba(151,117,250,0.2); padding: 10px 16px; border-radius: 8px;
+    border: 2px solid #9775FA; cursor: grab; font-size: 0.9em; color: #e8e8e8;
+    transition: 0.2s; user-select: none; text-align: center;
+  }
+  .he-drag-item:active { cursor: grabbing; transform: scale(1.05); }
+  .he-drag-item.placed { opacity: 0.4; pointer-events: none; }
+  .he-match-reset { margin-top: 16px; background: #333; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 0.9em; }
+  .he-match-reset:hover { background: #444; }
+  .he-match-result { margin-top: 12px; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; display: none; }
+</style>
+<h3>Interactive Exercise: Match the HE Types</h3>
+<p class="subtitle">Drag the descriptions on the right to match each HE type on the left</p>
+<div class="he-match-container">
+  <div class="he-match-left">
+    <div class="he-term">PHE<div class="he-drop-zone" id="drop-phe" data-answer="one" ondrop="heMatchDrop(event)" ondragover="heMatchDragOver(event)" ondragleave="heMatchDragLeave(event)">Drop here</div></div>
+    <div class="he-term">SWHE<div class="he-drop-zone" id="drop-swhe" data-answer="both-limited" ondrop="heMatchDrop(event)" ondragover="heMatchDragOver(event)" ondragleave="heMatchDragLeave(event)">Drop here</div></div>
+    <div class="he-term">FHE<div class="he-drop-zone" id="drop-fhe" data-answer="both-unlimited" ondrop="heMatchDrop(event)" ondragover="heMatchDragOver(event)" ondragleave="heMatchDragLeave(event)">Drop here</div></div>
+  </div>
+  <div class="he-match-right" id="heDragItems">
+    <div class="he-drag-item" draggable="true" data-id="both-unlimited" ondragstart="heMatchDragStart(event)">Both operations, unlimited times</div>
+    <div class="he-drag-item" draggable="true" data-id="one" ondragstart="heMatchDragStart(event)">One operation, unlimited times</div>
+    <div class="he-drag-item" draggable="true" data-id="both-limited" ondragstart="heMatchDragStart(event)">Both operations, limited times</div>
+  </div>
+</div>
+<div class="he-match-result" id="heMatchResult"></div>
+<button class="he-match-reset" onclick="resetHeMatch()">Reset</button>
+<script>
+(function(){
+  let heMatchCorrect = 0;
+  window.heMatchDragStart = function(e) { e.dataTransfer.setData('text/plain', e.target.dataset.id); };
+  window.heMatchDragOver = function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); };
+  window.heMatchDragLeave = function(e) { e.currentTarget.classList.remove('drag-over'); };
+  window.heMatchDrop = function(e) {
+    e.preventDefault();
+    const zone = e.currentTarget;
+    zone.classList.remove('drag-over');
+    if (zone.classList.contains('correct')) return;
+    const draggedId = e.dataTransfer.getData('text/plain');
+    const answer = zone.dataset.answer;
+    const dragItem = document.querySelector(`.he-drag-item[data-id="${draggedId}"]`);
+    if (draggedId === answer) {
+      zone.textContent = dragItem.textContent;
+      zone.classList.add('correct');
+      zone.style.color = '#69DB7C';
+      zone.style.fontWeight = '700';
+      dragItem.classList.add('placed');
+      heMatchCorrect++;
+      if (heMatchCorrect === 3) {
+        const res = document.getElementById('heMatchResult');
+        res.style.display = 'block';
+        res.style.background = 'rgba(105,219,124,0.15)';
+        res.style.color = '#69DB7C';
+        res.textContent = 'All correct! PHE=one op unlimited, SWHE=both limited, FHE=both unlimited.';
+      }
+    } else {
+      zone.classList.add('wrong');
+      setTimeout(() => zone.classList.remove('wrong'), 600);
+    }
+  };
+  window.resetHeMatch = function() {
+    heMatchCorrect = 0;
+    document.querySelectorAll('.he-drop-zone').forEach(z => {
+      z.textContent = 'Drop here'; z.className = 'he-drop-zone'; z.style.color = ''; z.style.fontWeight = '';
+    });
+    document.querySelectorAll('.he-drag-item').forEach(d => d.classList.remove('placed'));
+    document.getElementById('heMatchResult').style.display = 'none';
+  };
+})();
+</script>
+</div>
+
 <!-- Section 5: RSA as PHE for Multiplication -->
 <details>
   <summary>&#128290; 5. RSA is Already PHE for Multiplication</summary>
@@ -1129,6 +1325,144 @@ Individual salaries NEVER revealed
     <div class="mem"><small>Remember This</small><br><strong>RSA: multiply ciphertexts = encrypt product (WORKS). Add ciphertexts = encrypt sum (FAILS). RSA is PHE for multiplication ONLY.</strong></div>
   </div>
 </details>
+
+<!-- INTERACTIVE: RSA Homomorphic Multiplication Calculator -->
+<div class="interactive-rsa-calc" id="rsaCalc">
+<style>
+  .interactive-rsa-calc {
+    background: #0d1b2e; border-radius: 14px; padding: 24px; margin: 24px 0;
+    border-left: 5px solid #4DABF7; border: 2px solid rgba(77,171,247,0.3);
+  }
+  .interactive-rsa-calc h3 { color: #4DABF7; margin-bottom: 6px; font-size: 1.2em; }
+  .interactive-rsa-calc .subtitle { color: #aaa; font-size: 0.85em; margin-bottom: 18px; }
+  .interactive-rsa-calc label { color: #ccc; font-size: 0.9em; display: block; margin-bottom: 4px; }
+  .interactive-rsa-calc input[type="number"] {
+    background: #1a1a2e; color: #fff; border: 1px solid #444; border-radius: 6px;
+    padding: 8px 12px; width: 90px; font-size: 1em; margin-bottom: 10px;
+  }
+  .interactive-rsa-calc .input-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .interactive-rsa-calc .input-group { display: flex; flex-direction: column; }
+  .interactive-rsa-calc button {
+    background: #4DABF7; color: #000; border: none; border-radius: 8px;
+    padding: 10px 22px; font-weight: 700; font-size: 1em; cursor: pointer; transition: 0.2s;
+  }
+  .interactive-rsa-calc button:hover { background: #339af0; transform: scale(1.03); }
+  .rsa-result-section { margin-top: 16px; padding: 14px; border-radius: 8px; background: rgba(77,171,247,0.08); border: 1px solid rgba(77,171,247,0.2); }
+  .rsa-result-section h4 { color: #4DABF7; margin-bottom: 8px; }
+  .rsa-result-section p { margin: 4px 0; color: #ccc; font-family: monospace; font-size: 0.92em; }
+  .rsa-success { color: #69DB7C; font-weight: 700; padding: 8px; background: rgba(105,219,124,0.1); border-radius: 6px; margin-top: 8px; }
+  .rsa-fail { color: #e94560; font-weight: 700; padding: 8px; background: rgba(233,69,96,0.1); border-radius: 6px; margin-top: 8px; }
+</style>
+<h3>Try It Yourself: RSA Homomorphic Multiplication Calculator</h3>
+<p class="subtitle">Verify that RSA supports multiplication on ciphertexts -- and that addition FAILS</p>
+<div class="input-row">
+  <div class="input-group"><label>p (prime)</label><input type="number" id="rsaP" value="23"></div>
+  <div class="input-group"><label>q (prime)</label><input type="number" id="rsaQ" value="11"></div>
+  <div class="input-group"><label>e (public exp)</label><input type="number" id="rsaE" value="39"></div>
+</div>
+<div class="input-row">
+  <div class="input-group"><label>m1 (message 1)</label><input type="number" id="rsaM1" value="17"></div>
+  <div class="input-group"><label>m2 (message 2)</label><input type="number" id="rsaM2" value="13"></div>
+</div>
+<button onclick="calculateRSAHomo()">Calculate</button>
+<div id="rsaOutput"></div>
+<script>
+(function(){
+  function modPow(base, exp, mod) {
+    base = BigInt(base); exp = BigInt(exp); mod = BigInt(mod);
+    if (mod === 1n) return 0n;
+    let result = 1n;
+    base = ((base % mod) + mod) % mod;
+    while (exp > 0n) {
+      if (exp % 2n === 1n) result = (result * base) % mod;
+      exp = exp / 2n;
+      base = (base * base) % mod;
+    }
+    return result;
+  }
+
+  function modInverse(a, m) {
+    a = BigInt(a); m = BigInt(m);
+    let [old_r, r] = [a, m];
+    let [old_s, s] = [1n, 0n];
+    while (r !== 0n) {
+      const q = old_r / r;
+      [old_r, r] = [r, old_r - q * r];
+      [old_s, s] = [s, old_s - q * s];
+    }
+    return ((old_s % m) + m) % m;
+  }
+
+  function gcd(a, b) { a = BigInt(a); b = BigInt(b); while (b) { [a, b] = [b, a % b]; } return a; }
+
+  window.calculateRSAHomo = function() {
+    const p = BigInt(document.getElementById('rsaP').value);
+    const q = BigInt(document.getElementById('rsaQ').value);
+    const e = BigInt(document.getElementById('rsaE').value);
+    const m1 = BigInt(document.getElementById('rsaM1').value);
+    const m2 = BigInt(document.getElementById('rsaM2').value);
+
+    const n = p * q;
+    const phi = (p - 1n) * (q - 1n);
+
+    // Validate
+    if (gcd(e, phi) !== 1n) {
+      document.getElementById('rsaOutput').innerHTML = '<div class="rsa-fail">Error: e must be coprime with phi(n). gcd(e, phi) != 1. Try a different e.</div>';
+      return;
+    }
+
+    const d = modInverse(e, phi);
+
+    // Encrypt
+    const c1 = modPow(m1, e, n);
+    const c2 = modPow(m2, e, n);
+
+    // Multiplication test
+    const c1c2 = (c1 * c2) % n;
+    const decryptMul = modPow(c1c2, d, n);
+    const plainMul = (m1 * m2) % n;
+
+    // Addition test
+    const c1plusc2 = (c1 + c2) % n;
+    const decryptAdd = modPow(c1plusc2, d, n);
+    const plainAdd = (m1 + m2) % n;
+
+    let html = `
+    <div class="rsa-result-section">
+      <h4>Key Parameters</h4>
+      <p>n = p * q = ${p} * ${q} = <strong>${n}</strong></p>
+      <p>phi(n) = (p-1)(q-1) = ${p-1n} * ${q-1n} = <strong>${phi}</strong></p>
+      <p>d = e^(-1) mod phi = <strong>${d}</strong></p>
+      <p>Public key: (e=${e}, n=${n}) | Private key: d=${d}</p>
+    </div>
+    <div class="rsa-result-section">
+      <h4>Encryption</h4>
+      <p>E(m1) = ${m1}^${e} mod ${n} = <strong>${c1}</strong></p>
+      <p>E(m2) = ${m2}^${e} mod ${n} = <strong>${c2}</strong></p>
+    </div>
+    <div class="rsa-result-section">
+      <h4>MULTIPLICATION Test (Should Work)</h4>
+      <p>c1 * c2 = ${c1} * ${c2} = ${c1*c2} mod ${n} = <strong>${c1c2}</strong></p>
+      <p>Decrypt(c1*c2) = ${c1c2}^${d} mod ${n} = <strong>${decryptMul}</strong></p>
+      <p>m1 * m2 mod n = ${m1} * ${m2} mod ${n} = <strong>${plainMul}</strong></p>
+      ${decryptMul === plainMul
+        ? `<div class="rsa-success">They match! RSA is multiplicatively homomorphic: Decrypt(E(m1)*E(m2)) = m1*m2</div>`
+        : `<div class="rsa-fail">Mismatch -- check your parameters (m1*m2 should be less than n)</div>`}
+    </div>
+    <div class="rsa-result-section">
+      <h4>ADDITION Test (Should Fail)</h4>
+      <p>c1 + c2 = ${c1} + ${c2} = ${c1+c2} mod ${n} = <strong>${c1plusc2}</strong></p>
+      <p>Decrypt(c1+c2) = ${c1plusc2}^${d} mod ${n} = <strong>${decryptAdd}</strong></p>
+      <p>m1 + m2 = ${m1} + ${m2} = <strong>${plainAdd}</strong></p>
+      ${decryptAdd !== plainAdd
+        ? `<div class="rsa-fail">FAIL - Not equal! ${decryptAdd} != ${plainAdd}. RSA is NOT additively homomorphic.</div>`
+        : `<div class="rsa-success">Coincidental match (try different values) -- RSA is generally NOT additively homomorphic.</div>`}
+    </div>`;
+    document.getElementById('rsaOutput').innerHTML = html;
+  };
+})();
+</script>
+</div>
 
 <!-- Section 6: Paillier Encryption -->
 <details>
@@ -1183,6 +1517,204 @@ Individual salaries NEVER revealed
     <div class="mem"><small>Remember This</small><br><strong>Paillier: c = g^m * r^n mod n^2. Probabilistic (random r). Multiply ciphertexts = encrypt SUM. Complement of RSA (which does multiplication).</strong></div>
   </div>
 </details>
+
+<!-- INTERACTIVE: Paillier Key Generation & Encryption Demo -->
+<div class="interactive-paillier" id="paillierDemo">
+<style>
+  .interactive-paillier {
+    background: #0d1b2e; border-radius: 14px; padding: 24px; margin: 24px 0;
+    border-left: 5px solid #FFA94D; border: 2px solid rgba(255,169,77,0.3);
+  }
+  .interactive-paillier h3 { color: #FFA94D; margin-bottom: 6px; font-size: 1.2em; }
+  .interactive-paillier .subtitle { color: #aaa; font-size: 0.85em; margin-bottom: 18px; }
+  .interactive-paillier label { color: #ccc; font-size: 0.9em; display: block; margin-bottom: 4px; }
+  .interactive-paillier input[type="number"] {
+    background: #1a1a2e; color: #fff; border: 1px solid #444; border-radius: 6px;
+    padding: 8px 12px; width: 90px; font-size: 1em; margin-bottom: 10px;
+  }
+  .interactive-paillier .input-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .interactive-paillier .input-group { display: flex; flex-direction: column; }
+  .interactive-paillier button {
+    background: #FFA94D; color: #000; border: none; border-radius: 8px;
+    padding: 10px 22px; font-weight: 700; font-size: 1em; cursor: pointer; transition: 0.2s; margin-right: 10px;
+  }
+  .interactive-paillier button:hover { background: #ff922b; transform: scale(1.03); }
+  .paillier-result { margin-top: 16px; padding: 14px; border-radius: 8px; background: rgba(255,169,77,0.08); border: 1px solid rgba(255,169,77,0.2); }
+  .paillier-result h4 { color: #FFA94D; margin-bottom: 8px; }
+  .paillier-result p { margin: 4px 0; color: #ccc; font-family: monospace; font-size: 0.88em; word-break: break-all; }
+  .paillier-success { color: #69DB7C; font-weight: 700; padding: 8px; background: rgba(105,219,124,0.1); border-radius: 6px; margin-top: 8px; }
+  .paillier-note { color: #aaa; font-size: 0.8em; font-style: italic; margin-top: 12px; }
+</style>
+<h3>Try It Yourself: Paillier Encryption Demo</h3>
+<p class="subtitle">See how Paillier encrypts and how multiplying ciphertexts gives the encryption of the SUM</p>
+<div class="input-row">
+  <div class="input-group"><label>p (prime)</label><input type="number" id="pailP" value="13"></div>
+  <div class="input-group"><label>q (prime)</label><input type="number" id="pailQ" value="17"></div>
+  <div class="input-group"><label>m1 (message)</label><input type="number" id="pailM1" value="42"></div>
+  <div class="input-group"><label>m2 (for addition)</label><input type="number" id="pailM2" value="15"></div>
+</div>
+<button onclick="calculatePaillier()">Encrypt & Decrypt</button>
+<button onclick="paillierHomomorphic()" style="background:#69DB7C;">Try Homomorphic Addition</button>
+<div id="paillierOutput"></div>
+<script>
+(function(){
+  function modPowBig(base, exp, mod) {
+    base = BigInt(base); exp = BigInt(exp); mod = BigInt(mod);
+    if (mod === 1n) return 0n;
+    let result = 1n;
+    base = ((base % mod) + mod) % mod;
+    while (exp > 0n) {
+      if (exp % 2n === 1n) result = (result * base) % mod;
+      exp = exp / 2n;
+      base = (base * base) % mod;
+    }
+    return result;
+  }
+  function modInverseBig(a, m) {
+    a = BigInt(a); m = BigInt(m);
+    let [old_r, r] = [a, m]; let [old_s, s] = [1n, 0n];
+    while (r !== 0n) { const q = old_r / r; [old_r, r] = [r, old_r - q * r]; [old_s, s] = [s, old_s - q * s]; }
+    if (old_r !== 1n) return -1n;
+    return ((old_s % m) + m) % m;
+  }
+  function gcdBig(a, b) { a = BigInt(a); b = BigInt(b); if(a<0n)a=-a; if(b<0n)b=-b; while(b){[a,b]=[b,a%b];} return a; }
+  function lcmBig(a, b) { a = BigInt(a); b = BigInt(b); return (a * b) / gcdBig(a, b); }
+  function L(x, n) { return (x - 1n) / n; }
+
+  // Store state for homomorphic test
+  let pailState = {};
+
+  function getRandomInRange(min, max) {
+    return BigInt(Math.floor(Math.random() * Number(max - min)) + Number(min));
+  }
+
+  window.calculatePaillier = function() {
+    const p = BigInt(document.getElementById('pailP').value);
+    const q = BigInt(document.getElementById('pailQ').value);
+    const m1 = BigInt(document.getElementById('pailM1').value);
+
+    const n = p * q;
+    const n2 = n * n;
+    const lambda = lcmBig(p - 1n, q - 1n);
+
+    // Pick g = n + 1 (simplest valid choice)
+    const g = n + 1n;
+
+    // Compute mu
+    const gLam = modPowBig(g, lambda, n2);
+    const lVal = L(gLam, n);
+    const mu = modInverseBig(lVal, n);
+
+    if (mu === -1n) {
+      document.getElementById('paillierOutput').innerHTML = '<div style="color:#e94560">Error computing mu. Try different primes.</div>';
+      return;
+    }
+
+    // Validate message
+    if (m1 < 0n || m1 >= n) {
+      document.getElementById('paillierOutput').innerHTML = `<div style="color:#e94560">Message must be in range [0, n-1] = [0, ${n-1n}]</div>`;
+      return;
+    }
+
+    // Pick random r coprime to n
+    let r = 0n;
+    for (let i = 0; i < 100; i++) {
+      r = getRandomInRange(2n, n - 1n);
+      if (gcdBig(r, n) === 1n) break;
+    }
+
+    // Encrypt: c = g^m * r^n mod n^2
+    const gm = modPowBig(g, m1, n2);
+    const rn = modPowBig(r, n, n2);
+    const c = (gm * rn) % n2;
+
+    // Decrypt: m = L(c^lambda mod n^2) * mu mod n
+    const cLam = modPowBig(c, lambda, n2);
+    const lc = L(cLam, n);
+    const decrypted = (lc * mu) % n;
+
+    pailState = { n, n2, lambda, g, mu, m1, c, r };
+
+    let html = `
+    <div class="paillier-result">
+      <h4>Key Generation</h4>
+      <p>n = p*q = ${p}*${q} = <strong>${n}</strong></p>
+      <p>n^2 = <strong>${n2}</strong></p>
+      <p>lambda = lcm(${p-1n}, ${q-1n}) = <strong>${lambda}</strong></p>
+      <p>g = n+1 = <strong>${g}</strong></p>
+      <p>mu = L(g^lambda mod n^2)^(-1) mod n = <strong>${mu}</strong></p>
+      <p style="color:#FFA94D; font-weight:700">Public key: (n=${n}, g=${g}) | Private key: lambda=${lambda}</p>
+    </div>
+    <div class="paillier-result">
+      <h4>Encryption of m=${m1}</h4>
+      <p>Random r = ${r} (coprime to n)</p>
+      <p>c = g^m * r^n mod n^2 = ${g}^${m1} * ${r}^${n} mod ${n2}</p>
+      <p>c = <strong>${c}</strong></p>
+    </div>
+    <div class="paillier-result">
+      <h4>Decryption</h4>
+      <p>c^lambda mod n^2 = ${c}^${lambda} mod ${n2} = ${cLam}</p>
+      <p>L(${cLam}) = (${cLam} - 1) / ${n} = ${lc}</p>
+      <p>m = ${lc} * ${mu} mod ${n} = <strong>${decrypted}</strong></p>
+      ${decrypted === m1
+        ? `<div class="paillier-success">Decryption successful! Recovered m = ${decrypted}</div>`
+        : `<div style="color:#e94560">Decryption error -- try different primes</div>`}
+    </div>
+    <p class="paillier-note">Note: g=n+1 is a standard simplification. Each encryption uses a new random r, making Paillier probabilistic.</p>`;
+    document.getElementById('paillierOutput').innerHTML = html;
+  };
+
+  window.paillierHomomorphic = function() {
+    if (!pailState.n) { calculatePaillier(); }
+    const {n, n2, lambda, g, mu, m1, c: c1, r: r1} = pailState;
+    const m2 = BigInt(document.getElementById('pailM2').value);
+
+    if (m2 < 0n || m2 >= n) {
+      document.getElementById('paillierOutput').innerHTML += `<div style="color:#e94560;margin-top:12px">m2 must be in range [0, ${n-1n}]</div>`;
+      return;
+    }
+    if ((m1 + m2) >= n) {
+      document.getElementById('paillierOutput').innerHTML += `<div style="color:#e94560;margin-top:12px">m1+m2=${m1+m2} exceeds n=${n}. Use smaller messages so sum < n.</div>`;
+      return;
+    }
+
+    // Encrypt m2 with new random r
+    let r2 = 0n;
+    for (let i = 0; i < 100; i++) {
+      r2 = getRandomInRange(2n, n - 1n);
+      if (gcdBig(r2, n) === 1n) break;
+    }
+    const gm2 = modPowBig(g, m2, n2);
+    const rn2 = modPowBig(r2, n, n2);
+    const c2 = (gm2 * rn2) % n2;
+
+    // Homomorphic addition: multiply ciphertexts
+    const cSum = (c1 * c2) % n2;
+
+    // Decrypt the product of ciphertexts
+    const csLam = modPowBig(cSum, lambda, n2);
+    const lcs = L(csLam, n);
+    const decryptedSum = (lcs * mu) % n;
+
+    const plainSum = m1 + m2;
+
+    let html = `
+    <div class="paillier-result" style="margin-top:16px; border-color: rgba(105,219,124,0.4);">
+      <h4 style="color:#69DB7C">Homomorphic Addition Test</h4>
+      <p>E(m1=${m1}) = c1 = ${c1} (r1=${r1})</p>
+      <p>E(m2=${m2}) = c2 = ${c2} (r2=${r2})</p>
+      <p style="margin-top:8px">c1 * c2 mod n^2 = ${c1} * ${c2} mod ${n2} = <strong>${cSum}</strong></p>
+      <p>Decrypt(c1 * c2) = <strong>${decryptedSum}</strong></p>
+      <p>m1 + m2 = ${m1} + ${m2} = <strong>${plainSum}</strong></p>
+      ${decryptedSum === plainSum
+        ? `<div class="paillier-success">They match! Paillier is additively homomorphic: Decrypt(E(m1) * E(m2)) = m1 + m2 = ${plainSum}</div>`
+        : `<div style="color:#e94560">Mismatch -- try smaller values or different primes</div>`}
+    </div>`;
+    document.getElementById('paillierOutput').innerHTML += html;
+  };
+})();
+</script>
+</div>
 
 <!-- Section 7: History of HE -->
 <details>
@@ -1372,6 +1904,115 @@ Client                           Cloud Server
     <div class="mem"><small>Remember This</small><br><strong>RAD 1978 = Rivest, Adleman, Dertouzos. Coined "privacy homomorphisms." Posed FHE as an open problem. Gentry solved it in 2009. 31-year gap!</strong></div>
   </div>
 </details>
+
+<!-- INTERACTIVE: Fill-in-the-Blank Exercises -->
+<div class="interactive-fitb" id="fitbExercises">
+<style>
+  .interactive-fitb {
+    background: #0d1b2e; border-radius: 14px; padding: 24px; margin: 24px 0;
+    border-left: 5px solid #e94560; border: 2px solid rgba(233,69,96,0.3);
+  }
+  .interactive-fitb h3 { color: #e94560; margin-bottom: 6px; font-size: 1.2em; }
+  .interactive-fitb .subtitle { color: #aaa; font-size: 0.85em; margin-bottom: 18px; }
+  .fitb-item { margin-bottom: 16px; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid #333; transition: 0.3s; }
+  .fitb-item.correct { border-color: #69DB7C; background: rgba(105,219,124,0.05); }
+  .fitb-item.wrong { border-color: #e94560; animation: fitbShake 0.4s; }
+  @keyframes fitbShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 40%{transform:translateX(4px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+  .fitb-item p { color: #e8e8e8; margin: 0 0 8px; font-size: 0.95em; line-height: 1.5; }
+  .fitb-item input[type="text"] {
+    background: #1a1a2e; color: #fff; border: 2px solid #444; border-radius: 6px;
+    padding: 6px 12px; font-size: 0.95em; width: 180px; transition: 0.3s;
+  }
+  .fitb-item input.correct { border-color: #69DB7C; background: rgba(105,219,124,0.1); }
+  .fitb-item input.wrong { border-color: #e94560; background: rgba(233,69,96,0.1); }
+  .fitb-item button {
+    background: #e94560; color: #fff; border: none; border-radius: 6px;
+    padding: 6px 14px; font-weight: 600; font-size: 0.85em; cursor: pointer; margin-left: 8px; transition: 0.2s;
+  }
+  .fitb-item button:hover { background: #d63447; }
+  .fitb-item button:disabled { opacity: 0.5; cursor: default; }
+  .fitb-feedback { font-size: 0.85em; margin-top: 6px; font-weight: 600; }
+  .fitb-feedback.correct { color: #69DB7C; }
+  .fitb-feedback.wrong { color: #e94560; }
+  .fitb-score { margin-top: 16px; padding: 10px; background: rgba(233,69,96,0.08); border-radius: 8px; text-align: center; color: #e94560; font-weight: 700; }
+</style>
+<h3>Interactive Exercise: Fill in the Blank</h3>
+<p class="subtitle">Test your recall -- type the correct answer and click Check</p>
+
+<div class="fitb-item" id="fitb1">
+  <p>"RSA is homomorphic with respect to <input type="text" id="fitbAns1" placeholder="___">"</p>
+  <button onclick="checkFitb(1, ['multiplication'], this)">Check</button>
+  <div class="fitb-feedback" id="fitbFb1"></div>
+</div>
+
+<div class="fitb-item" id="fitb2">
+  <p>"Paillier is homomorphic with respect to <input type="text" id="fitbAns2" placeholder="___">"</p>
+  <button onclick="checkFitb(2, ['addition'], this)">Check</button>
+  <div class="fitb-feedback" id="fitbFb2"></div>
+</div>
+
+<div class="fitb-item" id="fitb3">
+  <p>"The first FHE scheme was proposed by <input type="text" id="fitbAns3" placeholder="___"> in 2009"</p>
+  <button onclick="checkFitb(3, ['gentry','craig gentry'], this)">Check</button>
+  <div class="fitb-feedback" id="fitbFb3"></div>
+</div>
+
+<div class="fitb-item" id="fitb4">
+  <p>"In Yao's protocol, if the J-th Z value equals G, then <input type="text" id="fitbAns4" placeholder="___"> is wealthier"</p>
+  <button onclick="checkFitb(4, ['mark','mark is equal or wealthier','mark is wealthier'], this)">Check</button>
+  <div class="fitb-feedback" id="fitbFb4"></div>
+</div>
+
+<div class="fitb-item" id="fitb5">
+  <p>"PHE supports <input type="text" id="fitbAns5" placeholder="___"> type(s) of operation unlimited times"</p>
+  <button onclick="checkFitb(5, ['one','1','one type'], this)">Check</button>
+  <div class="fitb-feedback" id="fitbFb5"></div>
+</div>
+
+<div class="fitb-score" id="fitbScore" style="display:none"></div>
+
+<script>
+(function(){
+  let fitbCorrect = 0;
+  let fitbTotal = 5;
+  let fitbAnswered = 0;
+  const answers = { 1: 'multiplication', 2: 'addition', 3: 'Gentry', 4: 'Mark', 5: 'one' };
+
+  window.checkFitb = function(num, acceptedAnswers, btn) {
+    const input = document.getElementById('fitbAns' + num);
+    const fb = document.getElementById('fitbFb' + num);
+    const item = document.getElementById('fitb' + num);
+    const userAns = input.value.trim().toLowerCase();
+
+    if (!userAns) { fb.textContent = 'Please type an answer'; fb.className = 'fitb-feedback wrong'; return; }
+
+    btn.disabled = true;
+    input.disabled = true;
+    fitbAnswered++;
+
+    if (acceptedAnswers.includes(userAns)) {
+      input.classList.add('correct');
+      item.classList.add('correct');
+      fb.textContent = 'Correct! The answer is: ' + answers[num];
+      fb.className = 'fitb-feedback correct';
+      fitbCorrect++;
+    } else {
+      input.classList.add('wrong');
+      item.classList.add('wrong');
+      fb.textContent = 'Not quite. The answer is: ' + answers[num];
+      fb.className = 'fitb-feedback wrong';
+    }
+
+    if (fitbAnswered === fitbTotal) {
+      const scoreEl = document.getElementById('fitbScore');
+      scoreEl.style.display = 'block';
+      scoreEl.textContent = `Score: ${fitbCorrect} / ${fitbTotal} correct`;
+      if (fitbCorrect === fitbTotal) scoreEl.style.color = '#69DB7C';
+    }
+  };
+})();
+</script>
+</div>
 
 <!-- QUIZ SECTION -->
 <div class="quiz-section">
