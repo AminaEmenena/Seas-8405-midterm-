@@ -815,10 +815,10 @@
 <!-- CAUTION BANNER -->
 <div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 20px 20px 0; max-width: 1000px; margin-left: auto; margin-right: auto;">
   <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">
-    &#9888;&#65039; PRELIMINARY - TEXTBOOK ONLY
+    &#9888;&#65039; PRELIMINARY - TEXTBOOK CONTENT
   </div>
   <div style="color:#aaa; font-size:0.9em; line-height:1.5;">
-    This study guide is based on the assigned textbook chapters. It will be updated when lecture slides and homework are released each week. Content may differ from what the professor emphasizes in class.
+    Based on Buchanan Cryptography Ch 4 &amp; Ch 11. Will be updated with lecture slides when released.
   </div>
 </div>
 
@@ -835,14 +835,14 @@
 <div class="tldr">
   <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 10 Key Points</div>
   <ul>
-    <li><strong>Homomorphic Encryption (HE)</strong> -- Perform computations on encrypted data without decrypting. E(a) op E(b) = E(a op b). Enables privacy-preserving cloud computing</li>
-    <li><strong>Three Types</strong> -- PHE (one operation), SHE (limited both), FHE (unlimited both). Each trades capability for performance</li>
-    <li><strong>PHE Examples</strong> -- RSA is multiplicatively homomorphic, Paillier is additively homomorphic, ElGamal is multiplicatively homomorphic</li>
-    <li><strong>FHE Breakthrough</strong> -- Craig Gentry (2009) built first FHE scheme using ideal lattices. Based on Learning With Errors (LWE) problem</li>
-    <li><strong>Noise Problem</strong> -- Each HE operation adds noise. Too many operations = can't decrypt. Bootstrapping refreshes ciphertext by homomorphically evaluating decryption circuit</li>
-    <li><strong>Performance</strong> -- FHE is millions of times slower than plaintext computation. Active research area, getting faster but not yet practical for all use cases</li>
-    <li><strong>Security Basis</strong> -- Lattice problems (LWE, Ring-LWE). Believed to be quantum-resistant, unlike RSA/ECC</li>
-    <li><strong>Use Cases</strong> -- Private cloud computing, secure voting, privacy-preserving ML, medical data analysis, encrypted financial computations</li>
+    <li><strong>Paillier Cryptosystem (Ch 4 p.162)</strong> -- Additively homomorphic: E(m1) * E(m2) = E(m1 + m2). Used for secure voting -- encrypt votes, multiply ciphertexts, decrypt sum without revealing individual votes</li>
+    <li><strong>Knapsack Encryption (Ch 4 p.163)</strong> -- Merkle-Hellman scheme based on subset sum problem. First public-key scheme after RSA. Broken by Shamir in 1984 using LLL lattice reduction</li>
+    <li><strong>Zero-Knowledge Proofs (Ch 11)</strong> -- Prove knowledge of a secret WITHOUT revealing it. Three properties: Completeness, Soundness, Zero-knowledge</li>
+    <li><strong>Fair Coin Flip (Ch 11.7)</strong> -- Both parties generate random numbers with salted hashes. Exchange hashes first, reveal values second. XOR LSBs for result</li>
+    <li><strong>Oblivious Transfer (Ch 11.9)</strong> -- DH-based protocol. Alice encrypts two messages, Bob can decrypt exactly ONE. Alice never learns which Bob chose</li>
+    <li><strong>Scrambled Circuits (Ch 11.10)</strong> -- Garbled circuits for secure 2-party computation. Bob encrypts truth table, Alice evaluates via oblivious transfer</li>
+    <li><strong>RAPPOR (Ch 11.12)</strong> -- Bloom filters + randomized response for differential privacy. Three stages: signal creation, PRR, IRR</li>
+    <li><strong>SFE (Ch 11.13)</strong> -- Secure Function Evaluation. Compute joint functions without revealing individual inputs using secret shares</li>
   </ul>
   <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
 </div>
@@ -907,325 +907,421 @@
   <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
 </div>
 
-<!-- Section 1: What is Homomorphic Encryption -->
+<!-- Section 1: Paillier Cryptosystem -->
 <details>
-  <summary>&#128274; 1. What is Homomorphic Encryption?</summary>
+  <summary>&#128274; 1. Paillier Cryptosystem (Buchanan Ch 4 p.162)</summary>
   <div class="content-section">
-    <div class="blue"><strong>DEFINITION:</strong> Homomorphic encryption allows <em>computation on encrypted data</em> without decrypting it first. The result, when decrypted, matches the result of performing the same operation on the plaintext.</div>
+    <div class="blue"><strong>DEFINITION:</strong> The Paillier cryptosystem is an <em>additively homomorphic</em> public-key encryption scheme. Multiplying two ciphertexts produces the encryption of the sum of the plaintexts: E(m1) * E(m2) = E(m1 + m2).</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">The Core Property</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Homomorphic Property</h3>
     <div class="red">
-      <strong>Homomorphic Property:</strong> E(a) op E(b) = E(a op b)<br>
-      Encrypt two values, perform an operation on the ciphertexts, and the result is the encryption of the operation applied to the plaintexts.
+      <strong>Additive Homomorphism:</strong> E(m1) * E(m2) = E(m1 + m2)<br>
+      This means you can add encrypted values without decrypting them. The multiplication of ciphertexts yields the encryption of the sum of plaintexts.
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Why It Matters</h3>
-    <ul>
-      <li><strong>Cloud Computing on Sensitive Data</strong> -- outsource computation without revealing your data</li>
-      <li><strong>Privacy-Preserving Analytics</strong> -- run queries on encrypted databases</li>
-      <li><strong>Secure Outsourced Computation</strong> -- delegate processing to untrusted servers</li>
-      <li><strong>Regulatory Compliance</strong> -- process data without exposing PII or PHI</li>
-    </ul>
-
-    <div class="ascii-diagram-title">Homomorphic Encryption Flow</div>
-    <div class="ascii-diagram">
-Client                          Cloud Server
-  |                                  |
-  |--- E(data) ------------------->  |
-  |                                  |
-  |                          Compute on E(data)
-  |                          without decrypting
-  |                                  |
-  |<-- E(result) -----------------  |
-  |                                  |
-  Decrypt E(result)                  |
-  = result of computation           |
-    </div>
-
-    <div class="key">
-      <strong>Key Insight:</strong> The cloud server <em>never sees</em> the plaintext data or the plaintext result. It only works with ciphertexts, yet produces a valid encrypted answer.
-    </div>
-  </div>
-</details>
-
-<!-- Section 2: Types of Homomorphic Encryption -->
-<details>
-  <summary>&#128200; 2. Types of Homomorphic Encryption -- PHE, SHE, FHE</summary>
-  <div class="content-section">
-    <div class="mem"><small>Remember This</small><br><strong>PHE = Partial (one op), SHE = Somewhat (limited both), FHE = Fully (unlimited both)</strong></div>
-
-    <table>
-      <tr>
-        <th>Type</th>
-        <th>Operations Supported</th>
-        <th>Limitations</th>
-        <th>Examples</th>
-      </tr>
-      <tr>
-        <td><strong>PHE (Partially Homomorphic)</strong></td>
-        <td>One operation: either addition OR multiplication</td>
-        <td>Cannot mix operations</td>
-        <td>RSA, Paillier, ElGamal</td>
-      </tr>
-      <tr>
-        <td><strong>SHE (Somewhat Homomorphic)</strong></td>
-        <td>Both addition AND multiplication</td>
-        <td>Limited number of operations before noise makes decryption impossible</td>
-        <td>BGN scheme</td>
-      </tr>
-      <tr>
-        <td><strong>FHE (Fully Homomorphic)</strong></td>
-        <td>Unlimited additions AND multiplications</td>
-        <td>Extremely slow (millions of times overhead)</td>
-        <td>Gentry's scheme, BFV, CKKS, BGV</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">PHE Examples in Detail</h3>
-    <div class="box">
-      <h4>RSA -- Multiplicatively Homomorphic</h4>
-      <ul>
-        <li>E(m1) * E(m2) = E(m1 * m2) mod n</li>
-        <li>Multiply two ciphertexts and get the encryption of the product</li>
-        <li>Does NOT support addition</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>Paillier -- Additively Homomorphic</h4>
-      <ul>
-        <li>E(m1) * E(m2) = E(m1 + m2) mod n^2</li>
-        <li>Multiply two ciphertexts and get the encryption of the sum</li>
-        <li>Used in e-voting and private set intersection</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>ElGamal -- Multiplicatively Homomorphic</h4>
-      <ul>
-        <li>E(m1) * E(m2) = E(m1 * m2)</li>
-        <li>Same multiplicative property as RSA but based on discrete logarithm</li>
-      </ul>
-    </div>
-
-    <div class="warn">
-      <strong>Why PHE is Limiting:</strong> With only addition OR multiplication, you can't compute arbitrary functions. Any general computation (like if-else logic) requires BOTH operations. That's why FHE was the holy grail.
-    </div>
-  </div>
-</details>
-
-<!-- Section 3: FHE History and Gentry's Breakthrough -->
-<details>
-  <summary>&#127942; 3. FHE History -- Craig Gentry's 2009 Breakthrough</summary>
-  <div class="content-section">
-    <div class="red"><strong>MILESTONE:</strong> In 2009, Craig Gentry (Stanford PhD thesis) constructed the <em>first fully homomorphic encryption scheme</em> -- a problem that had been open for over 30 years since Rivest, Adleman, and Dertouzos posed it in 1978.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Historical Timeline</h3>
-    <table>
-      <tr>
-        <th>Year</th>
-        <th>Milestone</th>
-      </tr>
-      <tr>
-        <td><strong>1978</strong></td>
-        <td>Rivest, Adleman, Dertouzos proposed the concept of "privacy homomorphisms"</td>
-      </tr>
-      <tr>
-        <td><strong>1978-2009</strong></td>
-        <td>Only PHE schemes existed (RSA, Paillier, ElGamal). No one could build FHE</td>
-      </tr>
-      <tr>
-        <td><strong>2009</strong></td>
-        <td>Craig Gentry's PhD thesis: first FHE scheme using ideal lattices</td>
-      </tr>
-      <tr>
-        <td><strong>2011-2013</strong></td>
-        <td>Second-generation FHE: BGV, BFV schemes (more practical)</td>
-      </tr>
-      <tr>
-        <td><strong>2017</strong></td>
-        <td>CKKS scheme: approximate computation, good for ML applications</td>
-      </tr>
-      <tr>
-        <td><strong>2020s</strong></td>
-        <td>Hardware acceleration, standardization efforts (HomomorphicEncryption.org)</td>
-      </tr>
-    </table>
-
-    <div class="key">
-      <strong>Gentry's Key Idea:</strong> Start with a <em>somewhat homomorphic</em> scheme, then use <em>bootstrapping</em> to make it fully homomorphic. Bootstrapping homomorphically evaluates the decryption circuit to "refresh" noisy ciphertexts.
-    </div>
-
-    <div class="prof">
-      <strong>Based on Lattice Problems:</strong> Gentry's scheme relies on the <em>Learning With Errors (LWE)</em> problem -- finding a "close vector" in a high-dimensional lattice. No efficient classical or quantum algorithm is known for LWE, making it a candidate for post-quantum security.
-    </div>
-  </div>
-</details>
-
-<!-- Section 4: The Noise Problem & Bootstrapping -->
-<details>
-  <summary>&#128295; 4. The Noise Problem and Bootstrapping</summary>
-  <div class="content-section">
-    <div class="red"><strong>CRITICAL CONCEPT:</strong> Every homomorphic operation <em>adds noise</em> to the ciphertext. After too many operations, the noise overwhelms the signal and <em>decryption fails</em>.</div>
-
-    <div class="ascii-diagram-title">Noise Growth in Homomorphic Encryption</div>
-    <div class="ascii-diagram">
-Operation 1:  E(a) + E(b) = E(a+b)  [noise: low]
-Operation 2:  Result * E(c)          [noise: medium]
-Operation 3:  Result + E(d)          [noise: high]
-     ...
-Operation N:  Result * E(x)          [noise: TOO HIGH -- DECRYPTION FAILS]
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Bootstrapping</h3>
-    <div class="blue">
-      <strong>Bootstrapping:</strong> The process of "refreshing" a noisy ciphertext by <em>homomorphically evaluating the decryption circuit</em>. Takes a noisy ciphertext, produces a fresh ciphertext of the same plaintext with reduced noise.
-    </div>
-    <ul>
-      <li>Conceptually: decrypt inside the encryption to reset noise level</li>
-      <li>Requires the scheme to be able to evaluate its own decryption circuit</li>
-      <li>Extremely expensive computationally</li>
-      <li>This is what converts SHE into FHE</li>
-    </ul>
-
-    <div class="warn">
-      <strong>Performance Impact:</strong> Bootstrapping is the most expensive operation in FHE. A single bootstrapping operation can take seconds to minutes. This is the primary bottleneck for practical FHE systems.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Noise Management Strategies</h3>
-    <ul>
-      <li><strong>Leveled FHE:</strong> Set a maximum circuit depth upfront, avoid bootstrapping entirely</li>
-      <li><strong>Modulus switching:</strong> Reduce noise by switching to a smaller modulus</li>
-      <li><strong>SIMD batching:</strong> Pack multiple values into one ciphertext for parallel operations</li>
-    </ul>
-  </div>
-</details>
-
-<!-- Section 5: Performance & Practical Considerations -->
-<details>
-  <summary>&#9889; 5. Performance and Practical Considerations</summary>
-  <div class="content-section">
-    <div class="warn"><strong>REALITY CHECK:</strong> FHE is <em>millions of times slower</em> than plaintext computation. A 1-second plaintext operation might take hours or days with FHE.</div>
-
-    <table>
-      <tr>
-        <th>Metric</th>
-        <th>Plaintext</th>
-        <th>FHE</th>
-      </tr>
-      <tr>
-        <td><strong>Simple Addition</strong></td>
-        <td>Nanoseconds</td>
-        <td>Milliseconds</td>
-      </tr>
-      <tr>
-        <td><strong>Multiplication</strong></td>
-        <td>Nanoseconds</td>
-        <td>Milliseconds to seconds</td>
-      </tr>
-      <tr>
-        <td><strong>Comparison (if/else)</strong></td>
-        <td>Nanoseconds</td>
-        <td>Seconds to minutes</td>
-      </tr>
-      <tr>
-        <td><strong>ML Inference</strong></td>
-        <td>Milliseconds</td>
-        <td>Minutes to hours</td>
-      </tr>
-      <tr>
-        <td><strong>Ciphertext Size</strong></td>
-        <td>Original data size</td>
-        <td>10-10,000x expansion</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Research Progress</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Secure Voting Application</h3>
     <div class="green">
-      <strong>Getting Faster:</strong>
+      <strong>How Paillier enables secure voting:</strong>
       <ul>
-        <li>Hardware acceleration (GPU, FPGA, ASIC designs)</li>
-        <li>Better algorithms (CKKS for approximate arithmetic)</li>
-        <li>Compiler optimizations for FHE circuits</li>
-        <li>Libraries: Microsoft SEAL, IBM HELib, Google's FHE transpiler</li>
+        <li>Each voter encrypts their vote: E(vote1), E(vote2), ...</li>
+        <li>Multiply all encrypted votes: E(vote1) * E(vote2) * ... = E(vote1 + vote2 + ...)</li>
+        <li>Decrypt the product to get the sum of all votes</li>
+        <li>Individual votes are <em>never revealed</em> -- only the total</li>
       </ul>
     </div>
 
+    <h3 style="margin-top: 20px; color: #58a6ff;">Python Code Example (from textbook)</h3>
+    <div class="box">
+      <h4>Using the phe library</h4>
+      <pre style="background: #0d1b2a; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 0.85em; line-height: 1.5;">
+from phe import paillier
+
+# Generate keys
+public_key, private_key = paillier.generate_paillier_keypair()
+
+# Encrypt two values
+a = 15
+b = 25
+enc_a = public_key.encrypt(a)
+enc_b = public_key.encrypt(b)
+
+# Add encrypted values (multiply ciphertexts)
+enc_sum = enc_a + enc_b
+
+# Decrypt to get the sum
+result = private_key.decrypt(enc_sum)
+print(result)  # Output: 40</pre>
+    </div>
+
     <div class="key">
-      <strong>Standards Status:</strong> No NIST standard yet for FHE. Active standardization efforts through HomomorphicEncryption.org (consortium including Microsoft, Intel, Samsung, and academic researchers).
+      <strong>Key Insight:</strong> The server performing the addition <em>never sees</em> the individual values (15 or 25). It only works with ciphertexts, yet produces a valid encrypted answer that decrypts to the correct sum (40).
     </div>
   </div>
 </details>
 
-<!-- Section 6: Use Cases -->
+<!-- Section 2: Knapsack Encryption -->
 <details>
-  <summary>&#127760; 6. Real-World Use Cases</summary>
+  <summary>&#127890; 2. Knapsack Encryption -- Merkle-Hellman (Buchanan Ch 4 p.163)</summary>
   <div class="content-section">
-    <div class="green">
-      <strong>Practical Applications:</strong>
+    <div class="blue"><strong>DEFINITION:</strong> The Merkle-Hellman knapsack cryptosystem is based on the <em>subset sum problem</em> (NP-hard in general). It was the first public-key encryption scheme proposed after RSA.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">How It Works</h3>
+    <div class="box">
+      <h4>Key Generation</h4>
       <ul>
-        <li><strong>Private Cloud Computing</strong> -- process sensitive data on untrusted cloud servers without exposing it</li>
-        <li><strong>Secure Voting</strong> -- tally encrypted votes without seeing individual ballots</li>
-        <li><strong>Privacy-Preserving ML</strong> -- train models on encrypted medical/financial data</li>
-        <li><strong>Medical Data Analysis</strong> -- run analytics on encrypted patient records (HIPAA compliance)</li>
-        <li><strong>Financial Computations</strong> -- perform calculations on encrypted financial data</li>
-        <li><strong>Secure Multi-Party Computation</strong> -- multiple parties compute jointly without revealing individual inputs</li>
-        <li><strong>Encrypted Search</strong> -- search encrypted databases without decrypting</li>
+        <li><strong>Private key:</strong> A <em>superincreasing sequence</em> -- each element is greater than the sum of all preceding elements (e.g., [2, 7, 11, 21, 42, 89]). This makes the knapsack problem EASY to solve</li>
+        <li><strong>Public key:</strong> Transform the superincreasing sequence into a <em>hard knapsack</em> using modular multiplication (multiply each element by w mod q). This makes the knapsack problem HARD to solve</li>
       </ul>
     </div>
 
     <div class="box">
-      <h4>Example: Privacy-Preserving Medical Research</h4>
+      <h4>Encryption / Decryption</h4>
       <ul>
-        <li>Hospital encrypts patient data with HE</li>
-        <li>Sends encrypted data to research institution</li>
-        <li>Researchers run statistical analysis on encrypted data</li>
-        <li>Return encrypted results to hospital</li>
-        <li>Hospital decrypts to get research findings</li>
-        <li>Researchers never saw any patient data</li>
+        <li><strong>Encrypt:</strong> Represent message as binary bits. Multiply each bit by corresponding public key element. Sum = ciphertext</li>
+        <li><strong>Decrypt:</strong> Use private key to convert back to superincreasing knapsack, then solve easily using greedy algorithm</li>
       </ul>
+    </div>
+
+    <div class="warn" style="border-left-color: #e94560; background: rgba(233,69,96,0.2);">
+      <strong>BROKEN -- Shamir (1984):</strong> Adi Shamir broke the Merkle-Hellman knapsack using the <em>LLL lattice reduction algorithm</em>. The transformation from superincreasing to hard knapsack could be reversed, revealing the private key. The scheme is NO LONGER SECURE.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Knapsack = historically important (first post-RSA public-key scheme) but BROKEN. Subset sum problem is NP-hard in general, but the specific structure Merkle-Hellman used was exploitable.</strong></div>
+
+    <div class="key">
+      <strong>Why It Matters:</strong> The knapsack scheme demonstrates that basing cryptography on an NP-hard problem is not sufficient -- the specific instance must also be hard. The structure used to create trapdoors can sometimes be exploited.
     </div>
   </div>
 </details>
 
-<!-- Section 7: Security & Connection to Course -->
+<!-- Section 3: Zero-Knowledge Proofs -->
 <details>
-  <summary>&#128737;&#65039; 7. Security Foundations and Course Connection</summary>
+  <summary>&#128373; 3. Zero-Knowledge Proofs (Buchanan Ch 11)</summary>
   <div class="content-section">
-    <div class="red">
-      <strong>Security Basis:</strong> Modern FHE schemes are based on <em>lattice problems</em>, specifically the Learning With Errors (LWE) and Ring-LWE problems. These are believed to be <em>quantum-resistant</em> -- no known quantum algorithm can solve them efficiently.
-    </div>
+    <div class="red"><strong>KEY IDEA:</strong> A zero-knowledge proof (ZKP) allows a <em>prover</em> to convince a <em>verifier</em> that a statement is true, WITHOUT revealing any information beyond the truth of the statement itself.</div>
 
+    <h3 style="margin-top: 20px; color: #58a6ff;">Three Properties of ZKP</h3>
     <table>
       <tr>
         <th>Property</th>
-        <th>RSA/ECC</th>
-        <th>Lattice-based (FHE)</th>
+        <th>Meaning</th>
       </tr>
       <tr>
-        <td><strong>Hard Problem</strong></td>
-        <td>Integer factorization / DLP</td>
-        <td>Learning With Errors (LWE)</td>
+        <td><strong>Completeness</strong></td>
+        <td>If the statement is true, an honest prover WILL convince an honest verifier</td>
       </tr>
       <tr>
-        <td><strong>Quantum Resistant</strong></td>
-        <td>No (broken by Shor's algorithm)</td>
-        <td>Yes (believed resistant)</td>
+        <td><strong>Soundness</strong></td>
+        <td>If the statement is false, a cheating prover CANNOT fool the verifier (except with negligible probability)</td>
       </tr>
       <tr>
-        <td><strong>Homomorphic</strong></td>
-        <td>Partially (RSA: multiplicative)</td>
-        <td>Fully (unlimited operations)</td>
+        <td><strong>Zero-knowledge</strong></td>
+        <td>The verifier learns NOTHING beyond the fact that the statement is true -- no information about the secret is leaked</td>
       </tr>
     </table>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Connection to Earlier Course Material</h3>
-    <div class="key">
-      <strong>Building on Public-Key Crypto:</strong> RSA's <em>multiplicative homomorphism</em> (E(m1) * E(m2) = E(m1*m2)) was known since the beginning but was not exploited. FHE research transformed this "accidental" property into a deliberate design goal, leading to entirely new cryptosystems based on lattice problems rather than factoring.
+    <h3 style="margin-top: 20px; color: #58a6ff;">Interactive ZKP Protocol (from textbook)</h3>
+    <div class="box">
+      <h4>Alice proves she knows secret x without revealing it</h4>
+      <ul>
+        <li><strong>Public parameters:</strong> g (generator), p (prime)</li>
+        <li><strong>Alice's secret:</strong> x</li>
+        <li><strong>Alice's public value:</strong> y = g^x mod p</li>
+        <li><strong>Step 1:</strong> Alice picks random v, computes t = g^v mod p, sends t to Bob</li>
+        <li><strong>Step 2:</strong> Compute challenge c = hash(g, y, t)</li>
+        <li><strong>Step 3:</strong> Alice computes r = v - c*x, sends r to Bob</li>
+        <li><strong>Step 4:</strong> Bob verifies: g^r * y^c = t (mod p)</li>
+      </ul>
     </div>
 
-    <div class="prof">
-      <strong>Why This Matters for Cybersecurity:</strong> FHE represents a paradigm shift -- instead of protecting data by restricting access, we protect data while still allowing computation. This is critical for cloud security, data privacy regulations (GDPR, HIPAA), and the future of secure computation.
+    <div class="ascii-diagram-title">ZKP Verification</div>
+    <div class="ascii-diagram">
+Alice (knows x)                    Bob (verifier)
+  |                                    |
+  | y = g^x (public)                  |
+  |                                    |
+  | Pick random v                      |
+  | t = g^v                            |
+  |---- t --------------------------> |
+  |                                    |
+  | c = hash(g, y, t)                 | c = hash(g, y, t)
+  | r = v - c*x                       |
+  |---- r --------------------------> |
+  |                                    |
+  |                          Verify: g^r * y^c = t?
+  |                          If yes: Alice knows x
+  |                          Bob learned NOTHING about x
+    </div>
+
+    <div class="key">
+      <strong>Key Insight:</strong> Bob becomes convinced Alice knows x because only someone who knows x can compute r = v - c*x correctly. But Bob cannot extract x from r (he doesn't know v) and the protocol reveals no information about x beyond the fact that Alice knows it.
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: Fair Coin Flip -->
+<details>
+  <summary>&#127922; 4. Fair Coin Flip (Buchanan Ch 11.7)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>PROBLEM:</strong> Two parties who don't trust each other need to flip a fair coin remotely. Neither should be able to cheat by choosing the outcome after seeing the other's input.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Protocol Steps</h3>
+    <div class="box">
+      <h4>Fair Coin Flip with Salted Hashes</h4>
+      <ul>
+        <li><strong>Step 1:</strong> Both Alice and Bob independently generate random numbers (a and b)</li>
+        <li><strong>Step 2:</strong> Both compute salted hashes of their numbers: H(salt || a) and H(salt || b)</li>
+        <li><strong>Step 3:</strong> Exchange hashes FIRST (commit phase) -- neither can change their value after seeing the other's hash</li>
+        <li><strong>Step 4:</strong> Reveal actual values and salts (reveal phase) -- both can verify the other's hash</li>
+        <li><strong>Step 5:</strong> XOR the least significant bits of both values. Result = coin flip outcome</li>
+      </ul>
+    </div>
+
+    <div class="key">
+      <strong>Why Salt Matters:</strong> The salt prevents replay attacks and rainbow table lookups. Without salt, an adversary could precompute hashes for many values and find a collision that produces their desired outcome.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Fair Coin Flip = commit-then-reveal using hashes. Salt prevents cheating. XOR of LSBs = result.</strong></div>
+  </div>
+</details>
+
+<!-- Section 5: Paillier Homomorphic Voting -->
+<details>
+  <summary>&#128499; 5. Paillier Homomorphic Voting (Buchanan Ch 11.8)</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY APPLICATION:</strong> Paillier's additive homomorphism enables secure electronic voting -- tally encrypted votes without ever decrypting individual ballots.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Voting Example (from textbook)</h3>
+    <div class="box">
+      <h4>Secure Vote Tallying</h4>
+      <ul>
+        <li><strong>Vote 1:</strong> Alice votes 100 -- encrypt: E(100)</li>
+        <li><strong>Vote 2:</strong> Bob votes 200 -- encrypt: E(200)</li>
+        <li><strong>Add encrypted votes:</strong> E(100) + E(200) = E(300)</li>
+        <li><strong>Decrypt sum:</strong> D(E(300)) = 300</li>
+        <li><strong>Result:</strong> Total = 300. Individual votes (100 and 200) are NEVER revealed</li>
+      </ul>
+    </div>
+
+    <div class="ascii-diagram-title">Homomorphic Voting Flow</div>
+    <div class="ascii-diagram">
+Voter A: vote=100     Voter B: vote=200
+    |                     |
+    v                     v
+  E(100)               E(200)
+    |                     |
+    +------> + <----------+
+             |
+           E(300)
+             |
+             v
+         Decrypt
+             |
+         Total = 300
+  (Individual votes never revealed)
+    </div>
+
+    <div class="green">
+      <strong>Properties:</strong>
+      <ul>
+        <li>Privacy: individual votes remain encrypted throughout</li>
+        <li>Verifiability: each voter can verify their encrypted vote was included</li>
+        <li>Correctness: the decrypted sum is mathematically guaranteed to equal the sum of individual votes</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: Oblivious Transfer -->
+<details>
+  <summary>&#128230; 6. Oblivious Transfer (Buchanan Ch 11.9)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Oblivious Transfer (OT) is a protocol where Alice has multiple messages and Bob wants to receive exactly ONE of them. Alice does not learn which message Bob chose, and Bob does not learn the other messages.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">DH-Based 1-of-2 Oblivious Transfer</h3>
+    <div class="box">
+      <h4>Protocol Steps</h4>
+      <ul>
+        <li><strong>Step 1:</strong> Alice generates A = g^a (sends A to Bob)</li>
+        <li><strong>Step 2:</strong> Bob wants message c (either 0 or 1):
+          <ul>
+            <li>If c=0: B = g^b</li>
+            <li>If c=1: B = A * g^b</li>
+          </ul>
+          Bob sends B to Alice
+        </li>
+        <li><strong>Step 3:</strong> Alice computes two keys:
+          <ul>
+            <li>K0 = B^a = g^(ab) (if c=0) or A^a * g^(ab) (if c=1)</li>
+            <li>K1 = (B/A)^a</li>
+          </ul>
+        </li>
+        <li><strong>Step 4:</strong> Alice encrypts both messages: C0 = Enc(K0, m0), C1 = Enc(K1, m1)</li>
+        <li><strong>Step 5:</strong> Bob can only decrypt ONE message -- the one corresponding to his choice c (he can compute g^(ab) = A^b but not the other key)</li>
+      </ul>
+    </div>
+
+    <div class="key">
+      <strong>Two-Way Privacy:</strong> Alice never learns which message Bob chose (c=0 or c=1). Bob never learns the message he did NOT choose. This "oblivious" property is fundamental to many cryptographic protocols including garbled circuits.
+    </div>
+  </div>
+</details>
+
+<!-- Section 7: Scrambled Circuits -->
+<details>
+  <summary>&#128268; 7. Scrambled (Garbled) Circuits (Buchanan Ch 11.10)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Garbled circuits enable <em>secure two-party computation</em>. Two parties can jointly compute a function on their private inputs without revealing those inputs to each other.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">How Garbled Circuits Work</h3>
+    <div class="box">
+      <h4>Protocol</h4>
+      <ul>
+        <li><strong>Step 1:</strong> Bob (circuit generator) represents the function as a Boolean circuit of AND/OR/XOR gates</li>
+        <li><strong>Step 2:</strong> Bob encrypts each gate's truth table with 4 different key combinations (one per input pair)</li>
+        <li><strong>Step 3:</strong> Bob sends the garbled circuit to Alice</li>
+        <li><strong>Step 4:</strong> Alice receives her input keys via <em>oblivious transfer</em> -- Bob sends keys without learning which input Alice has</li>
+        <li><strong>Step 5:</strong> Alice can only decrypt ONE row of each truth table (matching her actual input), producing the output</li>
+      </ul>
+    </div>
+
+    <div class="key">
+      <strong>Key Insight:</strong> Alice evaluates the circuit but never learns Bob's inputs (she only sees garbled values). Bob never learns Alice's inputs (oblivious transfer ensures this). Both learn only the final output.
+    </div>
+  </div>
+</details>
+
+<!-- Section 8: Millionaire's Problem -->
+<details>
+  <summary>&#128176; 8. Millionaire's Problem (Buchanan Ch 11.11)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>PROBLEM:</strong> Two millionaires want to know who has more money, but neither wants to reveal their actual amount. This is Yao's Millionaire Problem -- the foundational problem of secure multi-party computation.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">RSA-Based Solution (from textbook)</h3>
+    <div class="box">
+      <h4>Protocol Overview</h4>
+      <ul>
+        <li>Uses RSA encryption and modular arithmetic</li>
+        <li>Alice encrypts a value derived from her wealth with Bob's public key</li>
+        <li>Bob computes a series of Z values using his private key and his own wealth</li>
+        <li>Comparison of Z values reveals who is wealthier without revealing amounts</li>
+        <li>Neither party learns the other's actual wealth -- only the comparison result (&gt; or &lt;)</li>
+      </ul>
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Millionaire's Problem = compare private values without revealing them. Foundation of Secure Multi-Party Computation (MPC). Uses RSA for privacy.</strong></div>
+  </div>
+</details>
+
+<!-- Section 9: RAPPOR -->
+<details>
+  <summary>&#128202; 9. RAPPOR -- Differential Privacy (Buchanan Ch 11.12)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> RAPPOR (Randomized Aggregatable Privacy-Preserving Ordinal Response) is Google's protocol for collecting user data with <em>differential privacy</em>. Uses Bloom filters combined with randomized response.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Three Stages of RAPPOR</h3>
+    <table>
+      <tr>
+        <th>Stage</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Signal Creation</td>
+        <td>Hash the user's true value into a Bloom filter B (set specific bits to 1)</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Permanent Randomized Response (PRR)</td>
+        <td>Create B_fake by randomly flipping bits in B. This is a permanent "fake" version stored for the user. Provides longitudinal privacy</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Instantaneous Randomized Response (IRR)</td>
+        <td>Add additional noise to B_fake before each report. Different noise each time. Prevents tracking across reports</td>
+      </tr>
+    </table>
+
+    <div class="ascii-diagram-title">RAPPOR Pipeline</div>
+    <div class="ascii-diagram">
+True Value --> Hash to Bloom Filter (B)
+                    |
+                    v
+              PRR: Flip bits randomly --> B_fake (permanent)
+                    |
+                    v
+              IRR: Add more noise --> Reported Value
+                    |
+                    v
+              Server collects many noisy reports
+              Statistical analysis recovers population trends
+              Individual values remain private
+    </div>
+
+    <div class="key">
+      <strong>Differential Privacy Guarantee:</strong> Even if an adversary has access to all the noisy reports, they cannot determine any individual user's true value with high confidence. The noise is calibrated so that aggregate statistics remain accurate while individual privacy is protected.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>RAPPOR = Bloom filter + PRR (permanent noise) + IRR (per-report noise). Provides differential privacy for data collection.</strong></div>
+  </div>
+</details>
+
+<!-- Section 10: SFE - Secure Function Evaluation -->
+<details>
+  <summary>&#128101; 10. SFE -- Secure Function Evaluation (Buchanan Ch 11.13)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Secure Function Evaluation (SFE) allows multiple parties to jointly compute a function on their combined inputs, without any party revealing their individual input to the others.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Voting Example (from textbook)</h3>
+    <div class="box">
+      <h4>Secret Sharing Approach</h4>
+      <ul>
+        <li><strong>Alice = 7, Bob = 2, Carol = 7</strong> (individual secret values)</li>
+        <li><strong>Step 1:</strong> Each person splits their value into shares (one per participant)</li>
+        <li><strong>Step 2:</strong> Exchange shares -- each person sends one share to each other participant</li>
+        <li><strong>Step 3:</strong> Each person computes their partial sum (sum of received shares)</li>
+        <li><strong>Step 4:</strong> Everyone announces their partial sum</li>
+        <li><strong>Step 5:</strong> Total = sum of all partial sums mod 100 = actual total (16)</li>
+      </ul>
+    </div>
+
+    <div class="ascii-diagram-title">SFE with Secret Shares</div>
+    <div class="ascii-diagram">
+Alice(7)     Bob(2)      Carol(7)
+  |            |            |
+  | Split into shares       |
+  | a1,a2,a3   b1,b2,b3   c1,c2,c3
+  |            |            |
+  | Exchange shares         |
+  |            |            |
+  | Sum received shares     |
+  | P_A        P_B         P_C
+  |            |            |
+  | Announce partial sums   |
+  |            |            |
+  Total = P_A + P_B + P_C (mod 100) = 16
+  No one learns individual values
+    </div>
+
+    <div class="key">
+      <strong>Key Properties:</strong>
+      <ul>
+        <li><strong>Privacy:</strong> No party learns any other party's individual input</li>
+        <li><strong>Correctness:</strong> The computed result is guaranteed to be correct</li>
+        <li><strong>Modularity:</strong> Works for any computable function, not just addition</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Connection: SRP (Secure Remote Password)</h3>
+    <div class="box">
+      <h4>Buchanan Ch 11 also covers SRP</h4>
+      <ul>
+        <li>Password-based authentication where the server never stores or sees the password</li>
+        <li>Uses a verifier derived from the password instead of storing the password itself</li>
+        <li>Resistant to offline dictionary attacks even if the server's database is compromised</li>
+        <li>Based on Diffie-Hellman key exchange with password-derived parameters</li>
+      </ul>
     </div>
   </div>
 </details>
@@ -1241,113 +1337,113 @@ Operation N:  Result * E(x)          [noise: TOO HIGH -- DECRYPTION FAILS]
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">1</span> What is the defining property of homomorphic encryption?</p>
+      <p><span class="qnum">1</span> What is the homomorphic property of the Paillier cryptosystem?</p>
       <div class="options">
-        <div class="opt">It uses two keys for encryption and decryption</div>
-        <div class="opt">Computations on ciphertexts produce encrypted results that match operations on plaintexts: E(a) op E(b) = E(a op b)</div>
-        <div class="opt">It encrypts data faster than any other scheme</div>
-        <div class="opt">It allows multiple parties to share a single key</div>
+        <div class="opt">E(m1) * E(m2) = E(m1 * m2) -- multiplicatively homomorphic</div>
+        <div class="opt">E(m1) * E(m2) = E(m1 + m2) -- additively homomorphic</div>
+        <div class="opt">E(m1) + E(m2) = E(m1 + m2) -- additively homomorphic</div>
+        <div class="opt">E(m1) XOR E(m2) = E(m1 XOR m2) -- XOR homomorphic</div>
       </div>
-      <div class="explanation">The homomorphic property means you can perform operations on encrypted data without decrypting, and the result when decrypted matches the result of operating on plaintexts: E(a) op E(b) = E(a op b).</div>
-    </div>
-
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">2</span> Which type of homomorphic encryption supports only ONE operation (either addition or multiplication, but not both)?</p>
-      <div class="options">
-        <div class="opt">Fully Homomorphic Encryption (FHE)</div>
-        <div class="opt">Somewhat Homomorphic Encryption (SHE)</div>
-        <div class="opt">Partially Homomorphic Encryption (PHE)</div>
-        <div class="opt">Leveled Homomorphic Encryption (LHE)</div>
-      </div>
-      <div class="explanation">Partially Homomorphic Encryption (PHE) supports only one operation -- either addition OR multiplication, but not both. RSA and ElGamal are multiplicatively homomorphic; Paillier is additively homomorphic.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">3</span> RSA encryption is homomorphic with respect to which operation?</p>
-      <div class="options">
-        <div class="opt">Multiplication -- E(m1) * E(m2) = E(m1 * m2)</div>
-        <div class="opt">Addition -- E(m1) + E(m2) = E(m1 + m2)</div>
-        <div class="opt">Both addition and multiplication</div>
-        <div class="opt">XOR operations</div>
-      </div>
-      <div class="explanation">RSA is multiplicatively homomorphic: multiplying two RSA ciphertexts produces the encryption of the product of the two plaintexts. This was known since RSA was invented but wasn't widely exploited.</div>
+      <div class="explanation">Paillier is additively homomorphic: multiplying two ciphertexts produces the encryption of the SUM of the plaintexts. E(m1) * E(m2) = E(m1 + m2). This enables secure voting -- encrypt votes, multiply ciphertexts, decrypt to get the total.</div>
     </div>
 
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">4</span> Who constructed the first fully homomorphic encryption scheme, and when?</p>
+      <p><span class="qnum">2</span> Why was the Merkle-Hellman knapsack cryptosystem broken?</p>
       <div class="options">
-        <div class="opt">Ron Rivest in 1978</div>
-        <div class="opt">Whitfield Diffie in 1976</div>
-        <div class="opt">Pascal Paillier in 1999</div>
-        <div class="opt">Craig Gentry in 2009</div>
+        <div class="opt">The subset sum problem was proven to be solvable in polynomial time</div>
+        <div class="opt">Quantum computers factored the keys</div>
+        <div class="opt">A brute-force attack found all private keys</div>
+        <div class="opt">Shamir used the LLL lattice reduction algorithm to reverse the trapdoor transformation in 1984</div>
       </div>
-      <div class="explanation">Craig Gentry constructed the first FHE scheme in his 2009 Stanford PhD thesis, solving a problem that had been open for over 30 years since Rivest, Adleman, and Dertouzos proposed the concept in 1978.</div>
+      <div class="explanation">Adi Shamir broke Merkle-Hellman in 1984 using the LLL lattice reduction algorithm. While the general subset sum problem is NP-hard, the specific structure of the superincreasing-to-hard transformation was exploitable. The scheme is no longer secure.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">3</span> Which of the following is NOT one of the three required properties of a zero-knowledge proof?</p>
+      <div class="options">
+        <div class="opt">Completeness -- honest prover convinces honest verifier</div>
+        <div class="opt">Soundness -- cheating prover cannot fool verifier</div>
+        <div class="opt">Confidentiality -- messages are encrypted during transmission</div>
+        <div class="opt">Zero-knowledge -- verifier learns nothing beyond the truth of the statement</div>
+      </div>
+      <div class="explanation">The three properties of ZKP are Completeness, Soundness, and Zero-knowledge. Confidentiality (encrypted messages) is NOT a ZKP property -- ZKP is about proving knowledge without revealing the secret, not about encrypting communications.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">4</span> In Paillier homomorphic voting, if vote1=100 and vote2=200, what happens when you add the encrypted values?</p>
+      <div class="options">
+        <div class="opt">E(100) + E(200) = E(300), and decrypting gives 300 without revealing individual votes</div>
+        <div class="opt">E(100) + E(200) = E(20000), computing the product of votes</div>
+        <div class="opt">E(100) + E(200) = E(150), computing the average</div>
+        <div class="opt">The operation is not possible on encrypted values</div>
+      </div>
+      <div class="explanation">Paillier's additive homomorphism means E(100) + E(200) = E(300). Decrypting the result gives the sum (300) without ever revealing that the individual votes were 100 and 200. This is the foundation of homomorphic voting.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">5</span> What is "bootstrapping" in the context of FHE?</p>
+      <p><span class="qnum">5</span> In Oblivious Transfer, what does Alice learn about Bob's choice?</p>
       <div class="options">
-        <div class="opt">Initializing the encryption keys</div>
-        <div class="opt">Refreshing a noisy ciphertext by homomorphically evaluating the decryption circuit</div>
-        <div class="opt">Converting symmetric encryption to asymmetric</div>
-        <div class="opt">Distributing keys to multiple parties</div>
+        <div class="opt">Alice learns which message Bob chose and can verify his identity</div>
+        <div class="opt">Alice learns NOTHING about which message Bob chose</div>
+        <div class="opt">Alice learns which message Bob chose but not when he accessed it</div>
+        <div class="opt">Alice learns Bob's private key used to decrypt</div>
       </div>
-      <div class="explanation">Bootstrapping refreshes a noisy ciphertext by homomorphically evaluating the decryption circuit. It takes a noisy ciphertext and produces a fresh one with reduced noise, enabling unlimited operations. This converts SHE into FHE.</div>
+      <div class="explanation">In Oblivious Transfer, Alice sends encrypted versions of both messages. Bob can only decrypt ONE (based on his choice c=0 or c=1), and Alice never learns which one Bob chose. This two-way privacy is what makes OT "oblivious."</div>
     </div>
 
     <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">6</span> Why does each homomorphic operation add "noise" to the ciphertext?</p>
+      <p><span class="qnum">6</span> What are the three stages of RAPPOR for differential privacy?</p>
       <div class="options">
-        <div class="opt">Because the encryption algorithm has bugs</div>
-        <div class="opt">Because the server intentionally adds errors</div>
-        <div class="opt">Because the security of lattice-based schemes relies on small errors, and operations compound these errors</div>
-        <div class="opt">Because network transmission corrupts the data</div>
+        <div class="opt">Encryption, Transmission, Decryption</div>
+        <div class="opt">Hashing, Salting, Verification</div>
+        <div class="opt">Signal creation (Bloom filter), Permanent Randomized Response (PRR), Instantaneous Randomized Response (IRR)</div>
+        <div class="opt">Key generation, Signing, Verification</div>
       </div>
-      <div class="explanation">Lattice-based schemes (like those used in FHE) rely on the Learning With Errors problem, which intentionally introduces small errors for security. Each computation compounds these errors. If noise grows too large, decryption fails.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">7</span> What is the main practical limitation of FHE today?</p>
-      <div class="options">
-        <div class="opt">It is extremely slow -- millions of times slower than plaintext computation</div>
-        <div class="opt">It has been proven insecure against classical attacks</div>
-        <div class="opt">It only works with integer data types</div>
-        <div class="opt">It requires quantum computers to run</div>
-      </div>
-      <div class="explanation">FHE is extremely slow, often millions of times slower than plaintext computation. A 1-second plaintext operation might take hours with FHE. This is the primary barrier to widespread adoption, though performance is improving.</div>
+      <div class="explanation">RAPPOR has three stages: (1) Signal creation -- hash value into a Bloom filter B, (2) PRR -- create permanent fake B_fake by flipping bits, (3) IRR -- add additional noise before each report. This provides differential privacy while allowing aggregate analysis.</div>
     </div>
 
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">8</span> What mathematical problem underlies the security of modern FHE schemes?</p>
+      <p><span class="qnum">7</span> In the Fair Coin Flip protocol, why is salt used with the hash?</p>
       <div class="options">
+        <div class="opt">To make the hash computation faster</div>
+        <div class="opt">To ensure both parties use the same hash algorithm</div>
+        <div class="opt">To encrypt the random number before transmission</div>
+        <div class="opt">To prevent replay attacks and rainbow table lookups that could allow cheating</div>
+      </div>
+      <div class="explanation">Salt prevents an adversary from precomputing hashes for many values (rainbow table) to find one that produces their desired outcome. It also prevents replay of previously used values. Without salt, the commit phase could be circumvented.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> What problem does the Knapsack encryption scheme rely on?</p>
+      <div class="options">
+        <div class="opt">The subset sum problem (NP-hard in general)</div>
         <div class="opt">Integer factorization</div>
         <div class="opt">Discrete logarithm problem</div>
-        <div class="opt">Elliptic curve discrete logarithm</div>
-        <div class="opt">Learning With Errors (LWE) on lattices</div>
+        <div class="opt">Learning With Errors (LWE)</div>
       </div>
-      <div class="explanation">Modern FHE schemes are based on the Learning With Errors (LWE) problem and its variants (Ring-LWE). These lattice problems are believed to be resistant to both classical and quantum attacks.</div>
+      <div class="explanation">Merkle-Hellman knapsack encryption is based on the subset sum problem, which is NP-hard in general. However, the specific structure used (superincreasing sequence transformed by modular multiplication) was broken by Shamir using LLL lattice reduction.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">9</span> Which encryption scheme is additively homomorphic (multiplying ciphertexts gives the encryption of the sum)?</p>
+      <p><span class="qnum">9</span> In Secure Function Evaluation (SFE), how do Alice(7), Bob(2), and Carol(7) compute their total without revealing individual values?</p>
       <div class="options">
-        <div class="opt">RSA</div>
-        <div class="opt">Paillier</div>
-        <div class="opt">ElGamal</div>
-        <div class="opt">AES</div>
+        <div class="opt">They each encrypt their value and send it to a trusted third party</div>
+        <div class="opt">Each splits their value into shares, exchanges shares, computes partial sums, and announces results -- total mod 100 = actual total</div>
+        <div class="opt">They use homomorphic encryption to add all values</div>
+        <div class="opt">They use a hash function to combine all values</div>
       </div>
-      <div class="explanation">Paillier encryption is additively homomorphic: E(m1) * E(m2) = E(m1 + m2) mod n^2. This makes it useful for applications like e-voting (tallying encrypted votes) and private set intersection.</div>
+      <div class="explanation">In SFE with secret sharing, each person splits their value into shares (one per participant), exchanges shares, computes their partial sum from received shares, announces the partial sum, and the total of all partial sums mod 100 equals the actual total (16). No individual values are revealed.</div>
     </div>
 
     <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">10</span> Why is FHE considered relevant to post-quantum cryptography?</p>
+      <p><span class="qnum">10</span> In garbled circuits, how does Alice receive her input keys without Bob learning her input?</p>
       <div class="options">
-        <div class="opt">FHE requires quantum computers to operate</div>
-        <div class="opt">FHE was invented after quantum computing was proposed</div>
-        <div class="opt">FHE is based on lattice problems (LWE) which are believed resistant to quantum attacks</div>
-        <div class="opt">FHE encrypts quantum bits (qubits) directly</div>
+        <div class="opt">Alice generates her own keys from a shared secret</div>
+        <div class="opt">Bob sends all keys and Alice selects the correct ones</div>
+        <div class="opt">Through Oblivious Transfer -- Bob sends keys without learning which ones Alice receives</div>
+        <div class="opt">A trusted third party distributes the keys</div>
       </div>
-      <div class="explanation">FHE schemes based on lattice problems (LWE, Ring-LWE) are believed to be quantum-resistant. Unlike RSA and ECC, which Shor's algorithm can break, no known quantum algorithm efficiently solves lattice problems.</div>
+      <div class="explanation">Alice receives her input keys via Oblivious Transfer. Bob has keys for both possible inputs (0 and 1) for each of Alice's input bits. OT ensures Bob sends Alice exactly the keys matching her actual input, without Bob learning what that input is.</div>
     </div>
 </div>
 
@@ -1476,18 +1572,18 @@ Operation N:  Result * E(x)          [noise: TOO HIGH -- DECRYPTION FAILS]
 
   function getFlashcardData() {
     return [
-      { term: "Homomorphic Encryption", definition: "Encryption that allows computation on ciphertexts. E(a) op E(b) = E(a op b). Result when decrypted matches the operation on plaintexts. Cloud never sees plaintext.", category: "blue", label: "Definition" },
-      { term: "PHE (Partially Homomorphic)", definition: "Supports only ONE operation: either addition OR multiplication. Examples: RSA (multiplicative), Paillier (additive), ElGamal (multiplicative). Cannot compute arbitrary functions.", category: "blue", label: "Definition" },
-      { term: "SHE (Somewhat Homomorphic)", definition: "Supports both addition AND multiplication but only a limited number of operations before noise makes decryption impossible. Bridge between PHE and FHE.", category: "blue", label: "Definition" },
-      { term: "FHE (Fully Homomorphic)", definition: "Supports unlimited additions AND multiplications on encrypted data. Can compute any function. Extremely slow (millions of times overhead). First constructed by Craig Gentry in 2009.", category: "red", label: "Key Idea" },
-      { term: "Craig Gentry (2009)", definition: "Constructed first FHE scheme in his Stanford PhD thesis using ideal lattices. Solved a 30+ year open problem. Key idea: use bootstrapping to convert SHE into FHE.", category: "orange", label: "Key Person" },
-      { term: "Bootstrapping", definition: "Refreshes noisy ciphertext by homomorphically evaluating the decryption circuit. Converts SHE to FHE. Most expensive FHE operation. Resets noise level to allow more computations.", category: "red", label: "Key Idea" },
-      { term: "Noise Problem in HE", definition: "Each HE operation adds noise to ciphertext. Too many operations = noise overwhelms signal = decryption fails. Managed via bootstrapping, modulus switching, or leveled FHE.", category: "orange", label: "Caution" },
-      { term: "RSA Multiplicative Homomorphism", definition: "E(m1) * E(m2) = E(m1 * m2) mod n. Multiply ciphertexts to get encryption of product. Known since RSA invention but not widely exploited until FHE research.", category: "blue", label: "Definition" },
-      { term: "Paillier Encryption", definition: "Additively homomorphic: E(m1) * E(m2) = E(m1 + m2) mod n^2. Used in e-voting (tally encrypted votes) and private set intersection.", category: "blue", label: "Definition" },
-      { term: "Learning With Errors (LWE)", definition: "Mathematical problem underlying FHE security. Finding a close vector in high-dimensional lattice. No efficient classical or quantum algorithm known. Basis for post-quantum security.", category: "red", label: "Key Idea" },
-      { term: "FHE Performance", definition: "Millions of times slower than plaintext. A 1-second operation may take hours. Ciphertext expansion: 10-10,000x. Research improving via hardware acceleration, better algorithms, libraries (SEAL, HELib).", category: "orange", label: "Caution" },
-      { term: "FHE Use Cases", definition: "Private cloud computing, secure voting, privacy-preserving ML, medical data analysis, encrypted financial computation, secure multi-party computation, encrypted search.", category: "green", label: "Application" }
+      { term: "Paillier Cryptosystem", definition: "Additively homomorphic: E(m1) * E(m2) = E(m1 + m2). Multiply ciphertexts to get encryption of sum. Used for secure voting -- tally encrypted votes without revealing individual votes. (Buchanan Ch 4 p.162)", category: "blue", label: "Definition" },
+      { term: "Knapsack Encryption", definition: "Merkle-Hellman scheme. Based on subset sum problem (NP-hard). Private key = superincreasing sequence. Public key = hard knapsack via modular transform. BROKEN by Shamir (1984) using LLL lattice reduction. First public-key scheme after RSA.", category: "red", label: "Key Idea" },
+      { term: "Zero-Knowledge Proof (ZKP)", definition: "Prove knowledge of a secret WITHOUT revealing it. Three properties: Completeness (honest prover convinces), Soundness (cheater can't fool), Zero-knowledge (verifier learns nothing beyond validity).", category: "red", label: "Key Idea" },
+      { term: "ZKP Interactive Protocol", definition: "Alice proves she knows x: public y=g^x, picks random v, sends t=g^v, computes c=hash(g,y,t), sends r=v-c*x. Bob verifies g^r * y^c = t. Bob learns nothing about x.", category: "blue", label: "Definition" },
+      { term: "Fair Coin Flip", definition: "Both parties generate random numbers with salted hashes. Exchange hashes first (commit), then reveal values (reveal). XOR least significant bits = result. Salt prevents replay attacks. (Ch 11.7)", category: "green", label: "Protocol" },
+      { term: "Paillier Homomorphic Voting", definition: "Encrypt votes (e.g., 100, 200). Add encrypted values: E(100)+E(200)=E(300). Decrypt sum = 300. Individual votes never revealed. (Ch 11.8)", category: "green", label: "Application" },
+      { term: "Oblivious Transfer", definition: "DH-based. Alice has 2 messages, Bob wants exactly 1. Bob's choice (c=0 or c=1) determines which key he can compute. Alice encrypts both, Bob decrypts only one. Alice never learns Bob's choice. (Ch 11.9)", category: "blue", label: "Definition" },
+      { term: "Garbled Circuits", definition: "Secure 2-party computation. Bob encrypts truth table with 4 key combos. Alice gets keys via oblivious transfer. Can only evaluate one output. Neither learns the other's input. (Ch 11.10)", category: "blue", label: "Definition" },
+      { term: "Millionaire's Problem", definition: "Who has more money without revealing amounts? Uses RSA encryption and modular arithmetic. Z value comparison reveals who is wealthier. Foundation of secure multi-party computation (MPC). (Ch 11.11)", category: "orange", label: "Classic Problem" },
+      { term: "RAPPOR", definition: "Randomized Aggregatable Privacy-Preserving Ordinal Response. Three stages: Signal creation (Bloom filter), PRR (permanent noise), IRR (per-report noise). Provides differential privacy for data collection. (Ch 11.12)", category: "red", label: "Key Idea" },
+      { term: "Secure Function Evaluation (SFE)", definition: "Multiple parties compute joint function without revealing inputs. Secret sharing: split values into shares, exchange, compute partial sums, announce results. Total mod 100 = actual total. (Ch 11.13)", category: "blue", label: "Definition" },
+      { term: "SRP (Secure Remote Password)", definition: "Password auth where server never stores/sees password. Uses verifier derived from password. Resistant to offline dictionary attacks even if DB compromised. Based on Diffie-Hellman.", category: "green", label: "Protocol" }
     ];
   }
 

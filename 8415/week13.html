@@ -1319,10 +1319,10 @@
 <!-- CAUTION BANNER -->
 <div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 20px 20px 0; max-width: 1000px; margin-left: auto; margin-right: auto;">
   <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">
-    &#9888;&#65039; PRELIMINARY - TEXTBOOK ONLY
+    &#9888;&#65039; PRELIMINARY - TEXTBOOK + READINGS
   </div>
   <div style="color:#aaa; font-size:0.9em; line-height:1.5;">
-    This study guide is based on the assigned textbook chapters. It will be updated when lecture slides and homework are released each week. Content may differ from what the professor emphasizes in class.
+    Based on Buchanan Ch 9 and ZK-STARKs readings. Will be updated with lecture slides when released.
   </div>
 </div>
 
@@ -1344,7 +1344,7 @@
     <li><strong>NIST PQC Standards</strong> -- FIPS 203 ML-KEM (Kyber), FIPS 204 ML-DSA (Dilithium), FIPS 205 SLH-DSA (SPHINCS+) -- lattice-based and hash-based algorithms</li>
     <li><strong>Lattice-Based Crypto</strong> -- Learning With Errors (LWE) problem -- finding close vectors in high-dimensional lattices, no known quantum speedup</li>
     <li><strong>Zero-Knowledge Proofs</strong> -- Prove knowledge without revealing the secret. ZK-SNARKs (succinct, trusted setup) vs ZK-STARKs (transparent, quantum-resistant)</li>
-    <li><strong>ZK-STARKs</strong> -- Scalable Transparent ARguments of Knowledge. No trusted setup, hash-based (quantum-resistant), larger proofs but more scalable. Invented by Eli Ben-Sasson</li>
+    <li><strong>ZK-STARKs</strong> -- Scalable Transparent ARguments of Knowledge. No trusted setup, hash-based (quantum-resistant), larger proofs but more scalable. Invented by Eli Ben-Sasson. See 3-part readings series</li>
     <li><strong>Crypto Agility</strong> -- Design systems to swap algorithms easily for PQC migration. Hybrid approaches run classical + PQC together during transition</li>
     <li><strong>Migration Challenges</strong> -- Embedded/IoT devices, backward compatibility, larger PQC key sizes, organizational readiness for algorithm transition</li>
   </ul>
@@ -1702,9 +1702,64 @@
   </div>
 </details>
 
-<!-- Section 10: Crypto Agility and Hybrid Approaches -->
+<!-- Section 10: ZK-STARKs Course Readings -->
 <details>
-  <summary>&#128260; 10. Crypto Agility and Hybrid Approaches</summary>
+  <summary>&#128214; 10. ZK-STARKs -- Course Readings (Eli Ben-Sasson, 3-Part Series)</summary>
+  <div class="content-section">
+    <div class="key">
+      <strong>Assigned Readings:</strong> Three-part Medium article series on ZK-STARKs by <em>Eli Ben-Sasson</em> (co-inventor of STARKs and founder of StarkWare). These readings explain the motivation, construction, and applications of STARKs.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Key Takeaways from the Readings</h3>
+    <div class="box">
+      <h4>What "STARK" Stands For</h4>
+      <ul>
+        <li><strong>S</strong>calable -- prover time is quasi-linear, verifier time is quasi-logarithmic (scales to massive computations)</li>
+        <li><strong>T</strong>ransparent -- no trusted setup; all randomness is publicly verifiable. This is the "T" that distinguishes STARKs from SNARKs</li>
+        <li><strong>AR</strong>guments of <strong>K</strong>nowledge -- cryptographic proof that the prover possesses specific knowledge</li>
+      </ul>
+    </div>
+
+    <div class="red">
+      <strong>"Transparent" = No Trusted Setup:</strong> Unlike ZK-SNARKs, which require a one-time trusted setup ceremony (where "toxic waste" must be destroyed), STARKs derive all public parameters from hash functions and public randomness. No single point of failure. No trust assumptions about ceremony participants.
+    </div>
+
+    <div class="green">
+      <strong>Hash-Based = Potentially Quantum-Resistant:</strong> STARKs rely on <em>collision-resistant hash functions</em> (like SHA-256) rather than elliptic curve pairings. Since hash functions are not efficiently broken by Shor's algorithm, STARKs are believed to be quantum-resistant. This connects directly to the PQC themes in Buchanan Ch 9.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Trade-offs: STARKs vs SNARKs</h3>
+    <table>
+      <tr><th>Dimension</th><th>ZK-SNARKs</th><th>ZK-STARKs</th></tr>
+      <tr><td><strong>Proof Size</strong></td><td>~200-300 bytes (very small)</td><td>~10-100 KB (larger)</td></tr>
+      <tr><td><strong>Trusted Setup</strong></td><td>Required (toxic waste risk)</td><td>Not needed (transparent)</td></tr>
+      <tr><td><strong>Quantum Resistance</strong></td><td>No (elliptic curves)</td><td>Yes (hash functions)</td></tr>
+      <tr><td><strong>Scalability</strong></td><td>Verification constant but prover less scalable</td><td>Better for large computations</td></tr>
+      <tr><td><strong>Maturity</strong></td><td>More deployed (Zcash, etc.)</td><td>Growing adoption (StarkNet)</td></tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Real-World Applications (from Readings)</h3>
+    <div class="box">
+      <h4>StarkWare and StarkNet</h4>
+      <ul>
+        <li><strong>StarkWare</strong> -- Company founded by Eli Ben-Sasson to commercialize STARK technology</li>
+        <li><strong>StarkEx</strong> -- Scalability engine used by dYdX, Immutable X, and others for high-throughput blockchain transactions</li>
+        <li><strong>StarkNet</strong> -- Permissionless Layer 2 network on Ethereum using STARKs for rollup validity proofs</li>
+        <li><strong>Blockchain scaling</strong> -- STARKs enable thousands of transactions to be compressed into a single proof verified on-chain</li>
+      </ul>
+    </div>
+
+    <div class="prof">
+      <strong>Connection to PQC:</strong> The ZK-STARKs readings tie directly to the post-quantum theme of this week. As we migrate to quantum-resistant cryptography, zero-knowledge proof systems must also be quantum-safe. STARKs are already there because of their hash-based construction, while SNARKs would need to be rebuilt on post-quantum assumptions.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>STARKs readings: Transparent (no trusted setup), hash-based (quantum-safe), larger proofs but more scalable, StarkWare/StarkNet for blockchain.</strong></div>
+  </div>
+</details>
+
+<!-- Section 11: Crypto Agility and Hybrid Approaches -->
+<details>
+  <summary>&#128260; 11. Crypto Agility and Hybrid Approaches</summary>
   <div class="content-section">
     <div class="red"><strong>KEY IDEA:</strong> <em>Crypto agility</em> means designing systems so cryptographic algorithms can be swapped without major redesign. This is essential for surviving the PQC transition and future algorithm breaks.</div>
 
@@ -1740,9 +1795,9 @@
   </div>
 </details>
 
-<!-- Section 11: Migration Challenges -->
+<!-- Section 12: Migration Challenges -->
 <details>
-  <summary>&#128679; 11. PQC Migration Challenges</summary>
+  <summary>&#128679; 12. PQC Migration Challenges</summary>
   <div class="content-section">
     <div class="warn">
       <strong>Migration is not just a crypto swap.</strong> Moving to post-quantum cryptography involves systemic challenges across hardware, software, protocols, and organizations.
@@ -2041,7 +2096,9 @@
       { term: "Crypto Agility", definition: "Designing systems so cryptographic algorithms can be swapped without major redesign. Essential for PQC migration. Use pluggable modules, algorithm negotiation, and maintain a crypto inventory.", category: "green", label: "Best Practice" },
       { term: "Hybrid PQC Approach", definition: "Run classical (e.g., ECDH) and PQC (e.g., ML-KEM) algorithms simultaneously, combining both secrets. If either algorithm is secure, the system is secure. Best of both worlds during transition.", category: "green", label: "Best Practice" },
       { term: "McEliece Cryptosystem", definition: "Code-based PQC scheme from 1978. Based on error-correcting codes. 45+ years of cryptanalysis with no break. Very fast but extremely large public keys (hundreds of KB to MB).", category: "blue", label: "Definition" },
-      { term: "NIST PQC Competition", definition: "Started 2016 with 69 submissions. Multi-round evaluation. Final standards published 2024: ML-KEM (FIPS 203), ML-DSA (FIPS 204), SLH-DSA (FIPS 205). Rainbow was selected then broken in 2022.", category: "orange", label: "History" }
+      { term: "NIST PQC Competition", definition: "Started 2016 with 69 submissions. Multi-round evaluation. Final standards published 2024: ML-KEM (FIPS 203), ML-DSA (FIPS 204), SLH-DSA (FIPS 205). Rainbow was selected then broken in 2022.", category: "orange", label: "History" },
+      { term: "ZK-STARKs Readings (Ben-Sasson)", definition: "Three-part Medium series by Eli Ben-Sasson. Key points: 'Transparent' means no trusted setup (unlike SNARKs). Hash-based so quantum-resistant. Larger proofs than SNARKs but more scalable. Powers StarkWare/StarkNet for blockchain scaling.", category: "red", label: "Key Reading" },
+      { term: "STARK vs SNARK Trusted Setup", definition: "SNARKs require a trusted setup ceremony where 'toxic waste' must be destroyed -- single point of failure. STARKs are transparent: all parameters derived from public randomness and hash functions. No trust assumptions needed.", category: "orange", label: "Comparison" }
     ];
   }
 

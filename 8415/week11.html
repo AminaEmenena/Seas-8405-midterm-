@@ -836,8 +836,8 @@
 
 <!-- CAUTION BANNER -->
 <div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 0 20px 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-  <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">PRELIMINARY - TEXTBOOK ONLY</div>
-  <div style="color:#aaa; font-size:0.9em; line-height:1.5;">This study guide is based on assigned textbook chapters. It will be updated when lecture slides and homework are released. Content may differ from what the professor emphasizes in class.</div>
+  <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">PRELIMINARY - TEXTBOOK CONTENT</div>
+  <div style="color:#aaa; font-size:0.9em; line-height:1.5;">Based on Buchanan Ch 7 (Tunneling) &amp; Ch 8 (Crypto Cracking). Will be updated with lecture slides when released.</div>
 </div>
 
 <div class="container">
@@ -853,14 +853,14 @@
 <div class="tldr">
   <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 11 Key Points</div>
   <ul>
-    <li><strong>TLS 1.3</strong> -- Reduced handshake to 1-RTT (or 0-RTT), removed weak ciphers (RC4, 3DES, SHA-1), mandatory Perfect Forward Secrecy via ephemeral Diffie-Hellman</li>
-    <li><strong>IPsec</strong> -- Transport mode (host-to-host, original IP header preserved) vs Tunnel mode (gateway-to-gateway, entire packet encapsulated). Uses IKE for key exchange</li>
-    <li><strong>PKI</strong> -- Certificate Authorities issue X.509 certs, forming trust chains. Revocation via CRL (periodic list) or OCSP (real-time check). Hierarchical trust vs PGP's web of trust</li>
-    <li><strong>DSA</strong> -- NIST standard for digital signatures. Key gen: choose primes p, q, compute alpha, private key d, public key beta. NEVER reuse the ephemeral key k</li>
-    <li><strong>ECDSA</strong> -- Elliptic curve version of DSA. Shorter keys, same security. Used in Bitcoin and TLS 1.3</li>
-    <li><strong>SSH</strong> -- Secure remote access with key-based authentication. Supports port forwarding (local, remote, dynamic) for tunneling traffic</li>
-    <li><strong>Key Management</strong> -- Distribution, storage, rotation, escrow, recovery. The hardest part of cryptography is not the algorithms but managing keys at scale</li>
-    <li><strong>Why Cryptosystems Fail</strong> -- Anderson: implementation bugs and operational failures cause more breaches than broken algorithms. Usability matters ("Why Johnny Can't Encrypt")</li>
+    <li><strong>TLS/SSL (Ch 7)</strong> -- TLS 1.3: 1-RTT handshake, mandatory PFS, only AEAD ciphers. TLS 1.2: 2-RTT, cipher suite negotiation</li>
+    <li><strong>IPsec (Ch 7)</strong> -- Transport mode (host-to-host) vs Tunnel mode (gateway VPN). AH = auth only (breaks NAT). ESP = encryption + auth. IKE for key exchange</li>
+    <li><strong>Certificates (Ch 7)</strong> -- X.509, PKCS#7/10, certificate types (server auth, client auth, code signing, email). Lifecycle: Initialization, Issued, Cancellation</li>
+    <li><strong>Certificate Revocation</strong> -- CRL (periodic list, can be stale, DoS risk on CA) vs OCSP (lightweight online check). Revoked vs Hold states</li>
+    <li><strong>PGP Email (Ch 7)</strong> -- Hash with MD5, sign with RSA private key, ZIP, encrypt with IDEA session key, encrypt session key with recipient's public key</li>
+    <li><strong>Kerberos (Ch 7)</strong> -- Ticket-based auth: Authentication Server (AS), Ticket Granting Server (TGS), service tickets. No passwords sent over network</li>
+    <li><strong>RSA Cracking (Ch 8)</strong> -- Different e values, factoring N, M^e &lt; N (no mod reduction), CRT attack, chosen cipher, blinding, Bleichenbacher's PKCS#1 v1.5</li>
+    <li><strong>AES Cracking (Ch 8)</strong> -- ECB copy-and-paste (same block = same cipher), brute force common passwords, non-random PRNG makes keys guessable</li>
   </ul>
   <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
 </div>
@@ -1112,48 +1112,76 @@
   </div>
 </details>
 
-<!-- Section 4: PKI in Practice -->
+<!-- Section 4: Digital Certificates & PKI -->
 <details>
-  <summary>&#127970; 4. PKI in Practice -- Certificates, CAs, and Trust</summary>
+  <summary>&#127970; 4. Digital Certificates &amp; PKI (Buchanan Ch 7)</summary>
   <div class="content-section">
     <div class="key">
       <strong>PKI (Public Key Infrastructure):</strong> The framework of policies, procedures, hardware, software, and people needed to create, manage, distribute, use, store, and revoke digital certificates.
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">X.509 Certificate Format</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">X.509 Certificates and Standards</h3>
     <div class="box">
-      <h4>Key Fields in an X.509 Certificate</h4>
+      <h4>Key Standards (from Buchanan)</h4>
       <ul>
-        <li><strong>Version:</strong> Currently v3</li>
-        <li><strong>Serial Number:</strong> Unique identifier from the CA</li>
-        <li><strong>Signature Algorithm:</strong> Algorithm used by CA to sign the cert (e.g., SHA-256 with RSA)</li>
-        <li><strong>Issuer:</strong> Distinguished Name of the CA that issued it</li>
-        <li><strong>Validity Period:</strong> Not Before / Not After dates</li>
-        <li><strong>Subject:</strong> Distinguished Name of the entity (e.g., CN=www.example.com)</li>
-        <li><strong>Subject Public Key:</strong> The entity's public key and algorithm</li>
-        <li><strong>Extensions:</strong> Key Usage, Subject Alternative Names, Basic Constraints, etc.</li>
-        <li><strong>CA's Digital Signature:</strong> Binds all fields together</li>
+        <li><strong>X.509:</strong> Standard format for digital certificates. Contains subject, issuer, public key, validity, extensions, and CA signature</li>
+        <li><strong>IKE (Internet Key Exchange):</strong> Protocol for establishing shared keys in IPsec</li>
+        <li><strong>PKCS#7:</strong> Cryptographic Message Syntax -- format for signed and encrypted data</li>
+        <li><strong>PKCS#10:</strong> Certificate Signing Request (CSR) format -- what you send to a CA to get a certificate</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Chain of Trust</h3>
-    <div class="ascii-diagram">Root CA (self-signed, offline)
-    |
-    v
-Intermediate CA (signed by Root)
-    |
-    v
-End-Entity Certificate (signed by Intermediate)
-    |
-    v
-Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Types</h3>
+    <table>
+      <tr>
+        <th>Certificate Type</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td><strong>Server Authentication</strong></td>
+        <td>Proves identity of a server (e.g., HTTPS websites)</td>
+      </tr>
+      <tr>
+        <td><strong>Client Authentication</strong></td>
+        <td>Proves identity of a client connecting to a server</td>
+      </tr>
+      <tr>
+        <td><strong>Code Signing</strong></td>
+        <td>Verifies software publisher identity and code integrity</td>
+      </tr>
+      <tr>
+        <td><strong>Email (S/MIME)</strong></td>
+        <td>Enables encrypted and signed email</td>
+      </tr>
+      <tr>
+        <td><strong>Timestamping</strong></td>
+        <td>Proves data existed at a specific time</td>
+      </tr>
+    </table>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Revocation</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Key/Certificate Management Lifecycle (Buchanan)</h3>
+    <div class="box">
+      <h4>Three Phases</h4>
+      <ul>
+        <li><strong>Initialization:</strong> Key generation, certificate creation, distribution to parties, secure backup of keys</li>
+        <li><strong>Issued (Active):</strong> Certificate retrieval (from directory/repository), validation (check chain and revocation status), recovery (if key lost), update (before expiry)</li>
+        <li><strong>Cancellation:</strong> Expiration (natural end of validity period), revocation (premature invalidation due to compromise), archiving (store for historical verification)</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Revocation (Buchanan)</h3>
+    <div class="red">
+      <strong>Two Revocation States:</strong>
+      <ul>
+        <li><strong>Revoked:</strong> Permanently invalidated -- cannot be reinstated</li>
+        <li><strong>Hold:</strong> Temporarily suspended -- can be reinstated if the issue is resolved</li>
+      </ul>
+    </div>
     <table>
       <tr>
         <th>Method</th>
-        <th>CRL (Certificate Revocation List)</th>
-        <th>OCSP (Online Certificate Status Protocol)</th>
+        <th>CRL</th>
+        <th>OCSP</th>
       </tr>
       <tr>
         <td><strong>How it works</strong></td>
@@ -1166,210 +1194,290 @@ Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
         <td>Real-time (current status)</td>
       </tr>
       <tr>
-        <td><strong>Bandwidth</strong></td>
-        <td>Large download (entire list)</td>
-        <td>Small query/response per cert</td>
-      </tr>
-      <tr>
-        <td><strong>Privacy</strong></td>
-        <td>No privacy issue (download full list)</td>
-        <td>OCSP responder sees which sites you visit (mitigated by OCSP stapling)</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Hierarchical Trust (PKI) vs Web of Trust (PGP)</h3>
-    <table>
-      <tr>
-        <th>Feature</th>
-        <th>PKI (Hierarchical)</th>
-        <th>PGP (Web of Trust)</th>
-      </tr>
-      <tr>
-        <td><strong>Trust anchor</strong></td>
-        <td>Root Certificate Authorities</td>
-        <td>Individual users who vouch for each other</td>
-      </tr>
-      <tr>
-        <td><strong>Structure</strong></td>
-        <td>Top-down hierarchy</td>
-        <td>Peer-to-peer, decentralized</td>
-      </tr>
-      <tr>
-        <td><strong>Scalability</strong></td>
-        <td>Scales well for organizations</td>
-        <td>Difficult to scale beyond small communities</td>
-      </tr>
-      <tr>
-        <td><strong>Single point of failure</strong></td>
-        <td>Compromised CA breaks all certs it issued</td>
-        <td>No single point of failure</td>
+        <td><strong>Problems (Buchanan)</strong></td>
+        <td>Lack of checking by clients, revoking errors, DoS attacks on CA distribution point</td>
+        <td>Privacy concern (responder sees which sites you visit). Mitigated by OCSP stapling</td>
       </tr>
     </table>
 
     <div class="warn">
-      <strong>CA Compromise is Catastrophic:</strong> If a root CA private key is compromised, every certificate in the chain is untrustworthy. Real-world example: DigiNotar (2011) -- CA was compromised, fraudulent Google certificates issued, entire CA was shut down.
+      <strong>CRL Problems (from textbook):</strong> Many clients simply don't check CRLs. CAs can make errors when revoking. CRL distribution points are targets for DoS attacks. OCSP is lighter-weight but not universally deployed.
     </div>
   </div>
 </details>
 
-<!-- Section 5: Email Encryption -->
+<!-- Section 5: PGP Email Encryption -->
 <details>
-  <summary>&#128231; 5. Email Encryption -- S/MIME and PGP</summary>
+  <summary>&#128231; 5. PGP Email Encryption (Buchanan Ch 7)</summary>
   <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> PGP uses a hybrid approach combining hashing, digital signatures, compression, symmetric encryption, and public-key encryption in a specific pipeline.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">PGP Encryption Pipeline (Figure 6.26)</h3>
+    <div class="ascii-diagram-title">PGP Email Encryption Steps</div>
+    <div class="ascii-diagram">
+Plaintext Message
+    |
+    v
+1. Hash with MD5 --> message digest
+    |
+    v
+2. Sign digest with sender's RSA PRIVATE key --> digital signature
+    |
+    v
+3. Append signature to message, then ZIP compress
+    |
+    v
+4. Encrypt compressed data with IDEA session key (symmetric)
+    |
+    v
+5. Encrypt IDEA session key with recipient's RSA PUBLIC key
+    |
+    v
+6. Send: encrypted session key + encrypted message
+    </div>
+
+    <div class="box">
+      <h4>Why This Pipeline?</h4>
+      <ul>
+        <li><strong>MD5 hash:</strong> Creates a fixed-size digest of the message for signing</li>
+        <li><strong>RSA private key signing:</strong> Provides authentication (proves sender identity) and integrity (message not tampered)</li>
+        <li><strong>ZIP compression:</strong> Reduces message size BEFORE encryption (encrypted data cannot be compressed)</li>
+        <li><strong>IDEA session key:</strong> Fast symmetric encryption for the bulk message data</li>
+        <li><strong>RSA public key:</strong> Encrypts only the small session key -- avoids slow RSA on large data</li>
+      </ul>
+    </div>
+
+    <div class="key">
+      <strong>Hybrid Approach:</strong> PGP combines the speed of symmetric encryption (IDEA for bulk data) with the key distribution advantage of asymmetric encryption (RSA for the session key). The recipient decrypts the session key with their private key, then uses it to decrypt the message.
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: Kerberos -->
+<details>
+  <summary>&#128273; 6. Kerberos Authentication (Buchanan Ch 7)</summary>
+  <div class="content-section">
+    <div class="blue"><strong>DEFINITION:</strong> Kerberos is a ticket-based authentication protocol that allows users to prove their identity without sending passwords over the network. Used extensively in Active Directory environments.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Key Components</h3>
     <table>
       <tr>
-        <th>Feature</th>
-        <th>S/MIME</th>
-        <th>PGP / GPG</th>
+        <th>Component</th>
+        <th>Role</th>
       </tr>
       <tr>
-        <td><strong>Trust model</strong></td>
-        <td>Hierarchical PKI (CAs issue certs)</td>
-        <td>Web of Trust (users sign each other's keys)</td>
+        <td><strong>Identity Provider (IP) / Authentication Server (AS)</strong></td>
+        <td>Verifies user identity and issues initial ticket (Ticket Granting Ticket / TGT)</td>
       </tr>
       <tr>
-        <td><strong>Key distribution</strong></td>
-        <td>X.509 certificates from CAs</td>
-        <td>Public key servers, direct exchange</td>
+        <td><strong>Ticket Granting Server (TGS)</strong></td>
+        <td>Issues service tickets based on valid TGT. User presents TGT to get access to specific services</td>
       </tr>
       <tr>
-        <td><strong>Encryption</strong></td>
-        <td>Hybrid: RSA/ECDH for key exchange + AES for message</td>
-        <td>Hybrid: RSA/ECDH for key exchange + AES for message</td>
-      </tr>
-      <tr>
-        <td><strong>Built into</strong></td>
-        <td>Outlook, Apple Mail, enterprise clients</td>
-        <td>Thunderbird (via Enigmail), command-line tools</td>
-      </tr>
-      <tr>
-        <td><strong>Best for</strong></td>
-        <td>Enterprise/corporate environments</td>
-        <td>Individual privacy, journalism, activism</td>
+        <td><strong>Relying Party (RP) / Service</strong></td>
+        <td>The service the user wants to access. Verifies the service ticket</td>
       </tr>
     </table>
 
-    <div class="key">
-      <strong>Both S/MIME and PGP use hybrid encryption:</strong> The message body is encrypted with a symmetric key (fast), and that symmetric key is encrypted with the recipient's public key (so only they can decrypt). This combines the speed of symmetric crypto with the key distribution advantage of asymmetric crypto.
+    <h3 style="margin-top: 20px; color: #58a6ff;">Kerberos Flow</h3>
+    <div class="ascii-diagram">
+User                  AS (Auth Server)      TGS              Service
+ |                         |                  |                  |
+ |-- Credentials --------> |                  |                  |
+ |<-- TGT (encrypted) ---- |                  |                  |
+ |                         |                  |                  |
+ |-- TGT + Service Req ------------------>  |                  |
+ |<-- Service Ticket (encrypted) ---------  |                  |
+ |                         |                  |                  |
+ |-- Service Ticket ----------------------------------------> |
+ |<-- Access Granted ---------------------------------------- |
     </div>
 
-    <div class="prof">
-      <strong>Efail Vulnerability (2018):</strong> Researchers showed that HTML rendering in email clients could be exploited to exfiltrate plaintext from S/MIME and PGP encrypted emails. This was an implementation bug in email clients, not a flaw in the cryptographic algorithms.
+    <div class="key">
+      <strong>Key Advantage:</strong> Passwords are NEVER sent over the network after initial authentication. All subsequent authentication uses encrypted tickets. Tickets have limited lifetime, reducing exposure from compromise.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Kerberos = ticket-based auth. AS issues TGT, TGS issues service tickets. No passwords on the wire after login.</strong></div>
+  </div>
+</details>
+
+<!-- Section 7: Attack Types -->
+<details>
+  <summary>&#128165; 7. Cryptographic Attack Types (Buchanan Ch 8)</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Buchanan Ch 8 covers "Crypto Cracking" -- the various ways cryptographic systems can be attacked. Understanding attacks is essential for building secure systems.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Attack Categories</h3>
+    <table>
+      <tr>
+        <th>Attack Type</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><strong>Known Plaintext Attack</strong></td>
+        <td>Attacker has matching plaintext-ciphertext pairs and uses them to crack other ciphertexts encrypted with the same key</td>
+      </tr>
+      <tr>
+        <td><strong>Replay Attack</strong></td>
+        <td>Capture a legitimate encrypted message and resend it later. The receiver processes it as valid even though it is a replay</td>
+      </tr>
+      <tr>
+        <td><strong>Man-in-the-Middle (MITM)</strong></td>
+        <td>Intruder positions between two parties, impersonating each to the other. Intercepts and potentially modifies all communications</td>
+      </tr>
+      <tr>
+        <td><strong>Active Attack</strong></td>
+        <td>Attacker inserts or modifies messages in transit (not just passive eavesdropping)</td>
+      </tr>
+      <tr>
+        <td><strong>Cut and Paste</strong></td>
+        <td>Mix parts of different encrypted messages to create a new valid-looking ciphertext. Exploits block cipher modes without proper authentication</td>
+      </tr>
+    </table>
+
+    <div class="warn">
+      <strong>Defense:</strong> These attacks are prevented through nonces/timestamps (replay), mutual authentication and certificates (MITM), MACs/AEAD modes (active attack, cut-and-paste).
     </div>
   </div>
 </details>
 
-<!-- Section 6: DSA -->
+<!-- Section 8: RSA Cracking Methods -->
 <details>
-  <summary>&#9999;&#65039; 6. Digital Signature Algorithm (DSA) (Buchanan Ch 8)</summary>
+  <summary>&#128275; 8. RSA Cracking Methods (Buchanan Ch 8)</summary>
   <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> DSA is the NIST standard (FIPS 186) for digital signatures. Unlike RSA signatures, DSA can ONLY sign -- it cannot encrypt. It is based on the difficulty of computing discrete logarithms.</div>
+    <div class="red"><strong>KEY IDEA:</strong> While RSA with proper key sizes is computationally secure, there are multiple attack vectors when RSA is improperly implemented or used.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">DSA Key Generation</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">RSA Attack Methods (from textbook)</h3>
+
     <div class="box">
-      <h4>Parameters and Keys</h4>
+      <h4>1. Different e Value Attack</h4>
       <ul>
-        <li><strong>p:</strong> Large prime (1024-3072 bits)</li>
-        <li><strong>q:</strong> Prime factor of (p-1), typically 160-256 bits</li>
-        <li><strong>alpha (g):</strong> Generator of order q in Z*_p, computed as g = h^((p-1)/q) mod p</li>
-        <li><strong>Private key d:</strong> Random integer, 0 &lt; d &lt; q</li>
-        <li><strong>Public key beta:</strong> beta = alpha^d mod p</li>
+        <li>Same message M encrypted with two different public exponents e1 and e2 (same N)</li>
+        <li>Attacker gets C1 = M^e1 mod N and C2 = M^e2 mod N</li>
+        <li>Solve for x, y where x*e1 + y*e2 = 1 (Extended Euclidean Algorithm)</li>
+        <li>Compute M = C1^x * C2^y mod N</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">DSA Signing Process</h3>
     <div class="box">
-      <h4>To sign message m:</h4>
+      <h4>2. Factoring N</h4>
       <ul>
-        <li>Choose random <em>ephemeral key</em> k, where 0 &lt; k &lt; q</li>
-        <li>Compute r = (alpha^k mod p) mod q</li>
-        <li>Compute s = k^(-1) * (H(m) + d*r) mod q, where H(m) is SHA hash of message</li>
-        <li>Signature is the pair (r, s)</li>
+        <li>If you can factor N into P and Q, RSA is broken</li>
+        <li>Compute PHI = (P-1) * (Q-1)</li>
+        <li>Find d such that (d * e) mod PHI = 1</li>
+        <li>This is why N must be large enough that factoring is computationally infeasible</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">DSA Verification Process</h3>
     <div class="box">
-      <h4>To verify signature (r, s) on message m:</h4>
+      <h4>3. M^e &lt; N (Short Message Attack)</h4>
       <ul>
-        <li>Compute w = s^(-1) mod q</li>
-        <li>Compute u1 = H(m) * w mod q</li>
-        <li>Compute u2 = r * w mod q</li>
-        <li>Compute v = (alpha^u1 * beta^u2 mod p) mod q</li>
-        <li>Signature is valid if v = r</li>
+        <li>If the message M is very short, M^e may be less than N</li>
+        <li>Then C = M^e (no modular reduction happens)</li>
+        <li>Attacker can recover M using simple logarithms: M = 10^(log(C)/e)</li>
+        <li><strong>Defense:</strong> Always pad messages (OAEP padding)</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4>4. CRT (Chinese Remainder Theorem) Attack</h4>
+      <ul>
+        <li>Same message encrypted with same small e (e.g., e=3) but different N values (N1, N2, N3)</li>
+        <li>Attacker collects 3 ciphertexts: C1, C2, C3</li>
+        <li>Use CRT to solve for M^e (single value across all three moduli)</li>
+        <li>Take the e-th root to recover M</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4>5. Chosen Cipher Attack</h4>
+      <ul>
+        <li>Eve captures C = M^e mod N</li>
+        <li>Eve picks random r, computes C' = C * r^e mod N</li>
+        <li>Eve sends C' to Bob for decryption (tricks Bob into decrypting)</li>
+        <li>Bob returns M' = (M*r) -- the decryption of C'</li>
+        <li>Eve computes M = M'/r -- recovers original message</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4>6. Blinding Attack (Signature Forgery)</h4>
+      <ul>
+        <li>Goal: Get Bob to sign a message M without him knowing</li>
+        <li>Eve computes M' = r^e * M mod N (a "blinded" version of M)</li>
+        <li>Eve tricks Bob into signing M': S' = (M')^d mod N</li>
+        <li>Eve computes S = S'/r = M^d mod N = valid signature on M</li>
+        <li>Bob never knew he signed M</li>
+      </ul>
+    </div>
+
+    <div class="box" style="border-left-color: #e94560;">
+      <h4>7. Bleichenbacher's Attack (PKCS#1 v1.5)</h4>
+      <ul>
+        <li>Exploits PKCS#1 v1.5 padding format: ciphertext starts with 0x00 0x02</li>
+        <li>Attacker sends modified ciphertexts to server</li>
+        <li>Server responds differently: "Bad crypto" (invalid padding) vs. processes normally (valid padding)</li>
+        <li>This difference is an <em>oracle</em> that leaks information</li>
+        <li>Attacker iterates through s values to find valid padding</li>
+        <li>Requires <strong>30,000 to 130,000 attempts</strong> to fully recover the plaintext</li>
+        <li><strong>Defense:</strong> Use OAEP padding (PKCS#1 v2.0+), not v1.5</li>
       </ul>
     </div>
 
     <div class="warn" style="border-left-color: #e94560; background: rgba(233,69,96,0.2);">
-      <strong>CRITICAL -- NEVER REUSE THE EPHEMERAL KEY k:</strong> If the same k is used to sign two different messages, an attacker can recover the private key d. This is exactly what happened to Sony's PS3 ECDSA implementation in 2010 -- they used a fixed k value, and hackers extracted the private signing key.
+      <strong>Bleichenbacher is a real-world threat:</strong> This attack (also called the "million message attack" or ROBOT attack) has been used against real TLS implementations. PKCS#1 v1.5 padding is STILL used in some legacy systems. TLS 1.3 removes RSA key exchange entirely, eliminating this vector.
     </div>
-
-    <div class="mem"><small>Remember This</small><br><strong>DSA ephemeral key reuse = private key compromise. Sony PS3 hack (2010) is the classic example.</strong></div>
   </div>
 </details>
 
-<!-- Section 7: ECDSA -->
+<!-- Section 9: AES Cracking -->
 <details>
-  <summary>&#128200; 7. ECDSA -- Elliptic Curve Digital Signature Algorithm</summary>
+  <summary>&#128296; 9. AES Cracking Methods (Buchanan Ch 8)</summary>
   <div class="content-section">
-    <div class="key">
-      <strong>ECDSA:</strong> The elliptic curve version of DSA. Same logic but operates on points of an elliptic curve instead of modular arithmetic in Z*_p. Provides equivalent security with much shorter keys.
-    </div>
+    <div class="red"><strong>KEY IDEA:</strong> AES itself has no known practical attacks on the algorithm. But AES implementations and usage patterns create vulnerabilities.</div>
 
-    <table>
-      <tr>
-        <th>Security Level (bits)</th>
-        <th>DSA Key Size</th>
-        <th>ECDSA Key Size</th>
-        <th>RSA Key Size</th>
-      </tr>
-      <tr>
-        <td>80</td>
-        <td>1024</td>
-        <td>160</td>
-        <td>1024</td>
-      </tr>
-      <tr>
-        <td>112</td>
-        <td>2048</td>
-        <td>224</td>
-        <td>2048</td>
-      </tr>
-      <tr>
-        <td>128</td>
-        <td>3072</td>
-        <td>256</td>
-        <td>3072</td>
-      </tr>
-      <tr>
-        <td>256</td>
-        <td>15360</td>
-        <td>512</td>
-        <td>15360</td>
-      </tr>
-    </table>
+    <h3 style="margin-top: 20px; color: #58a6ff;">AES Attack Vectors (from textbook)</h3>
 
-    <div class="green">
-      <strong>Where ECDSA is Used:</strong>
+    <div class="box" style="border-left-color: #e94560;">
+      <h4>1. ECB Copy-and-Paste Attack</h4>
       <ul>
-        <li><strong>Bitcoin / Ethereum:</strong> Transaction signing uses secp256k1 curve</li>
-        <li><strong>TLS 1.3:</strong> Server authentication and key exchange</li>
-        <li><strong>Code signing:</strong> macOS, iOS app signatures</li>
-        <li><strong>SSH:</strong> Ed25519 keys (related EdDSA, not exactly ECDSA but same family)</li>
+        <li>ECB (Electronic Codebook) mode encrypts each block independently</li>
+        <li><strong>Same input block = same output block</strong> (deterministic)</li>
+        <li>Attacker can rearrange, duplicate, or swap cipher blocks</li>
+        <li>Example: swap encrypted "amount" blocks between two transactions</li>
+        <li><strong>Defense:</strong> Use CBC, CTR, or GCM mode instead of ECB</li>
       </ul>
     </div>
 
-    <div class="warn">
-      <strong>Same ephemeral key warning applies:</strong> The PS3 hack exploited ECDSA specifically. The ephemeral key k must be truly random and NEVER reused. Modern implementations use RFC 6979 (deterministic k from message + private key) to eliminate this risk.
+    <div class="box">
+      <h4>2. Brute Force with Common Passwords</h4>
+      <ul>
+        <li>If the AES key is derived from a password (e.g., key = SHA-256(password))</li>
+        <li>Attacker tries common passwords, computes SHA-256 of each, uses as AES key</li>
+        <li>If the password is weak, the AES key is predictable despite being 256 bits</li>
+        <li><strong>Defense:</strong> Use proper key derivation (PBKDF2, Argon2) with salt and high iterations</li>
+      </ul>
     </div>
+
+    <div class="box">
+      <h4>3. Non-Random Number Generator</h4>
+      <ul>
+        <li>If the PRNG used to generate AES keys is deterministic or poorly seeded</li>
+        <li>An attacker who knows the PRNG state can predict future keys</li>
+        <li>Real-world example: Dual_EC_DRBG (NSA backdoor in NIST-approved PRNG)</li>
+        <li><strong>Defense:</strong> Use cryptographically secure random number generators (CSPRNG)</li>
+      </ul>
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>ECB mode is the most dangerous AES mode -- same plaintext block = same ciphertext block. Always use CBC, CTR, or GCM. AES is only as strong as its key generation and mode of operation.</strong></div>
   </div>
 </details>
 
-<!-- Section 8: Key Management -->
+<!-- Section 10: Key Management & Why Systems Fail -->
 <details>
-  <summary>&#128273; 8. Key Management Challenges</summary>
+  <summary>&#128101; 10. Key Management and Common Failures</summary>
   <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> The cryptographic algorithms are the easy part. Key management -- generating, distributing, storing, rotating, revoking, and recovering keys -- is where most real-world systems fail.</div>
+    <div class="red"><strong>KEY IDEA:</strong> The cryptographic algorithms are the easy part. Key management and implementation errors cause more real-world failures than broken algorithms.</div>
 
     <h3 style="margin-top: 20px; color: #58a6ff;">Key Lifecycle</h3>
     <div class="flow">
@@ -1388,52 +1496,7 @@ Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
       <span class="flow-step">Destruction</span>
     </div>
 
-    <table>
-      <tr>
-        <th>Challenge</th>
-        <th>Description</th>
-        <th>Solution</th>
-      </tr>
-      <tr>
-        <td><strong>Key Distribution</strong></td>
-        <td>How to get keys to the right parties securely</td>
-        <td>Diffie-Hellman, PKI, key wrapping, out-of-band exchange</td>
-      </tr>
-      <tr>
-        <td><strong>Key Storage</strong></td>
-        <td>Protecting keys at rest from theft or compromise</td>
-        <td>HSMs (Hardware Security Modules), TPMs, key vaults</td>
-      </tr>
-      <tr>
-        <td><strong>Key Rotation</strong></td>
-        <td>Regularly replacing keys to limit exposure from compromise</td>
-        <td>Automated rotation policies, versioned keys</td>
-      </tr>
-      <tr>
-        <td><strong>Key Escrow</strong></td>
-        <td>Storing keys with a trusted third party for recovery</td>
-        <td>Split-key escrow, M-of-N schemes (Shamir's Secret Sharing)</td>
-      </tr>
-      <tr>
-        <td><strong>Key Recovery</strong></td>
-        <td>Retrieving keys when the primary holder is unavailable</td>
-        <td>Recovery agents, secure backup procedures</td>
-      </tr>
-    </table>
-
-    <div class="prof">
-      <strong>Key Escrow Controversy:</strong> The 1990s "Clipper Chip" debate -- US government wanted key escrow for all encryption (government holds a copy of every key). Privacy advocates and industry resisted. Key escrow creates a high-value target and introduces trust issues.
-    </div>
-  </div>
-</details>
-
-<!-- Section 9: Why Cryptosystems Fail -->
-<details>
-  <summary>&#128165; 9. Common Deployment Failures</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> Ross Anderson's "Why Cryptosystems Fail" (1993) -- most cryptographic failures are NOT due to broken algorithms. They are due to implementation bugs, poor key management, and operational mistakes.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Categories of Failure</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Common Failure Categories</h3>
     <table>
       <tr>
         <th>Category</th>
@@ -1441,71 +1504,25 @@ Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
       </tr>
       <tr>
         <td><strong>Implementation bugs</strong></td>
-        <td>Heartbleed (OpenSSL buffer over-read), goto fail (Apple TLS), padding oracle attacks</td>
+        <td>Heartbleed (OpenSSL buffer over-read), goto fail (Apple TLS), Bleichenbacher padding oracle</td>
       </tr>
       <tr>
         <td><strong>Protocol design flaws</strong></td>
-        <td>POODLE (SSLv3 padding), BEAST (CBC mode in TLS 1.0), CRIME (compression side-channel)</td>
+        <td>POODLE (SSLv3), BEAST (CBC in TLS 1.0), ECB mode in AES</td>
       </tr>
       <tr>
         <td><strong>Key management failures</strong></td>
-        <td>Hardcoded keys, keys in source code, weak random number generators</td>
+        <td>Hardcoded keys, keys in source code, weak PRNG, password-derived keys without KDF</td>
       </tr>
       <tr>
         <td><strong>Operational mistakes</strong></td>
-        <td>Expired certificates, misconfigured servers, using deprecated algorithms</td>
-      </tr>
-      <tr>
-        <td><strong>Usability failures</strong></td>
-        <td>Users bypassing crypto because it is too hard, ignoring certificate warnings</td>
+        <td>Expired certificates, misconfigured servers, using PKCS#1 v1.5 instead of OAEP</td>
       </tr>
     </table>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Side-Channel Attacks</h3>
-    <div class="box">
-      <h4>Attacks that exploit physical characteristics, not mathematical weaknesses</h4>
-      <ul>
-        <li><strong>Timing attacks:</strong> Measure how long operations take. Different inputs cause different execution times, leaking information about the key</li>
-        <li><strong>Power analysis:</strong> Monitor power consumption during cryptographic operations. Simple Power Analysis (SPA) and Differential Power Analysis (DPA) can extract keys from smart cards and embedded devices</li>
-        <li><strong>Electromagnetic emissions:</strong> Capture EM radiation from processors during crypto operations (TEMPEST)</li>
-        <li><strong>Cache attacks:</strong> Exploit shared CPU caches (Flush+Reload, Prime+Probe) to determine which memory lines a crypto operation accessed</li>
-      </ul>
-    </div>
-
     <div class="warn">
-      <strong>Constant-time programming:</strong> Cryptographic code must execute in the same amount of time regardless of input to prevent timing attacks. This means no early exits, no data-dependent branches, no variable-time memory access.
+      <strong>Anderson's Principle:</strong> "Why Cryptosystems Fail" (1993) -- most cryptographic failures are NOT from broken algorithms but from implementation bugs, poor key management, and operational errors. Security at the expense of usability comes at the expense of security.
     </div>
-  </div>
-</details>
-
-<!-- Section 10: Usability -->
-<details>
-  <summary>&#128101; 10. Usability -- "Why Johnny Can't Encrypt"</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> Whitten &amp; Tygar's "Why Johnny Can't Encrypt" (1999) -- even motivated users failed to use PGP correctly. If crypto is not usable, people will bypass it entirely, making the system LESS secure.</div>
-
-    <div class="box">
-      <h4>Key Findings from "Why Johnny Can't Encrypt"</h4>
-      <ul>
-        <li>Users confused their public key with their private key</li>
-        <li>Users accidentally sent unencrypted messages thinking they were encrypted</li>
-        <li>Key management concepts (keyring, trust, revocation) were incomprehensible to non-experts</li>
-        <li>Users could not distinguish between signing and encrypting</li>
-        <li>The mental model of public-key cryptography did not match users' expectations</li>
-      </ul>
-    </div>
-
-    <div class="green">
-      <strong>Modern Usability Improvements:</strong>
-      <ul>
-        <li><strong>Signal Protocol:</strong> End-to-end encryption with no key management for the user</li>
-        <li><strong>Let's Encrypt:</strong> Free, automated TLS certificates -- removed cost and complexity barriers</li>
-        <li><strong>HTTPS Everywhere:</strong> Browser defaults to encrypted connections</li>
-        <li><strong>iMessage / WhatsApp:</strong> Encryption transparent to the user</li>
-      </ul>
-    </div>
-
-    <div class="mem"><small>Remember This</small><br><strong>Security at the expense of usability comes at the expense of security. -- AviD's Rule of Usability</strong></div>
   </div>
 </details>
 
@@ -1520,113 +1537,113 @@ Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
   </div>
 
     <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">1</span> What is the most significant improvement in TLS 1.3 compared to TLS 1.2?</p>
+      <p><span class="qnum">1</span> In Bleichenbacher's attack on RSA, what oracle does the attacker exploit?</p>
       <div class="options">
-        <div class="opt">Support for longer encryption keys</div>
-        <div class="opt">Addition of certificate pinning</div>
-        <div class="opt">Mandatory Perfect Forward Secrecy and reduced handshake to 1-RTT</div>
-        <div class="opt">Support for HTTP/2 multiplexing</div>
+        <div class="opt">The server reveals the plaintext length in error messages</div>
+        <div class="opt">The server returns different error codes for wrong key vs wrong message</div>
+        <div class="opt">The server responds differently to valid PKCS#1 v1.5 padding (0x00 0x02) vs invalid padding</div>
+        <div class="opt">The server leaks the private exponent in timing differences</div>
       </div>
-      <div class="explanation">TLS 1.3 mandates Perfect Forward Secrecy (only ephemeral DH/ECDH allowed), reduces the handshake from 2-RTT to 1-RTT, removes weak cipher suites (RC4, 3DES, SHA-1, static RSA), and encrypts the server certificate during handshake.</div>
+      <div class="explanation">Bleichenbacher's attack exploits PKCS#1 v1.5 padding. The server responds "Bad crypto" for invalid padding but processes normally for valid padding (starting with 0x00 0x02). This difference allows the attacker to iteratively narrow down the plaintext, requiring 30,000 to 130,000 attempts.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">2</span> In IPsec, what is the key difference between Transport Mode and Tunnel Mode?</p>
+      <p><span class="qnum">2</span> Why is ECB mode dangerous for AES encryption?</p>
       <div class="options">
-        <div class="opt">Transport Mode encrypts the entire packet; Tunnel Mode only encrypts the payload</div>
-        <div class="opt">Transport Mode protects only the payload with the original IP header intact; Tunnel Mode encapsulates the entire original packet with a new IP header</div>
-        <div class="opt">Transport Mode is for wireless; Tunnel Mode is for wired networks</div>
-        <div class="opt">Transport Mode uses AH; Tunnel Mode uses ESP exclusively</div>
+        <div class="opt">ECB uses a weaker key schedule than other modes</div>
+        <div class="opt">Same plaintext block always produces the same ciphertext block, allowing copy-and-paste attacks</div>
+        <div class="opt">ECB does not support 256-bit keys</div>
+        <div class="opt">ECB requires an initialization vector that can be guessed</div>
       </div>
-      <div class="explanation">Transport Mode protects the payload while keeping the original IP header visible -- used for host-to-host. Tunnel Mode encapsulates the entire original IP packet inside a new one -- used for site-to-site VPN through gateways.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">3</span> Why is AH (Authentication Header) rarely used in modern IPsec deployments?</p>
-      <div class="options">
-        <div class="opt">AH provides no integrity checking</div>
-        <div class="opt">AH is computationally too expensive</div>
-        <div class="opt">AH only works in Tunnel Mode</div>
-        <div class="opt">AH is incompatible with NAT because it authenticates the IP header, which NAT modifies</div>
-      </div>
-      <div class="explanation">AH authenticates the entire packet including the IP header. Since NAT changes the IP header (modifying source/destination addresses and ports), AH authentication fails after NAT translation. ESP does not cover the outer IP header, making it NAT-compatible with NAT-T.</div>
+      <div class="explanation">ECB (Electronic Codebook) encrypts each block independently and deterministically. Same input = same output. An attacker can rearrange, duplicate, or swap cipher blocks (copy-and-paste attack). Use CBC, CTR, or GCM mode instead.</div>
     </div>
 
     <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">4</span> What catastrophic event demonstrated the risk of CA compromise in PKI?</p>
+      <p><span class="qnum">3</span> In the RSA "short message" attack, what happens when M^e &lt; N?</p>
       <div class="options">
-        <div class="opt">DigiNotar (2011) -- CA compromised, fraudulent Google certificates issued, entire CA shut down</div>
-        <div class="opt">Heartbleed (2014) -- OpenSSL vulnerability exposed private keys</div>
-        <div class="opt">POODLE (2014) -- SSLv3 padding oracle attack</div>
-        <div class="opt">SHA-1 collision (2017) -- SHAttered attack by Google</div>
+        <div class="opt">No modular reduction occurs, so C = M^e and the attacker can recover M using logarithms: M = 10^(log(C)/e)</div>
+        <div class="opt">The ciphertext wraps around and becomes negative</div>
+        <div class="opt">The encryption fails and returns an error</div>
+        <div class="opt">The message is automatically padded to fill N bits</div>
       </div>
-      <div class="explanation">DigiNotar, a Dutch CA, was compromised in 2011. Attackers issued fraudulent certificates for Google and other domains, enabling man-in-the-middle attacks against Iranian users. The CA was completely distrusted by all browsers and shut down.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">5</span> In DSA, what happens if the ephemeral key k is reused for two different signatures?</p>
-      <div class="options">
-        <div class="opt">The signatures become identical</div>
-        <div class="opt">The hash function is compromised</div>
-        <div class="opt">An attacker can recover the private key d from the two signatures</div>
-        <div class="opt">The verification process fails for both signatures</div>
-      </div>
-      <div class="explanation">If the same k is used for two messages m1 and m2, the r values are identical. An attacker can solve the two signature equations simultaneously to extract k, then trivially compute the private key d. The Sony PS3 hack (2010) exploited exactly this flaw in ECDSA.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">6</span> What advantage does ECDSA have over standard DSA?</p>
-      <div class="options">
-        <div class="opt">ECDSA can encrypt and sign, while DSA can only sign</div>
-        <div class="opt">ECDSA provides equivalent security with much shorter key sizes (e.g., 256-bit ECC vs 3072-bit DSA for 128-bit security)</div>
-        <div class="opt">ECDSA does not require an ephemeral key</div>
-        <div class="opt">ECDSA is immune to quantum computing attacks</div>
-      </div>
-      <div class="explanation">ECDSA operates on elliptic curves, providing the same security level with much shorter keys. A 256-bit ECDSA key provides the same security as a 3072-bit DSA key. This means faster operations, smaller signatures, and less bandwidth. Both DSA and ECDSA are vulnerable to quantum attacks.</div>
+      <div class="explanation">When M^e &lt; N, the modular reduction (mod N) has no effect -- C simply equals M^e. The attacker can recover M by computing the e-th root of C using logarithms. This is why messages must always be padded (e.g., with OAEP) before RSA encryption.</div>
     </div>
 
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">7</span> What is the difference between CRL and OCSP for certificate revocation?</p>
+      <p><span class="qnum">4</span> What are the three components of Kerberos authentication?</p>
       <div class="options">
-        <div class="opt">CRL is real-time; OCSP is periodic</div>
-        <div class="opt">CRL checks individual certificates; OCSP downloads full lists</div>
-        <div class="opt">CRL is used by PGP; OCSP is used by PKI</div>
-        <div class="opt">CRL is a periodically published list of all revoked certificates; OCSP provides real-time status checks for individual certificates</div>
+        <div class="opt">Root CA, Intermediate CA, End-Entity Certificate</div>
+        <div class="opt">Public Key, Private Key, Session Key</div>
+        <div class="opt">Hash Function, Symmetric Cipher, Asymmetric Cipher</div>
+        <div class="opt">Authentication Server (AS), Ticket Granting Server (TGS), and the Service/Relying Party</div>
       </div>
-      <div class="explanation">CRL (Certificate Revocation List) is a complete list of revoked certificates published by the CA on a schedule -- it can be stale and is a large download. OCSP (Online Certificate Status Protocol) queries a responder in real-time for a single certificate's status -- more current but raises privacy concerns (mitigated by OCSP stapling).</div>
-    </div>
-
-    <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">8</span> According to Ross Anderson's "Why Cryptosystems Fail," what is the most common cause of cryptographic system failures?</p>
-      <div class="options">
-        <div class="opt">Implementation bugs and operational failures, not broken algorithms</div>
-        <div class="opt">Weak encryption algorithms being used</div>
-        <div class="opt">Insufficient key lengths</div>
-        <div class="opt">Quantum computing advances</div>
-      </div>
-      <div class="explanation">Anderson demonstrated that the vast majority of cryptographic failures come from implementation mistakes (like Heartbleed, goto fail), poor key management (hardcoded keys), and operational errors (expired certs, misconfigurations) -- not from mathematically broken algorithms.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">9</span> What is a timing side-channel attack?</p>
-      <div class="options">
-        <div class="opt">An attack that exploits the time between key rotations</div>
-        <div class="opt">An attack that measures power consumption during encryption</div>
-        <div class="opt">An attack that measures how long cryptographic operations take to infer secret information like keys</div>
-        <div class="opt">An attack that exploits expired certificates</div>
-      </div>
-      <div class="explanation">Timing attacks measure execution time differences in cryptographic operations. If code takes different amounts of time depending on the key value (e.g., early exit on comparison failure), attackers can deduce the key bit by bit. Countermeasure: constant-time programming.</div>
+      <div class="explanation">Kerberos uses three components: the Authentication Server (AS/Identity Provider) verifies user identity and issues TGTs, the Ticket Granting Server (TGS) issues service tickets, and the Service (Relying Party) verifies service tickets and grants access. Passwords are never sent over the network after initial authentication.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">10</span> What was the key finding of Whitten & Tygar's "Why Johnny Can't Encrypt" study?</p>
+      <p><span class="qnum">5</span> In the CRT (Chinese Remainder Theorem) attack on RSA, what conditions are needed?</p>
       <div class="options">
-        <div class="opt">PGP's encryption algorithm was fundamentally flawed</div>
-        <div class="opt">Even motivated users could not use PGP correctly -- confusing public/private keys, sending unencrypted messages by mistake</div>
-        <div class="opt">Users preferred symmetric encryption over asymmetric</div>
-        <div class="opt">Email encryption was unnecessary for most users</div>
+        <div class="opt">The same message encrypted with different e values and the same N</div>
+        <div class="opt">The same message encrypted with the same small e (e.g., e=3) but different N values</div>
+        <div class="opt">Two messages encrypted with the same key and same nonce</div>
+        <div class="opt">A known plaintext-ciphertext pair from a previous session</div>
       </div>
-      <div class="explanation">Whitten & Tygar found that PGP's user interface was so confusing that users mixed up public and private keys, accidentally sent unencrypted messages thinking they were encrypted, and could not manage key trust. The lesson: if crypto is not usable, people bypass it, making the system less secure overall.</div>
+      <div class="explanation">The CRT attack requires the same message encrypted with the same small e value (e.g., e=3) but sent to different recipients with different N values. Collecting e ciphertexts allows the attacker to use CRT to solve for M^e, then take the e-th root to recover M.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">6</span> According to Buchanan, what are the two states a revoked certificate can be in?</p>
+      <div class="options">
+        <div class="opt">Valid and Invalid</div>
+        <div class="opt">Active and Expired</div>
+        <div class="opt">Revoked (permanent) and Hold (temporary, can be reinstated)</div>
+        <div class="opt">Trusted and Untrusted</div>
+      </div>
+      <div class="explanation">Buchanan describes two revocation states: Revoked (permanently invalidated, cannot be reinstated) and Hold (temporarily suspended, can be reinstated if the issue is resolved). This distinction is important for certificate lifecycle management.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">7</span> In the RSA blinding attack, what does Eve accomplish?</p>
+      <div class="options">
+        <div class="opt">Gets Bob to unknowingly sign a message M by having him sign a blinded version M' = r^e * M mod N, then divides by r</div>
+        <div class="opt">Recovers Bob's private key by analyzing multiple signatures</div>
+        <div class="opt">Decrypts Bob's messages by exploiting the padding scheme</div>
+        <div class="opt">Creates a fake certificate signed by Bob's key</div>
+      </div>
+      <div class="explanation">In the blinding attack, Eve computes M' = r^e * M mod N (blinded message), tricks Bob into signing it: S' = (M')^d mod N. Then Eve computes S = S'/r = M^d mod N, which is a valid signature on M. Bob never knew he signed M.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">8</span> In PGP email encryption (Buchanan), what is the correct order of operations?</p>
+      <div class="options">
+        <div class="opt">Encrypt with RSA, then hash, then sign, then ZIP</div>
+        <div class="opt">ZIP, encrypt with IDEA, hash with MD5, sign with RSA</div>
+        <div class="opt">Hash with SHA-256, encrypt with AES, sign with ECDSA</div>
+        <div class="opt">Hash with MD5, sign with RSA private key, ZIP compress, encrypt with IDEA session key, encrypt session key with recipient's RSA public key</div>
+      </div>
+      <div class="explanation">PGP's pipeline: (1) Hash message with MD5, (2) Sign hash with sender's RSA private key, (3) ZIP compress, (4) Encrypt with IDEA symmetric session key, (5) Encrypt IDEA session key with recipient's RSA public key. Compression happens BEFORE encryption because encrypted data cannot be compressed.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> What problem does the CRL distribution system have, according to Buchanan?</p>
+      <div class="options">
+        <div class="opt">CRLs are too small to include all revoked certificates</div>
+        <div class="opt">CRLs can only be distributed via email</div>
+        <div class="opt">Clients often don't check CRLs, CAs can make revoking errors, and CRL distribution points are vulnerable to DoS attacks</div>
+        <div class="opt">CRLs reveal which websites users visit</div>
+      </div>
+      <div class="explanation">Buchanan identifies three CRL problems: (1) Many clients simply don't check CRLs (lack of checking), (2) CAs can make errors when revoking certificates, and (3) CRL distribution points are targets for Denial of Service attacks. OCSP provides a lighter-weight alternative.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> Why does deriving AES keys from passwords (key = SHA-256(password)) make AES vulnerable?</p>
+      <div class="options">
+        <div class="opt">SHA-256 output is too short for AES-256</div>
+        <div class="opt">Attackers can brute-force common passwords, compute SHA-256 of each, and try as AES keys -- the key space is effectively the password space, not 2^256</div>
+        <div class="opt">SHA-256 collisions allow multiple passwords to produce the same key</div>
+        <div class="opt">SHA-256 is not a cryptographic hash function</div>
+      </div>
+      <div class="explanation">If key = SHA-256(password), the effective key space is the password space (maybe thousands of common passwords), not 2^256. An attacker tries common passwords, hashes each with SHA-256, and uses the result as the AES key. Defense: use a proper KDF like PBKDF2 or Argon2 with salt and high iteration count.</div>
     </div>
 </div>
 
@@ -1762,19 +1779,19 @@ Your browser trusts Root --> trusts Intermediate --> trusts End-Entity</div>
     return [
       { term: "TLS 1.3 Improvements", definition: "1-RTT handshake (0-RTT for resumed sessions). Mandatory PFS (ephemeral DH/ECDH only). Removed RC4, 3DES, SHA-1, static RSA. Only 5 AEAD cipher suites. Encrypted server certificate.", category: "red", label: "Key Idea" },
       { term: "IPsec Transport vs Tunnel Mode", definition: "Transport: protects payload only, original IP header intact, host-to-host. Tunnel: encapsulates entire packet with new IP header, gateway-to-gateway (VPN). Tunnel mode adds more overhead.", category: "blue", label: "Definition" },
-      { term: "AH vs ESP", definition: "AH: authentication/integrity only, no encryption, covers IP header (breaks with NAT). ESP: encryption + authentication, does NOT cover outer IP header (NAT-compatible). ESP is used far more in practice.", category: "blue", label: "Definition" },
-      { term: "IKE (Internet Key Exchange)", definition: "Two-phase protocol for IPsec. Phase 1: authenticate peers, establish secure channel (IKE SA) using DH. Phase 2: negotiate IPsec SAs (algorithms, keys, policies for data protection).", category: "blue", label: "Definition" },
-      { term: "X.509 Certificate", definition: "Standard format for PKI certificates. Contains: version, serial number, signature algorithm, issuer, validity period, subject, public key, extensions (Key Usage, SANs), and CA's digital signature.", category: "blue", label: "Definition" },
-      { term: "CRL vs OCSP", definition: "CRL: periodic list of all revoked certs (can be stale, large download). OCSP: real-time query for individual cert status (current but has privacy concerns). OCSP stapling mitigates privacy issue.", category: "orange", label: "Comparison" },
-      { term: "PKI (Hierarchical) vs PGP (Web of Trust)", definition: "PKI: top-down trust from Root CAs, scales well, single point of failure if CA compromised. PGP: peer-to-peer trust, users vouch for each other, no single point of failure but hard to scale.", category: "orange", label: "Comparison" },
-      { term: "DSA Ephemeral Key (k)", definition: "Random value used once per signature. NEVER REUSE k -- if same k signs two messages, attacker can recover private key d. Sony PS3 hack (2010): fixed k in ECDSA led to full key extraction.", category: "red", label: "Critical" },
-      { term: "DSA Key Generation", definition: "Choose primes p (large) and q (factor of p-1). Compute generator alpha = h^((p-1)/q) mod p. Private key d: random, 0 < d < q. Public key beta = alpha^d mod p.", category: "blue", label: "Definition" },
-      { term: "ECDSA", definition: "Elliptic curve version of DSA. Same security with shorter keys: 256-bit ECC = 3072-bit DSA/RSA at 128-bit security. Used in Bitcoin (secp256k1), TLS 1.3, code signing.", category: "red", label: "Key Idea" },
-      { term: "Why Cryptosystems Fail (Anderson)", definition: "Most crypto failures are NOT broken algorithms. They are implementation bugs (Heartbleed, goto fail), key management failures (hardcoded keys), and operational mistakes (expired certs, misconfigs).", category: "red", label: "Key Idea" },
-      { term: "Side-Channel Attacks", definition: "Exploit physical characteristics: timing (execution time differences), power analysis (SPA/DPA on smart cards), EM emissions (TEMPEST), cache attacks (Flush+Reload). Not mathematical attacks.", category: "orange", label: "Caution" },
-      { term: "Why Johnny Can't Encrypt", definition: "Whitten & Tygar (1999): users confused public/private keys, sent unencrypted messages by mistake, couldn't manage trust. Lesson: if crypto isn't usable, people bypass it, making everything LESS secure.", category: "red", label: "Key Idea" },
-      { term: "SSH Port Forwarding", definition: "Local (-L): forward local port to remote destination. Remote (-R): forward remote port to local destination. Dynamic (-D): SOCKS proxy through SSH tunnel. All traffic encrypted.", category: "green", label: "Best Practice" },
-      { term: "Perfect Forward Secrecy (PFS)", definition: "If long-term keys are compromised, past session keys remain secure. Achieved by using ephemeral DH/ECDH for each session. Mandatory in TLS 1.3. Without PFS, compromised server key decrypts all past traffic.", category: "red", label: "Key Idea" }
+      { term: "Certificate Types (Buchanan)", definition: "Server authentication, Client authentication, Code signing, Email (S/MIME), Timestamping. Standards: X.509, IKE, PKCS#7 (message syntax), PKCS#10 (CSR format).", category: "blue", label: "Definition" },
+      { term: "Certificate Lifecycle", definition: "Three phases: Initialization (key gen, cert creation, distribution, backup), Issued (retrieval, validation, recovery, update), Cancellation (expiration, revocation, archiving).", category: "blue", label: "Definition" },
+      { term: "CRL Problems (Buchanan)", definition: "Lack of checking by clients, revoking errors by CAs, DoS attacks on distribution points. Two states: Revoked (permanent) vs Hold (temporary, can be reinstated). OCSP is lighter-weight alternative.", category: "orange", label: "Caution" },
+      { term: "PGP Email Pipeline", definition: "Hash with MD5, sign with RSA private key, ZIP compress, encrypt with IDEA session key, encrypt session key with recipient's RSA public key. Compress BEFORE encryption.", category: "blue", label: "Definition" },
+      { term: "Kerberos", definition: "Ticket-based auth. AS (Authentication Server) issues TGT, TGS (Ticket Granting Server) issues service tickets. Passwords never sent over network after initial login.", category: "red", label: "Key Idea" },
+      { term: "Bleichenbacher's Attack", definition: "Exploits PKCS#1 v1.5 padding (0x00 0x02). Server responds differently to valid vs invalid padding = oracle. 30,000-130,000 attempts to recover plaintext. Defense: use OAEP padding.", category: "red", label: "Critical" },
+      { term: "RSA Short Message Attack", definition: "If M^e < N, no modular reduction happens. C = M^e (not mod N). Attacker recovers M = 10^(log(C)/e). Defense: always pad messages (OAEP).", category: "orange", label: "Caution" },
+      { term: "CRT Attack on RSA", definition: "Same message encrypted with same small e but different N values. Collect e ciphertexts, use Chinese Remainder Theorem to find M^e, take e-th root to recover M.", category: "orange", label: "Caution" },
+      { term: "RSA Blinding Attack", definition: "Eve computes M' = r^e * M mod N, tricks Bob into signing S' = (M')^d mod N. Eve computes S'/r = M^d mod N = valid signature on M. Bob never knew he signed M.", category: "red", label: "Critical" },
+      { term: "ECB Copy-and-Paste", definition: "ECB mode: same plaintext block = same ciphertext block (deterministic). Attacker can rearrange/swap cipher blocks. Most dangerous AES mode. Use CBC, CTR, or GCM instead.", category: "red", label: "Critical" },
+      { term: "AES Key from Password", definition: "If key = SHA-256(password), effective key space = password space (not 2^256). Attacker brute-forces common passwords. Defense: use PBKDF2/Argon2 with salt and high iterations.", category: "orange", label: "Caution" },
+      { term: "Non-Random PRNG Attack", definition: "Deterministic or poorly seeded PRNG makes keys predictable. Example: Dual_EC_DRBG (NSA backdoor). Always use cryptographically secure RNG (CSPRNG).", category: "orange", label: "Caution" },
+      { term: "SSH Port Forwarding", definition: "Local (-L): forward local port to remote destination. Remote (-R): forward remote port to local destination. Dynamic (-D): SOCKS proxy through SSH tunnel. All traffic encrypted.", category: "green", label: "Best Practice" }
     ];
   }
 
