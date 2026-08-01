@@ -834,12 +834,6 @@
   <div class="sub">SEAS 8415 -- Summer 2026 -- Prof. Fossaceca -- GWU</div>
 </div>
 
-<!-- CAUTION BANNER -->
-<div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 0 20px 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-  <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">PRELIMINARY - TEXTBOOK CONTENT</div>
-  <div style="color:#aaa; font-size:0.9em; line-height:1.5;">Based on Buchanan Ch 7 (Tunneling) &amp; Ch 8 (Crypto Cracking). Will be updated with lecture slides when released.</div>
-</div>
-
 <div class="container">
 
 <!-- PROGRESS BAR -->
@@ -853,14 +847,14 @@
 <div class="tldr">
   <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 11 Key Points</div>
   <ul>
-    <li><strong>TLS/SSL (Ch 7)</strong> -- TLS 1.3: 1-RTT handshake, mandatory PFS, only AEAD ciphers. TLS 1.2: 2-RTT, cipher suite negotiation</li>
-    <li><strong>IPsec (Ch 7)</strong> -- Transport mode (host-to-host) vs Tunnel mode (gateway VPN). AH = auth only (breaks NAT). ESP = encryption + auth. IKE for key exchange</li>
-    <li><strong>Certificates (Ch 7)</strong> -- X.509, PKCS#7/10, certificate types (server auth, client auth, code signing, email). Lifecycle: Initialization, Issued, Cancellation</li>
-    <li><strong>Certificate Revocation</strong> -- CRL (periodic list, can be stale, DoS risk on CA) vs OCSP (lightweight online check). Revoked vs Hold states</li>
-    <li><strong>PGP Email (Ch 7)</strong> -- Hash with MD5, sign with RSA private key, ZIP, encrypt with IDEA session key, encrypt session key with recipient's public key</li>
-    <li><strong>Kerberos (Ch 7)</strong> -- Ticket-based auth: Authentication Server (AS), Ticket Granting Server (TGS), service tickets. No passwords sent over network</li>
-    <li><strong>RSA Cracking (Ch 8)</strong> -- Different e values, factoring N, M^e &lt; N (no mod reduction), CRT attack, chosen cipher, blinding, Bleichenbacher's PKCS#1 v1.5</li>
-    <li><strong>AES Cracking (Ch 8)</strong> -- ECB copy-and-paste (same block = same cipher), brute force common passwords, non-random PRNG makes keys guessable</li>
+    <li><strong>Real World Systems</strong> -- Data faces risks on untrusted networks (sniffing, tampering, spoofed gateways). Five security services: Authentication, Key Agreement, Confidentiality, Integrity, Nonrepudiation</li>
+    <li><strong>Secure Email</strong> -- Sender unilaterally chooses crypto (no negotiation). S/MIME requires X.509 certificate. PGP: hash MD5, sign RSA, ZIP, encrypt IDEA, encrypt session key with RSA public key</li>
+    <li><strong>Sign vs Encrypt Order</strong> -- Sign-then-encrypt (PGP/SSL): signature over plaintext, hides signatories, but must decrypt before authenticating. Encrypt-then-sign (IPsec): verify before decrypting, efficient for automated checks</li>
+    <li><strong>SSL/TLS</strong> -- Provides auth, confidentiality, integrity but NOT nonrepudiation. TLS 1.3 is current (RFC 8446). The "S in HTTPS". Sits between application and transport layers</li>
+    <li><strong>TLS Handshake</strong> -- ClientHello (list cipher suites) -> ServerHello (certificate, select suite) -> Key Exchange (pre-master secret) -> derive 6 shared secret keys (3 per direction: encryption, HMAC, IV)</li>
+    <li><strong>Cipher Suite</strong> -- RSA for key exchange, DES for encryption, SHA-1 for digest, PKZip for compression. SSL v2 had export-grade 40-bit keys (deliberately weak)</li>
+    <li><strong>Digital Certificates</strong> -- Alice sends certificate, Bob verifies with trusted root CA public key. Establishes trust chain. Always check if certificate has been revoked</li>
+    <li><strong>Email Security</strong> -- Encryption does no good unless you turn it on! Encrypted messages should also be signed. Encryption alone does NOT imply integrity</li>
   </ul>
   <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
 </div>
@@ -935,284 +929,122 @@
   <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
 </div>
 
-<!-- Section 1: TLS/SSL -->
+<!-- Section 1: Real World Systems - Intro -->
 <details>
-  <summary>&#128274; 1. TLS/SSL Protocol (Buchanan Ch 7)</summary>
+  <summary>&#128274; 1. Real World Systems -- Why We Need Crypto</summary>
   <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> TLS (Transport Layer Security) is the most widely deployed cryptographic protocol, securing web traffic, email, VPN, and more. It evolved from SSL (Secure Sockets Layer).</div>
+    <div class="red"><strong>KEY IDEA:</strong> Data faces real risks on untrusted networks -- packet sniffing, data tampering, and spoofed gateways. Cryptographic systems solve these problems through secure tunneling, encrypted channels, and shared encryption keys.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">TLS Handshake Process</h3>
-    <div class="flow">
-      <span class="flow-step">Client Hello</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Server Hello + Certificate</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Key Exchange</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Session Keys Established</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Encrypted Communication</span>
-    </div>
-
+    <h3 style="margin-top: 20px; color: #58a6ff;">Network Threats</h3>
     <div class="box">
-      <h4>Handshake Steps (TLS 1.2)</h4>
+      <h4>Data at Risk</h4>
       <ul>
-        <li><strong>Client Hello:</strong> Supported cipher suites, random nonce, TLS version</li>
-        <li><strong>Server Hello:</strong> Chosen cipher suite, server's random nonce, server certificate (X.509)</li>
-        <li><strong>Certificate Verification:</strong> Client verifies server cert against trusted CAs</li>
-        <li><strong>Key Exchange:</strong> Pre-master secret encrypted with server's public key (RSA) or via Diffie-Hellman</li>
-        <li><strong>Session Keys:</strong> Both sides derive symmetric session keys from pre-master secret + nonces</li>
-        <li><strong>Finished:</strong> Both sides confirm with MAC of entire handshake transcript</li>
+        <li><strong>Packet sniffing:</strong> Attackers capture data traversing the network</li>
+        <li><strong>Data tampering:</strong> Packets modified in transit without detection</li>
+        <li><strong>Spoofed gateways:</strong> Fake network devices impersonate legitimate ones</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">TLS 1.3 Improvements</h3>
-    <div class="green">
-      <strong>Major changes in TLS 1.3 (RFC 8446):</strong>
-      <ul>
-        <li><strong>Reduced handshake:</strong> 1-RTT (one round trip) instead of 2-RTT. Supports 0-RTT for resumed sessions</li>
-        <li><strong>Removed weak ciphers:</strong> No more RC4, 3DES, SHA-1, static RSA, DH key exchange</li>
-        <li><strong>Mandatory PFS:</strong> Perfect Forward Secrecy required -- only ephemeral Diffie-Hellman (DHE or ECDHE)</li>
-        <li><strong>Simplified cipher suites:</strong> Only 5 cipher suites remain (all AEAD: AES-GCM, ChaCha20-Poly1305)</li>
-        <li><strong>Encrypted handshake:</strong> Server certificate is now encrypted (hidden from passive observers)</li>
-      </ul>
-    </div>
-
-    <div class="key">
-      <strong>Cipher Suite Negotiation:</strong> A cipher suite specifies four algorithms -- key exchange (e.g., ECDHE), authentication (e.g., RSA), bulk encryption (e.g., AES-256-GCM), and MAC (e.g., SHA-384). In TLS 1.3, the key exchange and authentication are separated from the cipher suite string.
-    </div>
-
-    <div class="warn">
-      <strong>0-RTT Warning:</strong> TLS 1.3's 0-RTT mode is vulnerable to <em>replay attacks</em>. An attacker can capture and resend the early data. Only use for idempotent requests (e.g., GET, not POST with financial transactions).
-    </div>
-  </div>
-</details>
-
-<!-- Section 2: SSH -->
-<details>
-  <summary>&#128421; 2. SSH -- Secure Shell</summary>
-  <div class="content-section">
-    <div class="key">
-      <strong>SSH (Secure Shell):</strong> Protocol for secure remote access, replacing insecure Telnet and rsh. Provides encrypted terminal sessions, file transfer (SCP/SFTP), and port forwarding.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">SSH Authentication Methods</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Security Requirements</h3>
     <table>
       <tr>
-        <th>Method</th>
-        <th>How It Works</th>
-        <th>Security Level</th>
+        <th>Requirement</th>
+        <th>Solution</th>
       </tr>
       <tr>
-        <td><strong>Password</strong></td>
-        <td>User sends password over encrypted channel</td>
-        <td>Basic -- vulnerable to brute force</td>
+        <td><strong>Privacy</strong></td>
+        <td>Encryption -- prevent eavesdropping</td>
       </tr>
       <tr>
-        <td><strong>Public Key</strong></td>
-        <td>Client proves possession of private key matching authorized public key on server</td>
-        <td>Strong -- recommended default</td>
+        <td><strong>Authentication</strong></td>
+        <td>Verify devices are who they claim to be</td>
       </tr>
       <tr>
-        <td><strong>Certificate-based</strong></td>
-        <td>SSH CA signs user/host keys, server trusts the CA</td>
-        <td>Enterprise -- scalable trust</td>
+        <td><strong>Integrity</strong></td>
+        <td>Ensure data has not been modified in transit</td>
       </tr>
     </table>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Port Forwarding (SSH Tunneling)</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Five Security Services</h3>
+    <div class="green">
+      <strong>The five fundamental security services provided by cryptographic systems:</strong>
+      <ol>
+        <li><strong>Authentication</strong> -- verify the identity of communicating parties</li>
+        <li><strong>Key Agreement/Exchange</strong> -- establish shared secrets securely</li>
+        <li><strong>Confidentiality</strong> -- keep data private through encryption</li>
+        <li><strong>Integrity</strong> -- detect any modification to data</li>
+        <li><strong>Nonrepudiation</strong> -- prevent denial of having sent a message</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <strong>Solution approach:</strong> Secure tunneling (VPNs), encrypted channels, and shared encryption keys address these threats. Different protocols (PGP, SSL/TLS, IPsec) implement these services in different ways.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>Five security services: Authentication, Key Agreement, Confidentiality, Integrity, Nonrepudiation. Different protocols provide different subsets.</strong></div>
+  </div>
+</details>
+
+<!-- Section 2: Secure Email -->
+<details>
+  <summary>&#128231; 2. Secure Email -- S/MIME and Crypto Basics</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> Email crypto is unique -- the sender unilaterally chooses crypto parameters (no negotiation like SSL/IPsec). Messages go to a mail server, not directly to the recipient. The receiver takes it or leaves it.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">S/MIME in Outlook</h3>
     <div class="box">
-      <h4>Three Types of SSH Port Forwarding</h4>
+      <h4>S/MIME Requirements</h4>
       <ul>
-        <li><strong>Local forwarding (-L):</strong> Forward a local port to a remote destination through the SSH server. Use case: access a database behind a firewall</li>
-        <li><strong>Remote forwarding (-R):</strong> Forward a port on the SSH server to a local destination. Use case: expose a local dev server to the internet</li>
-        <li><strong>Dynamic forwarding (-D):</strong> Creates a SOCKS proxy. Use case: route all browser traffic through the SSH tunnel</li>
+        <li>Requires an <strong>X.509 digital certificate</strong> from a Certificate Authority (CA)</li>
+        <li>Enables both encryption and digital signing of emails</li>
+        <li>Older S/MIME used 512-bit keys -- consider PGP for stronger keys</li>
+        <li>Modern secure email uses <strong>AES and RSA</strong></li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Generic Secure Email Process</h3>
+    <div class="ascii-diagram-title">Sending a Secure Email (Alice to Bob)</div>
+    <div class="ascii-diagram">
+Alice's Side (Sending):
+1. Generate a random SESSION KEY
+2. Encrypt the message with session key (symmetric)
+3. Encrypt session key with BOB'S PUBLIC KEY (asymmetric)
+4. Sign the message with ALICE'S PRIVATE KEY
+5. Send everything to Bob
+
+Bob's Side (Receiving):
+1. Decrypt session key with BOB'S PRIVATE KEY
+2. Decrypt message with session key
+3. Verify signature with ALICE'S PUBLIC KEY
+4. Check if certificate has been revoked
+    </div>
+
+    <div class="key">
+      <strong>Signed Digest:</strong> The signed digest ensures two things:
+      <ul>
+        <li><strong>Integrity:</strong> Message cannot be altered without detection</li>
+        <li><strong>Authentication/Nonrepudiation:</strong> Alice cannot deny signing the message</li>
       </ul>
     </div>
 
     <div class="prof">
-      <strong>SSH Host Key Verification:</strong> On first connection, SSH presents the server's host key fingerprint. Users must verify it ("Trust on First Use" / TOFU model). If the key changes later, SSH warns about a potential man-in-the-middle attack.
-    </div>
-  </div>
-</details>
-
-<!-- Section 3: IPsec -->
-<details>
-  <summary>&#128737; 3. IPsec -- Internet Protocol Security</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> IPsec operates at the <em>network layer</em> (Layer 3), providing security for ALL traffic between two endpoints -- unlike TLS which protects individual application connections.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Transport Mode vs Tunnel Mode</h3>
-    <table>
-      <tr>
-        <th>Feature</th>
-        <th>Transport Mode</th>
-        <th>Tunnel Mode</th>
-      </tr>
-      <tr>
-        <td><strong>What's protected</strong></td>
-        <td>Only the payload (data)</td>
-        <td>Entire original IP packet</td>
-      </tr>
-      <tr>
-        <td><strong>IP header</strong></td>
-        <td>Original IP header preserved</td>
-        <td>New IP header added; original encrypted</td>
-      </tr>
-      <tr>
-        <td><strong>Use case</strong></td>
-        <td>Host-to-host communication</td>
-        <td>Gateway-to-gateway (site-to-site VPN)</td>
-      </tr>
-      <tr>
-        <td><strong>Overhead</strong></td>
-        <td>Lower (no extra header)</td>
-        <td>Higher (extra IP header)</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">AH vs ESP</h3>
-    <table>
-      <tr>
-        <th>Protocol</th>
-        <th>AH (Authentication Header)</th>
-        <th>ESP (Encapsulating Security Payload)</th>
-      </tr>
-      <tr>
-        <td><strong>Confidentiality</strong></td>
-        <td>No encryption</td>
-        <td>Yes -- encrypts payload</td>
-      </tr>
-      <tr>
-        <td><strong>Integrity</strong></td>
-        <td>Yes -- covers IP header + payload</td>
-        <td>Yes -- covers payload only (not outer IP header)</td>
-      </tr>
-      <tr>
-        <td><strong>Authentication</strong></td>
-        <td>Yes</td>
-        <td>Yes</td>
-      </tr>
-      <tr>
-        <td><strong>NAT compatible</strong></td>
-        <td>No (AH covers IP header, NAT changes it)</td>
-        <td>Yes (with NAT-T encapsulation)</td>
-      </tr>
-    </table>
-
-    <div class="key">
-      <strong>IKE (Internet Key Exchange):</strong> Two-phase protocol for establishing IPsec Security Associations (SAs).
-      <ul>
-        <li><strong>Phase 1:</strong> Authenticate peers, establish a secure channel (IKE SA). Uses Diffie-Hellman for key exchange</li>
-        <li><strong>Phase 2:</strong> Negotiate IPsec SAs (which algorithms, keys, and policies to use for actual data protection)</li>
-      </ul>
+      <strong>User must explicitly invoke crypto services -- it is NOT automatic.</strong> Encryption does no good unless you turn it on!
     </div>
 
-    <div class="mem"><small>Remember This</small><br><strong>AH = Authentication only (no encryption). ESP = Encryption + Authentication. ESP is used far more in practice because AH breaks with NAT.</strong></div>
-  </div>
-</details>
-
-<!-- Section 4: Digital Certificates & PKI -->
-<details>
-  <summary>&#127970; 4. Digital Certificates &amp; PKI (Buchanan Ch 7)</summary>
-  <div class="content-section">
-    <div class="key">
-      <strong>PKI (Public Key Infrastructure):</strong> The framework of policies, procedures, hardware, software, and people needed to create, manage, distribute, use, store, and revoke digital certificates.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">X.509 Certificates and Standards</h3>
-    <div class="box">
-      <h4>Key Standards (from Buchanan)</h4>
-      <ul>
-        <li><strong>X.509:</strong> Standard format for digital certificates. Contains subject, issuer, public key, validity, extensions, and CA signature</li>
-        <li><strong>IKE (Internet Key Exchange):</strong> Protocol for establishing shared keys in IPsec</li>
-        <li><strong>PKCS#7:</strong> Cryptographic Message Syntax -- format for signed and encrypted data</li>
-        <li><strong>PKCS#10:</strong> Certificate Signing Request (CSR) format -- what you send to a CA to get a certificate</li>
-      </ul>
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Types</h3>
-    <table>
-      <tr>
-        <th>Certificate Type</th>
-        <th>Purpose</th>
-      </tr>
-      <tr>
-        <td><strong>Server Authentication</strong></td>
-        <td>Proves identity of a server (e.g., HTTPS websites)</td>
-      </tr>
-      <tr>
-        <td><strong>Client Authentication</strong></td>
-        <td>Proves identity of a client connecting to a server</td>
-      </tr>
-      <tr>
-        <td><strong>Code Signing</strong></td>
-        <td>Verifies software publisher identity and code integrity</td>
-      </tr>
-      <tr>
-        <td><strong>Email (S/MIME)</strong></td>
-        <td>Enables encrypted and signed email</td>
-      </tr>
-      <tr>
-        <td><strong>Timestamping</strong></td>
-        <td>Proves data existed at a specific time</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Key/Certificate Management Lifecycle (Buchanan)</h3>
-    <div class="box">
-      <h4>Three Phases</h4>
-      <ul>
-        <li><strong>Initialization:</strong> Key generation, certificate creation, distribution to parties, secure backup of keys</li>
-        <li><strong>Issued (Active):</strong> Certificate retrieval (from directory/repository), validation (check chain and revocation status), recovery (if key lost), update (before expiry)</li>
-        <li><strong>Cancellation:</strong> Expiration (natural end of validity period), revocation (premature invalidation due to compromise), archiving (store for historical verification)</li>
-      </ul>
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Revocation (Buchanan)</h3>
-    <div class="red">
-      <strong>Two Revocation States:</strong>
-      <ul>
-        <li><strong>Revoked:</strong> Permanently invalidated -- cannot be reinstated</li>
-        <li><strong>Hold:</strong> Temporarily suspended -- can be reinstated if the issue is resolved</li>
-      </ul>
-    </div>
-    <table>
-      <tr>
-        <th>Method</th>
-        <th>CRL</th>
-        <th>OCSP</th>
-      </tr>
-      <tr>
-        <td><strong>How it works</strong></td>
-        <td>CA publishes a list of revoked serial numbers, downloaded periodically</td>
-        <td>Client queries a responder in real-time for a specific certificate's status</td>
-      </tr>
-      <tr>
-        <td><strong>Freshness</strong></td>
-        <td>Can be stale (published on schedule)</td>
-        <td>Real-time (current status)</td>
-      </tr>
-      <tr>
-        <td><strong>Problems (Buchanan)</strong></td>
-        <td>Lack of checking by clients, revoking errors, DoS attacks on CA distribution point</td>
-        <td>Privacy concern (responder sees which sites you visit). Mitigated by OCSP stapling</td>
-      </tr>
-    </table>
-
+    <h3 style="margin-top: 20px; color: #58a6ff;">Confidentiality vs Authentication</h3>
     <div class="warn">
-      <strong>CRL Problems (from textbook):</strong> Many clients simply don't check CRLs. CAs can make errors when revoking. CRL distribution points are targets for DoS attacks. OCSP is lighter-weight but not universally deployed.
+      <strong>Users must know the difference:</strong> Encrypted email should also be signed. Encryption alone does NOT imply integrity -- someone could tamper with the encrypted data. Always sign AND encrypt.
     </div>
   </div>
 </details>
 
-<!-- Section 5: PGP Email Encryption -->
+<!-- Section 3: PGP -->
 <details>
-  <summary>&#128231; 5. PGP Email Encryption (Buchanan Ch 7)</summary>
+  <summary>&#128272; 3. PGP -- Pretty Good Privacy</summary>
   <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> PGP uses a hybrid approach combining hashing, digital signatures, compression, symmetric encryption, and public-key encryption in a specific pipeline.</div>
+    <div class="red"><strong>KEY IDEA:</strong> PGP uses asymmetric crypto for authentication and symmetric crypto for confidentiality. Key insight: PGP combines fast symmetric encryption with secure asymmetric key exchange.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">PGP Encryption Pipeline (Figure 6.26)</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">PGP Encryption Pipeline</h3>
     <div class="ascii-diagram-title">PGP Email Encryption Steps</div>
     <div class="ascii-diagram">
 Plaintext Message
@@ -1240,288 +1072,265 @@ Plaintext Message
       <h4>Why This Pipeline?</h4>
       <ul>
         <li><strong>MD5 hash:</strong> Creates a fixed-size digest of the message for signing</li>
-        <li><strong>RSA private key signing:</strong> Provides authentication (proves sender identity) and integrity (message not tampered)</li>
+        <li><strong>RSA private key signing:</strong> Provides authentication (proves sender identity) and nonrepudiation</li>
         <li><strong>ZIP compression:</strong> Reduces message size BEFORE encryption (encrypted data cannot be compressed)</li>
         <li><strong>IDEA session key:</strong> Fast symmetric encryption for the bulk message data</li>
         <li><strong>RSA public key:</strong> Encrypts only the small session key -- avoids slow RSA on large data</li>
       </ul>
     </div>
 
+    <div class="mem"><small>Remember This</small><br><strong>PGP pipeline: Hash (MD5) -> Sign (RSA private) -> ZIP -> Encrypt (IDEA session key) -> Encrypt session key (RSA public). Compress BEFORE encryption!</strong></div>
+  </div>
+</details>
+
+<!-- Section 4: Sign-then-Encrypt vs Encrypt-then-Sign -->
+<details>
+  <summary>&#128260; 4. Sign-then-Encrypt vs Encrypt-then-Sign</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> The order of signing and encrypting matters greatly for security properties and performance. PGP/SSL and IPsec use different approaches for good reasons.</div>
+
+    <table>
+      <tr>
+        <th>Property</th>
+        <th>Sign-then-Encrypt (PGP/SSL)</th>
+        <th>Encrypt-then-Sign (IPsec)</th>
+      </tr>
+      <tr>
+        <td><strong>Signature covers</strong></td>
+        <td>Plaintext</td>
+        <td>Ciphertext</td>
+      </tr>
+      <tr>
+        <td><strong>Privacy of signatories</strong></td>
+        <td>Encryption hides who signed the message</td>
+        <td>Signature is visible (signer identity exposed)</td>
+      </tr>
+      <tr>
+        <td><strong>Authentication speed</strong></td>
+        <td>Must decrypt BEFORE authenticating -- cannot quickly discard forged packets</td>
+        <td>Verify signatures BEFORE decrypting -- efficient for automated verification</td>
+      </tr>
+      <tr>
+        <td><strong>Weakness</strong></td>
+        <td>Receiver must decrypt before verifying -- resource cost on forged packets</td>
+        <td>BlackHat can send forged packets (signature on ciphertext is visible)</td>
+      </tr>
+      <tr>
+        <td><strong>Best for</strong></td>
+        <td>Human-to-human communication (email)</td>
+        <td>Machine-to-machine, high-throughput traffic (VPN)</td>
+      </tr>
+    </table>
+
+    <div class="prof">
+      <strong>Deterring email viruses:</strong> Accept only signed emails -- verified signatures before viruses can take control. This is a practical security measure enabled by secure email.
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>PGP/SSL = sign then encrypt (hides signer, must decrypt to verify). IPsec = encrypt then sign (verify before decrypting, efficient for automation).</strong></div>
+  </div>
+</details>
+
+<!-- Section 5: SSL & TLS -->
+<details>
+  <summary>&#128274; 5. SSL &amp; TLS -- Securing the Web</summary>
+  <div class="content-section">
+    <div class="red"><strong>KEY IDEA:</strong> SSL/TLS provides authentication, confidentiality, and message integrity for web traffic. SSL/TLS does NOT provide nonrepudiation -- this is a key difference from PGP.</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">History and Evolution</h3>
+    <div class="box">
+      <h4>Timeline</h4>
+      <ul>
+        <li><strong>1994:</strong> Netscape creates SSL v2</li>
+        <li><strong>1994:</strong> Microsoft creates PCT as a competitor</li>
+        <li><strong>1995:</strong> SSL v3 released</li>
+        <li><strong>1996:</strong> IETF TLS Working Group formed</li>
+        <li><strong>1999:</strong> TLS 1.0 released</li>
+        <li><strong>2015:</strong> SSL officially deprecated</li>
+        <li><strong>Today:</strong> TLS 1.3 is the current standard (RFC 8446)</li>
+      </ul>
+    </div>
+
     <div class="key">
-      <strong>Hybrid Approach:</strong> PGP combines the speed of symmetric encryption (IDEA for bulk data) with the key distribution advantage of asymmetric encryption (RSA for the session key). The recipient decrypts the session key with their private key, then uses it to decrypt the message.
+      <strong>Fun fact:</strong> Microsoft implemented TLS before Netscape. Today's "SSL certificates" actually use TLS. SSL is deprecated.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">TLS Version Comparison</h3>
+    <table>
+      <tr>
+        <th>Version</th>
+        <th>Status</th>
+        <th>Key Issues</th>
+      </tr>
+      <tr>
+        <td><strong>SSL 2.0/3.0</strong></td>
+        <td>Deprecated</td>
+        <td>Serious vulnerabilities (POODLE, etc.)</td>
+      </tr>
+      <tr>
+        <td><strong>TLS 1.0</strong></td>
+        <td>Outdated</td>
+        <td>BEAST attack vulnerability</td>
+      </tr>
+      <tr>
+        <td><strong>TLS 1.1</strong></td>
+        <td>Obsolete</td>
+        <td>Improved but still deprecated</td>
+      </tr>
+      <tr>
+        <td><strong>TLS 1.2</strong></td>
+        <td>Strong but complex</td>
+        <td>AES-CBC padding oracle attacks possible</td>
+      </tr>
+      <tr>
+        <td><strong>TLS 1.3</strong></td>
+        <td>Current standard</td>
+        <td>Rebuilt from scratch -- streamlined, faster, more secure</td>
+      </tr>
+    </table>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">What TLS Does</h3>
+    <div class="green">
+      <ul>
+        <li>TLS is the <strong>"S in HTTPS"</strong></li>
+        <li><strong>Application agnostic</strong> -- works with any application protocol</li>
+        <li><strong>Workhorse of internet security</strong> -- also used in machine-to-machine IoT</li>
+        <li>Goals: confidential, authenticated, unmodified data. Prevent MITM via certificates</li>
+        <li>Efficient, interoperable, extensible, versatile</li>
+      </ul>
+    </div>
+
+    <div class="warn">
+      <strong>Notable TLS vulnerabilities:</strong> Heartbleed, BEAST, CRIME, POODLE all targeted TLS implementations. These are implementation bugs, not flaws in the protocol math itself.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">SSL v2 Export-Grade Ciphers</h3>
+    <div class="prof">
+      <strong>Export-grade ciphersuites used 40-bit session keys</strong> -- deliberately weak due to US export regulations. This made "secure" connections trivially breakable by anyone with moderate computing power. A cautionary tale about governments weakening crypto.
     </div>
   </div>
 </details>
 
-<!-- Section 6: Kerberos -->
+<!-- Section 6: TLS Protocol Deep Dive -->
 <details>
-  <summary>&#128273; 6. Kerberos Authentication (Buchanan Ch 7)</summary>
+  <summary>&#128737; 6. TLS Protocol Suite -- Handshake &amp; Record</summary>
   <div class="content-section">
-    <div class="blue"><strong>DEFINITION:</strong> Kerberos is a ticket-based authentication protocol that allows users to prove their identity without sending passwords over the network. Used extensively in Active Directory environments.</div>
+    <div class="red"><strong>KEY IDEA:</strong> TLS has two main protocols: the Record protocol (how to transmit data) and the Handshake protocol (key agreement). The handshake is often confused as "the" TLS protocol, but it is only one part.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Key Components</h3>
-    <table>
-      <tr>
-        <th>Component</th>
-        <th>Role</th>
-      </tr>
-      <tr>
-        <td><strong>Identity Provider (IP) / Authentication Server (AS)</strong></td>
-        <td>Verifies user identity and issues initial ticket (Ticket Granting Ticket / TGT)</td>
-      </tr>
-      <tr>
-        <td><strong>Ticket Granting Server (TGS)</strong></td>
-        <td>Issues service tickets based on valid TGT. User presents TGT to get access to specific services</td>
-      </tr>
-      <tr>
-        <td><strong>Relying Party (RP) / Service</strong></td>
-        <td>The service the user wants to access. Verifies the service ticket</td>
-      </tr>
-    </table>
+    <h3 style="margin-top: 20px; color: #58a6ff;">TLS Placement in the Network Stack</h3>
+    <div class="key">
+      <strong>SSL/TLS sits between the application and transport layers:</strong>
+      <ul>
+        <li>HTTP port 80 becomes HTTPS port 443</li>
+        <li>SMTP port 25 becomes SMTPS port 465</li>
+      </ul>
+    </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Kerberos Flow</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">TLS Handshake Process</h3>
+    <div class="ascii-diagram-title">SSL/TLS Handshake</div>
     <div class="ascii-diagram">
-User                  AS (Auth Server)      TGS              Service
- |                         |                  |                  |
- |-- Credentials --------> |                  |                  |
- |<-- TGT (encrypted) ---- |                  |                  |
- |                         |                  |                  |
- |-- TGT + Service Req ------------------>  |                  |
- |<-- Service Ticket (encrypted) ---------  |                  |
- |                         |                  |                  |
- |-- Service Ticket ----------------------------------------> |
- |<-- Access Granted ---------------------------------------- |
+Client                                          Server
+  |                                                |
+  |-- Client Hello (list cipher suites) ---------> |
+  |                                                |
+  |<- Server Hello (certificate, select suite) --- |
+  |                                                |
+  |-- Client Key Exchange -----------------------> |
+  |   (pre-master secret encrypted with            |
+  |    server's public key)                        |
+  |                                                |
+  |   Both derive 6 shared secret keys             |
+  |   (3 each direction)                           |
+  |                                                |
+  |<========= Encrypted Communication ==========>  |
     </div>
 
-    <div class="key">
-      <strong>Key Advantage:</strong> Passwords are NEVER sent over the network after initial authentication. All subsequent authentication uses encrypted tickets. Tickets have limited lifetime, reducing exposure from compromise.
-    </div>
-
-    <div class="mem"><small>Remember This</small><br><strong>Kerberos = ticket-based auth. AS issues TGT, TGS issues service tickets. No passwords on the wire after login.</strong></div>
-  </div>
-</details>
-
-<!-- Section 7: Attack Types -->
-<details>
-  <summary>&#128165; 7. Cryptographic Attack Types (Buchanan Ch 8)</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> Buchanan Ch 8 covers "Crypto Cracking" -- the various ways cryptographic systems can be attacked. Understanding attacks is essential for building secure systems.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Attack Categories</h3>
-    <table>
-      <tr>
-        <th>Attack Type</th>
-        <th>Description</th>
-      </tr>
-      <tr>
-        <td><strong>Known Plaintext Attack</strong></td>
-        <td>Attacker has matching plaintext-ciphertext pairs and uses them to crack other ciphertexts encrypted with the same key</td>
-      </tr>
-      <tr>
-        <td><strong>Replay Attack</strong></td>
-        <td>Capture a legitimate encrypted message and resend it later. The receiver processes it as valid even though it is a replay</td>
-      </tr>
-      <tr>
-        <td><strong>Man-in-the-Middle (MITM)</strong></td>
-        <td>Intruder positions between two parties, impersonating each to the other. Intercepts and potentially modifies all communications</td>
-      </tr>
-      <tr>
-        <td><strong>Active Attack</strong></td>
-        <td>Attacker inserts or modifies messages in transit (not just passive eavesdropping)</td>
-      </tr>
-      <tr>
-        <td><strong>Cut and Paste</strong></td>
-        <td>Mix parts of different encrypted messages to create a new valid-looking ciphertext. Exploits block cipher modes without proper authentication</td>
-      </tr>
-    </table>
-
-    <div class="warn">
-      <strong>Defense:</strong> These attacks are prevented through nonces/timestamps (replay), mutual authentication and certificates (MITM), MACs/AEAD modes (active attack, cut-and-paste).
-    </div>
-  </div>
-</details>
-
-<!-- Section 8: RSA Cracking Methods -->
-<details>
-  <summary>&#128275; 8. RSA Cracking Methods (Buchanan Ch 8)</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> While RSA with proper key sizes is computationally secure, there are multiple attack vectors when RSA is improperly implemented or used.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">RSA Attack Methods (from textbook)</h3>
-
-    <div class="box">
-      <h4>1. Different e Value Attack</h4>
+    <h3 style="margin-top: 20px; color: #58a6ff;">The 6 Secret Keys</h3>
+    <div class="red">
+      <strong>SSL/TLS derives 6 separate secret keys (3 per direction):</strong>
       <ul>
-        <li>Same message M encrypted with two different public exponents e1 and e2 (same N)</li>
-        <li>Attacker gets C1 = M^e1 mod N and C2 = M^e2 mod N</li>
-        <li>Solve for x, y where x*e1 + y*e2 = 1 (Extended Euclidean Algorithm)</li>
-        <li>Compute M = C1^x * C2^y mod N</li>
+        <li><strong>Encryption key</strong> -- for bulk data encryption (e.g., DES, AES)</li>
+        <li><strong>HMAC key</strong> -- for message authentication and integrity</li>
+        <li><strong>IV (Initialization Vector)</strong> -- think of it as cipher initialization random plaintext</li>
       </ul>
+      <p style="margin-top: 8px;">Each direction (client-to-server and server-to-client) gets its own set of 3 keys = 6 total.</p>
     </div>
 
-    <div class="box">
-      <h4>2. Factoring N</h4>
-      <ul>
-        <li>If you can factor N into P and Q, RSA is broken</li>
-        <li>Compute PHI = (P-1) * (Q-1)</li>
-        <li>Find d such that (d * e) mod PHI = 1</li>
-        <li>This is why N must be large enough that factoring is computationally infeasible</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>3. M^e &lt; N (Short Message Attack)</h4>
-      <ul>
-        <li>If the message M is very short, M^e may be less than N</li>
-        <li>Then C = M^e (no modular reduction happens)</li>
-        <li>Attacker can recover M using simple logarithms: M = 10^(log(C)/e)</li>
-        <li><strong>Defense:</strong> Always pad messages (OAEP padding)</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>4. CRT (Chinese Remainder Theorem) Attack</h4>
-      <ul>
-        <li>Same message encrypted with same small e (e.g., e=3) but different N values (N1, N2, N3)</li>
-        <li>Attacker collects 3 ciphertexts: C1, C2, C3</li>
-        <li>Use CRT to solve for M^e (single value across all three moduli)</li>
-        <li>Take the e-th root to recover M</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>5. Chosen Cipher Attack</h4>
-      <ul>
-        <li>Eve captures C = M^e mod N</li>
-        <li>Eve picks random r, computes C' = C * r^e mod N</li>
-        <li>Eve sends C' to Bob for decryption (tricks Bob into decrypting)</li>
-        <li>Bob returns M' = (M*r) -- the decryption of C'</li>
-        <li>Eve computes M = M'/r -- recovers original message</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>6. Blinding Attack (Signature Forgery)</h4>
-      <ul>
-        <li>Goal: Get Bob to sign a message M without him knowing</li>
-        <li>Eve computes M' = r^e * M mod N (a "blinded" version of M)</li>
-        <li>Eve tricks Bob into signing M': S' = (M')^d mod N</li>
-        <li>Eve computes S = S'/r = M^d mod N = valid signature on M</li>
-        <li>Bob never knew he signed M</li>
-      </ul>
-    </div>
-
-    <div class="box" style="border-left-color: #e94560;">
-      <h4>7. Bleichenbacher's Attack (PKCS#1 v1.5)</h4>
-      <ul>
-        <li>Exploits PKCS#1 v1.5 padding format: ciphertext starts with 0x00 0x02</li>
-        <li>Attacker sends modified ciphertexts to server</li>
-        <li>Server responds differently: "Bad crypto" (invalid padding) vs. processes normally (valid padding)</li>
-        <li>This difference is an <em>oracle</em> that leaks information</li>
-        <li>Attacker iterates through s values to find valid padding</li>
-        <li>Requires <strong>30,000 to 130,000 attempts</strong> to fully recover the plaintext</li>
-        <li><strong>Defense:</strong> Use OAEP padding (PKCS#1 v2.0+), not v1.5</li>
-      </ul>
-    </div>
-
-    <div class="warn" style="border-left-color: #e94560; background: rgba(233,69,96,0.2);">
-      <strong>Bleichenbacher is a real-world threat:</strong> This attack (also called the "million message attack" or ROBOT attack) has been used against real TLS implementations. PKCS#1 v1.5 padding is STILL used in some legacy systems. TLS 1.3 removes RSA key exchange entirely, eliminating this vector.
-    </div>
-  </div>
-</details>
-
-<!-- Section 9: AES Cracking -->
-<details>
-  <summary>&#128296; 9. AES Cracking Methods (Buchanan Ch 8)</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> AES itself has no known practical attacks on the algorithm. But AES implementations and usage patterns create vulnerabilities.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">AES Attack Vectors (from textbook)</h3>
-
-    <div class="box" style="border-left-color: #e94560;">
-      <h4>1. ECB Copy-and-Paste Attack</h4>
-      <ul>
-        <li>ECB (Electronic Codebook) mode encrypts each block independently</li>
-        <li><strong>Same input block = same output block</strong> (deterministic)</li>
-        <li>Attacker can rearrange, duplicate, or swap cipher blocks</li>
-        <li>Example: swap encrypted "amount" blocks between two transactions</li>
-        <li><strong>Defense:</strong> Use CBC, CTR, or GCM mode instead of ECB</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>2. Brute Force with Common Passwords</h4>
-      <ul>
-        <li>If the AES key is derived from a password (e.g., key = SHA-256(password))</li>
-        <li>Attacker tries common passwords, computes SHA-256 of each, uses as AES key</li>
-        <li>If the password is weak, the AES key is predictable despite being 256 bits</li>
-        <li><strong>Defense:</strong> Use proper key derivation (PBKDF2, Argon2) with salt and high iterations</li>
-      </ul>
-    </div>
-
-    <div class="box">
-      <h4>3. Non-Random Number Generator</h4>
-      <ul>
-        <li>If the PRNG used to generate AES keys is deterministic or poorly seeded</li>
-        <li>An attacker who knows the PRNG state can predict future keys</li>
-        <li>Real-world example: Dual_EC_DRBG (NSA backdoor in NIST-approved PRNG)</li>
-        <li><strong>Defense:</strong> Use cryptographically secure random number generators (CSPRNG)</li>
-      </ul>
-    </div>
-
-    <div class="mem"><small>Remember This</small><br><strong>ECB mode is the most dangerous AES mode -- same plaintext block = same ciphertext block. Always use CBC, CTR, or GCM. AES is only as strong as its key generation and mode of operation.</strong></div>
-  </div>
-</details>
-
-<!-- Section 10: Key Management & Why Systems Fail -->
-<details>
-  <summary>&#128101; 10. Key Management and Common Failures</summary>
-  <div class="content-section">
-    <div class="red"><strong>KEY IDEA:</strong> The cryptographic algorithms are the easy part. Key management and implementation errors cause more real-world failures than broken algorithms.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Key Lifecycle</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">SSL/TLS Session Flow</h3>
     <div class="flow">
-      <span class="flow-step">Generation</span>
+      <span class="flow-step">Hello + Negotiate</span>
       <span class="flow-arrow">--></span>
-      <span class="flow-step">Distribution</span>
+      <span class="flow-step">Exchange Certificates</span>
       <span class="flow-arrow">--></span>
-      <span class="flow-step">Storage</span>
+      <span class="flow-step">Key Agreement</span>
       <span class="flow-arrow">--></span>
-      <span class="flow-step">Use</span>
+      <span class="flow-step">Authentication</span>
       <span class="flow-arrow">--></span>
-      <span class="flow-step">Rotation</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Revocation</span>
-      <span class="flow-arrow">--></span>
-      <span class="flow-step">Destruction</span>
+      <span class="flow-step">Confidentiality &amp; Integrity</span>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Common Failure Categories</h3>
-    <table>
-      <tr>
-        <th>Category</th>
-        <th>Examples</th>
-      </tr>
-      <tr>
-        <td><strong>Implementation bugs</strong></td>
-        <td>Heartbleed (OpenSSL buffer over-read), goto fail (Apple TLS), Bleichenbacher padding oracle</td>
-      </tr>
-      <tr>
-        <td><strong>Protocol design flaws</strong></td>
-        <td>POODLE (SSLv3), BEAST (CBC in TLS 1.0), ECB mode in AES</td>
-      </tr>
-      <tr>
-        <td><strong>Key management failures</strong></td>
-        <td>Hardcoded keys, keys in source code, weak PRNG, password-derived keys without KDF</td>
-      </tr>
-      <tr>
-        <td><strong>Operational mistakes</strong></td>
-        <td>Expired certificates, misconfigured servers, using PKCS#1 v1.5 instead of OAEP</td>
-      </tr>
-    </table>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Sending a Confidential Message (Alice to Bob)</h3>
+    <div class="box">
+      <h4>Alice Sends:</h4>
+      <ol>
+        <li><strong>Compress</strong> the message</li>
+        <li><strong>Hash with HMAC key</strong> (message authentication)</li>
+        <li><strong>Encrypt with DES key</strong> (confidentiality)</li>
+      </ol>
+      <h4>Bob Receives:</h4>
+      <ol>
+        <li><strong>Decrypt</strong> with DES key</li>
+        <li><strong>Authenticate</strong> (verify HMAC)</li>
+        <li><strong>Decompress</strong></li>
+      </ol>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Cipher Suite Example</h3>
+    <div class="key">
+      <strong>A cipher suite specifies four components:</strong>
+      <ul>
+        <li><strong>RSA</strong> -- for key exchange</li>
+        <li><strong>DES</strong> -- for bulk encryption</li>
+        <li><strong>SHA-1</strong> -- for message digest</li>
+        <li><strong>PKZip</strong> -- for compression</li>
+      </ul>
+    </div>
+
+    <div class="mem"><small>Remember This</small><br><strong>6 secret keys: 3 per direction (encryption key + HMAC key + IV). Cipher suite = key exchange + encryption + digest + compression.</strong></div>
+  </div>
+</details>
+
+<!-- Section 7: Digital Certificates -->
+<details>
+  <summary>&#127970; 7. Digital Certificates &amp; Trust</summary>
+  <div class="content-section">
+    <div class="key">
+      <strong>Digital certificates establish trust:</strong> Alice sends her digital certificate to Bob. Bob verifies it using the trusted root CA's public key. This establishes a chain of trust.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Certificate Verification Flow</h3>
+    <div class="ascii-diagram">
+Alice                         Bob                    Root CA
+  |                             |                       |
+  |-- Digital Certificate ----> |                       |
+  |                             |-- Verify with ------> |
+  |                             |   CA's public key     |
+  |                             |<-- Trust confirmed -- |
+  |                             |                       |
+  |<===== Secure Channel =====> |                       |
+    </div>
+
+    <div class="box">
+      <h4>Key Points</h4>
+      <ul>
+        <li>SSL allows client to authenticate server (Bob authenticates Alice's server)</li>
+        <li>Certificate exchange establishes the trust chain</li>
+        <li>Always check if the certificate has been revoked</li>
+        <li>S/MIME requires X.509 digital certificate from a CA</li>
+      </ul>
+    </div>
 
     <div class="warn">
-      <strong>Anderson's Principle:</strong> "Why Cryptosystems Fail" (1993) -- most cryptographic failures are NOT from broken algorithms but from implementation bugs, poor key management, and operational errors. Security at the expense of usability comes at the expense of security.
+      <strong>Certificate revocation:</strong> A valid-looking certificate may have been compromised. Always verify revocation status before trusting a certificate.
     </div>
   </div>
 </details>
@@ -1536,85 +1345,8 @@ User                  AS (Auth Server)      TGS              Service
     <button class="quiz-reset-btn">Reset Quiz</button>
   </div>
 
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">1</span> In Bleichenbacher's attack on RSA, what oracle does the attacker exploit?</p>
-      <div class="options">
-        <div class="opt">The server reveals the plaintext length in error messages</div>
-        <div class="opt">The server returns different error codes for wrong key vs wrong message</div>
-        <div class="opt">The server responds differently to valid PKCS#1 v1.5 padding (0x00 0x02) vs invalid padding</div>
-        <div class="opt">The server leaks the private exponent in timing differences</div>
-      </div>
-      <div class="explanation">Bleichenbacher's attack exploits PKCS#1 v1.5 padding. The server responds "Bad crypto" for invalid padding but processes normally for valid padding (starting with 0x00 0x02). This difference allows the attacker to iteratively narrow down the plaintext, requiring 30,000 to 130,000 attempts.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">2</span> Why is ECB mode dangerous for AES encryption?</p>
-      <div class="options">
-        <div class="opt">ECB uses a weaker key schedule than other modes</div>
-        <div class="opt">Same plaintext block always produces the same ciphertext block, allowing copy-and-paste attacks</div>
-        <div class="opt">ECB does not support 256-bit keys</div>
-        <div class="opt">ECB requires an initialization vector that can be guessed</div>
-      </div>
-      <div class="explanation">ECB (Electronic Codebook) encrypts each block independently and deterministically. Same input = same output. An attacker can rearrange, duplicate, or swap cipher blocks (copy-and-paste attack). Use CBC, CTR, or GCM mode instead.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">3</span> In the RSA "short message" attack, what happens when M^e &lt; N?</p>
-      <div class="options">
-        <div class="opt">No modular reduction occurs, so C = M^e and the attacker can recover M using logarithms: M = 10^(log(C)/e)</div>
-        <div class="opt">The ciphertext wraps around and becomes negative</div>
-        <div class="opt">The encryption fails and returns an error</div>
-        <div class="opt">The message is automatically padded to fill N bits</div>
-      </div>
-      <div class="explanation">When M^e &lt; N, the modular reduction (mod N) has no effect -- C simply equals M^e. The attacker can recover M by computing the e-th root of C using logarithms. This is why messages must always be padded (e.g., with OAEP) before RSA encryption.</div>
-    </div>
-
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">4</span> What are the three components of Kerberos authentication?</p>
-      <div class="options">
-        <div class="opt">Root CA, Intermediate CA, End-Entity Certificate</div>
-        <div class="opt">Public Key, Private Key, Session Key</div>
-        <div class="opt">Hash Function, Symmetric Cipher, Asymmetric Cipher</div>
-        <div class="opt">Authentication Server (AS), Ticket Granting Server (TGS), and the Service/Relying Party</div>
-      </div>
-      <div class="explanation">Kerberos uses three components: the Authentication Server (AS/Identity Provider) verifies user identity and issues TGTs, the Ticket Granting Server (TGS) issues service tickets, and the Service (Relying Party) verifies service tickets and grants access. Passwords are never sent over the network after initial authentication.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">5</span> In the CRT (Chinese Remainder Theorem) attack on RSA, what conditions are needed?</p>
-      <div class="options">
-        <div class="opt">The same message encrypted with different e values and the same N</div>
-        <div class="opt">The same message encrypted with the same small e (e.g., e=3) but different N values</div>
-        <div class="opt">Two messages encrypted with the same key and same nonce</div>
-        <div class="opt">A known plaintext-ciphertext pair from a previous session</div>
-      </div>
-      <div class="explanation">The CRT attack requires the same message encrypted with the same small e value (e.g., e=3) but sent to different recipients with different N values. Collecting e ciphertexts allows the attacker to use CRT to solve for M^e, then take the e-th root to recover M.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">6</span> According to Buchanan, what are the two states a revoked certificate can be in?</p>
-      <div class="options">
-        <div class="opt">Valid and Invalid</div>
-        <div class="opt">Active and Expired</div>
-        <div class="opt">Revoked (permanent) and Hold (temporary, can be reinstated)</div>
-        <div class="opt">Trusted and Untrusted</div>
-      </div>
-      <div class="explanation">Buchanan describes two revocation states: Revoked (permanently invalidated, cannot be reinstated) and Hold (temporarily suspended, can be reinstated if the issue is resolved). This distinction is important for certificate lifecycle management.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">7</span> In the RSA blinding attack, what does Eve accomplish?</p>
-      <div class="options">
-        <div class="opt">Gets Bob to unknowingly sign a message M by having him sign a blinded version M' = r^e * M mod N, then divides by r</div>
-        <div class="opt">Recovers Bob's private key by analyzing multiple signatures</div>
-        <div class="opt">Decrypts Bob's messages by exploiting the padding scheme</div>
-        <div class="opt">Creates a fake certificate signed by Bob's key</div>
-      </div>
-      <div class="explanation">In the blinding attack, Eve computes M' = r^e * M mod N (blinded message), tricks Bob into signing it: S' = (M')^d mod N. Then Eve computes S = S'/r = M^d mod N, which is a valid signature on M. Bob never knew he signed M.</div>
-    </div>
-
-    <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">8</span> In PGP email encryption (Buchanan), what is the correct order of operations?</p>
+      <p><span class="qnum">1</span> In PGP email encryption, what is the correct order of operations?</p>
       <div class="options">
         <div class="opt">Encrypt with RSA, then hash, then sign, then ZIP</div>
         <div class="opt">ZIP, encrypt with IDEA, hash with MD5, sign with RSA</div>
@@ -1624,26 +1356,103 @@ User                  AS (Auth Server)      TGS              Service
       <div class="explanation">PGP's pipeline: (1) Hash message with MD5, (2) Sign hash with sender's RSA private key, (3) ZIP compress, (4) Encrypt with IDEA symmetric session key, (5) Encrypt IDEA session key with recipient's RSA public key. Compression happens BEFORE encryption because encrypted data cannot be compressed.</div>
     </div>
 
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">9</span> What problem does the CRL distribution system have, according to Buchanan?</p>
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> What is the key difference between sign-then-encrypt (PGP/SSL) and encrypt-then-sign (IPsec)?</p>
       <div class="options">
-        <div class="opt">CRLs are too small to include all revoked certificates</div>
-        <div class="opt">CRLs can only be distributed via email</div>
-        <div class="opt">Clients often don't check CRLs, CAs can make revoking errors, and CRL distribution points are vulnerable to DoS attacks</div>
-        <div class="opt">CRLs reveal which websites users visit</div>
+        <div class="opt">Sign-then-encrypt is faster because signing plaintext is cheaper</div>
+        <div class="opt">With sign-then-encrypt, you must decrypt before authenticating. With encrypt-then-sign, you can verify signatures before decrypting -- more efficient for automated verification</div>
+        <div class="opt">Encrypt-then-sign provides nonrepudiation but sign-then-encrypt does not</div>
+        <div class="opt">There is no practical difference -- they provide identical security properties</div>
       </div>
-      <div class="explanation">Buchanan identifies three CRL problems: (1) Many clients simply don't check CRLs (lack of checking), (2) CAs can make errors when revoking certificates, and (3) CRL distribution points are targets for Denial of Service attacks. OCSP provides a lighter-weight alternative.</div>
+      <div class="explanation">Sign-then-encrypt (PGP/SSL) means the signature is over plaintext and encryption hides the signatories, but the receiver must decrypt before authenticating -- you cannot quickly discard forged packets. Encrypt-then-sign (IPsec) lets you verify signatures before decrypting, which is efficient for automated, high-throughput verification.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">3</span> Which security service does SSL/TLS NOT provide?</p>
+      <div class="options">
+        <div class="opt">Authentication</div>
+        <div class="opt">Confidentiality</div>
+        <div class="opt">Nonrepudiation</div>
+        <div class="opt">Message integrity</div>
+      </div>
+      <div class="explanation">SSL/TLS provides authentication, confidentiality, and message integrity -- but NOT nonrepudiation. This is a key difference from PGP, which does provide nonrepudiation through digital signatures with the sender's private key.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">4</span> What makes TLS 1.3 a significant improvement over previous versions?</p>
+      <div class="options">
+        <div class="opt">It was rebuilt from scratch -- streamlined, faster, and more secure. It eliminated vulnerabilities like AES-CBC padding oracle attacks found in TLS 1.2</div>
+        <div class="opt">It added support for RSA key exchange, which was missing in TLS 1.2</div>
+        <div class="opt">It introduced the first cipher suite negotiation, which older versions lacked</div>
+        <div class="opt">It only supports 512-bit keys for backward compatibility with older systems</div>
+      </div>
+      <div class="explanation">TLS 1.3 (RFC 8446) was rebuilt from scratch to be streamlined, faster, and more secure. TLS 1.2 was strong but complex, with vulnerabilities like AES-CBC padding oracle attacks. Earlier versions (SSL 2.0/3.0 deprecated for vulnerabilities, TLS 1.0 outdated, TLS 1.1 improved but obsolete) all had significant security issues.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">5</span> How many separate secret keys does SSL/TLS derive, and what are they?</p>
+      <div class="options">
+        <div class="opt">2 keys -- one encryption key and one HMAC key shared by both sides</div>
+        <div class="opt">4 keys -- encryption and HMAC keys for each direction</div>
+        <div class="opt">3 keys -- encryption key, HMAC key, and IV for one direction only</div>
+        <div class="opt">6 keys -- 3 per direction (encryption key, HMAC key, and IV for both client-to-server and server-to-client)</div>
+      </div>
+      <div class="explanation">SSL/TLS derives 6 separate secret keys: 3 for each direction of communication. Each direction gets an encryption key (for bulk data encryption), an HMAC key (for message authentication), and an IV (initialization vector -- think of it as cipher initialization random plaintext).</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">10</span> Why does deriving AES keys from passwords (key = SHA-256(password)) make AES vulnerable?</p>
+      <p><span class="qnum">6</span> What are the four components of an SSL/TLS cipher suite?</p>
       <div class="options">
-        <div class="opt">SHA-256 output is too short for AES-256</div>
-        <div class="opt">Attackers can brute-force common passwords, compute SHA-256 of each, and try as AES keys -- the key space is effectively the password space, not 2^256</div>
-        <div class="opt">SHA-256 collisions allow multiple passwords to produce the same key</div>
-        <div class="opt">SHA-256 is not a cryptographic hash function</div>
+        <div class="opt">AES, SHA-256, ECDHE, and HMAC</div>
+        <div class="opt">Key exchange algorithm (e.g., RSA), encryption algorithm (e.g., DES), digest algorithm (e.g., SHA-1), and compression algorithm (e.g., PKZip)</div>
+        <div class="opt">Public key, private key, session key, and initialization vector</div>
+        <div class="opt">Certificate Authority, server certificate, client certificate, and root certificate</div>
       </div>
-      <div class="explanation">If key = SHA-256(password), the effective key space is the password space (maybe thousands of common passwords), not 2^256. An attacker tries common passwords, hashes each with SHA-256, and uses the result as the AES key. Defense: use a proper KDF like PBKDF2 or Argon2 with salt and high iteration count.</div>
+      <div class="explanation">A cipher suite specifies four components: the key exchange algorithm (e.g., RSA), the bulk encryption algorithm (e.g., DES), the message digest algorithm (e.g., SHA-1), and the compression algorithm (e.g., PKZip). During the handshake, the client lists supported suites and the server selects one.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">7</span> In the SSL/TLS message flow, what is the difference between the HMAC key and the encryption key?</p>
+      <div class="options">
+        <div class="opt">They are the same key used for different purposes</div>
+        <div class="opt">The HMAC key is used during the handshake, the encryption key is used afterward</div>
+        <div class="opt">The HMAC key provides message authentication and integrity verification, while the encryption key provides confidentiality by encrypting the data</div>
+        <div class="opt">The encryption key is longer than the HMAC key</div>
+      </div>
+      <div class="explanation">In SSL/TLS, the HMAC key is used to hash the message for authentication and integrity verification (ensuring data has not been tampered with). The encryption key (e.g., DES key) is used to encrypt the data for confidentiality. Alice compresses, hashes with HMAC key, then encrypts with the encryption key. Bob reverses: decrypt, verify HMAC, decompress.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> What does S/MIME require to encrypt and digitally sign emails?</p>
+      <div class="options">
+        <div class="opt">An X.509 digital certificate from a Certificate Authority (CA)</div>
+        <div class="opt">A PGP key ring with at least 3 trusted keys</div>
+        <div class="opt">A Kerberos ticket from the authentication server</div>
+        <div class="opt">A pre-shared symmetric key exchanged out-of-band</div>
+      </div>
+      <div class="explanation">S/MIME in Outlook requires an X.509 digital certificate from a CA. This certificate enables both encryption and digital signing. Older S/MIME used 512-bit keys (consider PGP for stronger keys). Modern secure email uses AES and RSA.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">9</span> How does email crypto differ from SSL/IPsec in terms of parameter negotiation?</p>
+      <div class="options">
+        <div class="opt">Email uses a more complex multi-round negotiation than SSL</div>
+        <div class="opt">Email crypto requires both parties to be online simultaneously</div>
+        <div class="opt">Email and SSL use identical negotiation protocols</div>
+        <div class="opt">The sender unilaterally chooses crypto parameters -- there is no negotiation. The receiver takes it or leaves it</div>
+      </div>
+      <div class="explanation">Email crypto is fundamentally different: the sender unilaterally chooses the crypto parameters (no back-and-forth negotiation like SSL or IPsec). Messages go to a mail server, not directly to the recipient. The receiver takes it or leaves it. Also, users must explicitly invoke crypto services -- encryption is not automatic!</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">10</span> Why were SSL v2 export-grade ciphersuites a security problem?</p>
+      <div class="options">
+        <div class="opt">They used an algorithm that was later proven to be mathematically broken</div>
+        <div class="opt">They required both parties to use the same static key</div>
+        <div class="opt">They used 40-bit session keys that were deliberately weak due to US export regulations, making connections trivially breakable</div>
+        <div class="opt">They did not support any form of authentication</div>
+      </div>
+      <div class="explanation">SSL v2 export-grade ciphersuites used 40-bit session keys that were deliberately weak due to US government export regulations. This made "secure" connections trivially breakable by anyone with moderate computing power -- a cautionary tale about governments intentionally weakening cryptographic standards.</div>
     </div>
 </div>
 
@@ -1777,21 +1586,21 @@ User                  AS (Auth Server)      TGS              Service
 
   function getFlashcardData() {
     return [
-      { term: "TLS 1.3 Improvements", definition: "1-RTT handshake (0-RTT for resumed sessions). Mandatory PFS (ephemeral DH/ECDH only). Removed RC4, 3DES, SHA-1, static RSA. Only 5 AEAD cipher suites. Encrypted server certificate.", category: "red", label: "Key Idea" },
-      { term: "IPsec Transport vs Tunnel Mode", definition: "Transport: protects payload only, original IP header intact, host-to-host. Tunnel: encapsulates entire packet with new IP header, gateway-to-gateway (VPN). Tunnel mode adds more overhead.", category: "blue", label: "Definition" },
-      { term: "Certificate Types (Buchanan)", definition: "Server authentication, Client authentication, Code signing, Email (S/MIME), Timestamping. Standards: X.509, IKE, PKCS#7 (message syntax), PKCS#10 (CSR format).", category: "blue", label: "Definition" },
-      { term: "Certificate Lifecycle", definition: "Three phases: Initialization (key gen, cert creation, distribution, backup), Issued (retrieval, validation, recovery, update), Cancellation (expiration, revocation, archiving).", category: "blue", label: "Definition" },
-      { term: "CRL Problems (Buchanan)", definition: "Lack of checking by clients, revoking errors by CAs, DoS attacks on distribution points. Two states: Revoked (permanent) vs Hold (temporary, can be reinstated). OCSP is lighter-weight alternative.", category: "orange", label: "Caution" },
-      { term: "PGP Email Pipeline", definition: "Hash with MD5, sign with RSA private key, ZIP compress, encrypt with IDEA session key, encrypt session key with recipient's RSA public key. Compress BEFORE encryption.", category: "blue", label: "Definition" },
-      { term: "Kerberos", definition: "Ticket-based auth. AS (Authentication Server) issues TGT, TGS (Ticket Granting Server) issues service tickets. Passwords never sent over network after initial login.", category: "red", label: "Key Idea" },
-      { term: "Bleichenbacher's Attack", definition: "Exploits PKCS#1 v1.5 padding (0x00 0x02). Server responds differently to valid vs invalid padding = oracle. 30,000-130,000 attempts to recover plaintext. Defense: use OAEP padding.", category: "red", label: "Critical" },
-      { term: "RSA Short Message Attack", definition: "If M^e < N, no modular reduction happens. C = M^e (not mod N). Attacker recovers M = 10^(log(C)/e). Defense: always pad messages (OAEP).", category: "orange", label: "Caution" },
-      { term: "CRT Attack on RSA", definition: "Same message encrypted with same small e but different N values. Collect e ciphertexts, use Chinese Remainder Theorem to find M^e, take e-th root to recover M.", category: "orange", label: "Caution" },
-      { term: "RSA Blinding Attack", definition: "Eve computes M' = r^e * M mod N, tricks Bob into signing S' = (M')^d mod N. Eve computes S'/r = M^d mod N = valid signature on M. Bob never knew he signed M.", category: "red", label: "Critical" },
-      { term: "ECB Copy-and-Paste", definition: "ECB mode: same plaintext block = same ciphertext block (deterministic). Attacker can rearrange/swap cipher blocks. Most dangerous AES mode. Use CBC, CTR, or GCM instead.", category: "red", label: "Critical" },
-      { term: "AES Key from Password", definition: "If key = SHA-256(password), effective key space = password space (not 2^256). Attacker brute-forces common passwords. Defense: use PBKDF2/Argon2 with salt and high iterations.", category: "orange", label: "Caution" },
-      { term: "Non-Random PRNG Attack", definition: "Deterministic or poorly seeded PRNG makes keys predictable. Example: Dual_EC_DRBG (NSA backdoor). Always use cryptographically secure RNG (CSPRNG).", category: "orange", label: "Caution" },
-      { term: "SSH Port Forwarding", definition: "Local (-L): forward local port to remote destination. Remote (-R): forward remote port to local destination. Dynamic (-D): SOCKS proxy through SSH tunnel. All traffic encrypted.", category: "green", label: "Best Practice" }
+      { term: "Five Security Services", definition: "Authentication, Key Agreement/Exchange, Confidentiality, Integrity, Nonrepudiation. Different protocols provide different subsets -- SSL/TLS does NOT provide nonrepudiation.", category: "red", label: "Key Idea" },
+      { term: "Email Crypto is Unilateral", definition: "Sender unilaterally chooses crypto parameters (no negotiation like SSL/IPsec). Messages go to mail server, not directly to recipient. Receiver takes it or leaves it. User must explicitly invoke crypto -- not automatic!", category: "red", label: "Key Idea" },
+      { term: "S/MIME Requirements", definition: "Requires X.509 digital certificate from a CA. Enables encryption and digital signing. Older versions used 512-bit keys. Modern secure email uses AES and RSA.", category: "blue", label: "Definition" },
+      { term: "PGP Email Pipeline", definition: "Hash with MD5, sign with RSA private key, ZIP compress, encrypt with IDEA session key, encrypt session key with recipient's RSA public key. Key insight: combines fast symmetric encryption with secure asymmetric key exchange.", category: "blue", label: "Definition" },
+      { term: "Sign-then-Encrypt vs Encrypt-then-Sign", definition: "Sign-then-encrypt (PGP/SSL): signature over plaintext, hides signatories, but must decrypt before authenticating. Encrypt-then-sign (IPsec): verify signatures before decrypting, efficient for automated verification.", category: "red", label: "Critical" },
+      { term: "SSL/TLS Does NOT Provide Nonrepudiation", definition: "SSL/TLS provides authentication, confidentiality, and message integrity -- but NOT nonrepudiation. This is a key difference from PGP. SSL deprecated 2015; today's 'SSL certificates' actually use TLS.", category: "red", label: "Critical" },
+      { term: "TLS Version History", definition: "1994 Netscape SSL v2, Microsoft PCT competitor, 1995 SSL v3, 1996 IETF TLS WG, 1999 TLS 1.0. TLS 1.3 (RFC 8446) is current -- rebuilt, streamlined, faster, more secure. Fun fact: Microsoft implemented TLS before Netscape.", category: "blue", label: "Definition" },
+      { term: "TLS is the S in HTTPS", definition: "Application agnostic. Workhorse of internet security. Machine-to-machine IoT. Sits between application and transport layers. HTTP 80 -> HTTPS 443, SMTP 25 -> SMTPS 465.", category: "green", label: "Best Practice" },
+      { term: "SSL/TLS 6 Secret Keys", definition: "3 keys per direction (6 total): Encryption key (bulk data), HMAC key (message auth), IV (cipher initialization random plaintext). Client-to-server gets 3, server-to-client gets 3.", category: "red", label: "Critical" },
+      { term: "TLS Handshake", definition: "Client Hello (list cipher suites) -> Server Hello (certificate, select suite) -> Client Key Exchange (pre-master secret encrypted with server public key) -> derive 6 shared secret keys.", category: "blue", label: "Definition" },
+      { term: "Cipher Suite Components", definition: "Four parts: key exchange (RSA), encryption (DES), digest (SHA-1), compression (PKZip). Client lists supported suites, server selects one.", category: "blue", label: "Definition" },
+      { term: "Export-Grade Ciphers", definition: "SSL v2 export-grade ciphersuites used 40-bit session keys, deliberately weak due to US export regulations. Made 'secure' connections trivially breakable.", category: "orange", label: "Caution" },
+      { term: "Confidentiality vs Authentication", definition: "Users must know the difference. Encrypted email should also be signed. Encryption alone does NOT imply integrity. Signed digest ensures integrity AND authentication/nonrepudiation.", category: "orange", label: "Caution" },
+      { term: "Digital Certificates & Trust", definition: "Alice sends certificate, Bob verifies with trusted root CA public key. SSL allows client to authenticate server. Always check if certificate has been revoked.", category: "green", label: "Best Practice" },
+      { term: "Deterring Email Viruses", definition: "Accept only signed emails -- verified signatures before viruses can take control. Encryption does no good unless you turn it on!", category: "orange", label: "Caution" }
     ];
   }
 

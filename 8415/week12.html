@@ -1316,15 +1316,6 @@
   <div class="sub">SEAS 8415 -- Summer 2026 -- Prof. Fossaceca -- GWU</div>
 </div>
 
-<!-- CAUTION BANNER -->
-<div style="background: linear-gradient(135deg, rgba(252,196,25,0.15), rgba(255,169,77,0.15)); border: 2px solid #FCC419; border-radius: 12px; padding: 16px 20px; margin: 20px 20px 0; max-width: 1000px; margin-left: auto; margin-right: auto;">
-  <div style="display:flex; align-items:center; gap:10px; font-size:1.1em; font-weight:700; color:#FCC419; margin-bottom:8px;">
-    &#9888;&#65039; PRELIMINARY - TEXTBOOK + GENERAL CRYPTO KNOWLEDGE
-  </div>
-  <div style="color:#aaa; font-size:0.9em; line-height:1.5;">
-    Based on Buchanan Ch 12 and general crypto knowledge. Will be updated with lecture slides when released.
-  </div>
-</div>
 
 <div class="container">
 
@@ -1339,14 +1330,14 @@
 <div class="tldr">
   <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 12 Key Points</div>
   <ul>
-    <li><strong>Stream vs Block Ciphers</strong> -- Stream ciphers encrypt bit-by-bit using keystream XOR; block ciphers encrypt fixed-size blocks. Stream ciphers are faster for real-time/wireless</li>
-    <li><strong>LFSR</strong> -- Linear Feedback Shift Register: max period 2^n-1, but LINEAR = vulnerable to Berlekamp-Massey known-plaintext attack</li>
-    <li><strong>A5/1 (GSM)</strong> -- Three irregularly-clocked LFSRs (19+22+23=64 bits), broken with rainbow tables and known-plaintext attacks</li>
-    <li><strong>RC4</strong> -- Byte-oriented stream cipher (KSA+PRGA), biases in initial keystream bytes, prohibited in TLS 1.3</li>
-    <li><strong>ChaCha20-Poly1305</strong> -- Modern AEAD stream cipher, 256-bit key, 96-bit nonce, used in TLS 1.3 alongside AES-GCM</li>
-    <li><strong>WEP to WPA3</strong> -- WEP broken (24-bit IV, RC4), WPA (TKIP patch), WPA2 (AES-CCMP), WPA3 (SAE/Dragonfly, 192-bit enterprise)</li>
-    <li><strong>Bluetooth</strong> -- E0 stream cipher, pairing vulnerabilities, BlueBorne (remote code exec), KNOB attack (entropy reduction)</li>
-    <li><strong>5G Security</strong> -- SUPI/SUCI identity protection, 256-bit keys, network slicing isolation, mutual authentication</li>
+    <li><strong>WiFi Security Architecture</strong> -- Open broadcast medium, no physical access needed to intercept. Fundamental trade-off: convenience vs security. Home (single router) vs Enterprise (RADIUS/TACACS+ backend)</li>
+    <li><strong>802.1X &amp; EAP</strong> -- Supplicant authenticates via EAP (7-step process). EAPOL between client and authenticator, EAP over RADIUS to backend server. PEAP = server certs, EAP-TLS = client certs (mutual TLS)</li>
+    <li><strong>RC4 in Wireless</strong> -- Stream cipher chosen for limited CPU devices. Two phases: Key Setup (S-box) and Keystream Generation (XOR with plaintext). Key reuse catastrophe: same key+plaintext XOR reveals data. Solution: unique IVs</li>
+    <li><strong>WEP (Broken)</strong> -- RC4 + 40-bit key + 24-bit IV. IV repeats within hours, FMS weak key attacks, no replay protection, CRC-32 not crypto-secure, single global key. Bit-flipping attack redirects traffic</li>
+    <li><strong>WPA &amp; WPA2</strong> -- WPA: TKIP + 48-bit IV + MIC (no hardware changes). WPA2: AES-CCMP (block cipher). Four-way handshake derives PTK from PMK+nonces+MACs. KRACK exploits handshake implementation (not AES)</li>
+    <li><strong>WPA3</strong> -- SAE/Dragonfly replaces 4-way handshake, forward secrecy, brute-force resistant, PMF required, 192-bit enterprise. Mandatory for Wi-Fi 6 certified devices</li>
+    <li><strong>Wireless Attacks</strong> -- Evil Twin AP (stronger signal intercepts traffic, defeated by VPN), DoS/disassociation flooding, Rogue AP bypasses firewall. 802.1X controls wired and wireless access</li>
+    <li><strong>Cracking WPA2-PSK</strong> -- Capture 4-way handshake (Message 2), offline dictionary attack: derive PMK then PTK then compute MIC to match. NOT a crypto break -- vulnerability is weak passwords</li>
   </ul>
   <div class="tldr-footer">Expand sections below for details -- Quiz at the bottom to test yourself</div>
 </div>
@@ -1421,369 +1412,451 @@
   <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
 </div>
 
-<!-- Section 1: Stream vs Block Ciphers -->
+<!-- Section 1: Wireless Cryptography Fundamentals -->
 <details>
-  <summary>&#128256; 1. Stream Ciphers vs Block Ciphers</summary>
+  <summary>&#128225; 1. Wireless Cryptography Fundamentals</summary>
   <div class="content-section">
-    <div class="red"><strong>KEY CONCEPT:</strong> Stream ciphers encrypt data <em>one bit (or byte) at a time</em> by XORing plaintext with a pseudo-random keystream. Block ciphers encrypt <em>fixed-size blocks</em> (e.g., 128 bits) at a time.</div>
+    <div class="red"><strong>KEY CONCEPT:</strong> Wireless networks use an <em>open communication medium</em> -- a shared broadcast channel where no physical access is required to intercept. Any device in range can eavesdrop. The fundamental trade-off is <em>convenience vs security</em>.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Comparison</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Core Wireless Components</h3>
+    <div class="blue">
+      <strong>Definitions:</strong>
+      <ul style="margin-top: 8px;">
+        <li><strong>Station (STA/IBSS)</strong> -- Any wireless device: PDA, laptop, phone</li>
+        <li><strong>Access Point (AP)</strong> -- Transmitter/receiver providing basic services within ~300ft/100m range</li>
+        <li><strong>Basic WLAN</strong> -- AP + STA = the simplest wireless LAN configuration</li>
+        <li><strong>Supplicant</strong> -- The client device that must authenticate before gaining network access</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Home vs Enterprise WiFi</h3>
     <table>
       <tr>
         <th>Feature</th>
-        <th>Stream Cipher</th>
-        <th>Block Cipher</th>
+        <th>Home</th>
+        <th>Enterprise</th>
       </tr>
       <tr>
-        <td><strong>Unit of Encryption</strong></td>
-        <td>Bit or byte at a time</td>
-        <td>Fixed block (64, 128 bits)</td>
+        <td><strong>Architecture</strong></td>
+        <td>Single wireless router handles AP + security + auth</td>
+        <td>Lightweight APs as relays + centralized backend</td>
       </tr>
       <tr>
-        <td><strong>Operation</strong></td>
-        <td>XOR with keystream</td>
-        <td>Substitution-permutation network or Feistel</td>
+        <td><strong>Auth Server</strong></td>
+        <td>None (passphrase only)</td>
+        <td>RADIUS / TACACS+ backend servers</td>
       </tr>
       <tr>
-        <td><strong>Speed</strong></td>
-        <td>Very fast, low latency</td>
-        <td>Slower, needs full block</td>
+        <td><strong>Scalability</strong></td>
+        <td>Limited (single household)</td>
+        <td>Scalable credential management</td>
       </tr>
       <tr>
-        <td><strong>Error Propagation</strong></td>
-        <td>Single bit (no propagation)</td>
-        <td>Entire block affected</td>
-      </tr>
-      <tr>
-        <td><strong>Use Case</strong></td>
-        <td>Wireless, real-time communication</td>
-        <td>File encryption, TLS bulk data</td>
-      </tr>
-      <tr>
-        <td><strong>Key Reuse</strong></td>
-        <td>NEVER reuse keystream -- catastrophic</td>
-        <td>Key reuse with different IVs is safer</td>
+        <td><strong>Policy</strong></td>
+        <td>Per-device configuration</td>
+        <td>Consistent, centralized policies</td>
       </tr>
     </table>
 
-    <div class="key">
-      <strong>Stream Cipher Core Formula:</strong> C<sub>i</sub> = P<sub>i</sub> XOR K<sub>i</sub> -- Each plaintext bit is XORed with the corresponding keystream bit. Decryption is the same operation: P<sub>i</sub> = C<sub>i</sub> XOR K<sub>i</sub>.
-    </div>
-
     <div class="warn">
-      <strong>Critical Warning -- Keystream Reuse:</strong> If the same keystream encrypts two messages, an attacker can XOR the ciphertexts to get P1 XOR P2, eliminating the key entirely. This is why <em>nonce/IV management</em> is essential.
+      <strong>Security Implication:</strong> Because wireless is a shared broadcast channel, anyone within range (~100m) can passively capture all traffic. This makes encryption and authentication absolutely essential -- unlike wired networks where physical access to the cable is required.
     </div>
-
-    <div class="ascii-diagram-title">Stream Cipher Operation</div>
-    <div class="ascii-diagram">Key + Nonce ---> Keystream Generator ---> K1, K2, K3, K4 ...
-                                                    |
-Plaintext:  P1, P2, P3, P4 ...                     |
-                  XOR  <----------------------------+
-Ciphertext: C1, C2, C3, C4 ...</div>
   </div>
 </details>
 
-<!-- Section 2: LFSR -->
+<!-- Section 2: 802.1X & EAP Authentication -->
 <details>
-  <summary>&#9881;&#65039; 2. LFSR -- Linear Feedback Shift Register</summary>
+  <summary>&#128274; 2. Wireless Authentication -- 802.1X &amp; EAP</summary>
   <div class="content-section">
-    <div class="blue">
-      <strong>Definition:</strong> An LFSR is a shift register whose input bit is a linear function (XOR) of its previous state. With an n-bit register and a <em>primitive polynomial</em>, the maximum period is <em>2^n - 1</em>.
+    <div class="key">
+      <strong>802.1X Framework:</strong> Supports multiple authentication methods, integrates encryption keys + authentication + centralized policy enforcement. The supplicant (client) authenticates through an authenticator (AP) to a backend RADIUS server.
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">How LFSRs Work</h3>
-    <ul>
-      <li><strong>Shift register</strong> -- n flip-flops holding bits, shifting right each clock cycle</li>
-      <li><strong>Feedback function</strong> -- XOR of selected "tap" positions feeds back to the input</li>
-      <li><strong>Feedback polynomial</strong> -- Determines which taps are used (e.g., x^4 + x + 1)</li>
-      <li><strong>Primitive polynomial</strong> -- Produces maximum-length sequence of period 2^n - 1</li>
-      <li><strong>Output</strong> -- The bit shifted out each cycle becomes the keystream bit</li>
-    </ul>
-
-    <div class="ascii-diagram-title">4-bit LFSR Example (x^4 + x + 1)</div>
-    <div class="ascii-diagram">  +----[XOR]<-----------+
-  |                      |
-  v                      |
-[b4] --> [b3] --> [b2] --> [b1] --> output (keystream bit)
-  ^
-  |    feedback taps at positions 4 and 1
-  +--- new bit fed back into register</div>
-
-    <div class="red">
-      <strong>FATAL FLAW -- Linearity:</strong> Because LFSRs are <em>linear</em>, the Berlekamp-Massey algorithm can reconstruct the entire LFSR (polynomial + state) from just <em>2n</em> bits of known keystream. This is a devastating known-plaintext attack.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Fixing LFSR Vulnerabilities</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">EAP -- Extensible Authentication Protocol</h3>
     <div class="box">
-      <h4>Three Approaches to Nonlinearity</h4>
+      <h4>7-Step EAP Process</h4>
       <ul>
-        <li><strong>Nonlinear Combining</strong> -- Combine outputs of multiple LFSRs through a nonlinear Boolean function (e.g., majority function)</li>
-        <li><strong>Clock-Controlled Generators</strong> -- Use one LFSR to control the clocking of another (irregular clocking breaks linearity)</li>
-        <li><strong>Nonlinear Filters</strong> -- Apply a nonlinear function to multiple internal bits of a single LFSR to produce output</li>
+        <li><strong>Step 1:</strong> EAP Start -- supplicant initiates</li>
+        <li><strong>Step 2:</strong> EAP Request -- authenticator proposes method (e.g., smart card)</li>
+        <li><strong>Step 3:</strong> EAP Response -- supplicant sends negative acknowledgment (doesn't support that method)</li>
+        <li><strong>Step 4:</strong> EAP Request -- authenticator proposes alternative (e.g., MS-CHAP)</li>
+        <li><strong>Step 5:</strong> EAP Response -- supplicant sends correct credentials</li>
+        <li><strong>Step 6:</strong> EAP Success -- authentication approved</li>
+        <li><strong>Step 7:</strong> Auth Success Notification -- access granted</li>
       </ul>
     </div>
+
+    <div class="ascii-diagram-title">EAP Architecture</div>
+    <div class="ascii-diagram">Supplicant          Authenticator         RADIUS Server
+(Client)               (AP)               (Backend)
+    |                    |                     |
+    |--- EAPOL --------->|                     |
+    |  (EAP over LAN)   |--- EAP over RADIUS ->|
+    |  (Ethernet frame) |                     |
+    |                    |<-- RADIUS Response --|
+    |<-- EAPOL ----------|                     |</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">EAP Transport Protocols</h3>
+    <div class="blue">
+      <strong>EAPOL (EAP over LAN):</strong> EAP encapsulated in Ethernet frames, used between the supplicant and the authenticator (AP).
+    </div>
+    <div class="blue">
+      <strong>EAP over RADIUS:</strong> Used between the authenticator and the RADIUS server. <em>RADIUS limitation:</em> no automatic key management.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">RADIUS AAA</h3>
+    <ul>
+      <li><strong>Authentication</strong> -- Uses EAP to verify identity</li>
+      <li><strong>Authorization</strong> -- RADIUS functionality to determine access level</li>
+      <li><strong>Auditing</strong> -- RADIUS functionality to log access events</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">EAP Variants</h3>
+    <table>
+      <tr>
+        <th>Variant</th>
+        <th>Certificate Source</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td><strong>PEAP</strong></td>
+        <td>Server-supplied certificates</td>
+        <td>Outer auth via SSL/TLS tunnel, inner auth via EAP</td>
+      </tr>
+      <tr>
+        <td><strong>EAP-TLS</strong></td>
+        <td>Client-supplied certificates</td>
+        <td>Mutual TLS authentication -- strongest EAP method</td>
+      </tr>
+    </table>
 
     <div class="mem">
       <small>Memory Aid</small>
-      <strong>LFSR = "Linear = Learnable" -- 2n bits is all an attacker needs</strong>
+      <strong>PEAP = "P for Provider (server) certs" -- EAP-TLS = "T for Two-way (mutual) certs"</strong>
     </div>
   </div>
 </details>
 
-<!-- Section 3: A5/1 (GSM) -->
+<!-- Section 3: RC4 in Wireless -->
 <details>
-  <summary>&#128241; 3. A5/1 -- GSM Stream Cipher</summary>
+  <summary>&#9881;&#65039; 3. RC4 in Wireless Networks</summary>
   <div class="content-section">
-    <div class="red"><strong>BROKEN CIPHER:</strong> A5/1 was the encryption algorithm for GSM mobile phone communications. Despite being a military secret initially, it was reverse-engineered and is now <em>completely broken</em>.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">A5/1 Architecture</h3>
-    <ul>
-      <li><strong>Three LFSRs</strong> -- R1 (19 bits), R2 (22 bits), R3 (23 bits) = 64 bits total state</li>
-      <li><strong>Irregular clocking</strong> -- Each LFSR has a "clocking bit." At each step, the majority value of the 3 clocking bits is computed. Only LFSRs whose clocking bit agrees with the majority are actually clocked</li>
-      <li><strong>Output</strong> -- XOR of the three LFSR output bits</li>
-      <li><strong>Key</strong> -- 64-bit session key (but effectively 54 bits due to forced zero bits)</li>
-    </ul>
-
-    <div class="ascii-diagram-title">A5/1 Majority Clocking</div>
-    <div class="ascii-diagram">R1 (19 bits) --clk bit 8--+
-                           |
-R2 (22 bits) --clk bit 10-+--> MAJORITY --> clock only those
-                           |                 that match majority
-R3 (23 bits) --clk bit 10-+
-
-Output = R1[18] XOR R2[21] XOR R3[22]</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">How A5/1 Was Broken</h3>
-    <div class="box">
-      <h4>Attack Methods</h4>
-      <ul>
-        <li><strong>Rainbow tables</strong> -- Precomputed tables allow real-time decryption of GSM calls</li>
-        <li><strong>Known-plaintext</strong> -- GSM frames have predictable headers, providing known plaintext</li>
-        <li><strong>Time-memory tradeoff</strong> -- Practical attack in seconds with precomputation</li>
-        <li><strong>Small state space</strong> -- 64 bits total is too small by modern standards</li>
-      </ul>
-    </div>
-
-    <div class="warn">
-      <strong>A5/2 was even weaker</strong> -- deliberately weakened "export" version for non-Western countries. Broken in milliseconds. Both are deprecated; 3G/4G/5G use AES-based encryption.
-    </div>
-  </div>
-</details>
-
-<!-- Section 4: RC4 -->
-<details>
-  <summary>&#128274; 4. RC4 -- Rivest Cipher 4</summary>
-  <div class="content-section">
-    <div class="blue">
-      <strong>Definition:</strong> RC4 is a <em>byte-oriented</em> stream cipher designed by Ron Rivest in 1987. It was the most widely used stream cipher (SSL/TLS, WEP, WPA-TKIP) but is now <em>prohibited in TLS 1.3</em> due to known biases.
+    <div class="key">
+      <strong>Why RC4?</strong> Early wireless devices had limited CPU and memory. Stream ciphers like RC4 are efficient -- they encrypt byte-by-byte without needing to buffer entire blocks.
     </div>
 
     <h3 style="margin-top: 20px; color: #58a6ff;">RC4 Two-Phase Design</h3>
     <div class="box">
-      <h4>Phase 1: KSA (Key Scheduling Algorithm)</h4>
+      <h4>Phase 1: Key Setup</h4>
       <ul>
-        <li>Initialize permutation array S[0..255] = {0, 1, 2, ..., 255}</li>
-        <li>Scramble S using the secret key (40-2048 bits)</li>
+        <li>Takes an n-byte key and creates a 256-byte S-box</li>
+        <li>Initializes S-box through a series of swaps using modulo operations</li>
         <li>Result: a key-dependent permutation of all 256 byte values</li>
       </ul>
     </div>
 
     <div class="box">
-      <h4>Phase 2: PRGA (Pseudo-Random Generation Algorithm)</h4>
+      <h4>Phase 2: Keystream Generation</h4>
       <ul>
-        <li>For each output byte: update indices i, j using S</li>
-        <li>Swap S[i] and S[j]</li>
-        <li>Output S[(S[i] + S[j]) mod 256] as the keystream byte</li>
-        <li>XOR keystream byte with plaintext byte to encrypt</li>
+        <li>Uses the S-box plus internal counters to generate a pseudo-infinite keystream</li>
+        <li>Keystream is XORed with plaintext to produce ciphertext</li>
+        <li>Decryption: XOR ciphertext with the same keystream to recover plaintext</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">RC4 Vulnerabilities</h3>
+    <div class="ascii-diagram-title">RC4 Encryption Flow</div>
+    <div class="ascii-diagram">Secret Key (n bytes)
+       |
+       v
+  [Key Setup] --> 256-byte S-box
+                      |
+                      v
+              [Keystream Generator]
+                      |
+                      v
+  Plaintext --> XOR with Keystream --> Ciphertext</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">The Key Reuse Problem</h3>
     <div class="red">
-      <strong>Known Biases:</strong>
-      <ul style="margin-top: 8px;">
-        <li><strong>Second-byte bias</strong> -- P(second output byte = 0) = 2/256 instead of 1/256</li>
-        <li><strong>Initial keystream biases</strong> -- First ~256 bytes have detectable statistical biases</li>
-        <li><strong>Fluhrer-Mantin-Shamir (FMS) attack</strong> -- Exploits weak IVs in WEP to recover the key</li>
-        <li><strong>Royal Holloway attack</strong> -- Statistical biases allow plaintext recovery in TLS with ~2^30 ciphertexts</li>
-      </ul>
+      <strong>Critical Weakness:</strong> If the same key encrypts the same plaintext twice, XORing the two ciphertexts cancels the keystream and reveals the data. <em>Solution:</em> use a unique IV (nonce) for every packet so the effective key is always different.
     </div>
 
-    <div class="green">
-      <strong>Mitigation (historical):</strong> Drop the first 256 (or 3072) bytes of keystream output -- known as "RC4-drop[n]." But this is insufficient; RC4 should not be used in new systems.
-    </div>
-
-    <div class="prof">
-      <strong>Exam Note:</strong> RC4 is prohibited in TLS 1.3 (RFC 7465). Know the KSA/PRGA two-phase design and why initial byte biases make it insecure.
-    </div>
-  </div>
-</details>
-
-<!-- Section 5: eSTREAM Competition -->
-<details>
-  <summary>&#127942; 5. eSTREAM Competition</summary>
-  <div class="content-section">
-    <div class="key">
-      <strong>eSTREAM (2004-2008):</strong> European competition to identify new stream ciphers, organized by the ECRYPT network. Two profiles: software-optimized and hardware-optimized.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">eSTREAM Winners</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">IV Solutions</h3>
     <table>
       <tr>
-        <th>Profile</th>
-        <th>Cipher</th>
-        <th>Key Features</th>
+        <th>Protocol</th>
+        <th>IV Size</th>
+        <th>Key Management</th>
       </tr>
       <tr>
-        <td rowspan="4"><strong>Software</strong></td>
-        <td><em>Rabbit</em></td>
-        <td>128-bit key, very fast on 32-bit CPUs</td>
+        <td><strong>WEP</strong></td>
+        <td>24-bit IV</td>
+        <td style="color: var(--wrong)">Rollover vulnerability -- repeats within hours</td>
       </tr>
       <tr>
-        <td><em>HC-128</em></td>
-        <td>128-bit key, large internal state (4 KB), strong security margin</td>
-      </tr>
-      <tr>
-        <td><em>Salsa20</em></td>
-        <td>256-bit key, by Daniel Bernstein. Basis for ChaCha20</td>
-      </tr>
-      <tr>
-        <td><em>SOSEMANUK</em></td>
-        <td>Derived from Serpent block cipher + SNOW stream cipher</td>
-      </tr>
-      <tr>
-        <td rowspan="3"><strong>Hardware</strong></td>
-        <td><em>Grain</em></td>
-        <td>80-bit key, LFSR + nonlinear FSR combination</td>
-      </tr>
-      <tr>
-        <td><em>MICKEY</em></td>
-        <td>80-bit key, mutual irregular clocking of two registers</td>
-      </tr>
-      <tr>
-        <td><em>Trivium</em></td>
-        <td>80-bit key, elegant 3-register design, very compact in hardware</td>
+        <td><strong>TKIP (WPA)</strong></td>
+        <td>48-bit IV</td>
+        <td style="color: var(--correct)">Session key + periodic key updates</td>
       </tr>
     </table>
 
     <div class="mem">
-      <small>Memory Aid -- Software Winners</small>
-      <strong>"Rabbits Hop Smoothly on Salsa" -- Rabbit, HC-128, SOSEMANUK, Salsa20</strong>
+      <small>Memory Aid</small>
+      <strong>RC4 Key Reuse: "Same Key + Same Plaintext = XOR Reveals Everything"</strong>
     </div>
   </div>
 </details>
 
-<!-- Section 6: ChaCha20-Poly1305 -->
+<!-- Section 4: WEP -->
 <details>
-  <summary>&#128737;&#65039; 6. ChaCha20-Poly1305 -- Modern AEAD</summary>
+  <summary>&#128683; 4. WEP -- Wired Equivalent Privacy (BROKEN)</summary>
   <div class="content-section">
-    <div class="green"><strong>MODERN STANDARD:</strong> ChaCha20-Poly1305 is an <em>Authenticated Encryption with Associated Data (AEAD)</em> construction used in TLS 1.3, WireGuard, and many modern protocols. It pairs the ChaCha20 stream cipher with the Poly1305 MAC.</div>
+    <div class="red"><strong>WEP IS CATASTROPHICALLY BROKEN.</strong> First security protocol for IEEE 802.11b. Uses RC4 stream cipher with a 40-bit key and 24-bit IV. Crackable within 5 hours on a busy network.</div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">ChaCha20 Stream Cipher</h3>
-    <ul>
-      <li><strong>Designer</strong> -- Daniel Bernstein (variant of his Salsa20 from eSTREAM)</li>
-      <li><strong>Key size</strong> -- 256 bits</li>
-      <li><strong>Nonce</strong> -- 96 bits (must never repeat with same key)</li>
-      <li><strong>Block counter</strong> -- 32 bits (allows random access to keystream)</li>
-      <li><strong>State</strong> -- 512-bit state matrix (4x4 of 32-bit words)</li>
-      <li><strong>Operations</strong> -- Only ARX: Addition, Rotation, XOR (no S-boxes, no table lookups)</li>
-      <li><strong>Rounds</strong> -- 20 rounds (10 column rounds + 10 diagonal rounds)</li>
-    </ul>
-
-    <div class="box">
-      <h4>Why ChaCha20 over AES?</h4>
-      <ul>
-        <li><strong>No timing side channels</strong> -- ARX operations run in constant time (no cache-timing attacks)</li>
-        <li><strong>Fast in software</strong> -- Excellent performance without hardware AES-NI instructions</li>
-        <li><strong>Mobile devices</strong> -- Better performance on ARM processors without AES hardware</li>
-        <li><strong>Simpler implementation</strong> -- Less prone to implementation errors</li>
-      </ul>
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Poly1305 MAC</h3>
-    <ul>
-      <li><strong>One-time authenticator</strong> -- Produces a 128-bit authentication tag</li>
-      <li><strong>Mathematically proven</strong> -- Based on polynomial evaluation modulo a prime (2^130 - 5)</li>
-      <li><strong>Must use a unique key per message</strong> -- ChaCha20 derives a fresh Poly1305 key for each message</li>
-    </ul>
-
-    <div class="red">
-      <strong>TLS 1.3 AEAD Suites:</strong> Only two AEAD algorithms: <em>AES-GCM</em> and <em>ChaCha20-Poly1305</em>. All non-AEAD ciphers (including RC4, CBC mode) are removed.
-    </div>
-  </div>
-</details>
-
-<!-- Section 7: Wireless Security Evolution -->
-<details>
-  <summary>&#128225; 7. Wireless Security -- WEP to WPA3</summary>
-  <div class="content-section">
-    <div class="red"><strong>WEP IS CATASTROPHICALLY BROKEN.</strong> Understanding <em>why</em> it failed teaches fundamental lessons about cryptographic system design.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">WEP -- Wired Equivalent Privacy (BROKEN)</h3>
-    <div class="box">
-      <h4>WEP Design Flaws</h4>
-      <ul>
-        <li><strong>24-bit IV</strong> -- Only 16.7 million possible IVs. On a busy network, IVs repeat in hours</li>
-        <li><strong>IV sent in plaintext</strong> -- Attacker can see the IV and correlate with known plaintext</li>
-        <li><strong>RC4 weak keys</strong> -- Certain IV values produce weak RC4 key schedules (FMS attack)</li>
-        <li><strong>CRC-32 integrity</strong> -- CRC is not cryptographically secure; attacker can modify ciphertext and fix the CRC without knowing the key</li>
-        <li><strong>Static shared key</strong> -- Same key for all users, rarely changed</li>
-        <li><strong>No mutual authentication</strong> -- Only client authenticates to AP, not vice versa</li>
-      </ul>
-    </div>
-
+    <h3 style="margin-top: 20px; color: #58a6ff;">How WEP Works</h3>
     <div class="flow">
-      <span class="flow-step">WEP Key (40/104 bit)</span>
-      <span class="flow-arrow">+</span>
-      <span class="flow-step">24-bit IV</span>
+      <span class="flow-step">IV + Key</span>
       <span class="flow-arrow">--></span>
-      <span class="flow-step">RC4 Keystream</span>
+      <span class="flow-step">RC4</span>
+      <span class="flow-arrow">--></span>
+      <span class="flow-step">Pseudo-infinite Keystream</span>
       <span class="flow-arrow">XOR</span>
-      <span class="flow-step">Plaintext + CRC-32</span>
+      <span class="flow-step">Plaintext</span>
+    </div>
+    <p style="text-align: center; color: #aaa; margin-top: 8px;">IV is incremented per packet. Simple parity-based checksum (CRC-32) for integrity -- NOT cryptographically secure.</p>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WEP Weaknesses</h3>
+    <div class="box">
+      <h4>Complete List of Failures</h4>
+      <ul>
+        <li><strong>Small 24-bit IV</strong> -- Only 16.7M values, repeats within hours on busy networks</li>
+        <li><strong>FMS weak key attacks</strong> -- Certain IVs produce weak RC4 key schedules that leak key bytes</li>
+        <li><strong>No replay protection</strong> -- Attacker can re-send captured packets</li>
+        <li><strong>No tampering detection</strong> -- CRC-32 is linear, not cryptographically secure</li>
+        <li><strong>Single global key</strong> -- Compromise of one device = entire network compromised</li>
+        <li><strong>Keys can't update dynamically</strong> -- Must be manually changed on every device</li>
+      </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">WPA -- Wi-Fi Protected Access</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">Bit-Flipping Attack</h3>
+    <div class="red">
+      <strong>Why it works:</strong> RC4 is a stream cipher (XOR-based) and CRC-32 is a linear checksum. An attacker can flip specific bits in the IP header (e.g., change the destination address) to redirect traffic. The CRC-32 can be recalculated without knowing the key because CRC is linear.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Cracking WEP</h3>
+    <div class="prof">
+      <strong>Attack Process:</strong> When IVs repeat, XOR two ciphertexts together -- the keystream cancels out, leaving the XOR of two plaintexts. Frequency analysis on the XOR of plaintexts recovers the messages and ultimately the key. A busy network produces enough IV collisions within ~5 hours.
+    </div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"WEP = Woefully Easy to Penetrate" -- 24-bit IV, CRC-32, static key, no replay protection</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: WPA & WPA2 -->
+<details>
+  <summary>&#128737;&#65039; 5. WPA &amp; WPA2</summary>
+  <div class="content-section">
     <div class="key">
-      <strong>WPA (2003):</strong> Temporary fix using <em>TKIP (Temporal Key Integrity Protocol)</em> -- designed to run on existing WEP hardware with firmware updates.
-      <ul style="margin-top: 8px;">
-        <li><strong>Per-packet keys</strong> -- Mixes IV + base key + MAC address to create unique per-packet keys</li>
-        <li><strong>48-bit IV</strong> -- Extended from 24 to 48 bits (no more IV exhaustion)</li>
-        <li><strong>MIC (Michael)</strong> -- Replaced CRC-32 with a cryptographic message integrity check</li>
-        <li><strong>Still uses RC4</strong> -- TKIP is a wrapper around RC4, so inherits some weaknesses</li>
+      <strong>WPA</strong> addressed WEP's failures without requiring major hardware changes. Two modes: <em>WPA-PSK</em> (Pre-Shared Key, home) and <em>WPA Enterprise</em> (802.1X + EAP + RADIUS).
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA-PSK (Home Mode)</h3>
+    <ul>
+      <li><strong>No auth server required</strong> -- key derived from alphanumeric passphrase (up to 64 ASCII chars)</li>
+      <li><strong>Mutual authentication</strong> -- both sides prove knowledge of the key</li>
+      <li><strong>Key never transmitted over the network</strong> -- derived independently on both sides</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA Enterprise</h3>
+    <div class="box">
+      <h4>Key Improvements over WEP</h4>
+      <ul>
+        <li><strong>TKIP encryption</strong> -- Uses hashed IV + session key (still RC4 underneath but much safer)</li>
+        <li><strong>48-bit IV</strong> -- Eliminates the IV exhaustion problem</li>
+        <li><strong>Message Integrity Check (MIC)</strong> -- Prevents bit-flipping attacks (unlike CRC-32)</li>
+        <li><strong>Session keys</strong> -- Securely distributed by RADIUS server, unique per session</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">WPA2 -- AES-CCMP</h3>
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA2 (IEEE 802.11i-2004)</h3>
     <div class="green">
-      <strong>WPA2 (2004, mandatory 2006):</strong> Full redesign using <em>AES-CCMP</em> (Counter mode with CBC-MAC Protocol).
-      <ul style="margin-top: 8px;">
-        <li><strong>AES-128</strong> in counter mode for confidentiality</li>
-        <li><strong>CBC-MAC</strong> for integrity and authentication</li>
-        <li><strong>48-bit packet number</strong> -- No IV reuse issues</li>
-        <li><strong>4-way handshake</strong> -- Derives per-session pairwise transient key (PTK)</li>
-        <li><strong>Vulnerability</strong> -- KRACK attack (2017): forces nonce reuse in the 4-way handshake</li>
+      <strong>Major Change:</strong> Replaced TKIP/RC4 with <em>AES-CCMP</em> -- a block cipher mode. Two modes: Personal (PSK) and Enterprise.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Four-Way Handshake</h3>
+    <div class="box">
+      <h4>Purpose and Steps</h4>
+      <ul>
+        <li><strong>Goal:</strong> Mutual authentication without revealing the PMK (Pairwise Master Key)</li>
+        <li><strong>Nonce exchange:</strong> AP sends ANonce, client sends SNonce</li>
+        <li><strong>PTK derivation:</strong> PTK = f(PMK + ANonce + SNonce + MAC addresses)</li>
+        <li><strong>MIC validation:</strong> Both sides compute MIC to verify integrity</li>
+        <li><strong>GTK distribution:</strong> Group Temporal Key distributed for multicast/broadcast traffic</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">WPA3 -- SAE/Dragonfly</h3>
+    <div class="ascii-diagram-title">Four-Way Handshake</div>
+    <div class="ascii-diagram">AP (Authenticator)              Client (Supplicant)
+    |                                  |
+    |--- Msg 1: ANonce --------------->|
+    |                                  | (derives PTK)
+    |<-- Msg 2: SNonce + MIC ----------|
+    | (derives PTK)                    |
+    |--- Msg 3: GTK + MIC ----------->|
+    |                                  |
+    |<-- Msg 4: ACK + MIC ------------|
+    |                                  |
+    |====== Encrypted traffic =========|</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Cracking WPA2-PSK</h3>
+    <div class="red">
+      <strong>Attack method:</strong> Target the 4-way handshake (specifically Message 2). Perform offline dictionary attack: derive PMK from each candidate password, then compute PTK, then compute MIC, then compare to captured MIC.
+    </div>
     <div class="green">
-      <strong>WPA3 (2018):</strong> Major security upgrade.
+      <strong>Key insight:</strong> WPA2 is NOT broken cryptographically. The vulnerability is <em>weak PSK passwords</em>. Strong passphrases make this attack computationally infeasible.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">KRACK Attack</h3>
+    <div class="red">
+      <strong>KRACK (Key Reinstallation Attack):</strong>
       <ul style="margin-top: 8px;">
-        <li><strong>SAE (Simultaneous Authentication of Equals)</strong> -- Replaces PSK with Dragonfly key exchange (password-authenticated key agreement)</li>
-        <li><strong>Forward secrecy</strong> -- Compromising the password doesn't decrypt past traffic</li>
-        <li><strong>Protected Management Frames (PMF)</strong> -- Mandatory, prevents deauth attacks</li>
-        <li><strong>192-bit enterprise mode</strong> -- CNSA suite with AES-256-GCM, SHA-384, ECDH P-384</li>
-        <li><strong>OWE (Opportunistic Wireless Encryption)</strong> -- Encrypts open networks without passwords</li>
+        <li>Exploits a 4-way handshake <em>implementation flaw</em> (not AES itself)</li>
+        <li>Replays handshake messages to force key reinstallation</li>
+        <li>Causes reuse of nonces/encryption keys</li>
+        <li>Breaks confidentiality and integrity</li>
+        <li>Effective against <em>clients</em>, not APs</li>
+        <li>Affects both PSK and Enterprise modes</li>
+        <li><strong>Mitigation:</strong> Patch clients and APs, upgrade to WPA3</li>
       </ul>
     </div>
 
-    <h3 style="margin-top: 20px; color: #58a6ff;">Evolution Summary</h3>
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>KRACK = "Key Reinstallation" -- targets the handshake implementation, NOT the AES cipher</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: WPA3 -->
+<details>
+  <summary>&#128170; 6. WPA3 -- Next Generation WiFi Security</summary>
+  <div class="content-section">
+    <div class="green"><strong>WPA3</strong> provides four major improvements: brute-force protection (even with weak passwords), public network privacy (individualized encryption), IoT security, and stronger encryption (192-bit enterprise mode).</div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">SAE -- Simultaneous Authentication of Equals (Dragonfly)</h3>
+    <div class="box">
+      <h4>Key Properties</h4>
+      <ul>
+        <li><strong>Replaces the vulnerable 4-way handshake</strong> as the initial authentication mechanism</li>
+        <li><strong>Resistant to offline dictionary and brute-force attacks</strong></li>
+        <li><strong>Limits to a single password guess per interaction</strong> -- attacker must be online for each attempt</li>
+        <li><strong>Forward secrecy</strong> -- protects past traffic even if the password is compromised later</li>
+        <li><strong>Peer-to-peer connection</strong> -- prevents man-in-the-middle attacks</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">WPA3 Security Features</h3>
+    <ul>
+      <li><strong>Protected Management Frames (PMF)</strong> -- Required, prevents deauthentication attacks</li>
+      <li><strong>128-bit AES</strong> -- Personal mode encryption</li>
+      <li><strong>192-bit AES</strong> -- Enterprise mode for government/financial networks</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Adoption &amp; Challenges</h3>
+    <table>
+      <tr>
+        <th>Aspect</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td><strong>Mandate</strong></td>
+        <td>Mandatory for Wi-Fi CERTIFIED 6 devices (July 2020)</td>
+      </tr>
+      <tr>
+        <td><strong>OS Support</strong></td>
+        <td>Integrated into all modern operating systems</td>
+      </tr>
+      <tr>
+        <td><strong>6 GHz Band</strong></td>
+        <td>WPA3 required for 6 GHz band operation</td>
+      </tr>
+      <tr>
+        <td><strong>Legacy IoT</strong></td>
+        <td style="color: var(--wrong)">Pre-2018 devices struggle with transition mode</td>
+      </tr>
+      <tr>
+        <td><strong>Older Routers</strong></td>
+        <td style="color: var(--wrong)">Can't upgrade due to chipset limitations</td>
+      </tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>WPA3 SAE = "Same Authentication for Everyone" -- no server needed, brute-force resistant, forward secrecy built in</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 7: Wireless Attacks -->
+<details>
+  <summary>&#128520; 7. Wireless Attacks</summary>
+  <div class="content-section">
+    <h3 style="margin-top: 20px; color: #58a6ff;">Evil Twin AP Attack</h3>
+    <div class="red">
+      <strong>4-Step Attack:</strong>
+      <ul style="margin-top: 8px;">
+        <li><strong>Step 1:</strong> Attacker sets up a fake AP with a stronger signal outside the corporate site</li>
+        <li><strong>Step 2:</strong> Fake AP uses the same SSID as the legitimate network</li>
+        <li><strong>Step 3:</strong> Victim's device associates with the evil twin (stronger signal wins)</li>
+        <li><strong>Step 4:</strong> Attacker intercepts all communication (MITM position)</li>
+      </ul>
+    </div>
+
+    <div class="green">
+      <strong>Defense -- VPN:</strong> An end-to-end encrypted VPN tunnel with a pre-shared secret protects against Evil Twin attacks. Even if the attacker intercepts traffic, they cannot decrypt the VPN tunnel.
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">DoS -- Disassociation &amp; Jamming</h3>
+    <div class="box">
+      <h4>Three DoS Methods</h4>
+      <ul>
+        <li><strong>Frequency flooding</strong> -- Overwhelm the entire wireless frequency band</li>
+        <li><strong>AP packet flooding</strong> -- Flood the access point with packets to exhaust resources</li>
+        <li><strong>Disassociation attack</strong> -- Send forged "disassociate" frames to all wireless clients, kicking them off the network</li>
+      </ul>
+    </div>
+
+    <h3 style="margin-top: 20px; color: #58a6ff;">Rogue AP</h3>
+    <div class="warn">
+      <strong>Rogue AP:</strong> An unauthorized access point connected directly to the corporate network. Unlike an Evil Twin (which is external), a Rogue AP <em>bypasses the firewall entirely</em> because it is plugged into the internal network.
+    </div>
+
+    <div class="green">
+      <strong>802.1X Access Control:</strong> 802.1X can control both wired and wireless access. In 802.1X mode, a device must authenticate before the switch port or wireless connection grants network access, mitigating rogue AP and unauthorized device risks.
+    </div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>Evil Twin = outside attacker (stronger signal) vs Rogue AP = inside threat (bypasses firewall)</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 8: Protocol Evolution Summary -->
+<details>
+  <summary>&#128202; 8. WiFi Security Evolution Summary</summary>
+  <div class="content-section">
+    <h3 style="margin-top: 20px; color: #58a6ff;">Complete Evolution</h3>
     <table>
       <tr>
         <th>Protocol</th>
         <th>Cipher</th>
         <th>IV Size</th>
         <th>Integrity</th>
+        <th>Auth</th>
         <th>Status</th>
       </tr>
       <tr>
@@ -1791,13 +1864,15 @@ Output = R1[18] XOR R2[21] XOR R3[22]</div>
         <td>RC4</td>
         <td>24-bit</td>
         <td>CRC-32</td>
+        <td>Open/Shared Key</td>
         <td style="color: var(--wrong)">BROKEN</td>
       </tr>
       <tr>
         <td><strong>WPA</strong></td>
         <td>RC4-TKIP</td>
         <td>48-bit</td>
-        <td>Michael MIC</td>
+        <td>MIC (Michael)</td>
+        <td>PSK / 802.1X</td>
         <td style="color: #FFA94D">Deprecated</td>
       </tr>
       <tr>
@@ -1805,6 +1880,7 @@ Output = R1[18] XOR R2[21] XOR R3[22]</div>
         <td>AES-CCMP</td>
         <td>48-bit PN</td>
         <td>CBC-MAC</td>
+        <td>PSK / 802.1X</td>
         <td style="color: var(--correct)">Current</td>
       </tr>
       <tr>
@@ -1812,133 +1888,45 @@ Output = R1[18] XOR R2[21] XOR R3[22]</div>
         <td>AES-CCMP/GCMP</td>
         <td>48-bit PN</td>
         <td>GMAC/CBC-MAC</td>
+        <td>SAE / 802.1X</td>
         <td style="color: var(--correct)">Latest</td>
       </tr>
     </table>
-  </div>
-</details>
 
-<!-- Section 8: Bluetooth Security -->
-<details>
-  <summary>&#128264; 8. Bluetooth Security</summary>
-  <div class="content-section">
-    <div class="key">
-      <strong>Bluetooth</strong> uses the <em>E0 stream cipher</em> for encryption in Classic Bluetooth. Bluetooth Low Energy (BLE) uses AES-CCM. Both have known vulnerabilities.
-    </div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">E0 Stream Cipher</h3>
-    <ul>
-      <li><strong>Four LFSRs</strong> -- Combined through a finite state machine (summation generator)</li>
-      <li><strong>128-bit key</strong> -- Derived from link key during pairing</li>
-      <li><strong>Re-keyed every 2745 bits</strong> -- Limits exposure per key</li>
-      <li><strong>Algebraic attacks</strong> -- Effective complexity reduced to ~2^38 (far below 128-bit security)</li>
-    </ul>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Pairing Modes</h3>
-    <table>
-      <tr>
-        <th>Mode</th>
-        <th>Description</th>
-        <th>Security</th>
-      </tr>
-      <tr>
-        <td><strong>Just Works</strong></td>
-        <td>No user interaction</td>
-        <td style="color: var(--wrong)">Vulnerable to MITM</td>
-      </tr>
-      <tr>
-        <td><strong>Numeric Comparison</strong></td>
-        <td>Both devices display 6-digit number, user confirms match</td>
-        <td style="color: var(--correct)">MITM-protected</td>
-      </tr>
-      <tr>
-        <td><strong>Passkey Entry</strong></td>
-        <td>User enters PIN on one or both devices</td>
-        <td style="color: var(--correct)">MITM-protected</td>
-      </tr>
-      <tr>
-        <td><strong>Out of Band (OOB)</strong></td>
-        <td>Uses NFC or other channel for pairing data</td>
-        <td style="color: var(--correct)">MITM-protected</td>
-      </tr>
-    </table>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Notable Bluetooth Attacks</h3>
-    <div class="red">
-      <strong>BlueBorne (2017):</strong> Remote code execution over Bluetooth without pairing. Affected ~5.3 billion devices across Android, iOS, Windows, Linux. Attacker just needs Bluetooth enabled and in range -- no user interaction required.
-    </div>
-
-    <div class="red">
-      <strong>KNOB Attack (Key Negotiation of Bluetooth, 2019):</strong> Attacker forces Bluetooth devices to negotiate an encryption key with only <em>1 byte of entropy</em> (8 bits), making brute-force trivial. Exploits the fact that entropy negotiation was not authenticated.
-    </div>
-
-    <div class="warn">
-      <strong>BIAS Attack (2020):</strong> Bluetooth Impersonation AttackS -- allows an attacker to impersonate a previously paired device by exploiting flaws in the Secure Connections establishment.
-    </div>
-  </div>
-</details>
-
-<!-- Section 9: 5G Security -->
-<details>
-  <summary>&#128752; 9. 5G Security Improvements</summary>
-  <div class="content-section">
-    <div class="green"><strong>5G</strong> introduces significant security improvements over 4G/LTE, addressing known vulnerabilities in previous generations.</div>
-
-    <h3 style="margin-top: 20px; color: #58a6ff;">Key 5G Security Features</h3>
-    <table>
-      <tr>
-        <th>Feature</th>
-        <th>4G/LTE</th>
-        <th>5G</th>
-      </tr>
-      <tr>
-        <td><strong>Identity Protection</strong></td>
-        <td>IMSI sent in plaintext (IMSI catchers)</td>
-        <td>SUPI encrypted as SUCI using ECIES</td>
-      </tr>
-      <tr>
-        <td><strong>Key Length</strong></td>
-        <td>128-bit</td>
-        <td>128 or 256-bit</td>
-      </tr>
-      <tr>
-        <td><strong>Authentication</strong></td>
-        <td>One-way (network authenticates UE)</td>
-        <td>Mutual authentication (5G-AKA, EAP-AKA')</td>
-      </tr>
-      <tr>
-        <td><strong>Integrity Protection</strong></td>
-        <td>User plane: optional</td>
-        <td>User plane: supported</td>
-      </tr>
-      <tr>
-        <td><strong>Network Slicing</strong></td>
-        <td>N/A</td>
-        <td>Isolated security per slice</td>
-      </tr>
-      <tr>
-        <td><strong>Roaming Security</strong></td>
-        <td>Limited inter-operator security</td>
-        <td>SEPP (Security Edge Protection Proxy)</td>
-      </tr>
-    </table>
-
-    <div class="key">
-      <strong>SUPI/SUCI:</strong> The Subscription Permanent Identifier (SUPI) is never sent over the air in plaintext. Instead, it is encrypted into a Subscription Concealed Identifier (SUCI) using the home network's public key with ECIES (Elliptic Curve Integrated Encryption Scheme). This prevents IMSI-catcher attacks.
-    </div>
-
+    <h3 style="margin-top: 20px; color: #58a6ff;">Key Lessons from Each Generation</h3>
     <div class="box">
-      <h4>5G Encryption Algorithms</h4>
+      <h4>What Each Failure Taught Us</h4>
       <ul>
-        <li><strong>NEA0</strong> -- Null (no encryption, for emergency calls)</li>
-        <li><strong>NEA1</strong> -- SNOW 3G (stream cipher)</li>
-        <li><strong>NEA2</strong> -- AES-CTR (128-bit)</li>
-        <li><strong>NEA3</strong> -- ZUC (Chinese stream cipher)</li>
+        <li><strong>WEP:</strong> Small IVs + stream cipher key reuse = catastrophic. Linear checksums (CRC-32) are not integrity checks. Static global keys are unmanageable.</li>
+        <li><strong>WPA:</strong> TKIP was a band-aid -- wrapping a broken cipher (RC4) only buys time, not security.</li>
+        <li><strong>WPA2:</strong> Strong crypto (AES) can still fail if the <em>protocol implementation</em> has flaws (KRACK). Weak passwords undermine strong algorithms.</li>
+        <li><strong>WPA3:</strong> Forward secrecy and brute-force resistance require fundamentally different key exchange (SAE), not just stronger ciphers.</li>
       </ul>
     </div>
 
     <div class="prof">
-      <strong>Why This Matters:</strong> Each wireless generation learned from the failures of the previous one -- WEP's broken RC4 led to AES in WPA2, IMSI catchers in 4G led to SUCI in 5G. The pattern: <em>security is iterative, driven by real-world attacks</em>.
+      <strong>Exam Pattern:</strong> The evolution from WEP to WPA3 demonstrates that security is iterative -- each generation addresses the specific attacks that broke the previous one. Know <em>what</em> broke and <em>how</em> it was fixed.
+    </div>
+  </div>
+</details>
+
+<!-- Section 9: PUFs (Physically Unclonable Functions) -->
+<details>
+  <summary>&#128272; 9. Physically Unclonable Functions (PUFs)</summary>
+  <div class="content-section">
+    <div class="blue">
+      <strong>PUF:</strong> A hardware security primitive that exploits inherent manufacturing variations in silicon chips to create a unique, unclonable identity for each device. Each chip's microscopic physical differences produce unique challenge-response pairs.
+    </div>
+
+    <ul>
+      <li><strong>Manufacturing variation</strong> -- No two chips are identical at the nano-scale, even from the same production line</li>
+      <li><strong>Challenge-response</strong> -- Given an input (challenge), the PUF produces a unique output (response) based on its physical characteristics</li>
+      <li><strong>Unclonable</strong> -- Cannot be duplicated because the exact physical variations cannot be reproduced</li>
+      <li><strong>IoT application</strong> -- Lightweight device authentication without storing keys in memory (resistant to side-channel extraction)</li>
+    </ul>
+
+    <div class="warn">
+      <strong>Relevance to Wireless:</strong> PUFs are particularly important for IoT devices in wireless networks where traditional key storage may be vulnerable to physical attacks. They provide hardware-rooted identity without the overhead of full PKI.
     </div>
   </div>
 </details>
@@ -1953,114 +1941,114 @@ Output = R1[18] XOR R2[21] XOR R3[22]</div>
       <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
     </div>
 
-    <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">1</span> What is the fundamental difference between a stream cipher and a block cipher?</p>
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> What is the primary weakness of WEP's 24-bit IV?</p>
       <div class="options">
-        <div class="opt">Stream ciphers use public keys while block ciphers use symmetric keys</div>
-        <div class="opt">Stream ciphers encrypt bit-by-bit using a keystream XOR, while block ciphers encrypt fixed-size blocks</div>
-        <div class="opt">Block ciphers are faster than stream ciphers</div>
-        <div class="opt">Stream ciphers provide authentication while block ciphers do not</div>
+        <div class="opt">It is too large to transmit efficiently</div>
+        <div class="opt">It is encrypted and cannot be read by the receiver</div>
+        <div class="opt">With only 16.7 million possible values, IVs repeat within hours on a busy network, allowing keystream reuse</div>
+        <div class="opt">It requires a separate encryption key to protect</div>
       </div>
-      <div class="explanation">Stream ciphers generate a pseudo-random keystream and XOR it with plaintext one bit or byte at a time. Block ciphers process fixed-size blocks (e.g., 128 bits) through substitution-permutation networks or Feistel structures.</div>
+      <div class="explanation">The 24-bit IV provides only ~16.7 million unique values. On a busy network, these exhaust within hours. When IVs repeat, the same RC4 keystream is generated, allowing an attacker to XOR two ciphertexts and cancel the key, revealing the XOR of the plaintexts.</div>
     </div>
 
-    <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">2</span> Why is a basic LFSR insecure as a standalone stream cipher?</p>
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> What distinguishes WPA-PSK (home) from WPA Enterprise?</p>
       <div class="options">
-        <div class="opt">It produces too short a keystream period</div>
-        <div class="opt">It requires too much memory to implement</div>
-        <div class="opt">Its linearity allows the Berlekamp-Massey algorithm to reconstruct it from just 2n bits of known keystream</div>
-        <div class="opt">It can only generate binary output</div>
+        <div class="opt">WPA-PSK uses AES while Enterprise uses RC4</div>
+        <div class="opt">WPA-PSK uses a shared passphrase with no auth server, while Enterprise uses 802.1X + EAP + RADIUS for centralized authentication</div>
+        <div class="opt">WPA Enterprise does not support encryption</div>
+        <div class="opt">WPA-PSK requires a certificate authority</div>
       </div>
-      <div class="explanation">LFSRs are linear systems, meaning the Berlekamp-Massey algorithm can determine the feedback polynomial and initial state from just 2n consecutive keystream bits (where n is the register length). This is a devastating known-plaintext attack.</div>
+      <div class="explanation">WPA-PSK derives keys from an alphanumeric passphrase (up to 64 ASCII chars) without an authentication server. WPA Enterprise uses the full 802.1X framework with EAP and a centralized RADIUS server, providing scalable credential management and per-user keys.</div>
     </div>
 
     <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">3</span> How does A5/1 achieve nonlinearity despite using three LFSRs?</p>
+      <p><span class="qnum">3</span> What does the KRACK attack target?</p>
       <div class="options">
-        <div class="opt">Irregular (majority-based) clocking -- only LFSRs whose clocking bit matches the majority value are clocked each cycle</div>
-        <div class="opt">Using a nonlinear S-box on the output</div>
-        <div class="opt">Applying AES encryption to the LFSR outputs</div>
-        <div class="opt">Using prime-length registers to avoid periodicity</div>
+        <div class="opt">An implementation flaw in the 4-way handshake that forces key reinstallation and nonce reuse -- not AES itself</div>
+        <div class="opt">A weakness in the AES-CCMP encryption algorithm</div>
+        <div class="opt">The RADIUS authentication server</div>
+        <div class="opt">The WPA3 SAE protocol</div>
       </div>
-      <div class="explanation">A5/1 uses majority-based clocking: each LFSR has a designated clocking bit, and only those LFSRs whose clocking bit agrees with the majority of all three clocking bits are stepped. This irregular clocking introduces nonlinearity.</div>
+      <div class="explanation">KRACK (Key Reinstallation Attack) exploits a flaw in how the 4-way handshake is implemented. By replaying handshake messages, it forces the client to reinstall an already-used key, causing nonce reuse. This breaks confidentiality and integrity but is a protocol implementation bug, not a flaw in AES.</div>
     </div>
 
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">4</span> What are the two phases of RC4's operation?</p>
+      <p><span class="qnum">4</span> What two properties make WPA3's SAE (Dragonfly) superior to WPA2-PSK?</p>
       <div class="options">
-        <div class="opt">Encryption phase and authentication phase</div>
-        <div class="opt">Key expansion and block processing</div>
-        <div class="opt">Initialization vector generation and stream output</div>
-        <div class="opt">KSA (Key Scheduling Algorithm) to initialize the permutation, then PRGA (Pseudo-Random Generation Algorithm) to produce keystream bytes</div>
+        <div class="opt">Faster encryption and smaller key sizes</div>
+        <div class="opt">Support for legacy devices and backward compatibility</div>
+        <div class="opt">Larger IV space and stronger CRC checks</div>
+        <div class="opt">Resistance to offline brute-force attacks (single guess per interaction) and forward secrecy (past traffic protected even if password compromised)</div>
       </div>
-      <div class="explanation">RC4 works in two phases: KSA scrambles the 256-byte permutation array S using the secret key, then PRGA generates keystream bytes by continually swapping elements and outputting S[(S[i]+S[j]) mod 256].</div>
+      <div class="explanation">SAE limits attackers to a single password guess per online interaction, preventing offline dictionary attacks. It also provides forward secrecy -- each session derives unique keys, so compromising the password later cannot decrypt previously captured traffic.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">5</span> Why was WEP's use of RC4 catastrophically flawed?</p>
+      <p><span class="qnum">5</span> In the 802.1X framework, what are the three roles?</p>
       <div class="options">
-        <div class="opt">RC4 was too slow for wireless networks</div>
-        <div class="opt">24-bit IVs caused rapid reuse, weak RC4 key schedules leaked key bytes, and CRC-32 is not a cryptographic integrity check</div>
-        <div class="opt">WEP used RC4 with 8-bit keys</div>
-        <div class="opt">RC4 requires hardware acceleration that access points lacked</div>
+        <div class="opt">Client, server, and firewall</div>
+        <div class="opt">Supplicant (client device), authenticator (AP), and authentication server (RADIUS)</div>
+        <div class="opt">Sender, receiver, and certificate authority</div>
+        <div class="opt">Browser, proxy, and web server</div>
       </div>
-      <div class="explanation">WEP combined multiple flaws: the 24-bit IV space exhausts quickly causing keystream reuse, certain IVs produce weak RC4 key schedules (FMS attack), CRC-32 allows undetected ciphertext modification, and the static shared key is rarely changed.</div>
+      <div class="explanation">802.1X defines three roles: the supplicant (client device requesting access), the authenticator (AP that relays auth requests), and the authentication server (RADIUS backend that makes the access decision). EAP messages travel via EAPOL between supplicant and authenticator, and EAP-over-RADIUS between authenticator and server.</div>
     </div>
 
     <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">6</span> What encryption does WPA2 use instead of RC4?</p>
+      <p><span class="qnum">6</span> How does an Evil Twin attack work?</p>
       <div class="options">
-        <div class="opt">Triple DES in CBC mode</div>
-        <div class="opt">ChaCha20-Poly1305</div>
-        <div class="opt">AES-CCMP (AES in Counter mode with CBC-MAC Protocol)</div>
-        <div class="opt">Blowfish in CTR mode</div>
+        <div class="opt">The attacker physically replaces the legitimate access point</div>
+        <div class="opt">The attacker jams all wireless frequencies in range</div>
+        <div class="opt">The attacker sets up a fake AP with a stronger signal and the same SSID, causing victims to connect to it instead of the real AP</div>
+        <div class="opt">The attacker exploits a firmware vulnerability in the router</div>
       </div>
-      <div class="explanation">WPA2 uses AES-CCMP -- AES-128 in counter mode for confidentiality combined with CBC-MAC for integrity and authentication. This was a complete redesign from WEP/WPA's RC4-based approach.</div>
+      <div class="explanation">In an Evil Twin attack, the attacker places a rogue AP (often outside the building) with a stronger signal than the legitimate AP, using the same SSID. Victim devices automatically associate with the stronger signal, giving the attacker a man-in-the-middle position. A VPN with pre-shared secrets defeats this attack.</div>
     </div>
 
     <div class="quiz-q" data-correct="0">
-      <p><span class="qnum">7</span> What key improvement does WPA3's SAE (Dragonfly) provide over WPA2-PSK?</p>
+      <p><span class="qnum">7</span> What happens when the same RC4 key encrypts the same plaintext twice?</p>
       <div class="options">
-        <div class="opt">Forward secrecy -- compromising the password does not allow decryption of previously captured traffic</div>
-        <div class="opt">Faster connection times</div>
-        <div class="opt">Support for longer passwords</div>
-        <div class="opt">Backward compatibility with WEP devices</div>
+        <div class="opt">XORing the two ciphertexts cancels the keystream and reveals the plaintext data</div>
+        <div class="opt">The encryption becomes stronger due to double encryption</div>
+        <div class="opt">The ciphertexts are identical but cannot be exploited</div>
+        <div class="opt">RC4 automatically detects the reuse and generates a new key</div>
       </div>
-      <div class="explanation">SAE (Simultaneous Authentication of Equals) uses the Dragonfly password-authenticated key exchange, which provides forward secrecy. Even if the password is later compromised, past captured sessions cannot be decrypted because each session derives unique keys.</div>
+      <div class="explanation">Since C = P XOR K, if the same key K encrypts two plaintexts: C1 XOR C2 = (P1 XOR K) XOR (P2 XOR K) = P1 XOR P2. The keystream cancels out entirely, leaving the XOR of the two plaintexts, which can be separated using frequency analysis.</div>
     </div>
 
     <div class="quiz-q" data-correct="2">
-      <p><span class="qnum">8</span> What advantage does ChaCha20 have over AES on devices without hardware AES support?</p>
+      <p><span class="qnum">8</span> Why does WEP's bit-flipping attack work?</p>
       <div class="options">
-        <div class="opt">ChaCha20 uses smaller keys</div>
-        <div class="opt">ChaCha20 is a block cipher and therefore more secure</div>
-        <div class="opt">ChaCha20 uses only ARX operations (add, rotate, XOR) which run in constant time without cache-timing side channels</div>
-        <div class="opt">ChaCha20 requires less memory than AES</div>
+        <div class="opt">Because AES-CCMP uses a linear encryption mode</div>
+        <div class="opt">Because the WEP key is transmitted in plaintext</div>
+        <div class="opt">Because RC4 is a stream cipher (XOR-based) and CRC-32 is a linear checksum -- both can be manipulated without knowing the key</div>
+        <div class="opt">Because WEP does not encrypt the IP header</div>
       </div>
-      <div class="explanation">ChaCha20 uses only addition, rotation, and XOR (ARX) -- operations that execute in constant time on all processors. Software AES implementations without AES-NI are vulnerable to cache-timing side-channel attacks because of table lookups.</div>
+      <div class="explanation">RC4 uses XOR for encryption, meaning flipping a ciphertext bit flips the corresponding plaintext bit. CRC-32 is linear, so the attacker can recalculate the checksum for the modified data without knowing the key. This allows redirecting packets by changing the destination IP address in the encrypted header.</div>
     </div>
 
     <div class="quiz-q" data-correct="1">
-      <p><span class="qnum">9</span> What is the KNOB (Key Negotiation of Bluetooth) attack?</p>
+      <p><span class="qnum">9</span> In wireless networking, what is a "supplicant"?</p>
       <div class="options">
-        <div class="opt">An attack that jams Bluetooth signals</div>
-        <div class="opt">An attacker forces devices to negotiate an encryption key with only 1 byte of entropy, making brute-force trivial</div>
-        <div class="opt">A firmware exploit in Bluetooth chips</div>
-        <div class="opt">An attack that clones Bluetooth MAC addresses</div>
+        <div class="opt">The RADIUS authentication server</div>
+        <div class="opt">The client device that must authenticate before gaining network access</div>
+        <div class="opt">The access point that broadcasts the SSID</div>
+        <div class="opt">The encryption key used for WPA2</div>
       </div>
-      <div class="explanation">The KNOB attack exploits the fact that Bluetooth's entropy negotiation for the encryption key was not authenticated. An attacker can force both devices to agree on a key with only 1 byte (8 bits) of entropy, which can be brute-forced instantly.</div>
+      <div class="explanation">A supplicant is the client device (laptop, phone, PDA) that requests network access. In the 802.1X framework, the supplicant communicates via EAPOL with the authenticator (AP), which relays the authentication request to the RADIUS server.</div>
     </div>
 
     <div class="quiz-q" data-correct="3">
-      <p><span class="qnum">10</span> How does 5G protect subscriber identity compared to 4G?</p>
+      <p><span class="qnum">10</span> What is the purpose of the WPA2 four-way handshake?</p>
       <div class="options">
-        <div class="opt">5G uses shorter identifiers that are harder to intercept</div>
-        <div class="opt">5G rotates identifiers every 30 seconds</div>
-        <div class="opt">5G does not transmit any identifier over the air</div>
-        <div class="opt">5G encrypts the SUPI into a SUCI using the home network's public key (ECIES), preventing IMSI-catcher attacks</div>
+        <div class="opt">To transmit the PMK (Pairwise Master Key) securely over the air</div>
+        <div class="opt">To negotiate which encryption algorithm to use</div>
+        <div class="opt">To verify that the access point has a valid certificate</div>
+        <div class="opt">To achieve mutual authentication and derive the PTK (Pairwise Transient Key) from PMK, nonces, and MAC addresses -- without revealing the PMK</div>
       </div>
-      <div class="explanation">In 4G, the IMSI is sent in plaintext, enabling IMSI-catcher surveillance. In 5G, the Subscription Permanent Identifier (SUPI) is encrypted into a Subscription Concealed Identifier (SUCI) using Elliptic Curve Integrated Encryption Scheme (ECIES) with the home network's public key.</div>
+      <div class="explanation">The four-way handshake allows both sides to prove they know the PMK without transmitting it. They exchange nonces (ANonce, SNonce), independently derive the PTK from PMK + nonces + MAC addresses, validate with MIC, and distribute the GTK for multicast/broadcast traffic.</div>
     </div>
 </div>
 
@@ -2194,20 +2182,20 @@ Output = R1[18] XOR R2[21] XOR R3[22]</div>
 
   function getFlashcardData() {
     return [
-      { term: "Stream Cipher vs Block Cipher", definition: "Stream ciphers encrypt bit-by-bit using keystream XOR (fast, low latency, no error propagation). Block ciphers encrypt fixed-size blocks (128 bits) using S-P networks or Feistel. Never reuse a stream cipher keystream.", category: "red", label: "Key Idea" },
-      { term: "LFSR (Linear Feedback Shift Register)", definition: "Shift register with XOR feedback taps. Primitive polynomial gives max period 2^n-1. Fatal flaw: linearity allows Berlekamp-Massey to reconstruct from just 2n known keystream bits.", category: "blue", label: "Definition" },
-      { term: "Fixing LFSR Linearity", definition: "Three approaches: (1) Nonlinear combining of multiple LFSRs, (2) Clock-controlled generators (one LFSR controls another's clocking), (3) Nonlinear filter functions on internal bits.", category: "blue", label: "Definition" },
-      { term: "A5/1 (GSM Cipher)", definition: "Three irregularly-clocked LFSRs (19+22+23=64 bits). Majority-based clocking for nonlinearity. Broken with rainbow tables and known-plaintext attacks. A5/2 was even weaker (export version).", category: "red", label: "Key Idea" },
-      { term: "RC4", definition: "Byte-oriented stream cipher by Rivest (1987). Two phases: KSA (key scheduling) and PRGA (keystream generation). Biases in initial bytes, prohibited in TLS 1.3 (RFC 7465).", category: "red", label: "Key Idea" },
-      { term: "eSTREAM Winners", definition: "Software: Rabbit, HC-128, Salsa20, SOSEMANUK. Hardware: Grain, MICKEY, Trivium. European competition (2004-2008) to find next-generation stream ciphers.", category: "green", label: "Reference" },
-      { term: "ChaCha20-Poly1305", definition: "Modern AEAD: ChaCha20 stream cipher (256-bit key, ARX operations, no side channels) + Poly1305 MAC (128-bit tag). Used in TLS 1.3 alongside AES-GCM. Ideal for devices without hardware AES.", category: "green", label: "Best Practice" },
-      { term: "WEP Failures", definition: "24-bit IV (repeats in hours), RC4 weak key schedules, CRC-32 not crypto-secure, static shared key, no mutual auth. Completely broken by FMS attack and aircrack-ng.", category: "orange", label: "Caution" },
-      { term: "WPA -> WPA2 -> WPA3", definition: "WPA: TKIP wrapper around RC4 (temporary fix). WPA2: AES-CCMP (proper fix). WPA3: SAE/Dragonfly (forward secrecy), PMF mandatory, 192-bit enterprise mode, OWE for open networks.", category: "red", label: "Key Idea" },
-      { term: "BlueBorne Attack", definition: "2017 Bluetooth RCE vulnerability. No pairing needed, no user interaction. Affected ~5.3 billion devices. Just needs Bluetooth enabled and in range.", category: "orange", label: "Caution" },
-      { term: "KNOB Attack", definition: "Key Negotiation of Bluetooth (2019). Forces encryption key entropy down to 1 byte (8 bits) because entropy negotiation was not authenticated. Brute-force becomes trivial.", category: "orange", label: "Caution" },
-      { term: "5G SUPI/SUCI", definition: "5G encrypts the permanent subscriber identity (SUPI) into a concealed identifier (SUCI) using ECIES with the home network's public key. Prevents IMSI-catcher attacks that plagued 4G.", category: "green", label: "Best Practice" },
-      { term: "Keystream Reuse Catastrophe", definition: "If same keystream encrypts two messages: C1 XOR C2 = P1 XOR P2 (key cancels out). Attacker gets relationship between plaintexts. This is why nonce/IV must NEVER repeat with the same key.", category: "orange", label: "Caution" },
-      { term: "ARX Operations (ChaCha20)", definition: "Addition, Rotation, XOR -- the only three operations ChaCha20 uses. All run in constant time on any processor, eliminating cache-timing side channels that affect software AES implementations.", category: "blue", label: "Definition" }
+      { term: "Supplicant", definition: "The client device (laptop, phone, PDA) that must authenticate before gaining wireless network access. In 802.1X, communicates via EAPOL with the authenticator (AP).", category: "blue", label: "Definition" },
+      { term: "Home vs Enterprise WiFi", definition: "Home: single router handles AP + security + auth (passphrase). Enterprise: lightweight APs as relays + centralized RADIUS/TACACS+ servers for scalable credential management and consistent policies.", category: "blue", label: "Definition" },
+      { term: "802.1X / EAP / RADIUS", definition: "802.1X: port-based access control framework. EAP: extensible auth protocol (7-step process). RADIUS: backend server providing Authentication (via EAP), Authorization, and Auditing. EAPOL between client-AP, EAP-over-RADIUS between AP-server.", category: "red", label: "Key Idea" },
+      { term: "PEAP vs EAP-TLS", definition: "PEAP: server-supplied certificates (outer auth via SSL/TLS, inner auth via EAP). EAP-TLS: client-supplied certificates (mutual TLS). EAP-TLS is stronger but requires certificate on every client device.", category: "blue", label: "Definition" },
+      { term: "RC4 Key Reuse Problem", definition: "Same key + same plaintext = XOR of two ciphertexts cancels keystream, revealing XOR of plaintexts. Solution: unique IV (nonce) per packet. WEP's 24-bit IV was too small (rollover). TKIP's 48-bit IV + session key fixed this.", category: "orange", label: "Caution" },
+      { term: "RC4 Two Phases", definition: "Phase 1 - Key Setup: n-byte key creates 256-byte S-box via swaps and modulo. Phase 2 - Keystream Generation: S-box + counters produce pseudo-infinite keystream, XORed with plaintext.", category: "red", label: "Key Idea" },
+      { term: "WEP Failures", definition: "24-bit IV repeats in hours, FMS weak key attacks, no replay protection, CRC-32 not crypto-secure (linear), single global key, keys can't update dynamically. Crackable within 5 hours.", category: "orange", label: "Caution" },
+      { term: "WEP Bit-Flipping Attack", definition: "RC4 (stream cipher/XOR) + CRC-32 (linear checksum) = attacker can flip bits in IP header to redirect traffic. CRC can be recalculated without knowing the key because it's linear.", category: "orange", label: "Caution" },
+      { term: "WPA2 Four-Way Handshake", definition: "Mutual auth without revealing PMK. Exchange nonces (ANonce/SNonce), derive PTK from PMK+nonces+MACs, validate with MIC, distribute GTK for multicast/broadcast. Target for KRACK and PSK dictionary attacks.", category: "red", label: "Key Idea" },
+      { term: "KRACK Attack", definition: "Key Reinstallation Attack: exploits 4-way handshake implementation flaw (NOT AES). Replays handshake to force key reinstallation, reuses nonces. Affects clients not APs. Both PSK and Enterprise. Fix: patch + WPA3.", category: "orange", label: "Caution" },
+      { term: "Cracking WPA2-PSK", definition: "Capture 4-way handshake (Message 2), offline dictionary attack: derive PMK from password, compute PTK, compute MIC, compare. NOT a crypto break -- vulnerability is weak passwords. Strong passphrases = infeasible.", category: "red", label: "Key Idea" },
+      { term: "WPA3 SAE (Dragonfly)", definition: "Replaces vulnerable 4-way handshake. Resistant to offline dictionary/brute-force (single guess per interaction). Forward secrecy protects past traffic. Peer-to-peer prevents MITM. PMF required.", category: "green", label: "Best Practice" },
+      { term: "Evil Twin vs Rogue AP", definition: "Evil Twin: external fake AP with stronger signal, same SSID -- intercepts traffic (defeated by VPN). Rogue AP: unauthorized AP plugged into internal network -- bypasses firewall entirely.", category: "orange", label: "Caution" },
+      { term: "WiFi Evolution Pattern", definition: "WEP (RC4/24-bit IV/CRC-32) -> WPA (TKIP/48-bit IV/MIC) -> WPA2 (AES-CCMP/4-way handshake) -> WPA3 (SAE/forward secrecy/PMF/192-bit enterprise). Each gen fixes specific attacks that broke the previous.", category: "red", label: "Key Idea" }
     ];
   }
 
