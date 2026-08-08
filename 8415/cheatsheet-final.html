@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8415 - Final Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      font-size: 9px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 8px;
+      background: #1a1a2e;
+      border-radius: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    nav .nav-brand { color: #e94560; font-size: 11px; font-weight: bold; }
+    nav .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav .nav-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+    nav .nav-row-label { color: #888; font-size: 9px; font-weight: bold; margin-right: 2px; }
+    nav a { color: #90caf9; text-decoration: none; font-size: 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    nav a.active { color: #e94560; border-bottom: 2px solid #e94560; }
+    .print-btn {
+      background: #e94560; color: #fff; border: none; padding: 3px 8px;
+      border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 9px;
+    }
+    .print-btn:hover { background: #d63851; }
+
+    /* HEADER */
+    .sheet-title {
+      text-align: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #e94560;
+      margin: 1px 0 2px 0;
+      padding: 1px 0;
+      border-bottom: 1px solid #e94560;
+      border-top: 1px solid #e94560;
+      letter-spacing: 0.2px;
+    }
+
+    /* COLUMNS LAYOUT */
+    .columns {
+      column-count: 3;
+      column-gap: 4px;
+      column-rule: 1px solid #ccc;
+    }
+
+    /* WEEK SECTIONS */
+    .week {
+      margin-bottom: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 0.5px solid #bbb;
+      break-inside: avoid;
+    }
+
+    .week-header {
+      padding: 1px 3px;
+      font-size: 8px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .week-body {
+      padding: 1px 2px 1px 2px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .week-body ul {
+      margin: 0;
+      padding-left: 7px;
+      list-style: disc;
+    }
+
+    .week-body li {
+      margin-bottom: 0;
+    }
+
+    .week-body li b {
+      font-weight: 700;
+    }
+
+    /* WEEK COLORS */
+    .w1 .week-header { background: #c62828; color: #fff; }
+    .w1 .week-body { background: #FFE4E1; }
+    .w1 { border-color: #c62828; }
+
+    .w2 .week-header { background: #e65100; color: #fff; }
+    .w2 .week-body { background: #FFF3E0; }
+    .w2 { border-color: #e65100; }
+
+    .w3 .week-header { background: #f9a825; color: #1a1a1a; }
+    .w3 .week-body { background: #FFFDE7; }
+    .w3 { border-color: #f9a825; }
+
+    .w4 .week-header { background: #2e7d32; color: #fff; }
+    .w4 .week-body { background: #E8F5E9; }
+    .w4 { border-color: #2e7d32; }
+
+    .w5 .week-header { background: #1565c0; color: #fff; }
+    .w5 .week-body { background: #E3F2FD; }
+    .w5 { border-color: #1565c0; }
+
+    .w6 .week-header { background: #6a1b9a; color: #fff; }
+    .w6 .week-body { background: #F3E5F5; }
+    .w6 { border-color: #6a1b9a; }
+
+    .w8 .week-header { background: #c2185b; color: #fff; }
+    .w8 .week-body { background: #FCE4EC; }
+    .w8 { border-color: #c2185b; }
+
+    .w9 .week-header { background: #5e35b1; color: #fff; }
+    .w9 .week-body { background: #EDE7F6; }
+    .w9 { border-color: #5e35b1; }
+
+    .w10 .week-header { background: #283593; color: #fff; }
+    .w10 .week-body { background: #E8EAF6; }
+    .w10 { border-color: #283593; }
+
+    .w11 .week-header { background: #00838f; color: #fff; }
+    .w11 .week-body { background: #E0F7FA; }
+    .w11 { border-color: #00838f; }
+
+    .w12 .week-header { background: #2e7d32; color: #fff; }
+    .w12 .week-body { background: #E8F5E9; }
+    .w12 { border-color: #2e7d32; }
+
+    /* PRINT STYLES */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.12in;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        padding: 0;
+      }
+      nav { display: none !important; }
+      .print-btn { display: none !important; }
+
+      .sheet-title {
+        font-size: 6pt;
+        margin: 0;
+        padding: 0;
+        border-width: 0.5px;
+      }
+
+      .columns {
+        column-count: 3;
+        column-gap: 3px;
+        column-rule: 0.4px solid #999;
+      }
+
+      .week {
+        margin-bottom: 1px;
+        border-width: 0.4px;
+      }
+
+      .week-header {
+        padding: 0px 2px;
+        font-size: 5.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body {
+        padding: 0px 1px 0px 1px;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body ul {
+        padding-left: 5px;
+      }
+
+      code {
+        font-size: 5pt;
+      }
+
+      .week-body li {
+        margin-bottom: 0;
+      }
+
+      .w1 .week-header { background: #c62828 !important; color: #fff !important; }
+      .w1 .week-body { background: #FFE4E1 !important; }
+      .w2 .week-header { background: #e65100 !important; color: #fff !important; }
+      .w2 .week-body { background: #FFF3E0 !important; }
+      .w3 .week-header { background: #f9a825 !important; color: #1a1a1a !important; }
+      .w3 .week-body { background: #FFFDE7 !important; }
+      .w4 .week-header { background: #2e7d32 !important; color: #fff !important; }
+      .w4 .week-body { background: #E8F5E9 !important; }
+      .w5 .week-header { background: #1565c0 !important; color: #fff !important; }
+      .w5 .week-body { background: #E3F2FD !important; }
+      .w6 .week-header { background: #6a1b9a !important; color: #fff !important; }
+      .w6 .week-body { background: #F3E5F5 !important; }
+      .w8 .week-header { background: #c2185b !important; color: #fff !important; }
+      .w8 .week-body { background: #FCE4EC !important; }
+      .w9 .week-header { background: #5e35b1 !important; color: #fff !important; }
+      .w9 .week-body { background: #EDE7F6 !important; }
+      .w10 .week-header { background: #283593 !important; color: #fff !important; }
+      .w10 .week-body { background: #E8EAF6 !important; }
+      .w11 .week-header { background: #00838f !important; color: #fff !important; }
+      .w11 .week-body { background: #E0F7FA !important; }
+      .w12 .week-header { background: #2e7d32 !important; color: #fff !important; }
+      .w12 .week-body { background: #E8F5E9 !important; }
+    }
+
+    @media (max-width: 900px) {
+      .columns { column-count: 2; }
+    }
+    @media (max-width: 550px) {
+      .columns { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">SEAS 8415 FINAL</span>
+  <div class="nav-links">
+    <div class="nav-row">
+      <span class="nav-row-label">Midterm:</span>
+      <a href="week1.html">W1</a>
+      <a href="week2.html">W2</a>
+      <a href="week3.html">W3</a>
+      <a href="week4.html">W4</a>
+      <a href="week5.html">W5</a>
+      <a href="week6.html">W6</a>
+    </div>
+    <div class="nav-row">
+      <span class="nav-row-label">Final:</span>
+      <a href="week8.html">W8</a>
+      <a href="week9.html">W9</a>
+      <a href="week10.html">W10</a>
+      <a href="week11.html">W11</a>
+      <a href="week12.html">W12</a>
+    </div>
+    <div class="nav-row">
+      <a href="cheatsheet-final.html" class="active">Final Cheat Sheet</a>
+      <a href="cheatsheet.html">Midterm Cheat Sheet</a>
+      <a href="../index.html">All Courses</a>
+      <button class="print-btn" onclick="window.print()">Print</button>
+    </div>
+  </div>
+</nav>
+
+<div class="sheet-title">SEAS 8415 FINAL CHEAT SHEET (Weeks 1&ndash;12) | Final Exam | Weeks 1-12 | 2 hours | Closed book | 1 cheat sheet (8.5x11 both sides) | Honorlock</div>
+
+<div class="columns">
+
+  <!-- WEEK 1 -->
+  <div class="week w1">
+    <div class="week-header">W1 - Ciphers &amp; Hashing</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Classical ciphers:</b> Caesar (shift, monoalpha, broken by freq analysis). Vigenere (polyalpha, repeating keyword, broken by Kasiski). Bifid (Polybius grid, combines sub+trans). Rail Fence (transposition, zigzag rows). Sub CHANGES letters, trans REARRANGES positions.</li>
+        <li><b>Shannon:</b> Perfect secrecy = P(M|C)=P(M). OTP = ONLY perfectly secure cipher. Key must be truly random, >= msg length, used ONCE, kept secret. Impractical at scale. 5 criteria (1949): degree of secrecy, free from complexity, simple implementation, C<=P, limited error propagation - STILL VALID TODAY.</li>
+        <li><b>Symmetric vs Asymmetric:</b> Sym = same key, fast (100-1000x), bulk data (AES/DES/3DES). Asym = key pair, slow, solves key distrib (RSA/ECC/DH). Hybrid = asym for key exchange, sym for data (TLS model). N users need N(N-1)/2 sym keys.</li>
+        <li><b>Kerckhoffs:</b> Security in KEY, not algorithm. All modern algos public. Computational security = practical alternative to perfect secrecy: cost to break > value of info.</li>
+        <li><b>Hashing:</b> One-way, fixed output, collision resistant, avalanche effect. SHA-256 (current), MD5 (128-bit, BROKEN), SHA-1 (160-bit, deprecated). NOT encryption - irreversible. Salting = random string before hashing, defeats rainbow tables. HMAC = keyed hash for integrity+auth (NOT confidentiality). Key stretching: PBKDF2, bcrypt (deliberately slow).</li>
+        <li><b>Data states:</b> At rest (AES), in transit (TLS), in use (enclaves, HE). Protect all three. Block ciphers = fixed-size blocks (AES=128-bit). Stream = bit/byte at a time (RC4, ChaCha20).</li>
+        <li><b>PRNG:</b> Uncorrelated, long period, uniform. CSPRNG required for crypto. Weak PRNG = predictable keys. Nonce = used ONCE, prevents replay.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week w2">
+    <div class="week-header">W2 - Asymmetric Crypto &amp; Key Exchange</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Diffie-Hellman (1976):</b> First pub key exchange. Shared secret = g^(ab) mod p. Based on discrete log problem. DOES NOT authenticate - vulnerable to MITM. Calc: g=2,p=19,a=6,b=3 - Y=2^6 mod 19=7, C=2^3 mod 19=8, S=8^6 mod 19=18=7^3 mod 19.</li>
+        <li><b>RSA (1977):</b> Based on factoring N=p*q. phi(n)=(p-1)(q-1). Choose e coprime to phi, d=e^(-1) mod phi. Encrypt: C=M^e mod n. Decrypt: M=C^d mod n. Public=(n,e), Private=(n,d). Trap-door one-way function.</li>
+        <li><b>Digital signatures:</b> Sign w/ private key, verify w/ public key. Provides auth+integrity+non-repudiation. Hash msg - encrypt hash w/ priv key = signature. Non-repudiation: signer cannot deny.</li>
+        <li><b>PKI:</b> CA issues X.509 certificates. Chain of trust: Root CA - Intermediate CA - End entity. Revocation: CRL, OCSP. Hybrid encryption: RSA for key exchange, AES for bulk data.</li>
+        <li><b>ECC preview:</b> Lighter than RSA. ECC-256 ~ RSA-3072. Ideal for IoT/mobile. Based on ECDLP. CAB Forum requires RSA min 3072 bits now.</li>
+        <li><b>PQC:</b> Shor's algo breaks RSA/DH/ECC. "Harvest now, decrypt later." NIST winners: CRYSTALS-Kyber (key exchange), CRYSTALS-Dilithium (sigs), SPHINCS+ (hash-based sigs). SIKE BROKEN 2022. Migration target: 2035.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week w3">
+    <div class="week-header">W3 - Number Theory &amp; Math</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Modular arithmetic:</b> a mod n = remainder. GCD critical for RSA key gen. Euler's totient phi(n). Primes >3 are form 6k+/-1. Extended Euclidean for modular inverse.</li>
+        <li><b>Fermat's Little Theorem:</b> a^(p-1) = 1 mod p (p prime). Chinese Remainder Theorem for solving simultaneous congruences.</li>
+        <li><b>DLP:</b> Given g, p, g^x mod p, find x. Computationally hard = basis for DH/ElGamal. No efficient classical algorithm known.</li>
+        <li><b>Key space:</b> n-bit key = 2^n possibilities. Brute force avg = 2^(N-1). DES: 2^56=7.2x10^16. AES-128: 2^128=3.4x10^38. N+k bits = space x 2^k.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week w4">
+    <div class="week-header">W4 - Symmetric Encryption Deep Dive</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Block ciphers:</b> DES (56-bit, BROKEN 1999), 3DES (112-bit effective, deprecated, 3x slower), AES (128/192/256-bit, current standard, selected 2001).</li>
+        <li><b>AES (Rijndael):</b> Won NIST competition (Daemen &amp; Rijmen, Belgium). SPN structure (NOT Feistel). 128-bit block. 10/12/14 rounds for 128/192/256-bit keys. 4 ops: SubBytes (S-box, nonlinear) - ShiftRows - MixColumns (NOT in final round) - AddRoundKey. State array. GF(2^8) arithmetic.</li>
+        <li><b>Modes:</b> ECB (deterministic, NEVER use - same block=same cipher, penguin). CBC (IV chains blocks, XOR prev). CTR (counter, parallelizable, no padding). GCM (CTR+auth tag = confidentiality+integrity, gold standard).</li>
+        <li><b>Feistel (DES) vs SPN (AES):</b> Feistel splits block in half, same structure enc/dec. SPN = full block sub+perm, different ops enc vs dec.</li>
+        <li><b>Shannon:</b> Confusion = complex key-ciphertext relationship (S-boxes). Diffusion = each plaintext bit affects many ciphertext bits (ShiftRows/MixColumns).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week w5">
+    <div class="week-header">W5 - Zero Knowledge Proofs &amp; Trust</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ZKP:</b> Prove knowledge without revealing secret. 3 properties: Completeness (honest prover convinces), Soundness (cheater can't fool), Zero-knowledge (verifier learns nothing). Cheating prob = 1/2^n after n rounds.</li>
+        <li><b>Ali Baba Cave:</b> Peggy proves secret word to Victor. Interactive back-and-forth. Fiat-Shamir heuristic converts interactive to non-interactive via hash. zk-SNARKs (~100s bytes, ~10ms, trusted setup, quantum VULNERABLE). zk-STARKs (~100s KB, 50-100ms, NO trusted setup, quantum RESISTANT).</li>
+        <li><b>Trusting Trust (Thompson 1984):</b> Turing Award. Compiler can hide backdoor. Self-replicating Trojan persists even with clean source. Trust is fundamental.</li>
+        <li><b>Why Cryptosystems Fail (Anderson):</b> >90% failures = implementation/config errors, NOT broken math. Banking "phantom withdrawals." Need learning mechanism like aviation.</li>
+        <li><b>Why Johnny Can't Encrypt:</b> PGP usability study. 1/3 sent secrets unencrypted. Quill pen icon miscommunicated. Crypto must be usable or people bypass it.</li>
+        <li><b>OWASP Crypto Failures (#2):</b> 3 categories: loss of confidentiality, non-repudiation failure, failed integrity. Access control = SEPARATE category.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week w6">
+    <div class="week-header">W6 - AES &amp; Algorithm Selection</div>
+    <div class="week-body">
+      <ul>
+        <li><b>AES competition:</b> 15 candidates, Rijndael selected. Criteria: security, performance, flexibility. S-boxes: nonlinear substitution. Key schedule: RotWord, SubWord, Rcon XOR.</li>
+        <li><b>Deep Crack:</b> DES brute force in 22 hours (1998). Proved 56-bit keys insufficient.</li>
+        <li><b>SKIPJACK/EES:</b> NSA cipher w/ key escrow (Clipper Chip). Matt Blaze found vulnerability. Controversial, abandoned. Can't have strong encryption AND guaranteed govt access.</li>
+        <li><b>PQC transition:</b> NIST FIPS 203 (ML-KEM/Kyber), FIPS 204 (ML-DSA/Dilithium), FIPS 205 (SLH-DSA/SPHINCS+). Grover's halves key length: AES-128-64 (broken), AES-256-128 (safe). Need AES-256 post-quantum.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="week w8">
+    <div class="week-header">W8 - Blockchain &amp; Digital Cash</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Schneier digital cash:</b> Anonymous, untraceable. 4 protocols: basic - secret splitting w/ XOR identity reveal. 6 properties (Okamoto &amp; Ohta): Independence, Security, Privacy, Off-line, Transferability, Divisibility.</li>
+        <li><b>DigiCash:</b> David Chaum 1989 - bankruptcy 1998. First practical digital cash attempt.</li>
+        <li><b>Byzantine Generals (Lamport):</b> Consensus w/ malicious nodes. Solvable if >2/3 loyal (oral messages), ANY number (written/signed messages). Paxos: consensus for unreliable networks, less robust but cheaper than Byzantine.</li>
+        <li><b>Blockchain:</b> Tamper-evident/resistant distributed ledger (NISTIR 8202). No central authority. DLT: all participants access immutable records. Smart contracts auto-execute rules.</li>
+        <li><b>Virtues:</b> Verifiable, Immutable, Tamper-resistant, Addresses double-spend.</li>
+        <li><b>Node types:</b> Full (stores entire chain), Publishing (full + creates blocks), Lightweight (no copy, passes to full nodes).</li>
+        <li><b>Apps:</b> Crypto, supply chain, medical records, voting, IoT.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 9 -->
+  <div class="week w9">
+    <div class="week-header">W9 - Elliptic Curve Cryptography</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ECC:</b> Discovered 1985 by Koblitz and Miller independently. Levchin Prize 2021. Equation: y^2 = x^3 + ax + b (Weierstrass). Symmetric about x-axis. Point at Infinity = identity element.</li>
+        <li><b>Validity:</b> 4a^3 + 27b^2 != 0 (no singularities). Point Addition: line through P,Q intersects curve at 3rd point, reflect = P+Q. Point Doubling: tangent at P, intersect, reflect = 2P.</li>
+        <li><b>ECDLP:</b> Given P and Q=kP, find k. Computationally hard - NO sub-exponential algorithm known (unlike integer factoring for RSA). This is why ECC keys can be shorter.</li>
+        <li><b>Key advantage:</b> 160-bit ECC = 1024-bit RSA. 256-bit ECC = 3072-bit RSA. Shorter keys = speed + low power + bandwidth. Better for IoT/mobile/embedded. RSA more mature ecosystem.</li>
+        <li><b>ECDH:</b> ECC version of DH key exchange. <b>ECDSA:</b> ECC digital signatures. Used in Bitcoin, TLS 1.3.</li>
+        <li><b>Finite fields/Galois fields:</b> GF(p^n). Algebraic hierarchy: Group - Ring - Field. ECC vulnerable to quantum (like RSA). More dependent on true randomness than RSA.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="week w10">
+    <div class="week-header">W10 - Homomorphic Encryption &amp; MPC</div>
+    <div class="week-body">
+      <ul>
+        <li><b>MPC:</b> Compute function on joint inputs without revealing individual inputs. Yao's Millionaire's Protocol: who is richer w/o revealing wealth? Uses RSA.</li>
+        <li><b>Additive secret sharing:</b> Split salary into random shares summing to original. Distribute shares across parties. Sum columns = total. Average w/o revealing individuals.</li>
+        <li><b>HE types:</b> PHE (one op unlimited), SWHE (both ops limited depth), FHE (both ops unlimited). RSA = PHE for multiplication: E(m1)*E(m2)=E(m1*m2). NOT additive. Paillier = PHE for addition: E(m1)*E(m2)=E(m1+m2). Probabilistic (random r). Used for secure voting.</li>
+        <li><b>History:</b> RAD 1978 "Privacy Homomorphisms" - Gentry 2009 first FHE (ideal lattices, bootstrapping). MacArthur Fellow 2014. Bootstrapping = homomorphically evaluate decryption circuit to refresh noisy ciphertext. Key breakthrough AND performance bottleneck.</li>
+        <li><b>4 generations:</b> 1st (ideal lattices, atrocious perf), 2nd (LWE, leveled FHE), 3rd (simpler, faster), 4th (CKKS approximate arithmetic for ML). Performance: 8x improvement/year. Bootstrapping: 1800s (2011) - 0.5s (2021).</li>
+        <li><b>Schemes:</b> BFV = exact integer arithmetic. CKKS = approximate (ML/floating point). Paillier = additive only.</li>
+        <li><b>Apps:</b> Cloud computing, genomics, CryptoNets (NN on encrypted data), PIR, DARPA DPRIVE. Google FHE Transpiler: converts plaintext C++ to encrypted-data code.</li>
+        <li><b>Side-channel:</b> RevEAL paper on Microsoft SEAL. Mathematical security != implementation security.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div class="week w11">
+    <div class="week-header">W11 - Real World Systems (Email, SSL/TLS)</div>
+    <div class="week-body">
+      <ul>
+        <li><b>5 security services:</b> Authentication, Key Agreement, Confidentiality, Integrity, Nonrepudiation.</li>
+        <li><b>Secure email:</b> Sender unilaterally chooses crypto (no negotiation). S/MIME needs X.509 from CA.</li>
+        <li><b>PGP:</b> hash(MD5) - sign(RSA priv) - ZIP - encrypt(IDEA session key) - encrypt session key(RSA pub). Combines fast symmetric + secure asymmetric.</li>
+        <li><b>Sign-then-encrypt (PGP/SSL):</b> Signature over plaintext, hides signatories. Must decrypt before authenticating. <b>Encrypt-then-sign (IPsec):</b> Verify before decrypting, efficient for automation. But forgery risk.</li>
+        <li><b>SSL/TLS:</b> Auth + confidentiality + integrity. Does NOT provide nonrepudiation. SSL deprecated 2015. TLS 1.3 = current (RFC 8446). Attacks: Heartbleed/BEAST/CRIME/POODLE targeted implementations.</li>
+        <li><b>TLS protocols:</b> Record (how to transmit) + Handshake (key agreement). ClientHello - ServerHello. Sits between application and transport layers. HTTP:80 - HTTPS:443.</li>
+        <li><b>6 secret keys per session:</b> 3 each direction (encryption key, HMAC key, IV). Cipher suite = key exchange algo + encryption algo + hash algo + compression.</li>
+        <li><b>Export-grade ciphers:</b> Deliberately weak 40-bit keys (US export regulations). Digital certificates: X.509, CA trust chain, check revocation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 12 -->
+  <div class="week w12">
+    <div class="week-header">W12 - Wireless Crypto &amp; Stream Ciphers</div>
+    <div class="week-body">
+      <ul>
+        <li><b>Wireless:</b> STA (station/device), AP (access point, ~100m range). Open medium = eavesdrop risk. Home (single router) vs Enterprise (centralized RADIUS/TACACS+, lightweight APs). Supplicant = client device.</li>
+        <li><b>802.1X + EAP + RADIUS:</b> Centralized auth framework. PEAP (server certs) vs EAP-TLS (client certs).</li>
+        <li><b>RC4:</b> Stream cipher. Key Setup (S-box) - Keystream Gen - XOR plaintext. Key reuse = fatal (XOR cancels keystream).</li>
+        <li><b>WEP:</b> RC4 + 24-bit IV + 40-bit key. IV repeats in hours. FMS attack. No replay protection. No tamper detection. Single global key. CRC-32 linear (not crypto hash) = bit-flipping possible. Crackable in 5 hours.</li>
+        <li><b>WPA:</b> TKIP (48-bit IV, hashed IV+key, MIC). Stepping stone, inherited WEP/RC4 weaknesses.</li>
+        <li><b>WPA2 (802.11i):</b> AES-CCMP replaces RC4. 4-way handshake (ANonce/SNonce - PTK from PMK). PSK vs Enterprise. Cracking WPA2-PSK: capture handshake msg 2, offline dictionary - PMK - PTK - MIC match. NOT crypto broken, just weak passwords.</li>
+        <li><b>KRACK:</b> Replays handshake - key reinstallation - nonce reuse. Targets implementation NOT AES. Affects clients. Patch to fix.</li>
+        <li><b>WPA3:</b> SAE/Dragonfly (replaces 4-way), forward secrecy, brute force protection, individualized encryption, PMF required, 128-bit personal / 192-bit enterprise. Mandatory for Wi-Fi 6.</li>
+        <li><b>Attacks:</b> Evil Twin (fake AP, stronger signal, intercepts traffic - VPN protects). Rogue AP (unauthorized on corp network, bypasses firewall). DoS: freq jamming, disassociation attacks.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- KEY SIZE EQUIVALENCES -->
+  <div class="week" style="border-color: #00695c;">
+    <div class="week-header" style="background: #00695c; color: #fff;">KEY SIZE EQUIVALENCES</div>
+    <div class="week-body" style="background: #E0F2F1;">
+      <ul>
+        <li>80-bit sym = 1024-bit RSA = 160-bit ECC</li>
+        <li>112-bit sym = 2048-bit RSA = 224-bit ECC</li>
+        <li><b>128-bit sym = 3072-bit RSA = 256-bit ECC</b></li>
+        <li>192-bit sym = 7680-bit RSA = 384-bit ECC</li>
+        <li><b>256-bit sym = 15360-bit RSA = 512-bit ECC</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="week" style="border-color: #37474f;">
+    <div class="week-header" style="background: #37474f; color: #fff;">EMAIL vs SSL/TLS vs IPsec</div>
+    <div class="week-body" style="background: #ECEFF1;">
+      <ul>
+        <li><b>Email (PGP):</b> Unilateral crypto (sender chooses), single message, nonrepudiation YES (signs plaintext), sign-then-encrypt.</li>
+        <li><b>SSL/TLS:</b> Negotiated cipher suite, session-based, nonrepudiation NO, sits above transport layer, 6 keys/session, sign-then-encrypt.</li>
+        <li><b>IPsec:</b> Negotiated, encrypts-then-signs, nonrepudiation NO, transparent to user, network layer. Verify before decrypt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HE TYPES -->
+  <div class="week" style="border-color: #283593;">
+    <div class="week-header" style="background: #283593; color: #fff;">HE TYPES AT A GLANCE</div>
+    <div class="week-body" style="background: #E8EAF6;">
+      <ul>
+        <li><b>PHE:</b> One operation unlimited. RSA=multiply, Paillier=add, ElGamal=multiply.</li>
+        <li><b>SWHE:</b> Both operations, limited depth.</li>
+        <li><b>FHE:</b> Both operations, unlimited. Gentry 2009, bootstrapping.</li>
+        <li><b>Schemes:</b> BFV=exact integers. CKKS=approximate/ML. Paillier=addition only.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WIRELESS EVOLUTION -->
+  <div class="week" style="border-color: #2e7d32;">
+    <div class="week-header" style="background: #2e7d32; color: #fff;">WIRELESS SECURITY EVOLUTION</div>
+    <div class="week-body" style="background: #E8F5E9;">
+      <ul>
+        <li><b>WEP:</b> RC4+24-bit IV, broken in hours, CRC-32 (linear), FMS attack.</li>
+        <li><b>WPA:</b> TKIP (RC4+48-bit IV+MIC), temporary fix, inherited RC4 weaknesses.</li>
+        <li><b>WPA2:</b> AES-CCMP, 4-way handshake, PSK/Enterprise. KRACK vuln (implementation).</li>
+        <li><b>WPA3:</b> SAE/Dragonfly, forward secrecy, 192-bit enterprise, mandatory Wi-Fi 6.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WHAT PROVIDES WHAT -->
+  <div class="week" style="border-color: #4a148c;">
+    <div class="week-header" style="background: #4a148c; color: #fff;">WHAT PROVIDES WHAT?</div>
+    <div class="week-body" style="background: #F3E5F5;">
+      <ul>
+        <li><b>HMAC:</b> Integrity YES | Auth YES | Confidentiality NO | Non-repudiation NO (shared key).</li>
+        <li><b>Digital Sigs:</b> Integrity YES | Auth YES | Non-repudiation YES | Confidentiality NO.</li>
+        <li><b>Sym Encryption:</b> Confidentiality YES | Integrity NO | Auth NO. Add HMAC or GCM for integrity.</li>
+        <li><b>Hashing:</b> Integrity YES | Confidentiality NO | Auth NO (no key). Irreversible.</li>
+        <li><b>PGP:</b> Auth+Integrity+Non-repudiation+Confidentiality (signs plaintext, then encrypts).</li>
+        <li><b>SSL/TLS:</b> Auth+Confidentiality+Integrity. NO non-repudiation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAM TRAPS -->
+  <div class="week" style="border-color: #b71c1c;">
+    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS &amp; GOTCHAS</div>
+    <div class="week-body" style="background: #FFEBEE;">
+      <ul>
+        <li>SSL/TLS does NOT provide nonrepudiation (PGP does)</li>
+        <li>RSA is multiplicatively homomorphic (NOT additively)</li>
+        <li>Paillier is additively homomorphic (NOT multiplicatively)</li>
+        <li>WPA2 KRACK targets handshake implementation, NOT AES</li>
+        <li>ECC 256-bit = RSA 3072-bit security (not equal bit count)</li>
+        <li>Bootstrapping = solution AND bottleneck for FHE</li>
+        <li>ECDLP has NO sub-exponential algorithm (unlike integer factoring for RSA)</li>
+        <li>WEP uses CRC-32 (NOT crypto hash) - bit-flipping possible</li>
+        <li>TLS uses 6 secret keys per session (3 per direction)</li>
+        <li>Sign-then-encrypt = PGP/SSL. Encrypt-then-sign = IPsec</li>
+        <li>Byzantine: >2/3 loyal needed (oral). Any number (written/signed)</li>
+        <li>4a^3 + 27b^2 != 0 for valid elliptic curve</li>
+        <li>ECB = NEVER use (same block = same cipher, penguin example)</li>
+        <li>MixColumns NOT in AES final round</li>
+        <li>Quantum resistant != quantum proof (water-resistant vs waterproof)</li>
+        <li>Anderson: >90% failures = config/implementation, NOT broken math</li>
+        <li>Kindervag coined Zero Trust in 2009 (NOT 2010)</li>
+        <li>OWASP crypto failures: 3 categories (NOT access control)</li>
+        <li>Salting != Seeding (salt=unique hashes, seed=PRNG start)</li>
+        <li>WPA2-PSK cracking = weak passwords, NOT broken crypto</li>
+        <li>RC4 key reuse = fatal (XOR cancels keystream)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- KEY FORMULAS -->
+  <div class="week" style="border-color: #455a64;">
+    <div class="week-header" style="background: #455a64; color: #fff;">KEY FORMULAS &amp; NUMBERS</div>
+    <div class="week-body" style="background: #ECEFF1;">
+      <ul>
+        <li><b>RSA:</b> n=pxq, phi(n)=(p-1)(q-1), exd=1 mod phi(n). Encrypt: c=m^e mod n. Decrypt: m=c^d mod n.</li>
+        <li><b>DH:</b> Shared secret = g^(ab) mod p. Alice sends g^a mod p, Bob sends g^b mod p.</li>
+        <li><b>ECC:</b> y^2 = x^3 + ax + b. Valid if 4a^3 + 27b^2 != 0. Q=kP (ECDLP: find k).</li>
+        <li><b>Key space:</b> n-bit = 2^n. Brute force avg = 2^(N-1). N(N-1)/2 sym keys for N users.</li>
+        <li><b>ZKP cheating:</b> 1/2^n after n rounds. 20 rounds ~ 1 in a million.</li>
+        <li><b>AES rounds:</b> 128-bit=10, 192-bit=12, 256-bit=14. Grover's: effective key = bits/2.</li>
+        <li><b>Hash sizes:</b> MD5=128-bit (broken). SHA-1=160 (deprecated). SHA-256=256 (current). Birthday attack = 2^(n/2).</li>
+        <li><b>HE perf:</b> 8x improvement/year. Bootstrapping: 1800s (2011) - 0.5s (2021). Pinocchio: 288-byte proofs.</li>
+        <li><b>WEP:</b> 24-bit IV + 40-bit key. <b>WPA:</b> 48-bit IV. <b>WPA3:</b> 128/192-bit.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- KEY PEOPLE & TIMELINE -->
+  <div class="week" style="border-color: #0d47a1;">
+    <div class="week-header" style="background: #0d47a1; color: #fff;">KEY PEOPLE &amp; TIMELINE</div>
+    <div class="week-body" style="background: #E3F2FD;">
+      <ul>
+        <li><b>Shannon</b> (1949): perfect secrecy, confusion/diffusion, 5 criteria. <b>Diffie &amp; Hellman</b> (1976): key exchange. <b>RSA</b> (1977): Rivest/Shamir/Adleman. <b>RAD</b> (1978): privacy homomorphisms.</li>
+        <li><b>Thompson</b> (1984): Trusting Trust, Turing Award. <b>GMR</b> (1985): formalized ZKP. <b>Koblitz &amp; Miller</b> (1985): ECC independently.</li>
+        <li><b>Chaum</b> (1989): DigiCash. <b>Anderson</b> (1993): Why Cryptosystems Fail. <b>Clipper Chip</b> (1993): proposed, abandoned.</li>
+        <li><b>Deep Crack</b> (1998): DES brute-forced 22hrs. <b>Whitten &amp; Tygar</b> (1999): Johnny Can't Encrypt.</li>
+        <li><b>Daemen &amp; Rijmen</b> (2000): Rijndael selected as AES. <b>Jericho Forum</b> (2007): de-perimeterization.</li>
+        <li><b>Kindervag</b> (2009): coined Zero Trust. <b>Gentry</b> (2009): first FHE. MacArthur 2014.</li>
+        <li><b>NIST SP 800-207</b> (2020): ZTA. <b>Ronin hack</b> (2022): $620M. <b>SIKE broken</b> (2022). <b>CISA ZTMM v2.0</b> (2023). <b>PQC migration</b>: 2035.</li>
+        <li><b>Lamport:</b> Byzantine Generals. <b>Matt Blaze:</b> broke Clipper Chip. <b>Snowden:</b> "John Dobbertin" in Zcash ceremony.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXCEL FORMULAS -->
+  <div class="week" style="border-color: #006064;">
+    <div class="week-header" style="background: #006064; color: #fff;">EXCEL QUICK REFERENCE</div>
+    <div class="week-body" style="background: #E0F7FA;">
+      <ul>
+        <li><b>Core:</b> <code>=MOD(a,n)</code> modular. <code>=POWER(base,exp)</code>. <code>=GCD(a,b)</code>. <code>=CODE("A")</code>=65. <code>=CHAR(65)</code>="A".</li>
+        <li><b>RSA enc:</b> <code>=MOD(POWER(msg,e),n)</code>. Dec: <code>=MOD(POWER(cipher,d),n)</code>. Sign: use d. Verify: use e.</li>
+        <li><b>DH:</b> A=<code>=MOD(POWER(g,a),p)</code>. B=<code>=MOD(POWER(g,b),p)</code>. Secret=<code>=MOD(POWER(B,a),p)</code>.</li>
+        <li><b>Caesar:</b> <code>=CHAR(MOD(CODE(UPPER(A1))-65+key,26)+65)</code>. Vigenere: <code>=CHAR(MOD(CODE(A1)+CODE(B1)-130,26)+65)</code>.</li>
+        <li><b>Mod inverse (brute):</b> Col A: 1,2,3... Col B: <code>=MOD(A1*e,phi)</code>. Find row where B=1.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

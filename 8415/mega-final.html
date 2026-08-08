@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8415 Final Mega Exam -- Weeks 8-12</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #e94560;
+    --accent2: #0f3460;
+    --page-color: #e94560;
+    --page-tint: rgba(233,69,96,0.12);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w8 { background: var(--w1); color: #000; }
+  .topnav a.w9 { background: var(--w2); color: #000; }
+  .topnav a.w10 { background: var(--w3); color: #000; }
+  .topnav a.w11 { background: var(--w4); color: #000; }
+  .topnav a.w12 { background: var(--w5); color: #000; }
+  .topnav a.cs { background: #20C997; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+  .topnav .nav-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; width: 100%; }
+  .topnav .nav-row + .nav-row { margin-top: 6px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* MEGA EXAM COMPONENTS */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-bottom: 8px;
+  }
+  .header a { color: var(--page-color); text-decoration: none; font-weight: 600; }
+  .header a:hover { text-decoration: underline; }
+
+  .timer {
+    font-size: 2em; font-weight: 800; color: var(--accent1);
+    font-variant-numeric: tabular-nums;
+  }
+  .timer.warning { color: #FFA94D; }
+  .timer.danger { color: #ff6b6b; animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .progress-section { margin: 16px 0 24px; }
+  .progress-bar {
+    background: #333; border-radius: 12px; height: 28px;
+    overflow: hidden; margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent1), #c0392b);
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    text-align: center; font-weight: 600; color: #aaa; font-size: 0.95em;
+  }
+
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .btn-submit {
+    padding: 14px 32px; border-radius: 10px; border: none;
+    background: var(--accent1); color: #fff;
+    font-size: 1.05em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #c0392b; transform: scale(1.03); }
+  .btn-reset {
+    padding: 14px 32px; border-radius: 10px;
+    border: 2px solid var(--accent1); background: transparent;
+    color: var(--accent1); font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent1); color: #fff; }
+
+  .btn-shuffle {
+    padding: 14px 32px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #9775FA, #a78bfa);
+    color: #fff; font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-shuffle:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(151,117,250,0.4); }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .section-header {
+    font-size: 1.15em; font-weight: 800; color: var(--accent1);
+    padding: 14px 20px; margin: 28px 0 12px;
+    background: rgba(233,69,96,0.1); border-radius: 10px;
+    border-left: 5px solid var(--accent1);
+  }
+
+  .mq {
+    margin: 14px 0; padding: 18px 20px;
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s;
+  }
+  .mq p { font-weight: 600; margin-bottom: 14px; font-size: 1em; line-height: 1.6; }
+  .qnum {
+    display: inline-block; min-width: 32px; height: 32px;
+    line-height: 32px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.8em; font-weight: 800; margin-right: 10px;
+  }
+  .mq label {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); font-size: 0.95em;
+    cursor: pointer; transition: all 0.2s;
+    line-height: 1.5; user-select: none;
+  }
+  .mq label:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  #result {
+    display: none; text-align: center;
+    background: rgba(233,69,96,0.12); border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 32px; margin: 32px 0;
+  }
+  .result-label {
+    font-size: 1.2em; font-weight: 700; color: var(--accent1);
+    margin-bottom: 12px;
+  }
+
+  .mq-feedback {
+    margin-top: 12px; padding: 12px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 0; color: #666;
+    border-top: 1px solid rgba(255,255,255,0.06); margin-top: 32px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    .timer { font-size: 1.5em; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-row">
+    <span class="title" style="text-decoration:none">MIDTERM</span>
+    <a href="week1.html" class="w1">W1</a>
+    <a href="week2.html" class="w2">W2</a>
+    <a href="week3.html" class="w3">W3</a>
+    <a href="week4.html" class="w4">W4</a>
+    <a href="week5.html" class="w5">W5</a>
+    <a href="week6.html" class="w6">W6</a>
+    <a href="mega.html" class="mega">Midterm Mega</a>
+    <a href="cheatsheet.html" class="cs">Midterm Cheat Sheet</a>
+  </div>
+  <div class="nav-row">
+    <span class="title" style="text-decoration:none">FINAL</span>
+    <a href="week8.html" class="w8">W8</a>
+    <a href="week9.html" class="w9">W9</a>
+    <a href="week10.html" class="w10">W10</a>
+    <a href="week11.html" class="w11">W11</a>
+    <a href="week12.html" class="w12">W12</a>
+    <a href="mega-final.html" class="mega active">Final Mega</a>
+    <a href="cheatsheet-final.html" class="cs">Final Cheat Sheet</a>
+    <a href="../index.html" class="home">All Courses</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>FINAL MEGA EXAM -- 50 Questions</h1>
+  <div class="sub">SEAS 8415 Applied Cryptography &amp; Data Protection - Weeks 8-12 - 60-Minute Timed Exam</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <a href="index.html">&larr; Back to Hub</a>
+      <div style="color: #aaa; font-size: 0.95em;">Final Exam</div>
+    </div>
+    <div class="header-right">
+      <div class="timer">
+        <span id="timer">1:00:00</span>
+      </div>
+      <div style="font-size: 0.9em; color: #aaa;">Time Remaining</div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progbar" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress">0/50 answered</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
+    <button class="btn-reset" onclick="resetExam()">Reset</button>
+    <button class="btn-shuffle" onclick="shuffleAndReset()">Shuffle Questions</button>
+  </div>
+
+  <div id="questions-container">
+
+  <!-- WEEK 8: Blockchain -->
+  <div class="section-header" id="w8">Week 8: Blockchain &amp; Digital Cash (Questions 1-10)</div>
+
+  <div class="mq" id="mq1">
+    <p><span class="qnum">1</span> In Schneier's Protocol #4 for digital cash, what technique prevents double-spending while preserving anonymity until fraud occurs?</p>
+    <label onclick="pick(1,0)">A) Homomorphic encryption of the serial number</label>
+    <label onclick="pick(1,1)">B) Secret splitting of the buyer's identity into multiple parts, where spending the coin twice reveals enough parts to reconstruct the identity</label>
+    <label onclick="pick(1,2)">C) Zero-knowledge proof that the coin has not been spent</label>
+    <label onclick="pick(1,3)">D) Blockchain consensus verification at the point of sale</label>
+  </div>
+
+  <div class="mq" id="mq2">
+    <p><span class="qnum">2</span> Which of the following is NOT one of the six properties of ideal digital cash?</p>
+    <label onclick="pick(2,0)">A) Independence - not tied to a physical medium</label>
+    <label onclick="pick(2,1)">B) Anonymity - no link between user and purchase</label>
+    <label onclick="pick(2,2)">C) Reversibility - transactions can be undone within 24 hours</label>
+    <label onclick="pick(2,3)">D) Transferability - can be passed to other users</label>
+  </div>
+
+  <div class="mq" id="mq3">
+    <p><span class="qnum">3</span> The Byzantine Generals Problem for oral messages requires what fraction of loyal generals to reach consensus?</p>
+    <label onclick="pick(3,0)">A) More than 1/2 must be loyal</label>
+    <label onclick="pick(3,1)">B) More than 2/3 must be loyal (traitors must be fewer than 1/3)</label>
+    <label onclick="pick(3,2)">C) All generals must be loyal</label>
+    <label onclick="pick(3,3)">D) At least 3/4 must be loyal</label>
+  </div>
+
+  <div class="mq" id="mq4">
+    <p><span class="qnum">4</span> According to NISTIR 8202, which type of blockchain node stores the complete ledger history and can independently validate all transactions?</p>
+    <label onclick="pick(4,0)">A) Lightweight node</label>
+    <label onclick="pick(4,1)">B) Publishing node</label>
+    <label onclick="pick(4,2)">C) Full node</label>
+    <label onclick="pick(4,3)">D) Mining pool coordinator</label>
+  </div>
+
+  <div class="mq" id="mq5">
+    <p><span class="qnum">5</span> A smart contract on a blockchain is best described as:</p>
+    <label onclick="pick(5,0)">A) A legal document stored as a PDF on the blockchain</label>
+    <label onclick="pick(5,1)">B) Self-executing code where the terms are directly written into the program and automatically enforced</label>
+    <label onclick="pick(5,2)">C) An escrow service run by a trusted third party</label>
+    <label onclick="pick(5,3)">D) A digital signature on a contract document</label>
+  </div>
+
+  <div class="mq" id="mq6">
+    <p><span class="qnum">6</span> David Chaum's DigiCash (1989) failed commercially despite being cryptographically sound. Which factor contributed MOST to its failure?</p>
+    <label onclick="pick(6,0)">A) The underlying blind signature scheme was broken</label>
+    <label onclick="pick(6,1)">B) It required banks as intermediaries and failed to gain merchant/consumer adoption</label>
+    <label onclick="pick(6,2)">C) Government regulations prohibited digital currency</label>
+    <label onclick="pick(6,3)">D) The encryption was too slow for real-time transactions</label>
+  </div>
+
+  <div class="mq" id="mq7">
+    <p><span class="qnum">7</span> The Paxos consensus algorithm ensures safety by guaranteeing that:</p>
+    <label onclick="pick(7,0)">A) All nodes must respond within a fixed time window</label>
+    <label onclick="pick(7,1)">B) Only a single value is chosen, and only a value that has been proposed</label>
+    <label onclick="pick(7,2)">C) Byzantine fault tolerance is achieved with any number of faulty nodes</label>
+    <label onclick="pick(7,3)">D) Transactions are processed in parallel without ordering</label>
+  </div>
+
+  <div class="mq" id="mq8">
+    <p><span class="qnum">8</span> Which property of a distributed ledger ensures that once a transaction is recorded, it cannot be altered without redoing the proof-of-work for that block and all subsequent blocks?</p>
+    <label onclick="pick(8,0)">A) Transparency</label>
+    <label onclick="pick(8,1)">B) Decentralization</label>
+    <label onclick="pick(8,2)">C) Immutability (tamper evidence through cryptographic chaining)</label>
+    <label onclick="pick(8,3)">D) Anonymity</label>
+  </div>
+
+  <div class="mq" id="mq9">
+    <p><span class="qnum">9</span> In blockchain mechanics, each block header contains a hash of the previous block. This chaining mechanism primarily prevents:</p>
+    <label onclick="pick(9,0)">A) Unauthorized reading of transaction data</label>
+    <label onclick="pick(9,1)">B) Retroactive tampering with historical transactions</label>
+    <label onclick="pick(9,2)">C) Denial-of-service attacks on mining nodes</label>
+    <label onclick="pick(9,3)">D) Key compromise of wallet holders</label>
+  </div>
+
+  <div class="mq" id="mq10">
+    <p><span class="qnum">10</span> A lightweight (SPV) node differs from a full node because it:</p>
+    <label onclick="pick(10,0)">A) Cannot participate in the network at all</label>
+    <label onclick="pick(10,1)">B) Stores only block headers and verifies transactions using Merkle proofs without downloading the full chain</label>
+    <label onclick="pick(10,2)">C) Has more storage capacity than a full node</label>
+    <label onclick="pick(10,3)">D) Both A and C</label>
+  </div>
+
+  <!-- WEEK 9: ECC -->
+  <div class="section-header" id="w9">Week 9: Elliptic Curve Cryptography (Questions 11-20)</div>
+
+  <div class="mq" id="mq11">
+    <p><span class="qnum">11</span> Elliptic Curve Cryptography was independently proposed in 1985 by:</p>
+    <label onclick="pick(11,0)">A) Rivest and Shamir</label>
+    <label onclick="pick(11,1)">B) Diffie and Hellman</label>
+    <label onclick="pick(11,2)">C) Neal Koblitz and Victor Miller</label>
+    <label onclick="pick(11,3)">D) Whitfield Diffie and Ralph Merkle</label>
+  </div>
+
+  <div class="mq" id="mq12">
+    <p><span class="qnum">12</span> The Weierstrass form of an elliptic curve is y^2 = x^3 + ax + b. For the curve to be non-singular (no cusps or self-intersections), which condition must hold?</p>
+    <label onclick="pick(12,0)">A) a + b != 0</label>
+    <label onclick="pick(12,1)">B) 4a^3 + 27b^2 != 0 (the discriminant must be non-zero)</label>
+    <label onclick="pick(12,2)">C) a and b must both be prime numbers</label>
+    <label onclick="pick(12,3)">D) a^2 + b^2 = 1</label>
+  </div>
+
+  <div class="mq" id="mq13">
+    <p><span class="qnum">13</span> The Elliptic Curve Discrete Logarithm Problem (ECDLP) asks: given a base point P and a point Q = kP on the curve, find:</p>
+    <label onclick="pick(13,0)">A) The prime modulus p</label>
+    <label onclick="pick(13,1)">B) The scalar multiplier k</label>
+    <label onclick="pick(13,2)">C) The curve parameters a and b</label>
+    <label onclick="pick(13,3)">D) The point at infinity</label>
+  </div>
+
+  <div class="mq" id="mq14">
+    <p><span class="qnum">14</span> A 256-bit ECC key provides security roughly equivalent to:</p>
+    <label onclick="pick(14,0)">A) A 256-bit RSA key</label>
+    <label onclick="pick(14,1)">B) A 1024-bit RSA key</label>
+    <label onclick="pick(14,2)">C) A 3072-bit RSA key</label>
+    <label onclick="pick(14,3)">D) A 15360-bit RSA key</label>
+  </div>
+
+  <div class="mq" id="mq15">
+    <p><span class="qnum">15</span> In ECC point addition, when adding a point P to itself (point doubling), the geometric interpretation is:</p>
+    <label onclick="pick(15,0)">A) Drawing a horizontal line through P</label>
+    <label onclick="pick(15,1)">B) Drawing the tangent line at P, finding where it intersects the curve, and reflecting over the x-axis</label>
+    <label onclick="pick(15,2)">C) Multiplying the x-coordinate by 2</label>
+    <label onclick="pick(15,3)">D) Rotating the point 180 degrees around the origin</label>
+  </div>
+
+  <div class="mq" id="mq16">
+    <p><span class="qnum">16</span> Why is the index-calculus attack NOT applicable to elliptic curve groups?</p>
+    <label onclick="pick(16,0)">A) Elliptic curve points cannot be factored into smaller elements the way integers can be decomposed into prime factors</label>
+    <label onclick="pick(16,1)">B) Elliptic curves use larger key sizes</label>
+    <label onclick="pick(16,2)">C) The attack only works on symmetric ciphers</label>
+    <label onclick="pick(16,3)">D) Both B and C</label>
+  </div>
+
+  <div class="mq" id="mq17">
+    <p><span class="qnum">17</span> In ECDH key exchange, Alice and Bob agree on a curve and base point G. Alice picks private key a, Bob picks private key b. The shared secret is:</p>
+    <label onclick="pick(17,0)">A) a + b mod n</label>
+    <label onclick="pick(17,1)">B) a * b * G</label>
+    <label onclick="pick(17,2)">C) a(bG) = b(aG) = abG (both compute the same point by multiplying the other's public key by their private scalar)</label>
+    <label onclick="pick(17,3)">D) Hash(a || b)</label>
+  </div>
+
+  <div class="mq" id="mq18">
+    <p><span class="qnum">18</span> The point at infinity in an elliptic curve group serves as:</p>
+    <label onclick="pick(18,0)">A) The generator point for key generation</label>
+    <label onclick="pick(18,1)">B) The identity element - adding it to any point P yields P</label>
+    <label onclick="pick(18,2)">C) A special point used only for signature verification</label>
+    <label onclick="pick(18,3)">D) The public key in ECDSA</label>
+  </div>
+
+  <div class="mq" id="mq19">
+    <p><span class="qnum">19</span> ECC is particularly advantageous for IoT and mobile devices because:</p>
+    <label onclick="pick(19,0)">A) It provides equivalent security with much smaller keys, reducing bandwidth, storage, and computational overhead</label>
+    <label onclick="pick(19,1)">B) It does not require any mathematical operations</label>
+    <label onclick="pick(19,2)">C) It is immune to all known attacks</label>
+    <label onclick="pick(19,3)">D) It was designed specifically for embedded systems</label>
+  </div>
+
+  <div class="mq" id="mq20">
+    <p><span class="qnum">20</span> A 160-bit ECC key provides security roughly equivalent to a 1024-bit RSA key. This dramatic difference exists because:</p>
+    <label onclick="pick(20,0)">A) ECC uses a fundamentally different mathematical structure where the best known attacks are fully exponential, unlike sub-exponential attacks available against RSA</label>
+    <label onclick="pick(20,1)">B) RSA keys contain redundant padding</label>
+    <label onclick="pick(20,2)">C) ECC uses quantum-resistant algorithms</label>
+    <label onclick="pick(20,3)">D) RSA is implemented in software while ECC is hardware-only</label>
+  </div>
+
+  <!-- WEEK 10: Homomorphic Encryption & MPC -->
+  <div class="section-header" id="w10">Week 10: Homomorphic Encryption &amp; Multi-Party Computation (Questions 21-30)</div>
+
+  <div class="mq" id="mq21">
+    <p><span class="qnum">21</span> In Yao's Millionaire's Protocol, two millionaires want to determine who is richer without revealing their actual wealth. The protocol relies on:</p>
+    <label onclick="pick(21,0)">A) A trusted third party who compares the values</label>
+    <label onclick="pick(21,1)">B) RSA encryption - one party encrypts a modified value and the other checks a condition on the decrypted result</label>
+    <label onclick="pick(21,2)">C) Both parties publishing their net worth on a blockchain</label>
+    <label onclick="pick(21,3)">D) Symmetric key exchange followed by comparison</label>
+  </div>
+
+  <div class="mq" id="mq22">
+    <p><span class="qnum">22</span> RSA is multiplicatively homomorphic because E(m1) * E(m2) mod n equals:</p>
+    <label onclick="pick(22,0)">A) E(m1 + m2) mod n</label>
+    <label onclick="pick(22,1)">B) E(m1 * m2) mod n -- since (m1^e)(m2^e) = (m1*m2)^e mod n</label>
+    <label onclick="pick(22,2)">C) E(m1 XOR m2) mod n</label>
+    <label onclick="pick(22,3)">D) E(m1 / m2) mod n</label>
+  </div>
+
+  <div class="mq" id="mq23">
+    <p><span class="qnum">23</span> Why is RSA NOT additively homomorphic?</p>
+    <label onclick="pick(23,0)">A) Because m1^e + m2^e != (m1 + m2)^e mod n -- exponentiation does not distribute over addition</label>
+    <label onclick="pick(23,1)">B) Because RSA keys are too short for addition</label>
+    <label onclick="pick(23,2)">C) Because RSA only works with prime numbers</label>
+    <label onclick="pick(23,3)">D) Because addition is not a valid mathematical operation on ciphertext</label>
+  </div>
+
+  <div class="mq" id="mq24">
+    <p><span class="qnum">24</span> Craig Gentry's landmark 2009 PhD thesis achieved the first Fully Homomorphic Encryption (FHE) scheme using:</p>
+    <label onclick="pick(24,0)">A) RSA with extended key sizes</label>
+    <label onclick="pick(24,1)">B) Elliptic curve pairings</label>
+    <label onclick="pick(24,2)">C) Ideal lattices and a bootstrapping technique to manage noise growth</label>
+    <label onclick="pick(24,3)">D) Quantum error correction codes</label>
+  </div>
+
+  <div class="mq" id="mq25">
+    <p><span class="qnum">25</span> The 1978 RAD paper by Rivest, Adleman, and Dertouzos titled "On Data Banks and Privacy Homomorphisms" was significant because it:</p>
+    <label onclick="pick(25,0)">A) Proved FHE was impossible</label>
+    <label onclick="pick(25,1)">B) First posed the question of whether computation on encrypted data was possible, launching 30+ years of research</label>
+    <label onclick="pick(25,2)">C) Presented a working FHE implementation</label>
+    <label onclick="pick(25,3)">D) Proved that RSA was homomorphic for all operations</label>
+  </div>
+
+  <div class="mq" id="mq26">
+    <p><span class="qnum">26</span> The key difference between CKKS and BFV homomorphic encryption schemes is:</p>
+    <label onclick="pick(26,0)">A) CKKS supports approximate arithmetic on real/complex numbers (ideal for ML), while BFV performs exact arithmetic on integers</label>
+    <label onclick="pick(26,1)">B) CKKS is faster but BFV is more secure</label>
+    <label onclick="pick(26,2)">C) BFV works on encrypted data but CKKS does not</label>
+    <label onclick="pick(26,3)">D) They are identical schemes with different names</label>
+  </div>
+
+  <div class="mq" id="mq27">
+    <p><span class="qnum">27</span> In a cloud computing HE architecture, which critical principle ensures the cloud provider cannot read the data it processes?</p>
+    <label onclick="pick(27,0)">A) The cloud provider generates and holds both public and secret keys</label>
+    <label onclick="pick(27,1)">B) The client keeps the secret (decryption) key and only sends encrypted data and the public/evaluation key to the cloud</label>
+    <label onclick="pick(27,2)">C) Data is stored unencrypted but on air-gapped servers</label>
+    <label onclick="pick(27,3)">D) The cloud uses its own encryption layer on top</label>
+  </div>
+
+  <div class="mq" id="mq28">
+    <p><span class="qnum">28</span> The RevEAL attack demonstrated a critical vulnerability against Microsoft SEAL by:</p>
+    <label onclick="pick(28,0)">A) Breaking the underlying lattice problem mathematically</label>
+    <label onclick="pick(28,1)">B) Exploiting power consumption side-channel leakage during HE operations to recover plaintext</label>
+    <label onclick="pick(28,2)">C) Brute-forcing the encryption key</label>
+    <label onclick="pick(28,3)">D) Intercepting data before encryption</label>
+  </div>
+
+  <div class="mq" id="mq29">
+    <p><span class="qnum">29</span> The Paillier cryptosystem is notable because it is:</p>
+    <label onclick="pick(29,0)">A) Fully homomorphic for all operations</label>
+    <label onclick="pick(29,1)">B) Additively homomorphic -- E(m1) * E(m2) = E(m1 + m2), enabling encrypted addition and scalar multiplication</label>
+    <label onclick="pick(29,2)">C) Only usable for digital signatures</label>
+    <label onclick="pick(29,3)">D) Multiplicatively homomorphic like RSA</label>
+  </div>
+
+  <div class="mq" id="mq30">
+    <p><span class="qnum">30</span> Bootstrapping in FHE solves the noise problem by:</p>
+    <label onclick="pick(30,0)">A) Adding more noise to cancel out existing noise</label>
+    <label onclick="pick(30,1)">B) Homomorphically evaluating the decryption circuit on the ciphertext, effectively "refreshing" it with reduced noise so more operations can continue</label>
+    <label onclick="pick(30,2)">C) Switching to a different encryption algorithm mid-computation</label>
+    <label onclick="pick(30,3)">D) Increasing the key size after each operation</label>
+  </div>
+
+  <!-- WEEK 11: Real World Systems -->
+  <div class="section-header" id="w11">Week 11: Real-World Cryptographic Systems (Questions 31-40)</div>
+
+  <div class="mq" id="mq31">
+    <p><span class="qnum">31</span> In PGP's encryption process, the correct order of operations is:</p>
+    <label onclick="pick(31,0)">A) Encrypt with AES, then sign, then compress</label>
+    <label onclick="pick(31,1)">B) Hash the message (MD5), sign the hash with sender's RSA private key, compress (ZIP), encrypt with IDEA session key, encrypt the session key with recipient's RSA public key</label>
+    <label onclick="pick(31,2)">C) Compress, encrypt with RSA, then sign with IDEA</label>
+    <label onclick="pick(31,3)">D) Sign with public key, hash with SHA-256, encrypt with 3DES</label>
+  </div>
+
+  <div class="mq" id="mq32">
+    <p><span class="qnum">32</span> SSL/TLS provides confidentiality, integrity, and authentication. Which security service does it specifically NOT provide?</p>
+    <label onclick="pick(32,0)">A) Data integrity</label>
+    <label onclick="pick(32,1)">B) Server authentication</label>
+    <label onclick="pick(32,2)">C) Non-repudiation</label>
+    <label onclick="pick(32,3)">D) Confidentiality</label>
+  </div>
+
+  <div class="mq" id="mq33">
+    <p><span class="qnum">33</span> Each SSL/TLS session generates how many secret keys, and why?</p>
+    <label onclick="pick(33,0)">A) 2 keys - one for each direction</label>
+    <label onclick="pick(33,1)">B) 6 keys - 3 per direction (one for encryption, one for HMAC, one for IV)</label>
+    <label onclick="pick(33,2)">C) 1 key shared bidirectionally</label>
+    <label onclick="pick(33,3)">D) 4 keys - 2 for encryption and 2 for hashing</label>
+  </div>
+
+  <div class="mq" id="mq34">
+    <p><span class="qnum">34</span> The sign-then-encrypt approach (used by PGP) has which tradeoff compared to encrypt-then-sign?</p>
+    <label onclick="pick(34,0)">A) Sign-then-encrypt hides the signer's identity (privacy), but the recipient could potentially re-encrypt and forward the signed content to a third party claiming they sent it</label>
+    <label onclick="pick(34,1)">B) Sign-then-encrypt is always more secure</label>
+    <label onclick="pick(34,2)">C) There is no practical difference between the two approaches</label>
+    <label onclick="pick(34,3)">D) Sign-then-encrypt prevents all forwarding attacks</label>
+  </div>
+
+  <div class="mq" id="mq35">
+    <p><span class="qnum">35</span> S/MIME differs from PGP in its trust model because S/MIME:</p>
+    <label onclick="pick(35,0)">A) Uses a web of trust like PGP</label>
+    <label onclick="pick(35,1)">B) Requires X.509 certificates issued by a Certificate Authority, creating a hierarchical trust model</label>
+    <label onclick="pick(35,2)">C) Does not use any form of authentication</label>
+    <label onclick="pick(35,3)">D) Both A and C</label>
+  </div>
+
+  <div class="mq" id="mq36">
+    <p><span class="qnum">36</span> Export-grade ciphers (like those mandated by the US government in the 1990s) were deliberately limited to:</p>
+    <label onclick="pick(36,0)">A) 256-bit keys for strong security</label>
+    <label onclick="pick(36,1)">B) 40-bit keys, making them intentionally weak enough for government agencies to break</label>
+    <label onclick="pick(36,2)">C) 128-bit keys with a government backdoor</label>
+    <label onclick="pick(36,3)">D) 56-bit DES keys only</label>
+  </div>
+
+  <div class="mq" id="mq37">
+    <p><span class="qnum">37</span> Email cryptography is described as "unilateral" because:</p>
+    <label onclick="pick(37,0)">A) Only one encryption algorithm can be used</label>
+    <label onclick="pick(37,1)">B) The sender alone chooses whether and how to encrypt - the recipient has no say in the matter</label>
+    <label onclick="pick(37,2)">C) Only one party can read the encrypted email</label>
+    <label onclick="pick(37,3)">D) It only works in one geographic region</label>
+  </div>
+
+  <div class="mq" id="mq38">
+    <p><span class="qnum">38</span> The Heartbleed vulnerability (CVE-2014-0160) affected OpenSSL by:</p>
+    <label onclick="pick(38,0)">A) Breaking the AES encryption algorithm</label>
+    <label onclick="pick(38,1)">B) Allowing attackers to read up to 64KB of server memory per request through a missing bounds check in the TLS heartbeat extension, potentially exposing private keys and session data</label>
+    <label onclick="pick(38,2)">C) Downgrading connections to use SSL 2.0</label>
+    <label onclick="pick(38,3)">D) Exploiting weak random number generation</label>
+  </div>
+
+  <div class="mq" id="mq39">
+    <p><span class="qnum">39</span> TLS 1.3 improved over TLS 1.2 in several ways. Which of the following is true?</p>
+    <label onclick="pick(39,0)">A) TLS 1.3 added support for RC4 and 3DES</label>
+    <label onclick="pick(39,1)">B) TLS 1.3 reduced the handshake to 1-RTT (and supports 0-RTT resumption), removed insecure ciphers, and mandated forward secrecy</label>
+    <label onclick="pick(39,2)">C) TLS 1.3 eliminated certificate-based authentication</label>
+    <label onclick="pick(39,3)">D) TLS 1.3 uses only symmetric encryption without any key exchange</label>
+  </div>
+
+  <div class="mq" id="mq40">
+    <p><span class="qnum">40</span> The POODLE attack exploited which deprecated protocol?</p>
+    <label onclick="pick(40,0)">A) TLS 1.2</label>
+    <label onclick="pick(40,1)">B) TLS 1.0</label>
+    <label onclick="pick(40,2)">C) SSL 3.0 - exploiting its CBC padding to decrypt data byte by byte</label>
+    <label onclick="pick(40,3)">D) SSH version 1</label>
+  </div>
+
+  <!-- WEEK 12: Wireless Crypto -->
+  <div class="section-header" id="w12">Week 12: Wireless Cryptography (Questions 41-50)</div>
+
+  <div class="mq" id="mq41">
+    <p><span class="qnum">41</span> WEP is fundamentally broken for multiple reasons. Which combination correctly identifies its critical weaknesses?</p>
+    <label onclick="pick(41,0)">A) Uses AES with a 128-bit key and SHA-256 for integrity</label>
+    <label onclick="pick(41,1)">B) Uses RC4 with a 24-bit IV (too short, causing reuse), CRC-32 for integrity (which is linear and allows bit-flipping attacks), and can be cracked in approximately 5 hours</label>
+    <label onclick="pick(41,2)">C) Uses 3DES with a 48-bit IV</label>
+    <label onclick="pick(41,3)">D) Uses Blowfish with no IV</label>
+  </div>
+
+  <div class="mq" id="mq42">
+    <p><span class="qnum">42</span> WPA improved on WEP by introducing TKIP, which includes:</p>
+    <label onclick="pick(42,0)">A) AES encryption with 256-bit keys</label>
+    <label onclick="pick(42,1)">B) A 48-bit IV, per-packet key mixing, and a Message Integrity Check (MIC/Michael), though it still used RC4 as the underlying cipher</label>
+    <label onclick="pick(42,2)">C) Quantum-resistant key exchange</label>
+    <label onclick="pick(42,3)">D) Both A and C</label>
+  </div>
+
+  <div class="mq" id="mq43">
+    <p><span class="qnum">43</span> WPA2 uses AES-CCMP and a 4-way handshake. During this handshake, which values are exchanged to derive the Pairwise Transient Key (PTK)?</p>
+    <label onclick="pick(43,0)">A) Only the pre-shared key is sent in plaintext</label>
+    <label onclick="pick(43,1)">B) ANonce (from AP) and SNonce (from client) are exchanged, then combined with the PMK and MAC addresses to derive the PTK; the GTK for multicast is also distributed</label>
+    <label onclick="pick(43,2)">C) A Diffie-Hellman exchange replaces the PSK entirely</label>
+    <label onclick="pick(43,3)">D) RSA public keys are exchanged between client and AP</label>
+  </div>
+
+  <div class="mq" id="mq44">
+    <p><span class="qnum">44</span> The KRACK (Key Reinstallation Attack) against WPA2 works by:</p>
+    <label onclick="pick(44,0)">A) Breaking the AES-CCMP cipher mathematically</label>
+    <label onclick="pick(44,1)">B) Brute-forcing the pre-shared key</label>
+    <label onclick="pick(44,2)">C) Replaying handshake messages to trick the client into reinstalling an already-used key, causing nonce reuse -- this is an implementation flaw, not a cryptographic break of AES</label>
+    <label onclick="pick(44,3)">D) Exploiting a vulnerability in the RADIUS server</label>
+  </div>
+
+  <div class="mq" id="mq45">
+    <p><span class="qnum">45</span> Cracking WPA2-PSK requires:</p>
+    <label onclick="pick(45,0)">A) Breaking AES cryptographically</label>
+    <label onclick="pick(45,1)">B) Capturing the 4-way handshake and performing offline dictionary/brute-force attacks against the passphrase -- WPA2 itself is NOT cryptographically broken</label>
+    <label onclick="pick(45,2)">C) Physical access to the access point hardware</label>
+    <label onclick="pick(45,3)">D) Exploiting a flaw in CCMP</label>
+  </div>
+
+  <div class="mq" id="mq46">
+    <p><span class="qnum">46</span> WPA3 uses SAE (Simultaneous Authentication of Equals), also known as the Dragonfly handshake. This provides which key advantages over WPA2-PSK?</p>
+    <label onclick="pick(46,0)">A) Forward secrecy (compromising today's key doesn't expose past sessions) and resistance to offline dictionary attacks, even with a weak password</label>
+    <label onclick="pick(46,1)">B) Faster connection speeds but weaker security</label>
+    <label onclick="pick(46,2)">C) Elimination of all passwords in favor of biometrics</label>
+    <label onclick="pick(46,3)">D) Backward compatibility with WEP devices</label>
+  </div>
+
+  <div class="mq" id="mq47">
+    <p><span class="qnum">47</span> An evil twin attack against wireless networks involves which sequence of steps?</p>
+    <label onclick="pick(47,0)">A) The attacker only needs to guess the Wi-Fi password</label>
+    <label onclick="pick(47,1)">B) The attacker sets up a rogue AP with the same SSID and a stronger signal, causing clients to auto-connect; the attacker then intercepts all traffic (potentially performing SSL stripping or credential harvesting)</label>
+    <label onclick="pick(47,2)">C) The attacker jams all frequencies so no one can connect</label>
+    <label onclick="pick(47,3)">D) The attacker physically replaces the legitimate access point</label>
+  </div>
+
+  <div class="mq" id="mq48">
+    <p><span class="qnum">48</span> In 802.1X enterprise wireless authentication, the three roles are:</p>
+    <label onclick="pick(48,0)">A) Client, server, and firewall</label>
+    <label onclick="pick(48,1)">B) Supplicant (client device), authenticator (access point/switch), and authentication server (RADIUS) using EAP as the framework</label>
+    <label onclick="pick(48,2)">C) Browser, web server, and DNS</label>
+    <label onclick="pick(48,3)">D) User, admin, and auditor</label>
+  </div>
+
+  <div class="mq" id="mq49">
+    <p><span class="qnum">49</span> The critical difference between PEAP and EAP-TLS is:</p>
+    <label onclick="pick(49,0)">A) PEAP requires only a server certificate (client authenticates with username/password inside a TLS tunnel), while EAP-TLS requires certificates on BOTH the client and server</label>
+    <label onclick="pick(49,1)">B) EAP-TLS uses passwords while PEAP uses certificates</label>
+    <label onclick="pick(49,2)">C) PEAP is less secure but EAP-TLS is deprecated</label>
+    <label onclick="pick(49,3)">D) They are identical protocols with different names</label>
+  </div>
+
+  <div class="mq" id="mq50">
+    <p><span class="qnum">50</span> The fundamental vulnerability of RC4 that contributed to WEP's downfall was:</p>
+    <label onclick="pick(50,0)">A) RC4 is a block cipher with small block sizes</label>
+    <label onclick="pick(50,1)">B) When the same RC4 key is reused (or related keys are used, as with WEP's short IV concatenated with a static key), statistical biases in the keystream allow key recovery</label>
+    <label onclick="pick(50,2)">C) RC4 requires too much computational power</label>
+    <label onclick="pick(50,3)">D) RC4 cannot generate keys longer than 40 bits</label>
+  </div>
+
+  </div><!-- end questions-container -->
+
+  <div id="result">
+    <div class="result-label">Exam Results</div>
+    <div style="margin-bottom: 20px;"></div>
+  </div>
+
+  <div class="footer">
+    <p>SEAS 8415 Applied Cryptography &amp; Data Protection -- Final Mega Exam</p>
+    <p style="margin-top: 10px; color: #666;">50 questions. 60-minute time limit. Good luck!</p>
+  </div>
+</div>
+
+<script>
+    var answers = {};
+    var locked = {};
+    var score = 0;
+    var TOTAL = 50;
+    var correct = {1:1,2:2,3:1,4:2,5:1,6:1,7:1,8:2,9:1,10:1,11:2,12:1,13:1,14:2,15:1,16:0,17:2,18:1,19:0,20:0,21:1,22:1,23:0,24:2,25:1,26:0,27:1,28:1,29:1,30:1,31:1,32:2,33:1,34:0,35:1,36:1,37:1,38:1,39:1,40:2,41:1,42:1,43:1,44:2,45:1,46:0,47:1,48:1,49:0,50:1};
+
+    var explanations = {
+      1: "Schneier's Protocol #4 uses secret splitting (also called secret sharing) of the buyer's identity. The identity is split into multiple parts embedded in the coin. Spending the coin once reveals some parts but not enough to identify the buyer (preserving anonymity). Spending it twice at different merchants reveals enough overlapping parts to reconstruct the buyer's full identity, enabling the bank to catch double-spenders.",
+      2: "The six properties of ideal digital cash are: (1) Independence, (2) Security against duplication, (3) Anonymity, (4) Transferability, (5) Divisibility, and (6) Ease of use. Reversibility is NOT a property -- digital cash transactions are final, like physical cash. Irreversibility is actually a feature that prevents fraud against merchants.",
+      3: "For the Byzantine Generals Problem with oral messages (no authentication), the classic result by Lamport, Shostak, and Pease (1982) shows consensus requires more than 2/3 of participants to be loyal. Specifically, with t traitors among n generals, the system requires n > 3t. So if 1/3 or more are traitors, consensus is impossible.",
+      4: "A full node downloads and validates the entire blockchain history independently. It does not need to trust any other node. A publishing (mining) node is a full node that also creates new blocks. A lightweight (SPV) node only downloads block headers and relies on full nodes for transaction verification.",
+      5: "Smart contracts are self-executing programs stored on the blockchain where the contract terms are encoded as code. When predefined conditions are met, the contract automatically executes without requiring intermediaries. They are immutable once deployed (which is both a strength and risk).",
+      6: "DigiCash, founded by David Chaum, implemented blind signatures for anonymous digital payments. Despite strong cryptography, it failed due to a chicken-and-egg adoption problem -- banks were reluctant to adopt it, merchants wouldn't accept it without users, and users wouldn't use it without merchant support. The company went bankrupt in 1998.",
+      7: "Paxos (by Leslie Lamport) is a consensus protocol for crash-fault-tolerant distributed systems. It guarantees safety: only one value is chosen (agreement), and it must be a value that was actually proposed (validity). It tolerates crash failures but not Byzantine (arbitrary/malicious) failures, unlike PBFT.",
+      8: "Immutability in blockchain comes from cryptographic hash chaining. Each block contains the hash of the previous block, so modifying any past transaction changes that block's hash, which breaks the chain for all subsequent blocks. An attacker would need to redo the proof-of-work for the modified block and every block after it, which is computationally infeasible if they control less than 50% of network hashrate.",
+      9: "The hash chain creates tamper evidence. If an attacker modifies a historical transaction, the block's hash changes, which doesn't match the 'previous hash' stored in the next block. This breaks the chain, making the tampering immediately detectable by any node that validates the chain.",
+      10: "Lightweight or SPV (Simplified Payment Verification) nodes, described in the Bitcoin whitepaper, store only block headers (~80 bytes each) rather than full blocks. They verify transactions by requesting Merkle proofs from full nodes, confirming a transaction is included in a block without downloading the entire blockchain.",
+      11: "Neal Koblitz (University of Washington) and Victor Miller (IBM) independently proposed using elliptic curves for cryptography in 1985. Their key insight was that the discrete logarithm problem on elliptic curve groups appears harder than on multiplicative groups of finite fields, enabling smaller keys.",
+      12: "The discriminant condition 4a^3 + 27b^2 != 0 ensures the elliptic curve has no singular points (cusps or self-intersections). A singular curve would have points where the tangent line is undefined, breaking the group law needed for cryptographic operations.",
+      13: "The ECDLP asks: given points P and Q = kP on an elliptic curve, find the integer k. While computing Q = kP (scalar multiplication) is efficient, finding k given P and Q is believed to be computationally infeasible for properly chosen curves -- this asymmetry is the foundation of ECC security.",
+      14: "Key size equivalences (per NIST SP 800-57): 160-bit ECC is roughly equivalent to 1024-bit RSA, 256-bit ECC is roughly equivalent to 3072-bit RSA, and 384-bit ECC is roughly equivalent to 7680-bit RSA. The ratio grows as security levels increase because sub-exponential attacks on RSA scale better than exponential attacks on ECC.",
+      15: "Point doubling (P + P = 2P) geometrically draws the tangent line at point P on the curve, finds where this tangent intersects the curve at a third point, then reflects that point over the x-axis to get 2P. Point addition (P + Q where P != Q) draws a line through both points instead of a tangent.",
+      16: "The index-calculus method, which provides sub-exponential attacks against the discrete logarithm problem in multiplicative groups of finite fields (and factoring), relies on decomposing group elements into products of small primes ('smooth' elements). Elliptic curve points cannot be decomposed this way -- there is no notion of 'smooth' points on a curve -- so the best attacks remain fully exponential.",
+      17: "In ECDH, Alice computes her public key aG and sends it to Bob. Bob computes bG and sends it to Alice. Alice computes a(bG) = abG, and Bob computes b(aG) = abG. Both arrive at the same point abG due to the associativity and commutativity of scalar multiplication. An eavesdropper sees aG and bG but cannot compute abG without solving ECDLP.",
+      18: "The point at infinity (often denoted O) is the identity element of the elliptic curve group, analogous to 0 in addition or 1 in multiplication. For any point P: P + O = P. It also arises when a point is added to its inverse (reflection): P + (-P) = O.",
+      19: "ECC's smaller key sizes translate directly to less computational overhead, lower power consumption, reduced bandwidth for key exchange, and smaller certificate sizes. A 256-bit ECC key provides equivalent security to a 3072-bit RSA key -- roughly 12x smaller. This makes ECC ideal for resource-constrained IoT devices, smart cards, and mobile platforms.",
+      20: "The security gap exists because the best known algorithms for attacking RSA (number field sieve) are sub-exponential in complexity, while the best known algorithms for attacking ECDLP (Pollard's rho) are fully exponential. This means ECC security scales much more efficiently per bit of key length, so fewer bits are needed for equivalent security.",
+      21: "Yao's Millionaire's Protocol (1982) was one of the first secure multi-party computation protocols. It uses RSA encryption where one party encrypts a value derived from their wealth, and the other party performs operations on the encrypted values to determine the comparison result without either party learning the other's actual wealth.",
+      22: "RSA is multiplicatively homomorphic: E(m1) * E(m2) = m1^e * m2^e = (m1 * m2)^e = E(m1 * m2), all mod n. This algebraic property allows multiplying ciphertexts to get the encryption of the product of plaintexts, without ever decrypting.",
+      23: "RSA encryption computes m^e mod n. For addition: m1^e + m2^e != (m1 + m2)^e mod n because exponentiation does not distribute over addition (the binomial theorem shows (m1+m2)^e expands to many terms). This is a fundamental algebraic limitation, not an implementation issue.",
+      24: "Craig Gentry's 2009 Stanford PhD thesis 'A Fully Homomorphic Encryption Scheme' was the first constructive FHE scheme. It used ideal lattices and introduced bootstrapping -- a technique where the scheme homomorphically evaluates its own decryption circuit to 'refresh' noisy ciphertexts, enabling unlimited computation depth.",
+      25: "The 1978 RAD (Rivest-Adleman-Dertouzos) paper 'On Data Banks and Privacy Homomorphisms' first formally posed the question of computing on encrypted data. It coined the term 'privacy homomorphism' and explored which operations might be possible. This open problem took 30+ years to solve, culminating in Gentry's 2009 breakthrough.",
+      26: "CKKS (Cheon-Kim-Kim-Song) supports approximate arithmetic on real and complex numbers, making it ideal for machine learning and statistical computations where small rounding errors are acceptable. BFV (Brakerski/Fan-Vercauteren) performs exact integer arithmetic, suitable for applications requiring precise results like voting or financial calculations.",
+      27: "In the HE cloud computing model, the client encrypts data with their public key and sends only encrypted data plus an evaluation key to the cloud. The cloud performs computations on the encrypted data using the evaluation key. Crucially, the secret (decryption) key NEVER leaves the client, so the cloud cannot decrypt any data it processes.",
+      28: "The RevEAL (Revealing Encrypted Arithmetic through Leakage) attack is a side-channel attack against Microsoft SEAL's HE implementation. It exploits power consumption patterns during homomorphic operations to recover plaintext data, demonstrating that even mathematically secure HE can be vulnerable to physical side-channel attacks in practice.",
+      29: "The Paillier cryptosystem (1999) is a partial (additively) homomorphic encryption scheme. Its key property: E(m1) * E(m2) = E(m1 + m2) mod n^2. This enables encrypted addition and, by extension, scalar multiplication (E(m)^k = E(k*m)). It's widely used in electronic voting, privacy-preserving data aggregation, and secure computation.",
+      30: "Bootstrapping is Gentry's key innovation. After several homomorphic operations, ciphertext noise grows until it would corrupt the result. Bootstrapping homomorphically evaluates the decryption function on the noisy ciphertext (using an encrypted copy of the secret key), producing a fresh ciphertext with reduced noise that encrypts the same plaintext. This enables unlimited computation depth.",
+      31: "PGP's process: (1) Hash the plaintext with MD5, (2) Sign the hash with the sender's RSA private key, (3) Append the signature to the plaintext, (4) Compress with ZIP, (5) Generate a random IDEA session key, (6) Encrypt the compressed data with IDEA, (7) Encrypt the session key with the recipient's RSA public key, (8) Send both encrypted components.",
+      32: "SSL/TLS does NOT provide non-repudiation. During the TLS handshake, both parties are authenticated (at least the server), but the session uses shared symmetric keys. Since both parties hold the same keys, neither can prove to a third party that the other sent a particular message. Non-repudiation requires asymmetric digital signatures on individual messages.",
+      33: "SSL/TLS derives 6 secret keys from the master secret: for each direction (client-to-server and server-to-client), there is an encryption key (for bulk data), an HMAC key (for message integrity), and an IV (initialization vector for CBC mode ciphers). Using separate keys per direction prevents reflection attacks.",
+      34: "Sign-then-encrypt (PGP's approach) provides signer privacy since the signature is hidden inside the encryption. However, a malicious recipient could decrypt, re-encrypt with a different key, and forward the signed content -- the signature still validates because it was computed before encryption. Encrypt-then-sign prevents tampering with ciphertext but reveals who signed it.",
+      35: "S/MIME uses X.509 certificates from Certificate Authorities (CAs) for a hierarchical trust model. PGP uses a decentralized web of trust where users sign each other's keys. S/MIME's CA-based model is more common in enterprise environments; PGP's web of trust is more grassroots and decentralized.",
+      36: "In the 1990s, US export regulations (ITAR/EAR) restricted the export of strong cryptography. Exported software was limited to 40-bit symmetric keys (sometimes 56-bit), which were deliberately weak enough for intelligence agencies to break. This led to the FREAK and Logjam attacks decades later when legacy support for export-grade ciphers persisted.",
+      37: "Email encryption is unilateral: the sender decides whether to encrypt, which algorithm to use, and whether to sign. The recipient has no ability to require encryption before the message is sent. This contrasts with TLS, where both parties negotiate security parameters during the handshake.",
+      38: "Heartbleed was a buffer over-read vulnerability in OpenSSL's implementation of the TLS heartbeat extension. An attacker could send a malformed heartbeat request claiming a large payload length with a small actual payload. OpenSSL would respond with the requested length of memory, leaking up to 64KB of adjacent server memory per request -- potentially including private keys, session tokens, and passwords.",
+      39: "TLS 1.3 (RFC 8446, 2018) made major improvements: reduced handshake from 2-RTT to 1-RTT (with 0-RTT resumption), removed all insecure cipher suites (RC4, 3DES, static RSA key exchange, custom DHE groups, CBC mode), mandated forward secrecy via ephemeral key exchange, and simplified the protocol to reduce implementation errors.",
+      40: "POODLE (Padding Oracle On Downgraded Legacy Encryption, 2014) exploited a vulnerability in SSL 3.0's CBC-mode padding. Because SSL 3.0 did not specify padding content (only the last byte had to be the padding length), an attacker could use a padding oracle to decrypt data one byte at a time. This attack was a major factor in SSL 3.0's deprecation.",
+      41: "WEP's fatal flaws: (1) 24-bit IV is too short -- with 2^24 (~16.7 million) possible values, IVs repeat frequently on busy networks; (2) RC4 stream cipher with related keys (IV prepended to static key) enables statistical attacks; (3) CRC-32 integrity check is linear, allowing bit-flipping attacks without detection; (4) Tools like aircrack-ng can recover the key in approximately 5 hours or less.",
+      42: "TKIP (Temporal Key Integrity Protocol) was a stopgap improvement: (1) Extended IV from 24 to 48 bits (virtually eliminating IV reuse), (2) Per-packet key mixing to prevent related-key attacks, (3) MIC (Message Integrity Check, aka 'Michael') for tamper detection. However, TKIP still used RC4 underneath, which limited its long-term security. TKIP is now deprecated.",
+      43: "WPA2's 4-way handshake: (1) AP sends ANonce to client, (2) Client generates SNonce, computes PTK = PRF(PMK, ANonce, SNonce, MAC_AP, MAC_Client), sends SNonce + MIC to AP, (3) AP computes the same PTK, sends encrypted GTK (Group Temporal Key for multicast/broadcast) + MIC, (4) Client confirms. The PMK is never transmitted; both sides derive it independently from the passphrase.",
+      44: "KRACK (Key Reinstallation Attacks, 2017 by Mathy Vanhoef) manipulates the 4-way handshake by replaying message 3 to force the client to reinstall an already-in-use encryption key. This resets the nonce counter, causing nonce reuse with the same key, which breaks the security guarantees of AES-CCMP (and especially AES-GCMP). It is an implementation/protocol flaw, NOT a break of AES itself.",
+      45: "WPA2-PSK has never been cryptographically broken. The only practical attack is capturing the 4-way handshake and then performing offline brute-force or dictionary attacks against the passphrase. This means strong, random passphrases (20+ characters) make WPA2-PSK effectively unbreakable. Enterprise (802.1X) avoids this by using per-user keys.",
+      46: "WPA3-SAE (Dragonfly) is a password-authenticated key exchange (PAKE) protocol that provides: (1) Forward secrecy -- each session generates unique ephemeral keys, so compromising the password later doesn't expose past sessions; (2) Resistance to offline dictionary attacks -- an attacker must interact with the AP for each guess (online only); (3) Protection against passive eavesdropping. WPA3-Enterprise supports optional 192-bit security.",
+      47: "Evil twin attack steps: (1) Attacker creates a rogue AP with the same SSID as the legitimate network, (2) Transmits with higher power to produce a stronger signal, (3) Clients automatically connect to the stronger signal (most devices prefer stronger signals for the same SSID), (4) Attacker acts as a man-in-the-middle, intercepting credentials, performing SSL stripping, injecting malware, or harvesting data.",
+      48: "802.1X port-based access control uses three components: the supplicant (client software requesting access), the authenticator (the AP or switch that controls port access), and the authentication server (typically a RADIUS server that verifies credentials). EAP (Extensible Authentication Protocol) is the framework that carries authentication messages between supplicant and server through the authenticator.",
+      49: "PEAP (Protected EAP) creates a TLS tunnel using only the server's certificate, then authenticates the client inside that tunnel using a username/password (typically via MS-CHAPv2). EAP-TLS requires mutual certificate authentication -- both the server AND every client must have a valid X.509 certificate. EAP-TLS is more secure but harder to deploy because of the client certificate management burden.",
+      50: "RC4's core vulnerability is statistical bias in its keystream output, combined with WEP's flawed key scheduling. WEP concatenates a 24-bit IV with a static WEP key to form the per-packet RC4 key. Since the static portion never changes, related keys produce correlated keystreams. The Fluhrer-Mantin-Shamir (FMS) attack and later the PTW attack exploit these correlations to recover the static key from captured packets."
+    };
+
+    // 60-minute countdown timer
+    var totalSeconds = 60 * 60; // 60 minutes
+    var startTime = Date.now();
+
+    var timerInterval = setInterval(function(){
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var remaining = totalSeconds - elapsed;
+      if (remaining <= 0) {
+        remaining = 0;
+        clearInterval(timerInterval);
+        gradeExam();
+      }
+      var h = Math.floor(remaining / 3600);
+      var m = Math.floor((remaining % 3600) / 60);
+      var s = remaining % 60;
+      var timerEl = document.getElementById('timer');
+      timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+
+      // Warning colors
+      var timerContainer = timerEl.parentElement;
+      if (remaining <= 300) {
+        timerContainer.className = 'timer danger';
+      } else if (remaining <= 900) {
+        timerContainer.className = 'timer warning';
+      } else {
+        timerContainer.className = 'timer';
+      }
+    }, 1000);
+
+    function pick(q, c) {
+      if (locked[q]) return;
+      locked[q] = true;
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      var correctIdx = correct[q];
+      var isRight = (c === correctIdx);
+
+      labels.forEach(function(l) {
+        l.style.pointerEvents = 'none';
+        l.style.opacity = '0.7';
+      });
+
+      if (isRight) {
+        score++;
+        labels[c].style.background = 'rgba(81,207,102,0.2)';
+        labels[c].style.borderColor = '#51cf66';
+        labels[c].style.color = '#51cf66';
+        labels[c].style.fontWeight = '700';
+        labels[c].style.opacity = '1';
+      } else {
+        labels[c].style.background = 'rgba(255,107,107,0.2)';
+        labels[c].style.borderColor = '#ff6b6b';
+        labels[c].style.color = '#ff6b6b';
+        labels[c].style.opacity = '1';
+        labels[correctIdx].style.background = 'rgba(81,207,102,0.2)';
+        labels[correctIdx].style.borderColor = '#51cf66';
+        labels[correctIdx].style.color = '#51cf66';
+        labels[correctIdx].style.fontWeight = '700';
+        labels[correctIdx].style.opacity = '1';
+      }
+
+      var feedback = document.createElement('div');
+      feedback.className = 'mq-feedback';
+      var explanation = explanations[q] || '';
+      var encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+      var encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+      if (isRight) {
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation;
+      } else {
+        var correctText = labels[correctIdx].textContent.trim();
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation;
+      }
+      document.getElementById('mq' + q).appendChild(feedback);
+
+      var answered = Object.keys(answers).length;
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of ' + TOTAL + ' answered';
+      document.getElementById('progbar').style.width = (answered / TOTAL * 100) + '%';
+    }
+
+    function gradeExam() {
+      var pct = Math.round(score / TOTAL * 100);
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+      var answered = Object.keys(answers).length;
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var em = Math.floor(elapsed / 60);
+      var es = elapsed % 60;
+      var timeStr = em + 'm ' + es + 's';
+
+      var confetti = '';
+      if (pct >= 90) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#127881; &#127942; &#127881;</div>';
+      } else if (pct >= 80) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128170; &#11088; &#128170;</div>';
+      } else if (pct >= 70) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128077;</div>';
+      }
+
+      document.getElementById('result').innerHTML = confetti + '<div style="font-size:2.5em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="font-size:1.5em;color:#aaa">' + pct + '% in ' + timeStr + '</div><div style="font-size:2em;margin-top:10px;color:' + (pct >= 70 ? 'var(--correct)' : 'var(--wrong)') + '">' + g + '</div>';
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+
+      if (pct >= 90) { launchConfetti(); }
+    }
+
+    function launchConfetti() {
+      var colors = ['#e94560','#51cf66','#4DABF7','#FFD43B','#9775FA','#FFA94D'];
+      for (var i = 0; i < 80; i++) {
+        var c = document.createElement('div');
+        c.style.cssText = 'position:fixed;width:10px;height:10px;border-radius:50%;top:-10px;z-index:9999;pointer-events:none;';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animation = 'confettiFall ' + (2 + Math.random() * 3) + 's linear forwards';
+        c.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(c);
+        setTimeout(function(el){ el.remove(); }.bind(null, c), 6000);
+      }
+      var style = document.createElement('style');
+      style.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }';
+      document.head.appendChild(style);
+    }
+
+    function resetExam() {
+      answers = {};
+      locked = {};
+      score = 0;
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = '';
+        l.style.borderColor = '';
+        l.style.color = '';
+        l.style.fontWeight = '';
+        l.style.pointerEvents = '';
+        l.style.opacity = '';
+      });
+      document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
+      document.getElementById('progress').textContent = '0/' + TOTAL + ' answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+
+      // Reset timer
+      clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(function(){
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var remaining = totalSeconds - elapsed;
+        if (remaining <= 0) {
+          remaining = 0;
+          clearInterval(timerInterval);
+          gradeExam();
+        }
+        var h = Math.floor(remaining / 3600);
+        var m = Math.floor((remaining % 3600) / 60);
+        var s = remaining % 60;
+        var timerEl = document.getElementById('timer');
+        timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        var timerContainer = timerEl.parentElement;
+        if (remaining <= 300) {
+          timerContainer.className = 'timer danger';
+        } else if (remaining <= 900) {
+          timerContainer.className = 'timer warning';
+        } else {
+          timerContainer.className = 'timer';
+        }
+      }, 1000);
+
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function shuffleAndReset() {
+      resetExam();
+
+      var container = document.getElementById('questions-container');
+      var questions = Array.from(container.querySelectorAll('.mq'));
+      var headers = Array.from(container.querySelectorAll('.section-header'));
+
+      questions.forEach(function(q) { q.remove(); });
+      headers.forEach(function(h) { h.remove(); });
+
+      shuffleArray(questions);
+
+      var newHeader = document.createElement('div');
+      newHeader.className = 'section-header';
+      newHeader.textContent = 'Randomized Questions (1-' + TOTAL + ')';
+      newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
+      container.insertBefore(newHeader, container.firstChild);
+
+      questions.forEach(function(q, idx) {
+        var num = idx + 1;
+        var qnum = q.querySelector('.qnum');
+        if (qnum) qnum.textContent = num;
+        container.appendChild(q);
+      });
+
+      var notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#9775FA;color:#fff;padding:12px 24px;border-radius:25px;font-weight:600;z-index:1000;animation:fadeOut 2s forwards;';
+      notif.textContent = 'Questions shuffled! Good luck!';
+      document.body.appendChild(notif);
+      setTimeout(function() { notif.remove(); }, 2000);
+
+      startTime = Date.now();
+    }
+
+    // Shuffle on page load for fresh experience each time
+    document.addEventListener('DOMContentLoaded', function() {
+      shuffleAndReset();
+    });
+</script>
+</body>
+</html>
