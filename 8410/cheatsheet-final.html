@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8410 - Final Cheat Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      font-size: 9px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 8px;
+      background: #0ea5e9;
+      border-radius: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    nav .nav-brand { color: #fff; font-size: 11px; font-weight: bold; }
+    nav .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav .nav-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+    nav .nav-label { color: #ffd740; font-size: 9px; font-weight: bold; }
+    nav a { color: #e0f2fe; text-decoration: none; font-size: 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    nav a.active { color: #ffd740; border-bottom: 2px solid #ffd740; }
+    .print-btn {
+      background: #ffd740; color: #0c4a6e; border: none; padding: 3px 8px;
+      border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 9px;
+    }
+    .print-btn:hover { background: #ffca28; }
+
+    /* HEADER */
+    .sheet-title {
+      text-align: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #0ea5e9;
+      margin: 1px 0 2px 0;
+      padding: 1px 0;
+      border-bottom: 1px solid #0ea5e9;
+      border-top: 1px solid #0ea5e9;
+      letter-spacing: 0.2px;
+    }
+
+    /* COLUMNS LAYOUT */
+    .columns {
+      column-count: 3;
+      column-gap: 4px;
+      column-rule: 1px solid #ccc;
+    }
+
+    /* WEEK SECTIONS */
+    .week {
+      margin-bottom: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 0.5px solid #bbb;
+      break-inside: avoid;
+    }
+
+    .week-header {
+      padding: 1px 3px;
+      font-size: 8px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .week-body {
+      padding: 1px 2px 1px 2px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .week-body ul {
+      margin: 0;
+      padding-left: 7px;
+      list-style: disc;
+    }
+
+    .week-body li {
+      margin-bottom: 0;
+    }
+
+    .week-body li b {
+      font-weight: 700;
+    }
+
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 8px;
+      background: rgba(0,0,0,0.05);
+      padding: 0 1px;
+      border-radius: 1px;
+    }
+
+    /* WEEK 1 - Red */
+    .w1 .week-header { background: #dc2626; color: #fff; }
+    .w1 .week-body { background: #fef2f2; }
+    .w1 { border-color: #dc2626; }
+
+    /* WEEK 2 - Orange */
+    .w2 .week-header { background: #ea580c; color: #fff; }
+    .w2 .week-body { background: #fff7ed; }
+    .w2 { border-color: #ea580c; }
+
+    /* WEEK 3 - Amber */
+    .w3 .week-header { background: #d97706; color: #fff; }
+    .w3 .week-body { background: #fffbeb; }
+    .w3 { border-color: #d97706; }
+
+    /* WEEK 4 - Green */
+    .w4 .week-header { background: #16a34a; color: #fff; }
+    .w4 .week-body { background: #f0fdf4; }
+    .w4 { border-color: #16a34a; }
+
+    /* WEEK 5 - Blue */
+    .w5 .week-header { background: #2563eb; color: #fff; }
+    .w5 .week-body { background: #eff6ff; }
+    .w5 { border-color: #2563eb; }
+
+    /* WEEK 6 - Purple */
+    .w6 .week-header { background: #7c3aed; color: #fff; }
+    .w6 .week-body { background: #f5f3ff; }
+    .w6 { border-color: #7c3aed; }
+
+    /* WEEK 7 - Teal */
+    .w7 .week-header { background: #0d9488; color: #fff; }
+    .w7 .week-body { background: #f0fdfa; }
+    .w7 { border-color: #0d9488; }
+
+    /* WEEK 8 - Cyan */
+    .w8 .week-header { background: #0891b2; color: #fff; }
+    .w8 .week-body { background: #ecfeff; }
+    .w8 { border-color: #0891b2; }
+
+    /* WEEK 10 - Indigo */
+    .w10 .week-header { background: #4f46e5; color: #fff; }
+    .w10 .week-body { background: #eef2ff; }
+    .w10 { border-color: #4f46e5; }
+
+    /* WEEK 11 - Pink */
+    .w11 .week-header { background: #db2777; color: #fff; }
+    .w11 .week-body { background: #fdf2f8; }
+    .w11 { border-color: #db2777; }
+
+    /* WEEK 12 - Emerald */
+    .w12 .week-header { background: #059669; color: #fff; }
+    .w12 .week-body { background: #ecfdf5; }
+    .w12 { border-color: #059669; }
+
+    /* WEEK 13 - Slate */
+    .w13 .week-header { background: #475569; color: #fff; }
+    .w13 .week-body { background: #f8fafc; }
+    .w13 { border-color: #475569; }
+
+    /* PRINT STYLES */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.12in;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        padding: 0;
+      }
+      nav { display: none !important; }
+      .print-btn { display: none !important; }
+
+      .sheet-title {
+        font-size: 6pt;
+        margin: 0;
+        padding: 0;
+        border-width: 0.5px;
+      }
+
+      .columns {
+        column-count: 3;
+        column-gap: 3px;
+        column-rule: 0.4px solid #999;
+      }
+
+      .week {
+        margin-bottom: 1px;
+        border-width: 0.4px;
+        break-inside: avoid;
+      }
+
+      .week-header {
+        padding: 0px 2px;
+        font-size: 5.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body {
+        padding: 0px 1px 0px 1px;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .week-body ul {
+        padding-left: 5px;
+      }
+
+      code {
+        font-size: 5pt;
+      }
+
+      .week-body li {
+        margin-bottom: 0;
+      }
+
+      .w1 .week-header { background: #dc2626 !important; color: #fff !important; }
+      .w1 .week-body { background: #fef2f2 !important; }
+      .w2 .week-header { background: #ea580c !important; color: #fff !important; }
+      .w2 .week-body { background: #fff7ed !important; }
+      .w3 .week-header { background: #d97706 !important; color: #fff !important; }
+      .w3 .week-body { background: #fffbeb !important; }
+      .w4 .week-header { background: #16a34a !important; color: #fff !important; }
+      .w4 .week-body { background: #f0fdf4 !important; }
+      .w5 .week-header { background: #2563eb !important; color: #fff !important; }
+      .w5 .week-body { background: #eff6ff !important; }
+      .w6 .week-header { background: #7c3aed !important; color: #fff !important; }
+      .w6 .week-body { background: #f5f3ff !important; }
+      .w7 .week-header { background: #0d9488 !important; color: #fff !important; }
+      .w7 .week-body { background: #f0fdfa !important; }
+      .w8 .week-header { background: #0891b2 !important; color: #fff !important; }
+      .w8 .week-body { background: #ecfeff !important; }
+      .w10 .week-header { background: #4f46e5 !important; color: #fff !important; }
+      .w10 .week-body { background: #eef2ff !important; }
+      .w11 .week-header { background: #db2777 !important; color: #fff !important; }
+      .w11 .week-body { background: #fdf2f8 !important; }
+      .w12 .week-header { background: #059669 !important; color: #fff !important; }
+      .w12 .week-body { background: #ecfdf5 !important; }
+      .w13 .week-header { background: #475569 !important; color: #fff !important; }
+      .w13 .week-body { background: #f8fafc !important; }
+    }
+
+    @media (max-width: 900px) {
+      .columns { column-count: 2; }
+    }
+    @media (max-width: 550px) {
+      .columns { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">SEAS 8410 FINAL</span>
+  <div class="nav-links">
+    <div class="nav-row">
+      <span class="nav-label">Midterm:</span>
+      <a href="week1.html">W1</a>
+      <a href="week2.html">W2</a>
+      <a href="week3.html">W3</a>
+      <a href="week4.html">W4</a>
+      <a href="week5.html">W5</a>
+      <a href="week6.html">W6</a>
+    </div>
+    <div class="nav-row">
+      <span class="nav-label">Final:</span>
+      <a href="week7.html">W7</a>
+      <a href="week8.html">W8</a>
+      <a href="week10.html">W10</a>
+      <a href="week11.html">W11</a>
+      <a href="week12.html">W12</a>
+      <a href="week13.html">W13</a>
+      <a href="cheatsheet-final.html" class="active">Final Cheat Sheet</a>
+      <a href="cheatsheet.html">Midterm Cheat Sheet</a>
+      <a href="../index.html">All Courses</a>
+      <button class="print-btn" onclick="window.print()">Print</button>
+    </div>
+  </div>
+</nav>
+
+<div class="sheet-title">SEAS 8410 FINAL CHEAT SHEET (Weeks 1-13) | Final Exam | All Weeks | 2 hours | Closed book | 1 cheat sheet (8.5x11 both sides) | Calculator + Excel available</div>
+
+<div class="columns">
+
+  <!-- WEEK 1 -->
+  <div class="week w1">
+    <div class="week-header">W1 - Visualization Fundamentals</div>
+    <div class="week-body">
+      <ul>
+        <li><b>CHARTS:</b> Bar (categories, GAPS), Histogram (distribution, bars TOUCH), Scatter (2 vars, correlation), Line (time trends), Pie (AVOID - angle=rel.freq*360, 25%=90deg). Heatmap (matrix, color intensity). Stem-and-leaf (preserves digits).</li>
+        <li><b>PERCEPTION:</b> Position > Length > Angle > Area > Color. Use position-based (bar) over area-based (pie).</li>
+        <li><b>PRE-ATTENTIVE:</b> Color, size, orientation, shape - processed &lt;200ms before conscious thought. Max ~4 distinct features.</li>
+        <li><b>DATA-INK RATIO (Tufte):</b> = Data-ink / Total ink. MAXIMIZE data ink, MINIMIZE chart junk. Remove gridlines, 3D, decoration.</li>
+        <li><b>COLOR:</b> Sequential (low-to-high, one hue), Diverging (center point, two hues), Categorical (distinct groups, max ~7). ~8% males colorblind (red-green).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week w2">
+    <div class="week-header">W2 - Data Sources, Tools & Stats Foundations</div>
+    <div class="week-body">
+      <ul>
+        <li><b>SOURCES:</b> Network/firewall/IDS/endpoint/IAM/DLP/SIEM/cloud logs. CASB. Threat intel feeds. Honeypots.</li>
+        <li><b>STORAGE:</b> SQL (Oracle, MySQL, PostgreSQL, ACID). NoSQL: MongoDB (doc), Redis (key-value), Cassandra (column), Neo4j (graph - nodes+relationships, "5 hops" easy). HDFS (128MB blocks, 3x replication, compute to data). Time-series (InfluxDB). Star schema (dimension WHO/WHAT/WHERE/WHEN + fact tables).</li>
+        <li><b>TOOLS GP:</b> Power BI (drag-drop, PowerPoint, free GWU), Tableau (visual storytelling, Data Flow ETL), Looker (Google). GP = connect to anything, scheduling, marketplace. <b>Specialized:</b> Excel (~1.5M rows), Splunk (SIEM, Cisco, SPL), ELK (open source), Python (pandas/matplotlib), Grafana (time-series).</li>
+        <li><b>JSON</b> replaced XML. CSV=legacy. Parquet=columnar big data.</li>
+        <li><b>DESCRIPTIVE</b> = summarize (mean, charts). <b>INFERENTIAL</b> = sample to population (hypothesis tests, CI).</li>
+        <li><b>SAMPLING:</b> Simple Random (equal chance), Stratified (bit FROM every group), Cluster (ALL of few groups), Systematic (every m-th, m=N/n). TRAP: Stratified vs Cluster easily confused.</li>
+        <li><b>NOIR:</b> Nominal (labels, no order: IP, port#), Ordinal (ranked: severity), Interval (no true zero: temp C/F), Ratio (true zero: weight, age, bytes). Port#=NOMINAL not ratio!</li>
+        <li><b>FREQ TABLE:</b> R=max-min, m=1+3.3*log10(n) rounded, width=R/m rounded UP. [lower, upper).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week w3">
+    <div class="week-header">W3 - Endpoints, Preprocessing & Measures</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ENDPOINT:</b> Any device on network (desktop, laptop, server, IoT). ML pipeline: clean->feature eng->train->score->evaluate. Garbage in garbage out. Data prep = 80% of work.</li>
+        <li><b>CLEANING:</b> <code>df.describe()</code> <code>df.dropna()</code> <code>df.fillna()</code> <code>df.drop_duplicates()</code> <code>df.loc[mask]</code>. Imputation: mean/median/mode (simple), ffill/bfill (time-series), KNN (preserves relationships, O(n^2)), model-based (best accuracy).</li>
+        <li><b>FEATURE ENGINEERING:</b> Create NEW features from existing = "secret sauce" of ML. Requires domain knowledge.</li>
+        <li><b>CENTER:</b> Mean (sensitive to outliers), Median (robust, rank=(n+1)/2), Mode (nominal data only). Shape: mean=median=mode symmetric. "Mean chases the tail" - right-skew: mean>median>mode.</li>
+        <li><b>SPREAD:</b> Range=max-min. Variance S^2=sum(Xi-Xbar)^2/(n-1) [n-1 sample, N population]. SD=sqrt(S^2) back to original units.</li>
+        <li><b>PARAMETER</b> (Greek: mu, sigma) vs <b>STATISTIC</b> (Latin: Xbar, S).</li>
+        <li><b>EMPIRICAL:</b> 68-95-99.7% within 1-2-3 SD (bell ONLY). <b>Chebyshev:</b> ANY shape, at least 1-1/k^2 (k=2: 75%, k=3: 88.9%).</li>
+        <li><b>Z-SCORE:</b> Z=(Xi-mean)/SD, unitless. |Z|>3 = outlier. <b>Correlation r:</b> r=Cov/(Sx*Sy), [-1,+1], NOT causation, LINEAR only.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week w4">
+    <div class="week-header">W4 - User Security & Hypothesis Testing</div>
+    <div class="week-body">
+      <ul>
+        <li><b>USER:</b> Human OR non-human with ID + permissions. DBIR 2025: 60% human element, 22% credential abuse, 53% system intrusion, internal 10x more records. 30% third-party.</li>
+        <li><b>PRIVACY:</b> GDPR (EU, consent, 72hr notification, 4% revenue fine), CCPA (CA, know/delete/opt-out), PIPEDA (Canada), LGPD (Brazil), DPA 2018 (UK).</li>
+        <li><b>H0</b> = null (always has = sign). <b>H1</b> = alternative (inequality). Never "accept H0" -- "fail to reject."</li>
+        <li><b>ERRORS:</b> Type I = alpha = false alarm (reject true H0). Type II = beta = missed detection. Power = 1-beta. Bigger samples reduce BOTH.</li>
+        <li><b>6 STEPS:</b> 1) State H0/H1. 2) Pick alpha BEFORE data. 3) Choose test statistic. 4) ID distribution. 5) Find rejection region. 6) Compute and decide.</li>
+        <li><b>TAILS:</b> H1 decides WHERE rejection region. Alpha decides HOW BIG. One-tail (H1: &lt; or >), Two-tail (H1: !=, alpha/2 each side).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week w5">
+    <div class="week-header">W5 - Code Security & Hypothesis Mechanics</div>
+    <div class="week-body">
+      <ul>
+        <li><b>CODE SECURITY = CIA.</b> Von Neumann: CPU+Memory+I/O, shared memory = injection attacks possible.</li>
+        <li><b>CVEs:</b> Heartbleed (2014, bounds check, 64KB leak). Equifax (2017, unpatched 6mo, 147M). XZ Utils (2024, 3yr social engineering, supply chain). CrowdStrike Ch291 (8.5M BSOD, NOT hack, SQA=security).</li>
+        <li><b>SAST</b> = static, white-box, no execution, early dev. <b>DAST</b> = dynamic, black-box, app running, runtime. No scans -> no production.</li>
+        <li><b>Z-TEST:</b> Z=(Xbar-mu0)/(sigma/sqrt(n)). SE=sigma/sqrt(n). Bigger n -> smaller SE -> more convincing.</li>
+        <li><b>P-VALUE:</b> P(data this extreme | H0 true). p&lt;alpha -> reject. Two-sided: p=2*P(Z>=|z|). P-value is NOT P(H0 is true).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week w6">
+    <div class="week-header">W6 - Dashboards & Outlier Detection</div>
+    <div class="week-body">
+      <ul>
+        <li><b>DASHBOARD (Few):</b> "Single screen at a glance." Mackinlay: expressiveness (ALL and ONLY facts) + effectiveness (best encoding). 13 anti-patterns. Bar>pie. Top-left=prime real estate.</li>
+        <li><b>OUTLIER:</b> Wrecks mean, median robust. IQR=Q3-Q1. Mild fence: Q1-1.5*IQR to Q3+1.5*IQR. Extreme: 3*IQR. TRAP: fences from Q1/Q3, NOT min/max.</li>
+        <li><b>SECURITY:</b> Outlier may BE the attack. Investigate before discarding. Robust stats: median, MAD, trimmed mean.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========== POST-MIDTERM ========== -->
+
+  <!-- WEEK 7 -->
+  <div class="week w7">
+    <div class="week-header">W7 - Log Analysis & Gestalt Principles</div>
+    <div class="week-body">
+      <ul>
+        <li><b>LOG:</b> Chronological record of events. Types: system, application, network, security, audit, web server, database. Essential for forensics, compliance, anomaly detection.</li>
+        <li><b>GESTALT 6 PRINCIPLES:</b> Proximity (near=grouped), Similarity (alike=grouped), Closure (brain completes incomplete shapes), Continuity (follow smooth paths), Enclosure (STRONGEST - bounded region=group), Connection (linked=grouped).</li>
+        <li><b>STRENGTH ORDER:</b> Enclosure > Connection > Proximity/Similarity. Use enclosure (borders, shading) for most important groupings in dashboards.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="week w8">
+    <div class="week-header">W8 - Parametric vs Non-Parametric & Decision Trees</div>
+    <div class="week-body">
+      <ul>
+        <li><b>PARAMETRIC:</b> Assume normal distribution, test mean, Z-test/t-test. Use when bell-shaped data, large n, continuous ratio/interval.</li>
+        <li><b>NON-PARAMETRIC:</b> Distribution-free, test median, sign test. Use when skewed, ordinal, outliers, small n, non-normal.</li>
+        <li><b>SIGN TEST:</b> H0: M=m0. Compare each value to m0, count pluses (+) and minuses (-). Discard ties. R=number of pluses ~ Binomial(n, 0.5). Use binomial table for p-value.</li>
+        <li><b>DECISION RULE:</b> Bell-shaped -> parametric. Skewed/ordinal/outliers/small n -> non-parametric.</li>
+        <li><b>DECISION TREES:</b> Root node (top), internal nodes (splits), leaf nodes (predictions), branches (conditions). Recursive partitioning. Overfitting -> pruning. CART (binary splits), ID3/C4.5 (multi-way, info gain).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="week w10">
+    <div class="week-header">W10 - APTs & Linear Regression</div>
+    <div class="week-body">
+      <ul>
+        <li><b>APT:</b> Advanced (custom malware, zero-day) + Persistent (months/years undetected) + Threat (data theft/disruption).</li>
+        <li><b>6 TIERS:</b> I-II ($10s, exploit KNOWN vulns), III-IV ($Ms, DISCOVER unknown vulns), V-VI ($Bs, CREATE vulns in supply chain). TRAP: V-VI CREATE, not just discover.</li>
+        <li><b>KILL CHAIN:</b> Recon -> Weaponize -> Deliver -> Exploit -> Install -> C2 -> Actions on Objectives. Break any link to stop attack.</li>
+        <li><b>CROWDSTRIKE NAMING:</b> Bear=Russia, Chollima=DPRK, Kitten=Iran, Leopard=Pakistan, Panda=China. TRAP: Bear=Russia NOT China.</li>
+        <li><b>LINEAR REGRESSION:</b> Y=b0+b1X+e. b0=intercept, b1=slope (care about MOST - unit change in X -> b1 change in Y). Least squares minimizes sum of squared residuals. Gauss-Markov: best unbiased linear estimator.</li>
+        <li><b>ALWAYS</b> scatter plot first before fitting regression. Check for linearity, outliers, patterns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div class="week w11">
+    <div class="week-header">W11 - Collaboration & Logistic Regression</div>
+    <div class="week-body">
+      <ul>
+        <li><b>COLLABORATION:</b> Sharing/access controls, real-time editing, commenting, version control, interactive dashboards, data sync, security, mobile, ecosystem integration. Power BI: Excel publish, PowerPoint embed (live+interactive), mobile annotate. Tableau: publish to cloud, alerting, comments.</li>
+        <li><b>LOGISTIC REGRESSION:</b> Sigmoid S-curve, probability [0,1] for binary yes/no outcomes. NOT for continuous Y (use linear). Cutoff tradeoff: lower cutoff = more catches + more false alarms.</li>
+        <li><b>CONFUSION MATRIX:</b> TP (true positive), TN (true negative), FP (false positive = Type I), FN (false negative = Type II).</li>
+        <li><b>SENSITIVITY</b> = TP/(TP+FN) "of real attacks, how many caught." <b>SPECIFICITY</b> = TN/(TN+FP) "of normal, how many correctly cleared."</li>
+        <li><b>ACCURACY</b> = (TP+TN)/total. CAN FOOL YOU: 99% normal data -> lazy model predicts all normal -> 99% accuracy but 0% sensitivity. Sensitivity matters more in security.</li>
+        <li><b>ROC CURVE:</b> Sensitivity (y) vs 1-Specificity (x) across all cutoffs. <b>AUC:</b> 0.5=coin flip (BAD), 1.0=perfect. AUC=0.5 is BAD not good.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 12 -->
+  <div class="week w12">
+    <div class="week-header">W12 - ANOVA & Non-Parametric Alternatives</div>
+    <div class="week-body">
+      <ul>
+        <li><b>ANOVA:</b> Compare 3+ group means. F=MSB/MSW (between variance / within variance). Large F -> reject H0 (groups differ). TRAP: F=between/within, NOT within/between.</li>
+        <li><b>ASSUMPTIONS:</b> Independence, normality, equal variance (homoscedasticity). Tukey post-hoc to find WHICH groups differ after significant F.</li>
+        <li><b>TWO-WAY ANOVA:</b> 2 factors, tests main effects + INTERACTION. Interaction = MOST IMPORTANT, read FIRST in output. Non-parallel lines in interaction plot = interaction exists.</li>
+        <li><b>MANOVA:</b> Multiple correlated response variables. Why not multiple ANOVAs? Inflates Type I error, ignores correlations between responses.</li>
+        <li><b>NON-PARAMETRIC:</b> Kruskal-Wallis (replaces one-way ANOVA), Friedman (replaces two-way ANOVA). Use when non-normal: zero-inflated counts, skewed times, ordinal severity, heavy tails, small n.</li>
+        <li><b>SECURITY DATA</b> often non-normal: zero-inflated counts, skewed response times, ordinal severity ratings, heavy-tailed distributions, small incident samples.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 13 -->
+  <div class="week w13">
+    <div class="week-header">W13 - Course Recap & Integration</div>
+    <div class="week-body">
+      <ul>
+        <li><b>VIZ HISTORY:</b> John Snow 1849 cholera map - data viz solved real problem. Tufte, Few, Mackinlay foundations.</li>
+        <li><b>DATA STACK:</b> NoSQL types (document/key-value/column/graph). GP tools (Power BI, Tableau) vs specialized (Splunk, ELK). Step Zero = explore first.</li>
+        <li><b>SPLUNK PYRAMID:</b> Raw data -> Search -> Table -> Report -> Dashboard. SPL: search, where, stats, table, timechart, eval, rex.</li>
+        <li><b>SECURITY DOMAINS:</b> Endpoints, users (human+non-human), code (Von Neumann, CI/CD pipeline), apps (CIA), logs, APTs. LANL dataset for user behavior analytics.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========== QUICK REFERENCE SECTIONS ========== -->
+
+  <!-- KEY FORMULAS -->
+  <div class="week" style="border-color: #1565C0;">
+    <div class="week-header" style="background: #1565C0; color: #fff;">KEY FORMULAS - COMPLETE</div>
+    <div class="week-body" style="background: #e3f2fd;">
+      <ul>
+        <li><b>Z-TEST:</b> Z=(Xbar-mu0)/(sigma/sqrt(n)). Critical: Z_0.05=1.645 (1-tail), Z_0.025=1.96 (2-tail at alpha=0.05).</li>
+        <li><b>VARIANCE:</b> S^2=sum(Xi-Xbar)^2/(n-1) [sample]. sigma^2=sum(Xi-mu)^2/N [population]. Shortcut: S^2=[sum(Xi^2)-n*Xbar^2]/(n-1).</li>
+        <li><b>SD:</b> S=sqrt(S^2). <b>SE:</b> sigma/sqrt(n). <b>CV:</b> (S/Xbar)*100%.</li>
+        <li><b>IQR FENCES:</b> IQR=Q3-Q1. Mild: [Q1-1.5*IQR, Q3+1.5*IQR]. Extreme: [Q1-3*IQR, Q3+3*IQR].</li>
+        <li><b>CLASS RECIPE:</b> R=max-min. m=1+3.3*log10(n). Width=R/m rounded UP.</li>
+        <li><b>EMPIRICAL:</b> 68-95-99.7 (bell only). Chebyshev: 1-1/k^2 (any shape).</li>
+        <li><b>CORRELATION:</b> r=Cov(X,Y)/(Sx*Sy). [-1,+1]. <b>Median:</b> rank=(n+1)/2. <b>Z-score:</b> (Xi-mean)/SD.</li>
+        <li><b>REGRESSION:</b> Y=b0+b1X+e. b1=slope (most important). Least squares minimizes sum of squared residuals.</li>
+        <li><b>ANOVA:</b> F=MSB/MSW. Large F -> reject H0 (groups differ).</li>
+        <li><b>LOGISTIC:</b> P(Y=1) = 1/(1+e^-(b0+b1X)). Sigmoid [0,1]. Sensitivity=TP/(TP+FN). Specificity=TN/(TN+FP).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PARAMETRIC vs NON-PARAMETRIC TABLE -->
+  <div class="week" style="border-color: #7c3aed;">
+    <div class="week-header" style="background: #7c3aed; color: #fff;">PARAMETRIC vs NON-PARAMETRIC DECISION TABLE</div>
+    <div class="week-body" style="background: #f5f3ff;">
+      <ul>
+        <li><b>1 SAMPLE:</b> t-test (parametric) vs Sign test (non-parametric).</li>
+        <li><b>2 GROUPS:</b> 2-sample t-test vs Wilcoxon rank-sum.</li>
+        <li><b>3+ GROUPS:</b> ANOVA vs Kruskal-Wallis. TRAP: non-normal -> Kruskal-Wallis, NOT ANOVA.</li>
+        <li><b>BLOCKED:</b> Two-way ANOVA vs Friedman test.</li>
+        <li><b>CORRELATION:</b> Pearson r (parametric, linear, continuous) vs Spearman rho (non-parametric, monotonic, ordinal OK).</li>
+        <li><b>DECISION:</b> Bell-shaped, large n, continuous -> parametric. Skewed, small n, ordinal, outliers -> non-parametric.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONFUSION MATRIX -->
+  <div class="week" style="border-color: #db2777;">
+    <div class="week-header" style="background: #db2777; color: #fff;">CONFUSION MATRIX QUICK REFERENCE</div>
+    <div class="week-body" style="background: #fdf2f8;">
+      <ul>
+        <li><b>TP:</b> Predicted attack, WAS attack. <b>TN:</b> Predicted normal, WAS normal.</li>
+        <li><b>FP (Type I):</b> Predicted attack, was NORMAL (false alarm). <b>FN (Type II):</b> Predicted normal, was ATTACK (missed detection).</li>
+        <li><b>Sensitivity/Recall</b> = TP/(TP+FN) -- "of all real attacks, how many caught?"</li>
+        <li><b>Specificity</b> = TN/(TN+FP) -- "of all normal, how many correctly identified?"</li>
+        <li><b>Accuracy</b> = (TP+TN)/total. Misleading with imbalanced data (99% normal -> 99% accuracy with 0% sensitivity).</li>
+        <li><b>ROC/AUC:</b> Plot sensitivity vs 1-specificity. AUC 0.5=random (BAD), 0.7-0.8=fair, 0.8-0.9=good, >0.9=excellent, 1.0=perfect.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ANOVA FAMILY -->
+  <div class="week" style="border-color: #059669;">
+    <div class="week-header" style="background: #059669; color: #fff;">ANOVA FAMILY COMPARISON</div>
+    <div class="week-body" style="background: #ecfdf5;">
+      <ul>
+        <li><b>t-test:</b> 2 groups, 1 response variable. Compares two means.</li>
+        <li><b>One-Way ANOVA:</b> 3+ groups, 1 factor, 1 response. F=MSB/MSW. Tukey post-hoc for pairwise.</li>
+        <li><b>Two-Way ANOVA:</b> 2 factors, 1 response. Tests main effects + INTERACTION (read first). Non-parallel lines = interaction.</li>
+        <li><b>MANOVA:</b> 1+ factors, 2+ correlated responses. Avoids inflated Type I from multiple ANOVAs.</li>
+        <li><b>NON-PARAMETRIC:</b> Kruskal-Wallis (1-way), Friedman (2-way blocked). For non-normal security data.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GESTALT + DESIGN PRINCIPLES -->
+  <div class="week" style="border-color: #0d9488;">
+    <div class="week-header" style="background: #0d9488; color: #fff;">GESTALT & DASHBOARD DESIGN</div>
+    <div class="week-body" style="background: #f0fdfa;">
+      <ul>
+        <li><b>GESTALT:</b> Proximity (near=group), Similarity (alike=group), Closure (complete shapes), Continuity (smooth paths), Enclosure (STRONGEST), Connection (linked=group).</li>
+        <li><b>FEW'S ANTI-PATTERNS:</b> Exceeding single screen, no context ("compared to WHAT?"), excessive precision, wrong measure, wrong chart type, meaningless variety, 3D charts, Y-axis not at 0, poor arrangement, no highlighting, clutter, misused color, ugly.</li>
+        <li><b>DESIGN:</b> Top-left=prime. Bar>pie always. Related metrics together. Consistent color. Mackinlay: expressiveness+effectiveness.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- APT & THREAT ACTOR REFERENCE -->
+  <div class="week" style="border-color: #4f46e5;">
+    <div class="week-header" style="background: #4f46e5; color: #fff;">APT & THREAT ACTORS</div>
+    <div class="week-body" style="background: #eef2ff;">
+      <ul>
+        <li><b>TIERS:</b> I-II (script kiddies, $10s, known exploits) | III-IV (organized crime/state, $Ms, discover 0-days) | V-VI (nation-state elite, $Bs, CREATE vulns in supply chain).</li>
+        <li><b>KILL CHAIN:</b> Recon->Weaponize->Deliver->Exploit->Install->C2->Actions. Defense: break any link.</li>
+        <li><b>NAMING:</b> Bear=Russia, Panda=China, Kitten=Iran, Chollima=DPRK, Leopard=Pakistan.</li>
+        <li><b>KEY CASES:</b> Heartbleed (bounds check), Equifax (patch failure), XZ Utils (3yr trust exploit), CrowdStrike (SQA failure), SolarWinds (build system compromise).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAM TRAPS - FINAL -->
+  <div class="week" style="border-color: #b71c1c;">
+    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS - FINAL SPECIFIC</div>
+    <div class="week-body" style="background: #ffebee;">
+      <ul>
+        <li><b>1.</b> Sensitivity vs Specificity: sensitivity=TP/(TP+FN) catches attacks. Specificity=TN/(TN+FP) clears normals. Don't swap.</li>
+        <li><b>2.</b> AUC=0.5 is BAD (random coin flip), NOT good. AUC=1.0 is perfect.</li>
+        <li><b>3.</b> ANOVA F=MSB/MSW (between/within), NOT within/between. Large F = reject.</li>
+        <li><b>4.</b> Two-way ANOVA: read INTERACTION first. Non-parallel lines = interaction exists.</li>
+        <li><b>5.</b> Non-normal data -> Kruskal-Wallis, NOT regular ANOVA. Security data is often non-normal.</li>
+        <li><b>6.</b> Binary outcome (yes/no) -> logistic regression, NOT linear. Linear is for continuous Y.</li>
+        <li><b>7.</b> APT Tiers V-VI CREATE vulnerabilities (supply chain), not just discover them.</li>
+        <li><b>8.</b> CrowdStrike Bear=RUSSIA. Panda=China. Kitten=Iran. Don't mix up.</li>
+        <li><b>9.</b> "Accept H0" is WRONG. Say "fail to reject H0." Never proven, just insufficient evidence.</li>
+        <li><b>10.</b> Accuracy misleading with imbalanced data. 99% normal -> lazy model 99% accurate, 0% sensitivity.</li>
+        <li><b>11.</b> n-1 for SAMPLE variance (Bessel). N for population. Type I=false alarm. Type II=missed detection.</li>
+        <li><b>12.</b> Gestalt: Enclosure is STRONGEST, not proximity. Use borders/shading for key groupings.</li>
+        <li><b>13.</b> Correlation != causation. r only measures LINEAR relationships. Non-linear can have r near 0.</li>
+        <li><b>14.</b> Two-sided p-value: DOUBLE the one-tail probability. p=2*P(Z>=|z|). Forgetting to double = wrong.</li>
+        <li><b>15.</b> Sign test: discard TIES, count only pluses. R~Binomial(n,0.5) where n excludes ties.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HYPOTHESIS TESTING COMPLETE -->
+  <div class="week" style="border-color: #475569;">
+    <div class="week-header" style="background: #475569; color: #fff;">HYPOTHESIS TESTING COMPLETE REF</div>
+    <div class="week-body" style="background: #f8fafc;">
+      <ul>
+        <li><b>SETUP:</b> H0 has = sign. H1 has inequality. H1 decides WHERE rejection region. Alpha decides HOW BIG.</li>
+        <li><b>LEFT:</b> H1: mu&lt;mu0. Reject if Z&lt;-Z_alpha. p=P(Z&lt;=z).</li>
+        <li><b>RIGHT:</b> H1: mu>mu0. Reject if Z>Z_alpha. p=P(Z>=z).</li>
+        <li><b>TWO-TAIL:</b> H1: mu!=mu0. Reject if |Z|>Z_alpha/2. p=2*P(Z>=|z|).</li>
+        <li><b>CRITICAL Z:</b> alpha=0.10: 1.28/1.645. alpha=0.05: 1.645/1.96. alpha=0.01: 2.33/2.576 (one/two-tail).</li>
+        <li><b>SECURITY:</b> H0="system normal." Type I=false alarm (wastes time). Type II=missed attack (catastrophic). In security, Type II usually WORSE.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REGRESSION & MODELING -->
+  <div class="week" style="border-color: #0891b2;">
+    <div class="week-header" style="background: #0891b2; color: #fff;">REGRESSION & CLASSIFICATION MODELS</div>
+    <div class="week-body" style="background: #ecfeff;">
+      <ul>
+        <li><b>LINEAR:</b> Y=b0+b1X+e. Continuous Y. Scatter plot first. b1=slope=most important. Least squares. Gauss-Markov theorem.</li>
+        <li><b>LOGISTIC:</b> Binary Y (0/1). Sigmoid curve [0,1]. Cutoff tradeoff. Lower cutoff -> more catches + more false alarms.</li>
+        <li><b>DECISION TREE:</b> Root/internal/leaf/branch. Recursive partitioning. Overfitting -> pruning. CART=binary. ID3/C4.5=multi-way, info gain.</li>
+        <li><b>WHEN TO USE:</b> Continuous outcome -> linear regression. Binary outcome -> logistic regression. Non-linear/categorical splits -> decision tree.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PYTHON COMMANDS -->
+  <div class="week" style="border-color: #1d4ed8;">
+    <div class="week-header" style="background: #1d4ed8; color: #fff;">PYTHON/PANDAS COMMANDS</div>
+    <div class="week-body" style="background: #eff6ff;">
+      <ul>
+        <li><b>LOAD:</b> <code>pd.read_csv()</code> <code>pd.read_sql()</code> <code>mysql.connector.connect()</code></li>
+        <li><b>EXPLORE:</b> <code>df.describe()</code> <code>df.info()</code> <code>df.shape</code> <code>df.head()</code></li>
+        <li><b>CLEAN:</b> <code>df.dropna()</code> <code>df.fillna()</code> <code>df.drop_duplicates()</code> <code>df.replace()</code> <code>df.astype()</code></li>
+        <li><b>FILTER:</b> <code>df.loc[df['col']>5]</code> <code>df[df['status']=='failed']</code></li>
+        <li><b>VIZ:</b> <code>plt.bar()</code> <code>plt.scatter()</code> <code>plt.hist()</code> <code>sns.boxplot()</code> <code>sns.heatmap()</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUICK DECISION GUIDE -->
+  <div class="week" style="border-color: #b45309;">
+    <div class="week-header" style="background: #b45309; color: #fff;">QUICK DECISION GUIDE</div>
+    <div class="week-body" style="background: #fffbeb;">
+      <ul>
+        <li><b>"Skewed data center?"</b> -> Median. <b>"Nominal data center?"</b> -> Mode. <b>"Not bell-shaped, which rule?"</b> -> Chebyshev.</li>
+        <li><b>"p=0.03, alpha=0.05?"</b> -> Reject H0. <b>"p=0.08, alpha=0.05?"</b> -> Fail to reject.</li>
+        <li><b>"IDS misses attack?"</b> -> Type II. <b>"IDS false alert?"</b> -> Type I. <b>"Binary outcome model?"</b> -> Logistic.</li>
+        <li><b>"3+ group comparison?"</b> -> ANOVA (normal) or Kruskal-Wallis (non-normal). <b>"Correlation, no causation?"</b> -> Always.</li>
+        <li><b>"AUC=0.52?"</b> -> Terrible (near random). <b>"99% accuracy, 0% sensitivity?"</b> -> Useless model, imbalanced data.</li>
+        <li><b>"Non-parallel interaction plot?"</b> -> Interaction exists, interpret BEFORE main effects.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- VOCAB GLOSSARY -->
+  <div class="week" style="border-color: #334155;">
+    <div class="week-header" style="background: #334155; color: #fff;">KEY VOCAB - FINAL</div>
+    <div class="week-body" style="background: #f1f5f9;">
+      <ul>
+        <li><b>EXPRESSIVENESS:</b> ALL and ONLY facts (Mackinlay) | <b>EFFECTIVENESS:</b> Readily perceived | <b>DATA-INK:</b> Max data, min junk (Tufte)</li>
+        <li><b>GESTALT:</b> Enclosure(strongest)>Connection>Proximity/Similarity | <b>DASHBOARD:</b> Single screen at a glance (Few)</li>
+        <li><b>PARAMETER:</b> Population (Greek: mu, sigma) | <b>STATISTIC:</b> Sample (Latin: Xbar, S) | <b>SE:</b> sigma/sqrt(n)</li>
+        <li><b>SENSITIVITY:</b> TP/(TP+FN) catch rate | <b>SPECIFICITY:</b> TN/(TN+FP) clear rate | <b>AUC:</b> 0.5=bad, 1=perfect</li>
+        <li><b>MSB:</b> Between-group variance | <b>MSW:</b> Within-group variance | <b>F:</b> MSB/MSW | <b>INTERACTION:</b> Read first in 2-way ANOVA</li>
+        <li><b>APT:</b> Advanced+Persistent+Threat | <b>KILL CHAIN:</b> 7 steps Recon->Actions | <b>SUPPLY CHAIN:</b> Upstream compromise</li>
+        <li><b>SAST:</b> Static/white-box | <b>DAST:</b> Dynamic/black-box | <b>SIEM:</b> Aggregates all logs (Splunk, QRadar, Sentinel)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

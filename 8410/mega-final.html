@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAS 8410 Final Mega Exam -- Post-Midterm (Weeks 7-13)</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #0ea5e9;
+    --page-tint: rgba(14,165,233,0.12);
+    --w7: #FF6B6B; --w8: #FFA94D; --w10: #FFD43B; --w11: #69DB7C;
+    --w12: #4DABF7; --w13: #9775FA;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav .row-label {
+    font-size: 12px; font-weight: 700; color: #888;
+    width: 100%; margin-bottom: -4px; margin-top: 4px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .topnav .row-label:first-child { margin-top: 0; }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w7); color: #000; }
+  .topnav a.w2 { background: var(--w8); color: #000; }
+  .topnav a.w3 { background: var(--w10); color: #000; }
+  .topnav a.w4 { background: var(--w11); color: #000; }
+  .topnav a.w5 { background: var(--w12); color: #000; }
+  .topnav a.w6 { background: var(--w13); color: #000; }
+  .topnav a.cs { background: #20C997; color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.home { background: rgba(255,255,255,0.1); }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* MEGA EXAM COMPONENTS */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-bottom: 8px;
+  }
+  .header a { color: var(--page-color); text-decoration: none; font-weight: 600; }
+  .header a:hover { text-decoration: underline; }
+
+  .timer {
+    font-size: 2em; font-weight: 800; color: var(--accent1);
+    font-variant-numeric: tabular-nums;
+  }
+  .timer.warning { color: #FFA94D; }
+  .timer.danger { color: #ff6b6b; animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .progress-section { margin: 16px 0 24px; }
+  .progress-bar {
+    background: #333; border-radius: 12px; height: 28px;
+    overflow: hidden; margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent1), #0369a1);
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    text-align: center; font-weight: 600; color: #aaa; font-size: 0.95em;
+  }
+
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .btn-submit {
+    padding: 14px 32px; border-radius: 10px; border: none;
+    background: var(--accent1); color: #fff;
+    font-size: 1.05em; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #0369a1; transform: scale(1.03); }
+  .btn-reset {
+    padding: 14px 32px; border-radius: 10px;
+    border: 2px solid var(--accent1); background: transparent;
+    color: var(--accent1); font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent1); color: #fff; }
+
+  .btn-shuffle {
+    padding: 14px 32px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #9775FA, #a78bfa);
+    color: #fff; font-size: 1.05em; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-shuffle:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(151,117,250,0.4); }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .section-header {
+    font-size: 1.15em; font-weight: 800; color: var(--accent1);
+    padding: 14px 20px; margin: 28px 0 12px;
+    background: rgba(14,165,233,0.1); border-radius: 10px;
+    border-left: 5px solid var(--accent1);
+  }
+
+  .mq {
+    margin: 14px 0; padding: 18px 20px;
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s;
+  }
+  .mq p { font-weight: 600; margin-bottom: 14px; font-size: 1em; line-height: 1.6; }
+  .qnum {
+    display: inline-block; min-width: 32px; height: 32px;
+    line-height: 32px; text-align: center;
+    background: var(--accent1); color: #fff; border-radius: 50%;
+    font-size: 0.8em; font-weight: 800; margin-right: 10px;
+  }
+  .mq label {
+    display: block; width: 100%;
+    padding: 12px 16px; margin: 6px 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); font-size: 0.95em;
+    cursor: pointer; transition: all 0.2s;
+    line-height: 1.5; user-select: none;
+  }
+  .mq label:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  #result {
+    display: none; text-align: center;
+    background: rgba(14,165,233,0.12); border: 2px solid var(--accent1);
+    border-radius: 16px; padding: 32px; margin: 32px 0;
+  }
+  .result-label {
+    font-size: 1.2em; font-weight: 700; color: var(--accent1);
+    margin-bottom: 12px;
+  }
+
+  .mq-feedback {
+    margin-top: 12px; padding: 12px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 0.9em; color: #ccc;
+    border-left: 3px solid var(--correct);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 0; color: #666;
+    border-top: 1px solid rgba(255,255,255,0.06); margin-top: 32px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    .timer { font-size: 1.5em; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <div class="row-label">Midterm</div>
+  <a href="index.html" class="home">W1-W6</a>
+  <a href="mega.html" class="mega">Midterm Mega</a>
+  <a href="cheatsheet.html" class="cs">Midterm Cheat Sheet</a>
+  <div class="row-label">Final</div>
+  <a href="#w7" class="w1">W7</a>
+  <a href="#w8" class="w2">W8</a>
+  <a href="#w10" class="w3">W10</a>
+  <a href="#w11" class="w4">W11</a>
+  <a href="#w12" class="w5">W12</a>
+  <a href="#w13" class="w6">W13</a>
+  <a href="mega-final.html" class="mega active">Final Mega</a>
+  <a href="cheatsheet-final.html" class="cs">Final Cheat Sheet</a>
+  <a href="../index.html" class="home">All Courses</a>
+</nav>
+
+<div class="page-hero">
+  <h1>FINAL MEGA EXAM -- 60 Questions</h1>
+  <div class="sub">SEAS 8410 Security Data Visualization &amp; Analytics - Post-Midterm Review - Weeks 7-13</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <a href="index.html">&larr; Back to Hub</a>
+      <div style="color: #aaa; font-size: 0.95em;">Final Review (Post-Midterm)</div>
+    </div>
+    <div class="header-right">
+      <div class="timer">
+        <span id="timer">1:15:00</span>
+      </div>
+      <div style="font-size: 0.9em; color: #aaa;">Time Remaining</div>
+      <div style="font-size: 0.7em; color: #888; margin-top:4px;">75-minute timed exam.<br>60 questions covering Weeks 7-8, 10-13.</div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progbar" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress">0/60 answered</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-submit" onclick="gradeExam()">Submit Exam</button>
+    <button class="btn-reset" onclick="resetExam()">Reset</button>
+    <button class="btn-shuffle" onclick="shuffleAndReset()">Shuffle Questions</button>
+  </div>
+
+  <div id="questions-container">
+
+  <!-- WEEK 7: Log Security & Gestalt -->
+  <div class="section-header" id="w7">Week 7: Log Security &amp; Gestalt Principles (Questions 1-10)</div>
+
+  <div class="mq" id="mq1">
+    <p><span class="qnum">1</span> A log is BEST defined as:</p>
+    <label onclick="pick(1,0)">A) A real-time dashboard showing active network connections</label>
+    <label onclick="pick(1,1)">B) A recorded sequence of events with timestamps that documents system, user, or application activity</label>
+    <label onclick="pick(1,2)">C) A database table containing employee records</label>
+    <label onclick="pick(1,3)">D) A firewall configuration file</label>
+  </div>
+
+  <div class="mq" id="mq2">
+    <p><span class="qnum">2</span> Which of the following is NOT one of the 7 standard log types?</p>
+    <label onclick="pick(2,0)">A) System log</label>
+    <label onclick="pick(2,1)">B) Blockchain log</label>
+    <label onclick="pick(2,2)">C) Audit log</label>
+    <label onclick="pick(2,3)">D) Web server log</label>
+  </div>
+
+  <div class="mq" id="mq3">
+    <p><span class="qnum">3</span> According to the Gestalt strength ranking, which principle has the STRONGEST grouping effect?</p>
+    <label onclick="pick(3,0)">A) Proximity</label>
+    <label onclick="pick(3,1)">B) Similarity</label>
+    <label onclick="pick(3,2)">C) Enclosure</label>
+    <label onclick="pick(3,3)">D) Continuity</label>
+  </div>
+
+  <div class="mq" id="mq4">
+    <p><span class="qnum">4</span> In the Gestalt hierarchy, which principle ranks SECOND after Enclosure?</p>
+    <label onclick="pick(4,0)">A) Closure</label>
+    <label onclick="pick(4,1)">B) Continuity</label>
+    <label onclick="pick(4,2)">C) Connection</label>
+    <label onclick="pick(4,3)">D) Proximity</label>
+  </div>
+
+  <div class="mq" id="mq5">
+    <p><span class="qnum">5</span> The Gestalt principle of PROXIMITY is most useful in dashboard design because it:</p>
+    <label onclick="pick(5,0)">A) Makes charts more colorful</label>
+    <label onclick="pick(5,1)">B) Directs the viewer's scanning direction - items close together are perceived as related groups</label>
+    <label onclick="pick(5,2)">C) Eliminates the need for labels</label>
+    <label onclick="pick(5,3)">D) Increases the data-ink ratio automatically</label>
+  </div>
+
+  <div class="mq" id="mq6">
+    <p><span class="qnum">6</span> The Gestalt principle of SIMILARITY is best applied in visualization by:</p>
+    <label onclick="pick(6,0)">A) Using a different color for every single data point</label>
+    <label onclick="pick(6,1)">B) Using consistent color coding so elements of the same category look alike across all charts</label>
+    <label onclick="pick(6,2)">C) Making all chart elements the same size regardless of value</label>
+    <label onclick="pick(6,3)">D) Randomly assigning shapes to data points</label>
+  </div>
+
+  <div class="mq" id="mq7">
+    <p><span class="qnum">7</span> According to CrowdStrike 2025 threat data, the average eCrime breakout time is:</p>
+    <label onclick="pick(7,0)">A) 24 hours</label>
+    <label onclick="pick(7,1)">B) 48 minutes</label>
+    <label onclick="pick(7,2)">C) 4 hours and 30 minutes</label>
+    <label onclick="pick(7,3)">D) 12 minutes</label>
+  </div>
+
+  <div class="mq" id="mq8">
+    <p><span class="qnum">8</span> CrowdStrike reported the FASTEST observed eCrime breakout time at:</p>
+    <label onclick="pick(8,0)">A) 5 minutes</label>
+    <label onclick="pick(8,1)">B) 2 minutes 7 seconds</label>
+    <label onclick="pick(8,2)">C) 51 seconds</label>
+    <label onclick="pick(8,3)">D) 10 minutes</label>
+  </div>
+
+  <div class="mq" id="mq9">
+    <p><span class="qnum">9</span> CrowdStrike 2025 data shows voice phishing (vishing) attacks increased by:</p>
+    <label onclick="pick(9,0)">A) +50%</label>
+    <label onclick="pick(9,1)">B) +150%</label>
+    <label onclick="pick(9,2)">C) +442%</label>
+    <label onclick="pick(9,3)">D) +1000%</label>
+  </div>
+
+  <div class="mq" id="mq10">
+    <p><span class="qnum">10</span> A database log records:</p>
+    <label onclick="pick(10,0)">A) Only failed login attempts to the operating system</label>
+    <label onclick="pick(10,1)">B) Queries, schema changes, and access patterns within database systems</label>
+    <label onclick="pick(10,2)">C) Network packet captures from firewalls</label>
+    <label onclick="pick(10,3)">D) Physical access badge swipes</label>
+  </div>
+
+  <!-- WEEK 8: Parametric vs Non-Parametric & Decision Trees -->
+  <div class="section-header" id="w8">Week 8: Parametric vs Non-Parametric &amp; Decision Trees (Questions 11-20)</div>
+
+  <div class="mq" id="mq11">
+    <p><span class="qnum">11</span> A parametric test assumes the data follows a known distribution (typically normal) and uses which measure of center?</p>
+    <label onclick="pick(11,0)">A) Median</label>
+    <label onclick="pick(11,1)">B) Mode</label>
+    <label onclick="pick(11,2)">C) Mean</label>
+    <label onclick="pick(11,3)">D) Range</label>
+  </div>
+
+  <div class="mq" id="mq12">
+    <p><span class="qnum">12</span> A non-parametric test is described as "distribution-free" because it:</p>
+    <label onclick="pick(12,0)">A) Requires data to be normally distributed</label>
+    <label onclick="pick(12,1)">B) Makes no assumption about the underlying population distribution</label>
+    <label onclick="pick(12,2)">C) Can only be used with large samples (n > 1000)</label>
+    <label onclick="pick(12,3)">D) Requires equal variances across all groups</label>
+  </div>
+
+  <div class="mq" id="mq13">
+    <p><span class="qnum">13</span> When should you choose a non-parametric test over a parametric one?</p>
+    <label onclick="pick(13,0)">A) When the data is perfectly bell-shaped and the sample is large</label>
+    <label onclick="pick(13,1)">B) When the data is ordinal, heavily skewed, has outliers, or the normality assumption is violated</label>
+    <label onclick="pick(13,2)">C) Only when you have more than 10,000 observations</label>
+    <label onclick="pick(13,3)">D) Non-parametric tests should never be used in security analytics</label>
+  </div>
+
+  <div class="mq" id="mq14">
+    <p><span class="qnum">14</span> In the sign test, how are tied observations (where the value equals the hypothesized median) handled?</p>
+    <label onclick="pick(14,0)">A) They are counted as positive signs</label>
+    <label onclick="pick(14,1)">B) They are counted as negative signs</label>
+    <label onclick="pick(14,2)">C) They are discarded, and n is reduced accordingly</label>
+    <label onclick="pick(14,3)">D) They invalidate the entire test</label>
+  </div>
+
+  <div class="mq" id="mq15">
+    <p><span class="qnum">15</span> The sign test uses which probability distribution to calculate the p-value?</p>
+    <label onclick="pick(15,0)">A) Normal distribution</label>
+    <label onclick="pick(15,1)">B) Chi-square distribution</label>
+    <label onclick="pick(15,2)">C) Binomial distribution with p = 0.5</label>
+    <label onclick="pick(15,3)">D) Poisson distribution</label>
+  </div>
+
+  <div class="mq" id="mq16">
+    <p><span class="qnum">16</span> In a decision tree, the topmost node that represents the first split is called the:</p>
+    <label onclick="pick(16,0)">A) Leaf node</label>
+    <label onclick="pick(16,1)">B) Internal node</label>
+    <label onclick="pick(16,2)">C) Root node</label>
+    <label onclick="pick(16,3)">D) Branch</label>
+  </div>
+
+  <div class="mq" id="mq17">
+    <p><span class="qnum">17</span> Decision trees are built using a process called:</p>
+    <label onclick="pick(17,0)">A) Forward propagation</label>
+    <label onclick="pick(17,1)">B) Recursive partitioning - repeatedly splitting data into purer subsets</label>
+    <label onclick="pick(17,2)">C) Gradient descent optimization</label>
+    <label onclick="pick(17,3)">D) Principal component analysis</label>
+  </div>
+
+  <div class="mq" id="mq18">
+    <p><span class="qnum">18</span> A decision tree that memorizes training data noise instead of learning general patterns is suffering from:</p>
+    <label onclick="pick(18,0)">A) Underfitting</label>
+    <label onclick="pick(18,1)">B) Overfitting - the tree is too deep and complex</label>
+    <label onclick="pick(18,2)">C) Data leakage</label>
+    <label onclick="pick(18,3)">D) Feature scaling issues</label>
+  </div>
+
+  <div class="mq" id="mq19">
+    <p><span class="qnum">19</span> CART (Classification and Regression Trees) differs from ID3/C4.5 in that CART:</p>
+    <label onclick="pick(19,0)">A) Can only handle categorical variables</label>
+    <label onclick="pick(19,1)">B) Produces binary splits only, while ID3/C4.5 can produce multi-way splits</label>
+    <label onclick="pick(19,2)">C) Does not support pruning</label>
+    <label onclick="pick(19,3)">D) Requires data to be normally distributed</label>
+  </div>
+
+  <div class="mq" id="mq20">
+    <p><span class="qnum">20</span> A classification tree predicts categorical outcomes (e.g., malicious/benign), while a regression tree predicts:</p>
+    <label onclick="pick(20,0)">A) Only binary outcomes</label>
+    <label onclick="pick(20,1)">B) Continuous numeric values (e.g., predicted response time)</label>
+    <label onclick="pick(20,2)">C) Cluster memberships</label>
+    <label onclick="pick(20,3)">D) Probability distributions</label>
+  </div>
+
+  <!-- WEEK 10: APTs & Linear Regression -->
+  <div class="section-header" id="w10">Week 10: APTs &amp; Linear Regression (Questions 21-30)</div>
+
+  <div class="mq" id="mq21">
+    <p><span class="qnum">21</span> In the APT acronym, "Persistent" means the attacker:</p>
+    <label onclick="pick(21,0)">A) Uses the most advanced zero-day exploits available</label>
+    <label onclick="pick(21,1)">B) Maintains long-term presence in the target network, often for months or years</label>
+    <label onclick="pick(21,2)">C) Attacks only once and immediately exfiltrates data</label>
+    <label onclick="pick(21,3)">D) Targets multiple organizations simultaneously</label>
+  </div>
+
+  <div class="mq" id="mq22">
+    <p><span class="qnum">22</span> Tier I-II threat actors are characterized by:</p>
+    <label onclick="pick(22,0)">A) Creating new vulnerabilities in hardware and costing billions in funding</label>
+    <label onclick="pick(22,1)">B) Exploiting known vulnerabilities with budgets in the tens of thousands of dollars</label>
+    <label onclick="pick(22,2)">C) Discovering unknown vulnerabilities with budgets in the millions</label>
+    <label onclick="pick(22,3)">D) Operating exclusively as nation-state actors</label>
+  </div>
+
+  <div class="mq" id="mq23">
+    <p><span class="qnum">23</span> Tier V-VI threat actors are the most dangerous because they can:</p>
+    <label onclick="pick(23,0)">A) Only exploit publicly known CVEs</label>
+    <label onclick="pick(23,1)">B) CREATE new vulnerabilities in hardware, firmware, and protocols, with budgets in the billions</label>
+    <label onclick="pick(23,2)">C) Discover unknown vulnerabilities but not create new ones</label>
+    <label onclick="pick(23,3)">D) Only conduct social engineering attacks</label>
+  </div>
+
+  <div class="mq" id="mq24">
+    <p><span class="qnum">24</span> In CrowdStrike's threat actor naming convention, "Bear" designates actors from:</p>
+    <label onclick="pick(24,0)">A) North Korea</label>
+    <label onclick="pick(24,1)">B) Iran</label>
+    <label onclick="pick(24,2)">C) Russia</label>
+    <label onclick="pick(24,3)">D) Pakistan</label>
+  </div>
+
+  <div class="mq" id="mq25">
+    <p><span class="qnum">25</span> In CrowdStrike naming, "Chollima" represents threat actors from which country?</p>
+    <label onclick="pick(25,0)">A) China</label>
+    <label onclick="pick(25,1)">B) North Korea (DPRK)</label>
+    <label onclick="pick(25,2)">C) Iran</label>
+    <label onclick="pick(25,3)">D) Russia</label>
+  </div>
+
+  <div class="mq" id="mq26">
+    <p><span class="qnum">26</span> The Lockheed Martin Cyber Kill Chain has how many stages?</p>
+    <label onclick="pick(26,0)">A) 5 stages</label>
+    <label onclick="pick(26,1)">B) 7 stages (Recon, Weaponize, Deliver, Exploit, Install, C2, Actions on Objectives)</label>
+    <label onclick="pick(26,2)">C) 10 stages</label>
+    <label onclick="pick(26,3)">D) 3 stages</label>
+  </div>
+
+  <div class="mq" id="mq27">
+    <p><span class="qnum">27</span> In simple linear regression Y = b0 + b1*X + e, the slope b1 represents:</p>
+    <label onclick="pick(27,0)">A) The value of Y when X equals zero</label>
+    <label onclick="pick(27,1)">B) The expected change in Y for each one-unit increase in X</label>
+    <label onclick="pick(27,2)">C) The correlation coefficient</label>
+    <label onclick="pick(27,3)">D) The standard error of the estimate</label>
+  </div>
+
+  <div class="mq" id="mq28">
+    <p><span class="qnum">28</span> The method of least squares fits a regression line by minimizing:</p>
+    <label onclick="pick(28,0)">A) The sum of absolute deviations</label>
+    <label onclick="pick(28,1)">B) The sum of squared residuals (vertical distances from points to the line)</label>
+    <label onclick="pick(28,2)">C) The maximum deviation of any single point</label>
+    <label onclick="pick(28,3)">D) The number of data points above the line</label>
+  </div>
+
+  <div class="mq" id="mq29">
+    <p><span class="qnum">29</span> Before running a linear regression, the FIRST thing you should always do is:</p>
+    <label onclick="pick(29,0)">A) Calculate the p-value</label>
+    <label onclick="pick(29,1)">B) Create a scatter plot to visually inspect the relationship</label>
+    <label onclick="pick(29,2)">C) Remove all outliers from the dataset</label>
+    <label onclick="pick(29,3)">D) Normalize all variables to z-scores</label>
+  </div>
+
+  <div class="mq" id="mq30">
+    <p><span class="qnum">30</span> The Gauss-Markov theorem states that OLS (Ordinary Least Squares) estimators are BLUE, which stands for:</p>
+    <label onclick="pick(30,0)">A) Best Linear Unbiased Estimator - the most efficient among all linear unbiased estimators</label>
+    <label onclick="pick(30,1)">B) Basic Linear Uniform Estimation</label>
+    <label onclick="pick(30,2)">C) Bayesian Linear Underlying Error</label>
+    <label onclick="pick(30,3)">D) Bounded Linear Univariate Equation</label>
+  </div>
+
+  <!-- WEEK 11: Collaboration & Logistic Regression -->
+  <div class="section-header" id="w11">Week 11: Collaboration &amp; Logistic Regression (Questions 31-40)</div>
+
+  <div class="mq" id="mq31">
+    <p><span class="qnum">31</span> Which of the following is NOT a core feature of collaboration in analytics platforms?</p>
+    <label onclick="pick(31,0)">A) Sharing dashboards and reports</label>
+    <label onclick="pick(31,1)">B) Real-time co-editing</label>
+    <label onclick="pick(31,2)">C) Automatic vulnerability scanning of shared code</label>
+    <label onclick="pick(31,3)">D) Version control and change tracking</label>
+  </div>
+
+  <div class="mq" id="mq32">
+    <p><span class="qnum">32</span> Power BI integrates tightly with the Microsoft ecosystem by allowing users to:</p>
+    <label onclick="pick(32,0)">A) Only view reports in a web browser</label>
+    <label onclick="pick(32,1)">B) Publish from Excel, embed live tiles in PowerPoint, and access dashboards on mobile</label>
+    <label onclick="pick(32,2)">C) Only share reports via email attachments</label>
+    <label onclick="pick(32,3)">D) Edit reports exclusively in SharePoint</label>
+  </div>
+
+  <div class="mq" id="mq33">
+    <p><span class="qnum">33</span> Logistic regression uses the sigmoid function to output:</p>
+    <label onclick="pick(33,0)">A) A continuous unbounded prediction</label>
+    <label onclick="pick(33,1)">B) A probability between 0 and 1</label>
+    <label onclick="pick(33,2)">C) An integer class label directly</label>
+    <label onclick="pick(33,3)">D) A z-score</label>
+  </div>
+
+  <div class="mq" id="mq34">
+    <p><span class="qnum">34</span> In a confusion matrix, a False Positive (FP) in security means:</p>
+    <label onclick="pick(34,0)">A) A real attack was correctly detected</label>
+    <label onclick="pick(34,1)">B) Normal traffic was incorrectly flagged as an attack (false alarm)</label>
+    <label onclick="pick(34,2)">C) A real attack was missed by the system</label>
+    <label onclick="pick(34,3)">D) Normal traffic was correctly classified as benign</label>
+  </div>
+
+  <div class="mq" id="mq35">
+    <p><span class="qnum">35</span> Sensitivity (Recall / True Positive Rate) measures:</p>
+    <label onclick="pick(35,0)">A) The proportion of predicted positives that are actually positive</label>
+    <label onclick="pick(35,1)">B) The proportion of actual positives correctly identified (catching real attacks)</label>
+    <label onclick="pick(35,2)">C) The overall accuracy of the model</label>
+    <label onclick="pick(35,3)">D) The proportion of actual negatives correctly identified</label>
+  </div>
+
+  <div class="mq" id="mq36">
+    <p><span class="qnum">36</span> Why can accuracy alone be misleading in security classification? Consider a dataset with 99% benign and 1% malicious traffic:</p>
+    <label onclick="pick(36,0)">A) Accuracy is always the best metric regardless of class imbalance</label>
+    <label onclick="pick(36,1)">B) A "lazy model" that predicts everything as benign achieves 99% accuracy while catching zero attacks</label>
+    <label onclick="pick(36,2)">C) Accuracy accounts for class imbalance automatically</label>
+    <label onclick="pick(36,3)">D) Accuracy and sensitivity are always the same value</label>
+  </div>
+
+  <div class="mq" id="mq37">
+    <p><span class="qnum">37</span> An ROC curve with AUC = 0.5 indicates:</p>
+    <label onclick="pick(37,0)">A) A perfect classifier</label>
+    <label onclick="pick(37,1)">B) The model is no better than a random coin flip</label>
+    <label onclick="pick(37,2)">C) The model has perfect sensitivity</label>
+    <label onclick="pick(37,3)">D) The model has zero false positives</label>
+  </div>
+
+  <div class="mq" id="mq38">
+    <p><span class="qnum">38</span> The Challenger Space Shuttle disaster (1986) is used as a logistic regression case study because:</p>
+    <label onclick="pick(38,0)">A) The engineers used logistic regression and it worked perfectly</label>
+    <label onclick="pick(38,1)">B) A logistic regression on temperature vs. O-ring failure would have shown high failure probability at the launch temperature, but the analysis was not done</label>
+    <label onclick="pick(38,2)">C) The shuttle's computers used logistic regression for navigation</label>
+    <label onclick="pick(38,3)">D) It demonstrates that statistical models are never useful for engineering decisions</label>
+  </div>
+
+  <div class="mq" id="mq39">
+    <p><span class="qnum">39</span> Lowering the classification cutoff threshold in logistic regression (e.g., from 0.5 to 0.3) will:</p>
+    <label onclick="pick(39,0)">A) Decrease sensitivity and decrease false positives</label>
+    <label onclick="pick(39,1)">B) Increase sensitivity (catch more attacks) but also increase false positives</label>
+    <label onclick="pick(39,2)">C) Have no effect on model performance</label>
+    <label onclick="pick(39,3)">D) Improve both sensitivity and specificity simultaneously</label>
+  </div>
+
+  <div class="mq" id="mq40">
+    <p><span class="qnum">40</span> Tableau supports collaboration through:</p>
+    <label onclick="pick(40,0)">A) Only local file sharing via USB drives</label>
+    <label onclick="pick(40,1)">B) Cloud publishing, data-driven alerting, and inline commenting on visualizations</label>
+    <label onclick="pick(40,2)">C) Only email-based report distribution</label>
+    <label onclick="pick(40,3)">D) Sharing only through Microsoft Teams integration</label>
+  </div>
+
+  <!-- WEEK 12: ANOVA & Non-Parametric Tests -->
+  <div class="section-header" id="w12">Week 12: ANOVA &amp; Non-Parametric Tests (Questions 41-50)</div>
+
+  <div class="mq" id="mq41">
+    <p><span class="qnum">41</span> One-way ANOVA is used to compare means across:</p>
+    <label onclick="pick(41,0)">A) Exactly 2 groups only (use a t-test instead)</label>
+    <label onclick="pick(41,1)">B) 3 or more groups simultaneously using the F-statistic (F = MSB/MSW)</label>
+    <label onclick="pick(41,2)">C) Paired observations before and after treatment</label>
+    <label onclick="pick(41,3)">D) Two continuous variables for correlation</label>
+  </div>
+
+  <div class="mq" id="mq42">
+    <p><span class="qnum">42</span> Running multiple t-tests instead of ANOVA when comparing 3+ groups is problematic because:</p>
+    <label onclick="pick(42,0)">A) t-tests are computationally more expensive than ANOVA</label>
+    <label onclick="pick(42,1)">B) The familywise Type I error rate inflates - e.g., 3 groups need 3 t-tests, inflating alpha from 5% to approximately 14%</label>
+    <label onclick="pick(42,2)">C) t-tests cannot handle continuous data</label>
+    <label onclick="pick(42,3)">D) t-tests require larger sample sizes than ANOVA</label>
+  </div>
+
+  <div class="mq" id="mq43">
+    <p><span class="qnum">43</span> The three assumptions of one-way ANOVA are:</p>
+    <label onclick="pick(43,0)">A) Linearity, multicollinearity, and homoscedasticity</label>
+    <label onclick="pick(43,1)">B) Independence of observations, normality of residuals, and equal variance (homogeneity) across groups</label>
+    <label onclick="pick(43,2)">C) Random sampling, ordinal data, and matched pairs</label>
+    <label onclick="pick(43,3)">D) Large sample size, categorical outcome, and no outliers</label>
+  </div>
+
+  <div class="mq" id="mq44">
+    <p><span class="qnum">44</span> When ANOVA rejects H0 (at least one mean differs), the Tukey post-hoc test is used to:</p>
+    <label onclick="pick(44,0)">A) Confirm the ANOVA result is valid</label>
+    <label onclick="pick(44,1)">B) Determine WHICH specific pairs of groups differ from each other</label>
+    <label onclick="pick(44,2)">C) Test whether the data is normally distributed</label>
+    <label onclick="pick(44,3)">D) Calculate the effect size</label>
+  </div>
+
+  <div class="mq" id="mq45">
+    <p><span class="qnum">45</span> In two-way ANOVA, the MOST important concept to check FIRST is:</p>
+    <label onclick="pick(45,0)">A) The main effect of Factor A</label>
+    <label onclick="pick(45,1)">B) The main effect of Factor B</label>
+    <label onclick="pick(45,2)">C) The interaction effect between Factor A and Factor B</label>
+    <label onclick="pick(45,3)">D) The overall mean of all groups</label>
+  </div>
+
+  <div class="mq" id="mq46">
+    <p><span class="qnum">46</span> MANOVA extends ANOVA by handling:</p>
+    <label onclick="pick(46,0)">A) More than 3 groups</label>
+    <label onclick="pick(46,1)">B) Multiple correlated response (dependent) variables simultaneously</label>
+    <label onclick="pick(46,2)">C) Non-parametric data only</label>
+    <label onclick="pick(46,3)">D) Time-series data exclusively</label>
+  </div>
+
+  <div class="mq" id="mq47">
+    <p><span class="qnum">47</span> The Kruskal-Wallis test is the non-parametric equivalent of:</p>
+    <label onclick="pick(47,0)">A) Paired t-test</label>
+    <label onclick="pick(47,1)">B) One-way ANOVA - it compares 3+ groups using ranks instead of means</label>
+    <label onclick="pick(47,2)">C) Two-way ANOVA</label>
+    <label onclick="pick(47,3)">D) Simple linear regression</label>
+  </div>
+
+  <div class="mq" id="mq48">
+    <p><span class="qnum">48</span> The Friedman test is the non-parametric alternative for:</p>
+    <label onclick="pick(48,0)">A) Independent samples comparison</label>
+    <label onclick="pick(48,1)">B) Blocked (repeated measures) designs - the non-parametric counterpart to repeated-measures ANOVA</label>
+    <label onclick="pick(48,2)">C) Correlation analysis</label>
+    <label onclick="pick(48,3)">D) Simple linear regression</label>
+  </div>
+
+  <div class="mq" id="mq49">
+    <p><span class="qnum">49</span> Security data often violates ANOVA's normality assumption because it tends to be:</p>
+    <label onclick="pick(49,0)">A) Perfectly bell-shaped with no outliers</label>
+    <label onclick="pick(49,1)">B) Zero-inflated, heavily right-skewed, heavy-tailed, and often ordinal rather than continuous</label>
+    <label onclick="pick(49,2)">C) Always uniformly distributed</label>
+    <label onclick="pick(49,3)">D) Bimodal with equal peaks</label>
+  </div>
+
+  <div class="mq" id="mq50">
+    <p><span class="qnum">50</span> In ANOVA, F = MSB/MSW. A large F-value indicates:</p>
+    <label onclick="pick(50,0)">A) The within-group variability dominates, meaning groups are similar</label>
+    <label onclick="pick(50,1)">B) The between-group variability is large relative to within-group variability, suggesting group means differ</label>
+    <label onclick="pick(50,2)">C) The test assumptions have been violated</label>
+    <label onclick="pick(50,3)">D) The sample size is too small</label>
+  </div>
+
+  <!-- WEEK 13: Course Recap -->
+  <div class="section-header" id="w13">Week 13: Comprehensive Course Recap (Questions 51-60)</div>
+
+  <div class="mq" id="mq51">
+    <p><span class="qnum">51</span> John Snow's 1854 cholera map is a landmark in data visualization because it:</p>
+    <label onclick="pick(51,0)">A) Was the first use of a pie chart in public health</label>
+    <label onclick="pick(51,1)">B) Used spatial visualization of death locations to identify a contaminated water pump as the source</label>
+    <label onclick="pick(51,2)">C) Introduced the bar chart to medical research</label>
+    <label onclick="pick(51,3)">D) Was the first computer-generated map</label>
+  </div>
+
+  <div class="mq" id="mq52">
+    <p><span class="qnum">52</span> The four NoSQL database types are:</p>
+    <label onclick="pick(52,0)">A) SQL, MySQL, PostgreSQL, SQLite</label>
+    <label onclick="pick(52,1)">B) Key-value, Document, Column-family, and Graph</label>
+    <label onclick="pick(52,2)">C) Relational, Hierarchical, Network, Object-oriented</label>
+    <label onclick="pick(52,3)">D) JSON, XML, CSV, Parquet</label>
+  </div>
+
+  <div class="mq" id="mq53">
+    <p><span class="qnum">53</span> A general-purpose (GP) visualization tool like Python/matplotlib differs from a specialized tool like Splunk in that GP tools:</p>
+    <label onclick="pick(53,0)">A) Cannot create any type of visualization</label>
+    <label onclick="pick(53,1)">B) Offer maximum flexibility and customization but require more coding, while specialized tools are domain-optimized with built-in workflows</label>
+    <label onclick="pick(53,2)">C) Are always faster than specialized tools</label>
+    <label onclick="pick(53,3)">D) Can only produce static images, never interactive dashboards</label>
+  </div>
+
+  <div class="mq" id="mq54">
+    <p><span class="qnum">54</span> The Splunk operational intelligence pyramid (from bottom to top) is:</p>
+    <label onclick="pick(54,0)">A) Alerting -> Reporting -> Searching -> Dashboards</label>
+    <label onclick="pick(54,1)">B) Searching -> Reporting -> Alerting -> Dashboards</label>
+    <label onclick="pick(54,2)">C) Dashboards -> Alerting -> Reporting -> Searching</label>
+    <label onclick="pick(54,3)">D) Reporting -> Searching -> Dashboards -> Alerting</label>
+  </div>
+
+  <div class="mq" id="mq55">
+    <p><span class="qnum">55</span> In the data preprocessing pipeline, the correct order is:</p>
+    <label onclick="pick(55,0)">A) Feature Engineering -> Data Cleaning -> Model Training -> Data Collection</label>
+    <label onclick="pick(55,1)">B) Data Collection -> Data Cleaning -> Feature Engineering -> Training Data -> Learning Algorithm -> Model</label>
+    <label onclick="pick(55,2)">C) Model Training -> Data Collection -> Feature Engineering -> Data Cleaning</label>
+    <label onclick="pick(55,3)">D) Data Cleaning -> Data Collection -> Model Training -> Feature Engineering</label>
+  </div>
+
+  <div class="mq" id="mq56">
+    <p><span class="qnum">56</span> SAST analyzes source code WITHOUT executing it, while DAST:</p>
+    <label onclick="pick(56,0)">A) Also analyzes source code without execution</label>
+    <label onclick="pick(56,1)">B) Tests the running application from the outside, simulating real attacks</label>
+    <label onclick="pick(56,2)">C) Only reviews documentation and design specs</label>
+    <label onclick="pick(56,3)">D) Is only used for mobile applications</label>
+  </div>
+
+  <div class="mq" id="mq57">
+    <p><span class="qnum">57</span> According to the 2025 Verizon DBIR, third-party involvement in breaches has reached approximately:</p>
+    <label onclick="pick(57,0)">A) 5%</label>
+    <label onclick="pick(57,1)">B) 15%</label>
+    <label onclick="pick(57,2)">C) 30%</label>
+    <label onclick="pick(57,3)">D) 75%</label>
+  </div>
+
+  <div class="mq" id="mq58">
+    <p><span class="qnum">58</span> Dashboard anti-pattern "exceeding single screen boundaries" violates the core principle that dashboards must:</p>
+    <label onclick="pick(58,0)">A) Use only pie charts</label>
+    <label onclick="pick(58,1)">B) Be monitored at a glance on a single screen without scrolling</label>
+    <label onclick="pick(58,2)">C) Contain at least 20 visualizations</label>
+    <label onclick="pick(58,3)">D) Update only once per day</label>
+  </div>
+
+  <div class="mq" id="mq59">
+    <p><span class="qnum">59</span> The IQR fence for detecting EXTREME outliers is set at:</p>
+    <label onclick="pick(59,0)">A) 1.5 * IQR beyond Q1 and Q3</label>
+    <label onclick="pick(59,1)">B) 2 * IQR beyond Q1 and Q3</label>
+    <label onclick="pick(59,2)">C) 3 * IQR beyond Q1 and Q3</label>
+    <label onclick="pick(59,3)">D) 1 standard deviation from the mean</label>
+  </div>
+
+  <div class="mq" id="mq60">
+    <p><span class="qnum">60</span> The NOIR data types, from least to most informative, are:</p>
+    <label onclick="pick(60,0)">A) Ratio, Interval, Ordinal, Nominal</label>
+    <label onclick="pick(60,1)">B) Nominal (categories), Ordinal (ranked), Interval (no true zero), Ratio (true zero)</label>
+    <label onclick="pick(60,2)">C) Nominal, Interval, Ordinal, Ratio</label>
+    <label onclick="pick(60,3)">D) Ordinal, Nominal, Ratio, Interval</label>
+  </div>
+
+
+  </div><!-- end questions-container -->
+
+  <div id="result"></div>
+
+  <div class="footer">
+    SEAS 8410 Security Data Visualization &amp; Analytics - Final Review (Weeks 7-13)
+  </div>
+</div>
+
+<script>
+    var answers = {};
+    var locked = {};
+    var score = 0;
+    var correct = {1:1,2:1,3:2,4:2,5:1,6:1,7:1,8:2,9:2,10:1,11:2,12:1,13:1,14:2,15:2,16:2,17:1,18:1,19:1,20:1,21:1,22:1,23:1,24:2,25:1,26:1,27:1,28:1,29:1,30:0,31:2,32:1,33:1,34:1,35:1,36:1,37:1,38:1,39:1,40:1,41:1,42:1,43:1,44:1,45:2,46:1,47:1,48:1,49:1,50:1,51:1,52:1,53:1,54:1,55:1,56:1,57:2,58:1,59:2,60:1};
+
+    var explanations = {
+      1: "A log is a recorded sequence of events with timestamps documenting what happened, when, and often who or what caused it. Logs are the foundational data source for security monitoring, forensics, and compliance.",
+      2: "The 7 standard log types are: System, Application, Network, Security, Audit, Web Server, and Database logs. 'Blockchain log' is not one of the standard categories. Each type captures different aspects of system and user activity.",
+      3: "The Gestalt strength ranking from strongest to weakest is: Enclosure > Connection > Proximity/Similarity > Continuity > Closure. Enclosure (surrounding items with a border or shading) creates the strongest perceptual grouping.",
+      4: "After Enclosure, Connection is the second strongest Gestalt principle. Connecting elements with a line creates a strong visual grouping even if the elements are far apart or look different.",
+      5: "Proximity directs scanning direction - items placed close together are automatically perceived as belonging to the same group. In dashboards, related metrics should be physically close, and unrelated ones separated by whitespace.",
+      6: "Similarity means using consistent visual attributes (color, shape, size) for elements in the same category. When 'critical alerts' are always red across all dashboard panels, viewers instantly recognize the pattern without reading labels.",
+      7: "CrowdStrike 2025 data reports the average eCrime breakout time (time from initial compromise to lateral movement) is 48 minutes. This means defenders have less than an hour to detect and contain an intrusion.",
+      8: "The fastest observed eCrime breakout was just 51 seconds - less than a minute from initial access to lateral movement. This underscores why automated detection and response capabilities are critical.",
+      9: "Voice phishing (vishing) attacks surged +442% according to CrowdStrike 2025 data. Attackers are increasingly using phone calls to bypass email security controls and exploit human trust.",
+      10: "Database logs record queries executed, schema modifications (CREATE/ALTER/DROP), user access patterns, and performance metrics within database management systems. They are critical for detecting data exfiltration and unauthorized access.",
+      11: "Parametric tests assume a known distribution (usually normal) and work with the mean as the measure of center. The Z-test is a classic parametric test. These tests are more powerful when their assumptions are met.",
+      12: "Non-parametric tests make no assumption about the population distribution shape. They work with ranks or signs rather than raw values, making them suitable for ordinal data, skewed distributions, and small samples where normality cannot be verified.",
+      13: "Choose non-parametric tests when: data is ordinal (not truly continuous), the distribution is heavily skewed, outliers are present, sample size is small and normality cannot be verified, or normality tests fail.",
+      14: "In the sign test, tied observations (where the value equals the hypothesized median) are discarded, and n is reduced. Only the non-tied observations contribute to the test statistic. This is a key procedural detail for exams.",
+      15: "The sign test counts the number of positive signs (values above the hypothesized median). Under H0, this count follows a Binomial(n, 0.5) distribution, where n is the number of non-tied observations.",
+      16: "The root node is the topmost node in a decision tree representing the first and most important split. It contains the feature that best separates the data. All other decisions branch downward from the root.",
+      17: "Recursive partitioning repeatedly splits the data at each node using the feature and threshold that best separates the classes (maximizes purity). This process continues recursively until stopping criteria are met.",
+      18: "Overfitting occurs when a tree is too deep/complex and memorizes training noise. The tree performs perfectly on training data but poorly on new data. Pruning (cutting back branches) is the primary remedy for overfitting.",
+      19: "CART produces only binary (two-way) splits at each node, while ID3 and C4.5 can create multi-way splits (one branch per category value). CART uses Gini impurity; ID3/C4.5 use information gain/gain ratio.",
+      20: "A classification tree predicts categorical outcomes (class labels like malicious/benign). A regression tree predicts continuous numeric values (like response time or risk score) by averaging values in each leaf node.",
+      21: "In APT, 'Persistent' means the attacker establishes and maintains long-term access, often remaining undetected for months or years. They use backdoors, legitimate credentials, and living-off-the-land techniques to persist.",
+      22: "Tier I-II actors exploit known vulnerabilities using publicly available tools and have budgets in the tens of thousands. They include script kiddies and basic cybercriminals. Contrast with Tier III-IV who discover unknown vulnerabilities ($Ms).",
+      23: "Tier V-VI actors (nation-state elite) can CREATE new vulnerabilities in hardware, firmware, and protocols. Their budgets are in the billions. They can compromise supply chains and implant hardware backdoors - capabilities beyond mere exploit use.",
+      24: "CrowdStrike's naming convention: Bear = Russia, Chollima = North Korea (DPRK), Kitten = Iran, Leopard = Pakistan, Panda = China. The animal names make it easy to quickly identify the nation-state origin of a threat group.",
+      25: "Chollima (a mythical winged horse from Korean folklore) designates North Korean threat actors in CrowdStrike's naming system. Examples include Labyrinth Chollima and Velvet Chollima targeting financial and diplomatic sectors.",
+      26: "The Lockheed Martin Cyber Kill Chain has 7 stages: (1) Reconnaissance, (2) Weaponization, (3) Delivery, (4) Exploitation, (5) Installation, (6) Command & Control (C2), (7) Actions on Objectives. Defenders can break the chain at any stage.",
+      27: "The slope b1 represents the expected change in Y for each one-unit increase in X. For example, if b1 = 2.5, then each additional unit of X is associated with a 2.5-unit increase in Y, on average.",
+      28: "Least squares minimizes the sum of squared residuals - the vertical distances between observed points and the fitted line. Squaring ensures all deviations are positive and penalizes large deviations more than small ones.",
+      29: "Always create a scatter plot first before running regression. The scatter plot reveals whether the relationship is linear (regression appropriate), curved (need transformation), or nonexistent (regression meaningless). Fitting a line to non-linear data is a common mistake.",
+      30: "BLUE = Best Linear Unbiased Estimator. The Gauss-Markov theorem guarantees that when assumptions hold (linearity, independence, homoscedasticity, no perfect multicollinearity), OLS gives the most efficient (smallest variance) estimates among all linear unbiased estimators.",
+      31: "Core collaboration features include: sharing, real-time co-editing, version control, data synchronization, and ecosystem integration. Automatic vulnerability scanning is a security tool feature, not a collaboration feature of analytics platforms.",
+      32: "Power BI's Microsoft ecosystem integration allows: publishing reports from Excel, embedding live interactive tiles in PowerPoint presentations, and accessing full dashboards via the Power BI mobile app - seamless cross-tool workflow.",
+      33: "The sigmoid function S(x) = 1/(1+e^(-x)) maps any input to a value between 0 and 1, making it interpretable as a probability. Logistic regression predicts P(Y=1|X) - the probability of the positive class given the features.",
+      34: "A False Positive (FP) means the model predicted 'positive' (attack) but the truth was 'negative' (benign). In security, this is a false alarm - wasting analyst time investigating non-threats and potentially causing alert fatigue.",
+      35: "Sensitivity = TP / (TP + FN) = the proportion of actual attacks correctly detected. High sensitivity means few missed attacks (low FN). In security, sensitivity is often prioritized because missing an attack (FN) can be catastrophic.",
+      36: "With 99% benign traffic, a model that always predicts 'benign' achieves 99% accuracy while detecting zero attacks. This 'lazy model' problem shows why accuracy is misleading with imbalanced data. Use sensitivity, specificity, and AUC instead.",
+      37: "AUC = 0.5 means the ROC curve follows the diagonal - the model has no discrimination ability and is equivalent to random guessing (coin flip). AUC = 1.0 means perfect separation between classes. Good models typically have AUC > 0.8.",
+      38: "Engineers had O-ring damage data at various launch temperatures but did not perform a logistic regression. Had they modeled P(failure) vs. temperature, the sigmoid curve would have shown near-certain failure at 31 F (the launch temperature). A textbook case of how proper statistical analysis could have prevented disaster.",
+      39: "Lowering the cutoff means more observations are classified as 'positive.' This catches more true attacks (higher sensitivity/recall) but also flags more benign traffic as attacks (more false positives, lower specificity). This sensitivity-specificity tradeoff is fundamental.",
+      40: "Tableau supports collaboration through: publishing workbooks to Tableau Cloud/Server, setting up data-driven alerts that notify users of threshold changes, and inline commenting on visualizations for team discussion.",
+      41: "One-way ANOVA compares means across 3 or more groups using the F-statistic (F = MSB/MSW). For exactly 2 groups, use a t-test. ANOVA tests H0: all group means are equal vs. H1: at least one differs.",
+      42: "With 3 groups, you need 3 pairwise t-tests. Each test has a 5% error rate, but the combined error rate is approximately 1 - (0.95)^3 = 14.3%. With more groups, this inflation gets worse. ANOVA controls the overall alpha at 5%.",
+      43: "ANOVA's three assumptions: (1) Independence - observations are not correlated, (2) Normality - residuals in each group are approximately normal, (3) Equal variance (homogeneity) - all groups have similar spread. Violations can invalidate results.",
+      44: "ANOVA only tells you 'at least one mean differs' but not which ones. Tukey's HSD (Honest Significant Difference) performs all pairwise comparisons while controlling the familywise error rate, identifying exactly which group pairs differ.",
+      45: "In two-way ANOVA, always check the interaction effect FIRST. If the interaction is significant, the main effects cannot be interpreted independently because the effect of one factor depends on the level of the other factor.",
+      46: "MANOVA (Multivariate ANOVA) handles multiple correlated dependent variables simultaneously. Instead of running separate ANOVAs for each response (inflating error), MANOVA tests all responses together while accounting for their correlations.",
+      47: "Kruskal-Wallis is the non-parametric one-way ANOVA. It compares 3+ independent groups using ranks instead of raw values. Use it when ANOVA assumptions (especially normality) are violated or when data is ordinal.",
+      48: "The Friedman test is the non-parametric alternative for repeated-measures (blocked) designs. It uses ranks within each block. Use it when you have the same subjects measured under 3+ conditions and normality is violated.",
+      49: "Security data characteristics that violate normality: zero-inflation (many days with zero incidents), heavy right skew (rare but extreme events), heavy tails (outliers are real attacks, not noise), and ordinal severity ratings. Non-parametric tests are often more appropriate.",
+      50: "F = MSB/MSW compares between-group variability to within-group variability. A large F means groups differ more than expected by random within-group variation. If F is close to 1, group differences are no larger than random noise.",
+      51: "John Snow's 1854 cholera map plotted death locations on a street map of London, revealing a cluster around the Broad Street pump. This spatial visualization identified the contaminated water source and is a founding example of data-driven public health investigation.",
+      52: "The four NoSQL types: Key-value (Redis, DynamoDB), Document (MongoDB, CouchDB), Column-family (Cassandra, HBase), and Graph (Neo4j). Each is optimized for different data patterns and query types that relational databases handle poorly.",
+      53: "GP tools (Python, R, D3.js) offer unlimited customization but require coding expertise. Specialized tools (Splunk, Tableau, Power BI) provide domain-optimized workflows, built-in connectors, and drag-and-drop interfaces but with less flexibility.",
+      54: "Splunk's operational intelligence pyramid from bottom to top: Searching (ad-hoc queries) -> Reporting (scheduled summaries) -> Alerting (threshold-triggered notifications) -> Dashboards (real-time visual monitoring). Each layer builds on the one below.",
+      55: "The correct preprocessing pipeline order: Data Collection -> Data Cleaning (handle missing values, fix errors) -> Feature Engineering (create new informative variables) -> Training Data -> Learning Algorithm -> Model. Skipping cleaning corrupts everything downstream.",
+      56: "DAST (Dynamic Application Security Testing) tests the running application from the outside by sending crafted inputs and observing responses - simulating real attacker behavior. SAST sees the code; DAST sees the behavior. Both are complementary.",
+      57: "The 2025 DBIR reports approximately 30% of breaches involve third parties (doubled from 15% in the prior year). This trend highlights the growing risk from supply chain dependencies, managed service providers, and SaaS platforms.",
+      58: "Stephen Few's dashboard definition requires information to be 'monitored at a glance' on 'a single screen.' Scrolling breaks this principle - critical metrics hidden below the fold may be missed during time-sensitive monitoring.",
+      59: "Extreme outliers fall beyond 3 * IQR from Q1 or Q3 (i.e., below Q1 - 3*IQR or above Q3 + 3*IQR). Mild outliers fall beyond 1.5 * IQR. In security, extreme outliers may indicate genuine attacks and should be investigated before removal.",
+      60: "NOIR: Nominal (named categories, no order - e.g., protocol type), Ordinal (ranked categories - e.g., severity Low/Med/High), Interval (equal spacing, no true zero - e.g., temperature in Celsius), Ratio (true zero - e.g., packet count, response time)."
+    };
+
+    // 75-minute countdown timer
+    var totalSeconds = 75 * 60;
+    var startTime = Date.now();
+
+    var timerInterval = setInterval(function(){
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var remaining = totalSeconds - elapsed;
+      if (remaining <= 0) {
+        remaining = 0;
+        clearInterval(timerInterval);
+        gradeExam();
+      }
+      var h = Math.floor(remaining / 3600);
+      var m = Math.floor((remaining % 3600) / 60);
+      var s = remaining % 60;
+      var timerEl = document.getElementById('timer');
+      timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+
+      // Warning colors
+      var timerContainer = timerEl.parentElement;
+      if (remaining <= 300) {
+        timerContainer.className = 'timer danger';
+      } else if (remaining <= 900) {
+        timerContainer.className = 'timer warning';
+      } else {
+        timerContainer.className = 'timer';
+      }
+    }, 1000);
+
+    function pick(q, c) {
+      if (locked[q]) return;
+      locked[q] = true;
+      answers[q] = c;
+      var labels = document.querySelectorAll('#mq' + q + ' label');
+      var correctIdx = correct[q];
+      var isRight = (c === correctIdx);
+
+      labels.forEach(function(l) {
+        l.style.pointerEvents = 'none';
+        l.style.opacity = '0.7';
+      });
+
+      if (isRight) {
+        score++;
+        labels[c].style.background = 'rgba(81,207,102,0.2)';
+        labels[c].style.borderColor = '#51cf66';
+        labels[c].style.color = '#51cf66';
+        labels[c].style.fontWeight = '700';
+        labels[c].style.opacity = '1';
+      } else {
+        labels[c].style.background = 'rgba(255,107,107,0.2)';
+        labels[c].style.borderColor = '#ff6b6b';
+        labels[c].style.color = '#ff6b6b';
+        labels[c].style.opacity = '1';
+        labels[correctIdx].style.background = 'rgba(81,207,102,0.2)';
+        labels[correctIdx].style.borderColor = '#51cf66';
+        labels[correctIdx].style.color = '#51cf66';
+        labels[correctIdx].style.fontWeight = '700';
+        labels[correctIdx].style.opacity = '1';
+      }
+
+      var feedback = document.createElement('div');
+      feedback.className = 'mq-feedback';
+      var explanation = explanations[q] || '';
+      var encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!'];
+      var encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+      if (isRight) {
+        feedback.innerHTML = '<strong style="color:#51cf66">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation;
+      } else {
+        var correctText = labels[correctIdx].textContent.trim();
+        feedback.innerHTML = '<strong style="color:#ff6b6b">Not quite...</strong> The correct answer is: <em style="color:#51cf66">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation;
+      }
+      document.getElementById('mq' + q).appendChild(feedback);
+
+      var answered = Object.keys(answers).length;
+      document.getElementById('progress').textContent = score + ' correct / ' + answered + ' of 60 answered';
+      document.getElementById('progbar').style.width = (answered / 60 * 100) + '%';
+    }
+
+    function gradeExam() {
+      var answered = Object.keys(answers).length;
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var em = Math.floor(elapsed / 60);
+      var es = elapsed % 60;
+      var timeStr = em + 'm ' + es + 's';
+
+      var pct = answered > 0 ? Math.round(score / answered * 100) : 0;
+      var g = pct >= 93 ? 'A' : pct >= 90 ? 'A-' : pct >= 87 ? 'B+' : pct >= 83 ? 'B' : pct >= 80 ? 'B-' : pct >= 77 ? 'C+' : pct >= 73 ? 'C' : pct >= 70 ? 'C-' : pct >= 60 ? 'D' : 'F';
+
+      var confetti = '';
+      if (pct >= 90) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#127881; &#127942; &#127881;</div>';
+      } else if (pct >= 80) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128170; &#11088; &#128170;</div>';
+      } else if (pct >= 70) {
+        confetti = '<div style="font-size:3em;margin-bottom:10px">&#128077;</div>';
+      }
+
+      var resultHTML = confetti;
+      resultHTML += '<div style="margin-bottom:16px">';
+      resultHTML += '<div style="display:inline-block;padding:16px 24px;background:rgba(14,165,233,0.1);border:2px solid var(--accent1);border-radius:12px;"><div style="font-size:0.85em;color:var(--accent1);font-weight:700;margin-bottom:4px">SCORE (Weeks 7-13)</div><div style="font-size:2em;font-weight:700;color:var(--accent1)">' + score + '/' + answered + '</div><div style="color:#aaa">' + pct + '% - ' + g + '</div></div>';
+      resultHTML += '</div>';
+      resultHTML += '<div style="font-size:1.2em;color:#aaa">Completed in ' + timeStr + '</div>';
+
+      document.getElementById('result').innerHTML = resultHTML;
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({top: document.getElementById('result').offsetTop - 100, behavior: 'smooth'});
+
+      if (pct >= 90) { launchConfetti(); }
+    }
+
+    function launchConfetti() {
+      var colors = ['#0ea5e9','#51cf66','#4DABF7','#FFD43B','#9775FA','#FFA94D'];
+      for (var i = 0; i < 80; i++) {
+        var c = document.createElement('div');
+        c.style.cssText = 'position:fixed;width:10px;height:10px;border-radius:50%;top:-10px;z-index:9999;pointer-events:none;';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animation = 'confettiFall ' + (2 + Math.random() * 3) + 's linear forwards';
+        c.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(c);
+        setTimeout(function(el){ el.remove(); }.bind(null, c), 6000);
+      }
+      var style = document.createElement('style');
+      style.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }';
+      document.head.appendChild(style);
+    }
+
+    function resetExam() {
+      answers = {};
+      locked = {};
+      score = 0;
+      document.querySelectorAll('.mq label').forEach(function(l) {
+        l.style.background = '';
+        l.style.borderColor = '';
+        l.style.color = '';
+        l.style.fontWeight = '';
+        l.style.pointerEvents = '';
+        l.style.opacity = '';
+      });
+      document.querySelectorAll('.mq-feedback').forEach(function(f) { f.remove(); });
+      document.getElementById('progress').textContent = '0/60 answered';
+      document.getElementById('progbar').style.width = '0%';
+      document.getElementById('result').style.display = 'none';
+
+      // Reset timer
+      clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(function(){
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var remaining = totalSeconds - elapsed;
+        if (remaining <= 0) {
+          remaining = 0;
+          clearInterval(timerInterval);
+          gradeExam();
+        }
+        var h = Math.floor(remaining / 3600);
+        var m = Math.floor((remaining % 3600) / 60);
+        var s = remaining % 60;
+        var timerEl = document.getElementById('timer');
+        timerEl.textContent = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        var timerContainer = timerEl.parentElement;
+        if (remaining <= 300) {
+          timerContainer.className = 'timer danger';
+        } else if (remaining <= 900) {
+          timerContainer.className = 'timer warning';
+        } else {
+          timerContainer.className = 'timer';
+        }
+      }, 1000);
+
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function shuffleAndReset() {
+      resetExam();
+
+      var container = document.getElementById('questions-container');
+      var questions = Array.from(container.querySelectorAll('.mq'));
+      var headers = Array.from(container.querySelectorAll('.section-header'));
+
+      questions.forEach(function(q) { q.remove(); });
+      headers.forEach(function(h) { h.remove(); });
+
+      shuffleArray(questions);
+
+      var newHeader = document.createElement('div');
+      newHeader.className = 'section-header';
+      newHeader.textContent = 'Randomized Questions (1-60)';
+      newHeader.style.background = 'linear-gradient(135deg, #9775FA, #a78bfa)';
+      container.insertBefore(newHeader, container.firstChild);
+
+      questions.forEach(function(q, idx) {
+        var num = idx + 1;
+        var qnum = q.querySelector('.qnum');
+        if (qnum) qnum.textContent = num;
+        container.appendChild(q);
+      });
+
+      var notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#9775FA;color:#fff;padding:12px 24px;border-radius:25px;font-weight:600;z-index:1000;animation:fadeOut 2s forwards;';
+      notif.textContent = 'Questions shuffled! Good luck!';
+      document.body.appendChild(notif);
+      setTimeout(function() { notif.remove(); }, 2000);
+
+      startTime = Date.now();
+    }
+
+    // Shuffle on page load for fresh experience each time
+    document.addEventListener('DOMContentLoaded', function() {
+      shuffleAndReset();
+    });
+</script>
+</body>
+</html>
