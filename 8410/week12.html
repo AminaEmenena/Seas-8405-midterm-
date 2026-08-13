@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 - Non-Parametric Tests, ANOVA, Security & AI</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #FFD43B;
+    --page-tint: rgba(255,212,59,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #00897B;
+    --w10: #E599F7; --w11: #FF922B; --w12: #FFD43B; --w13: #69DB7C;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #fff; }
+  .topnav a.w10 { background: var(--w10); color: #000; }
+  .topnav a.w11 { background: var(--w11); color: #000; }
+  .topnav a.w12 { background: var(--w12); color: #000; }
+  .topnav a.w13 { background: var(--w13); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+  .topnav .nav-sep { width: 100%; height: 0; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(255,212,59,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none; transition: all 0.2s;
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre; color: #ddd;
+  }
+
+  /* QUIZ STYLING */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <div class="nav-sep"></div>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="week10.html" class="w10">W10</a>
+  <a href="week11.html" class="w11">W11</a>
+  <a href="week12.html" class="w12 active">W12</a>
+  <a href="week13.html" class="w13">W13</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 12 -- Non-Parametric Tests, ANOVA, Security &amp; AI</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics -- Summer 2026</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 12 Key Points</div>
+  <ul>
+    <li><strong>ANOVA</strong> extends the t-test from 2 groups to 3+. F-statistic = Between-group variance / Within-group variance. Large F = evidence means differ</li>
+    <li><strong>Two-Way ANOVA</strong> tests two factors plus their interaction. Interaction means the effect of one factor depends on the level of the other</li>
+    <li><strong>MANOVA</strong> handles multiple correlated response variables simultaneously, controlling Type I error across all outcomes</li>
+    <li><strong>Non-parametric alternatives</strong> -- Kruskal-Wallis replaces one-way ANOVA, Friedman replaces repeated measures, when normality fails</li>
+    <li><strong>Security data</strong> is often non-normal: zero-inflated counts, skewed response times, heavy-tailed losses, ordinal severity scores</li>
+    <li><strong>Post-hoc tests</strong> (Tukey) identify WHICH groups differ after ANOVA rejects H0. ANOVA only tells you "at least one differs"</li>
+  </ul>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: ANOVA Core Idea -->
+<details>
+  <summary>&#128202; 1. ANOVA -- Analysis of Variance: The Core Idea</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> ANOVA extends the t-test from comparing 2 group means to comparing 3 or more group means simultaneously, while controlling the overall false positive rate.</div>
+
+    <h3>The Progression</h3>
+    <table>
+      <tr><th>Samples</th><th>Test</th><th>What It Tests</th></tr>
+      <tr><td>1 sample</td><td>t-test</td><td>1 mean</td></tr>
+      <tr><td>2 samples</td><td>t-test</td><td>2 means</td></tr>
+      <tr><td>3+ samples</td><td>ANOVA</td><td>3+ means</td></tr>
+    </table>
+
+    <h3>Core Question</h3>
+    <p>"Are the means of 3 or more independent groups equal?"</p>
+    <ul>
+      <li><strong>H0:</strong> mu1 = mu2 = ... = muk (all group means are equal)</li>
+      <li><strong>H1:</strong> At least one mean differs</li>
+    </ul>
+
+    <h3>Why Not Just Run Multiple t-Tests?</h3>
+    <div class="red"><strong>CRITICAL:</strong> With 3 groups at alpha = 0.05, you need 3 pairwise comparisons. The false positive probability inflates to approximately 14%. With more groups it gets worse. ANOVA controls this by testing all groups simultaneously in a single test.</div>
+
+    <h3>Two Types of Variance</h3>
+    <table>
+      <tr><th>Variance Type</th><th>What It Measures</th><th>Represents</th></tr>
+      <tr><td><strong>BETWEEN-group (MSB)</strong></td><td>How different group means are from grand mean</td><td>Signal / effect we care about</td></tr>
+      <tr><td><strong>WITHIN-group (MSW)</strong></td><td>Spread of observations inside each group</td><td>Noise / random variation</td></tr>
+    </table>
+
+    <div class="key"><strong>F-statistic = Between / Within = MSB / MSW.</strong> Large F means group means are more spread out than random noise would explain -- evidence against H0.</div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"F = Signal / Noise" -- large F means the signal (group differences) is louder than the noise (random variation)</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 2: ANOVA Assumptions -->
+<details>
+  <summary>&#9888;&#65039; 2. ANOVA Assumptions &amp; When They Fail</summary>
+  <div>
+    <h3>Three Core Assumptions</h3>
+    <ol>
+      <li><strong>Independence</strong> -- each measurement comes from a different unit</li>
+      <li><strong>Normality</strong> -- response is approximately normal within each group. Check with Shapiro-Wilk test or Q-Q plots</li>
+      <li><strong>Homogeneity of Variance</strong> -- all groups have approximately equal variances. Check with Levene's test or Bartlett's test</li>
+    </ol>
+
+    <h3>When Assumptions Fail</h3>
+    <div class="warn">
+      <table>
+        <tr><th>Problem</th><th>Alternative Test</th><th>Details</th></tr>
+        <tr><td>Normality fails</td><td><strong>Kruskal-Wallis H-Test</strong></td><td>Non-parametric, ranks-based alternative to one-way ANOVA</td></tr>
+        <tr><td>Unequal variances</td><td><strong>Welch's ANOVA</strong></td><td>Does not assume equal variances across groups</td></tr>
+        <tr><td>Blocked/repeated measures</td><td><strong>Friedman's Test</strong></td><td>Non-parametric alternative for related samples</td></tr>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: One-Way ANOVA Example -->
+<details>
+  <summary>&#128295; 3. One-Way ANOVA -- SOC Team Response Times Example</summary>
+  <div>
+    <h3>Setup</h3>
+    <ul>
+      <li>Three SOC teams (A, B, C), 8 incidents each</li>
+      <li>Mean response times: A = 52.5 min, B = 31.8 min, C = 68.5 min</li>
+      <li>Grand mean = 50.9 min</li>
+      <li>H0: mu_A = mu_B = mu_C. H1: at least one differs. Alpha = 0.05</li>
+    </ul>
+
+    <h3>Results</h3>
+    <div class="red"><strong>F = 32.75, df = (2, 21), p = 0.000.</strong> F_critical(0.05, 2, 21) = 3.47. Since 32.75 >> 3.47, reject H0.</div>
+    <p><strong>Conclusion:</strong> Strong evidence that mean response time differs across SOC teams. Next step: post-hoc tests to find WHICH teams differ.</p>
+
+    <h3>Tukey Post-Hoc Test</h3>
+    <div class="green"><strong>Tukey HSD</strong> performs pairwise comparisons with family-wise error rate control. All three pairs were significant (p &lt; 0.01) in this example.</div>
+
+    <h3>Minitab Steps</h3>
+    <ol>
+      <li><strong>Reshape data:</strong> Stat > Stack > Rows</li>
+      <li><strong>Check normality:</strong> Stat > Basic Statistics > Graph Summary</li>
+      <li><strong>Check equal variances:</strong> Stat > ANOVA > Test for Equal Variances (Bartlett's test: 1.98, p = 0.372 -- variances are equal)</li>
+      <li><strong>Run ANOVA:</strong> Stat > ANOVA > One-Way</li>
+    </ol>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"ANOVA says someone is different. Tukey says WHO is different." -- always follow up a significant ANOVA with post-hoc</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: Two-Way ANOVA -->
+<details>
+  <summary>&#128256; 4. Two-Way ANOVA -- Two Factors, One Response</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> Two-Way ANOVA tests two factors simultaneously and asks THREE questions: Does Factor A affect the response? Does Factor B? Does the effect of A depend on B (interaction)?</div>
+
+    <h3>The Three Questions</h3>
+    <ol>
+      <li><strong>Main effect A:</strong> Does Factor A affect the response?</li>
+      <li><strong>Main effect B:</strong> Does Factor B affect the response?</li>
+      <li><strong>Interaction A*B:</strong> Does the effect of A DEPEND on the level of B?</li>
+    </ol>
+
+    <div class="red"><strong>INTERACTION is the most important concept.</strong> If interaction exists, the effect of one factor changes depending on the level of the other factor. It can mask, reverse, or amplify main effects. Always read the interaction row FIRST in Minitab output.</div>
+
+    <h3>Security Example</h3>
+    <ul>
+      <li><strong>Factor A:</strong> Training type (Online / In-Person)</li>
+      <li><strong>Factor B:</strong> Experience (Junior / Senior)</li>
+      <li><strong>Response:</strong> % threats correctly identified</li>
+      <li>2x2 factorial design, n = 10 per cell</li>
+    </ul>
+    <table>
+      <tr><th>Effect</th><th>F</th><th>p-value</th><th>Significant?</th></tr>
+      <tr><td>Training</td><td>12.3</td><td>0.001</td><td>Yes</td></tr>
+      <tr><td>Experience</td><td>8.7</td><td>0.005</td><td>Yes</td></tr>
+      <tr><td>Interaction</td><td>9.1</td><td>0.004</td><td>Yes</td></tr>
+    </table>
+
+    <div class="warn"><strong>Interpretation:</strong> In-person training helps Juniors more than Seniors. You cannot simply say "in-person is better" without specifying experience level. When interaction is significant, interpret main effects with caution.</div>
+
+    <h3>Interaction Plot</h3>
+    <p>In Minitab: Stat > ANOVA > General Linear Model. Non-parallel lines on the interaction plot = interaction exists.</p>
+
+    <h3>Additional Assumptions (beyond one-way)</h3>
+    <ul>
+      <li>Balanced design preferred</li>
+      <li>Additivity (for main effects to be interpretable independently)</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 5: MANOVA -->
+<details>
+  <summary>&#128201; 5. MANOVA -- Multiple Response Variables</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> MANOVA (Multivariate Analysis of Variance) is used when you have MULTIPLE correlated response variables. ANOVA handles one response; MANOVA handles two or more.</div>
+
+    <h3>Why Not Just Run Multiple ANOVAs?</h3>
+    <ul>
+      <li>Inflates Type I error rate</li>
+      <li>Ignores correlation between response variables</li>
+      <li>Cannot detect differences in COMBINATIONS of outcomes</li>
+    </ul>
+
+    <h3>Hypotheses</h3>
+    <ul>
+      <li><strong>H0:</strong> The mean VECTOR of all response variables is equal across groups</li>
+      <li><strong>H1:</strong> At least one group's mean vector differs</li>
+    </ul>
+
+    <h3>When to Use MANOVA</h3>
+    <div class="green"><strong>Use when:</strong> You have multiple related outcome measures (e.g., 3 SOC metrics: detection rate, false positive rate, MTTR), outcomes are correlated, and you want Type I error controlled across all outcomes.</div>
+
+    <h3>Security Example</h3>
+    <p>3 SOC teams measured on 3 metrics. Wilks' Lambda = 0.312, F(6,72) = 8.94, p &lt; 0.001 -- Reject H0.</p>
+    <table>
+      <tr><th>Follow-up Metric</th><th>p-value</th><th>Significant?</th></tr>
+      <tr><td>Detection rate</td><td>0.003</td><td>Yes</td></tr>
+      <tr><td>False positive rate</td><td>0.041</td><td>Yes</td></tr>
+      <tr><td>MTTR</td><td>0.218</td><td>No</td></tr>
+    </table>
+    <div class="key"><strong>Key insight:</strong> MANOVA reveals the overall combined profile differs across teams even though individual MTTR is not significant on its own. The multivariate perspective catches what individual ANOVAs miss.</div>
+
+    <h3>MANOVA Assumptions</h3>
+    <ul>
+      <li>All ANOVA assumptions (independence, normality, equal variances)</li>
+      <li><strong>Multivariate normality</strong></li>
+      <li><strong>Homogeneity of covariance matrices</strong> (Box's M test)</li>
+      <li><strong>No severe multicollinearity</strong> (r &gt; 0.9 is problematic)</li>
+      <li><strong>n per group &gt; number of response variables</strong></li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 6: Complete ANOVA Family Reference -->
+<details>
+  <summary>&#128218; 6. Complete ANOVA Family Reference</summary>
+  <div>
+    <h3>Parametric Tests</h3>
+    <table>
+      <tr><th>Test</th><th>Groups</th><th>Factors</th><th>Responses</th><th>Design</th></tr>
+      <tr><td><strong>t-test</strong></td><td>2</td><td>1</td><td>1</td><td>Independent</td></tr>
+      <tr><td><strong>One-Way ANOVA</strong></td><td>3+</td><td>1</td><td>1</td><td>Independent</td></tr>
+      <tr><td><strong>Two-Way ANOVA</strong></td><td>3+</td><td>2</td><td>1</td><td>Factorial</td></tr>
+      <tr><td><strong>Repeated Measures</strong></td><td>1+</td><td>1+</td><td>1</td><td>Same subjects</td></tr>
+      <tr><td><strong>MANOVA</strong></td><td>2+</td><td>1+</td><td>2+</td><td>Multiple responses</td></tr>
+    </table>
+
+    <h3>Non-Parametric Equivalents</h3>
+    <table>
+      <tr><th>Parametric</th><th>Non-Parametric</th><th>Use When</th></tr>
+      <tr><td>One-Way ANOVA</td><td><strong>Kruskal-Wallis</strong></td><td>Normality fails, ranks-based</td></tr>
+      <tr><td>Two-Way / Blocked</td><td><strong>Friedman</strong></td><td>Repeated measures, non-normal</td></tr>
+      <tr><td>Pearson Correlation</td><td><strong>Spearman</strong></td><td>Ordinal data or non-linear</td></tr>
+    </table>
+  </div>
+</details>
+
+<!-- Section 7: Why Security Data is Non-Normal -->
+<details>
+  <summary>&#128274; 7. Why Security Data is Often Non-Normal</summary>
+  <div>
+    <div class="red"><strong>KEY INSIGHT:</strong> Non-parametric tests ask the SAME questions as parametric tests but use ranks/signs instead of raw values, so they do not need normality. This makes them especially suited for security data.</div>
+
+    <h3>Common Reasons for Non-Normality in Security</h3>
+    <ul>
+      <li><strong>Zero-inflated counts</strong> -- most days zero incidents, rare days many</li>
+      <li><strong>Skewed response times</strong> -- few major incidents take 10x longer than typical</li>
+      <li><strong>Ordinal severity scores</strong> -- CVSS: Low/Med/High/Critical are ordered but have unequal intervals</li>
+      <li><strong>Heavy-tailed distributions</strong> -- cyber losses follow power-law/Pareto distributions</li>
+      <li><strong>Small sample sizes</strong> -- breach investigations, red team exercises: n = 5 to n = 15</li>
+      <li><strong>Categorical variables</strong> -- attack types, threat actor classifications</li>
+    </ul>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Security data is almost NEVER bell-shaped" -- zero-inflated, skewed, heavy-tailed, ordinal. When in doubt, go non-parametric</strong>
+    </div>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+<div class="quiz-section">
+    <h2>Week 12 Quiz -- ANOVA, Non-Parametric Tests &amp; Security Data</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> The F-statistic in ANOVA equals:</p>
+      <div class="options">
+        <div class="opt">Within-group variance / Between-group variance</div>
+        <div class="opt">Total variance / Residual variance</div>
+        <div class="opt">Between-group variance (MSB) / Within-group variance (MSW)</div>
+        <div class="opt">Mean / Standard deviation</div>
+      </div>
+      <div class="explanation">F = MSB / MSW = Between-group variance / Within-group variance. A large F means the signal (group differences) exceeds the noise (random variation within groups).</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> Why should you NOT run multiple t-tests instead of ANOVA when comparing 3+ groups?</p>
+      <div class="options">
+        <div class="opt">t-tests cannot compare means</div>
+        <div class="opt">The false positive rate inflates with each additional comparison</div>
+        <div class="opt">t-tests require larger sample sizes</div>
+        <div class="opt">t-tests only work with non-normal data</div>
+      </div>
+      <div class="explanation">With 3 groups at alpha = 0.05, you need 3 comparisons, and the false positive probability inflates to approximately 14%. ANOVA controls this by testing all groups simultaneously.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">3</span> Which test should you use when ANOVA's normality assumption fails?</p>
+      <div class="options">
+        <div class="opt">Kruskal-Wallis H-Test</div>
+        <div class="opt">Welch's ANOVA</div>
+        <div class="opt">Bartlett's test</div>
+        <div class="opt">Tukey HSD</div>
+      </div>
+      <div class="explanation">When normality fails, use the Kruskal-Wallis H-Test -- a non-parametric, ranks-based alternative to one-way ANOVA. Welch's ANOVA addresses unequal variances, not non-normality.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">4</span> After a significant one-way ANOVA result, what is the appropriate next step?</p>
+      <div class="options">
+        <div class="opt">Conclude all group means are different</div>
+        <div class="opt">Run the ANOVA again with a lower alpha</div>
+        <div class="opt">Switch to a non-parametric test</div>
+        <div class="opt">Run Tukey post-hoc tests to identify which groups differ</div>
+      </div>
+      <div class="explanation">ANOVA only tells you "at least one mean differs." Tukey post-hoc tests perform pairwise comparisons with family-wise error control to identify WHICH specific groups differ.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">5</span> In a Two-Way ANOVA, what does a significant interaction effect mean?</p>
+      <div class="options">
+        <div class="opt">Both factors are statistically significant</div>
+        <div class="opt">Neither factor affects the response</div>
+        <div class="opt">The effect of one factor depends on the level of the other factor</div>
+        <div class="opt">The sample sizes are unequal</div>
+      </div>
+      <div class="explanation">A significant interaction means the effect of one factor changes depending on the level of the other factor. For example, in-person training may help juniors more than seniors. You cannot interpret main effects in isolation when interaction is significant.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">6</span> What is the primary advantage of MANOVA over running separate ANOVAs for each response variable?</p>
+      <div class="options">
+        <div class="opt">MANOVA does not require normality</div>
+        <div class="opt">MANOVA controls Type I error and accounts for correlation between responses</div>
+        <div class="opt">MANOVA requires smaller sample sizes</div>
+        <div class="opt">MANOVA only needs one response variable</div>
+      </div>
+      <div class="explanation">Running multiple ANOVAs inflates Type I error and ignores correlations between response variables. MANOVA tests all responses simultaneously, controls error rates, and can detect differences in combinations of outcomes.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">7</span> Which of these is NOT an assumption of ANOVA?</p>
+      <div class="options">
+        <div class="opt">Independence of observations</div>
+        <div class="opt">Normality within each group</div>
+        <div class="opt">Homogeneity of variance</div>
+        <div class="opt">Data must be ordinal</div>
+      </div>
+      <div class="explanation">ANOVA assumes independence, normality, and homogeneity of variance. ANOVA requires interval or ratio data, not ordinal. Ordinal data would call for a non-parametric test like Kruskal-Wallis.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> Security data often follows heavy-tailed distributions (e.g., cyber losses following power-law). Which approach is most appropriate?</p>
+      <div class="options">
+        <div class="opt">Non-parametric tests because they use ranks instead of raw values</div>
+        <div class="opt">Parametric tests because they have more statistical power</div>
+        <div class="opt">Ignore the distribution shape and use t-tests</div>
+        <div class="opt">Only use descriptive statistics</div>
+      </div>
+      <div class="explanation">Non-parametric tests ask the same questions as parametric tests but use ranks/signs instead of raw values, so they do not need normality. This makes them ideal for heavy-tailed security data.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> In the Two-Way ANOVA interaction plot, what visual pattern indicates an interaction effect?</p>
+      <div class="options">
+        <div class="opt">All lines are horizontal</div>
+        <div class="opt">Lines are perfectly parallel</div>
+        <div class="opt">Lines are non-parallel (crossing or diverging)</div>
+        <div class="opt">Lines all start from the same point</div>
+      </div>
+      <div class="explanation">Non-parallel lines on an interaction plot indicate an interaction effect exists. Parallel lines would mean no interaction -- the effect of one factor is the same at all levels of the other.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> Which MANOVA assumption is checked using Box's M test?</p>
+      <div class="options">
+        <div class="opt">Multivariate normality</div>
+        <div class="opt">Homogeneity of covariance matrices</div>
+        <div class="opt">Independence of observations</div>
+        <div class="opt">No multicollinearity</div>
+      </div>
+      <div class="explanation">Box's M test checks the homogeneity of covariance matrices assumption in MANOVA -- that the covariance matrices are equal across groups. This is the multivariate extension of Levene's test for equal variances.</div>
+    </div>
+</div>
+</div>
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#00897B'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++; streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 13 - Course Recap & Final Review</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #69DB7C;
+    --page-tint: rgba(105,219,124,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #00897B;
+    --w10: #E599F7; --w11: #FF922B; --w12: #FFD43B; --w13: #69DB7C;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #fff; }
+  .topnav a.w10 { background: var(--w10); color: #000; }
+  .topnav a.w11 { background: var(--w11); color: #000; }
+  .topnav a.w12 { background: var(--w12); color: #000; }
+  .topnav a.w13 { background: var(--w13); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+  .topnav .nav-sep { width: 100%; height: 0; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(105,219,124,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none; transition: all 0.2s;
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre; color: #ddd;
+  }
+
+  /* QUIZ STYLING */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <a href="week1.html" class="w1">W1</a>
+  <a href="week2.html" class="w2">W2</a>
+  <a href="week3.html" class="w3">W3</a>
+  <a href="week4.html" class="w4">W4</a>
+  <a href="week5.html" class="w5">W5</a>
+  <a href="week6.html" class="w6">W6</a>
+  <div class="nav-sep"></div>
+  <a href="week7.html" class="w7">W7</a>
+  <a href="week8.html" class="w8">W8</a>
+  <a href="week10.html" class="w10">W10</a>
+  <a href="week11.html" class="w11">W11</a>
+  <a href="week12.html" class="w12">W12</a>
+  <a href="week13.html" class="w13 active">W13</a>
+  <a href="mega.html" class="mega">Mega</a>
+  <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+  <a href="index.html" style="background:rgba(255,255,255,0.1);">Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 13 -- Course Recap &amp; Final Review</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics -- Summer 2026</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 13 Course Recap</div>
+  <ul>
+    <li><strong>Visualization history</strong> starts with Dr. John Snow's 1849 cholera map -- the original security data visualization</li>
+    <li><strong>Data pipeline:</strong> Sources (logs, auth events) -> Storage (NoSQL, time-series DBs) -> Exploration (df.describe()) -> Preprocessing (cleaning, imputation) -> Visualization</li>
+    <li><strong>Splunk pyramid:</strong> Raw Data -> Searches/SPL -> Table -> Report/Aggregation -> Dashboard</li>
+    <li><strong>Security domains:</strong> Endpoint security (devices on network), user security (auth/access logs), code security (Von Neumann, CI/CD)</li>
+    <li><strong>Statistical methods:</strong> Parametric (Z-test, t-test, ANOVA) vs Non-parametric (Sign test, Kruskal-Wallis, Friedman)</li>
+    <li><strong>Key principle:</strong> Garbage in, garbage out -- data preprocessing is essential before any analysis or visualization</li>
+  </ul>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Visualization Fundamentals (W1) -->
+<details>
+  <summary>&#127912; 1. Visualization Fundamentals (W1)</summary>
+  <div>
+    <div class="blue"><strong>HISTORY:</strong> Dr. John Snow's 1849 cholera map is considered one of the earliest and most famous examples of data visualization for problem-solving -- he mapped cholera deaths in London to trace the outbreak to a contaminated water pump.</div>
+
+    <h3>Chart Types for Single Dimensions</h3>
+    <ul>
+      <li><strong>Pie charts</strong> -- proportions of a whole (use sparingly, hard to compare)</li>
+      <li><strong>Bar charts</strong> -- comparing categories (horizontal or vertical)</li>
+      <li><strong>Line charts</strong> -- trends over time</li>
+      <li><strong>3D bar charts</strong> -- adding a third dimension (can distort perception)</li>
+    </ul>
+
+    <div class="key"><strong>Simple charts for single dimensions.</strong> Start simple, add complexity only when the data demands it.</div>
+  </div>
+</details>
+
+<!-- Section 2: Data Sources & Storage (W2) -->
+<details>
+  <summary>&#128450; 2. Data Sources &amp; Storage (W2)</summary>
+  <div>
+    <h3>NoSQL Database Types</h3>
+    <table>
+      <tr><th>Type</th><th>Example</th><th>Best For</th></tr>
+      <tr><td><strong>Document</strong></td><td>MongoDB</td><td>Flexible schemas, JSON-like data</td></tr>
+      <tr><td><strong>Key-Value</strong></td><td>Redis</td><td>Caching, session storage, fast lookups</td></tr>
+      <tr><td><strong>Column-Family</strong></td><td>Cassandra</td><td>Large-scale, distributed, write-heavy</td></tr>
+      <tr><td><strong>Graph</strong></td><td>Neo4j</td><td>Relationships, network analysis</td></tr>
+    </table>
+
+    <h3>Time-Series Databases</h3>
+    <ul>
+      <li><strong>InfluxDB</strong> -- purpose-built for time-stamped data</li>
+      <li><strong>TimescaleDB</strong> -- PostgreSQL extension for time-series</li>
+    </ul>
+
+    <h3>General Purpose Visualization Tools</h3>
+    <ul>
+      <li>Drag-and-drop interfaces</li>
+      <li>Cloud + desktop deployment</li>
+      <li>Rich components and data source integrations (including Hadoop)</li>
+      <li>PowerPoint integration</li>
+      <li>Licensing costs are a consideration</li>
+    </ul>
+
+    <h3>Visualization Libraries (W2)</h3>
+    <ul>
+      <li><strong>Python:</strong> Seaborn gallery for statistical visualizations</li>
+      <li><strong>Splunk:</strong> Built-in visualization capabilities</li>
+    </ul>
+
+    <h3>What's Behind Pivots (W2)</h3>
+    <div class="green"><strong>Dragging and dropping = measures across dimensions.</strong> When you pivot data, you are mapping measures (Risk, values) across dimensions (Country, Reliability). Understanding this concept is key to building effective dashboards.</div>
+  </div>
+</details>
+
+<!-- Section 3: Data Exploration & Preprocessing (W3) -->
+<details>
+  <summary>&#128270; 3. Data Exploration &amp; Preprocessing (W3)</summary>
+  <div>
+    <div class="red"><strong>STEP ZERO = EXPLORE DATA FIRST.</strong> Before any analysis, understand what you have: data dictionary, df.describe(), CSV loading, basic profiling.</div>
+
+    <h3>Exploration Essentials</h3>
+    <ul>
+      <li><strong>Data dictionary</strong> -- know what each field means</li>
+      <li><strong>df.describe()</strong> -- summary statistics at a glance</li>
+      <li><strong>CSV loading</strong> -- most common data interchange format</li>
+      <li><strong>Big data technologies:</strong> Hadoop, Kafka, Spark</li>
+      <li><strong>Python with open-source databases</strong> -- flexible and cost-effective</li>
+    </ul>
+
+    <h3>Data Preprocessing</h3>
+    <div class="warn"><strong>GARBAGE IN, GARBAGE OUT.</strong> No visualization or model can compensate for dirty data.</div>
+    <ul>
+      <li><strong>Cleaning</strong> -- handle missing values, duplicates, outliers</li>
+      <li><strong>Imputation</strong> -- fill missing values strategically
+        <ul>
+          <li><em>Forward fill</em> -- carry last known value forward (good for time-series)</li>
+          <li><em>Backward fill</em> -- use next known value (good for time-series)</li>
+        </ul>
+      </li>
+      <li><strong>Feature engineering</strong> -- create new meaningful variables from existing data</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 4: Endpoint Security (W3) -->
+<details>
+  <summary>&#128187; 4. Endpoint Security (W3)</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> An endpoint is any device communicating with the network -- desktops, laptops, servers, smartphones, tablets, IoT devices. These are primary attack targets.</div>
+
+    <h3>Security Measures</h3>
+    <ul>
+      <li><strong>Firewalls</strong> -- control network traffic in/out</li>
+      <li><strong>Antivirus</strong> -- detect and remove malware</li>
+      <li><strong>IDS/IPS</strong> -- Intrusion Detection/Prevention Systems</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 5: User & Security Data Sources (W4) -->
+<details>
+  <summary>&#128100; 5. User &amp; Security Data Sources (W4)</summary>
+  <div>
+    <h3>User Security Data Sources</h3>
+    <ul>
+      <li><strong>Authentication/access logs</strong> -- who logged in, when, from where</li>
+      <li><strong>User account information</strong> -- roles, permissions, status</li>
+      <li><strong>Network traffic logs</strong> -- communication patterns</li>
+      <li><strong>Firewall logs</strong> -- allowed/blocked connections</li>
+    </ul>
+
+    <h3>Los Alamos National Lab Dataset</h3>
+    <div class="key"><strong>Benchmark dataset for security research:</strong>
+      <ul>
+        <li>Windows authentication events, process events, DNS lookups, network flow, red team events</li>
+        <li>12 GB, 1.6 billion events</li>
+        <li>12,425 users, 17,684 computers, 62,974 processes</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: Splunk (W2/W4) -->
+<details>
+  <summary>&#128200; 6. Splunk -- From Raw Data to Dashboards (W2/W4)</summary>
+  <div>
+    <h3>The Splunk Pyramid</h3>
+    <pre>
+        Dashboard
+       /          \
+     Report / Aggregation
+    /                      \
+       Table
+      /        \
+   Searches / SPL
+  /                  \
+     Raw Data
+    </pre>
+
+    <h3>Key SPL Concepts</h3>
+    <ul>
+      <li><strong>eval</strong> -- build new fields from expressions</li>
+      <li><strong>stats</strong> -- aggregate functions by fields (count, avg, sum, etc.)</li>
+      <li><strong>Source Type</strong> -- categorizes ingested data</li>
+      <li><strong>Transform</strong> -- field extraction at search time</li>
+      <li><strong>Props.conf</strong> -- configuration for data parsing and extraction</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 7: Code Security & CI/CD (W5) -->
+<details>
+  <summary>&#128272; 7. Code Security &amp; CI/CD (W5)</summary>
+  <div>
+    <h3>Von Neumann Architecture</h3>
+    <div class="blue"><strong>Foundation:</strong> CPU + Memory + I/O. Code security = instructions for processor. The key principle is separation of instructions and data.</div>
+
+    <h3>CI/CD Process End-to-End</h3>
+    <pre>
+Build Products                Test/Provision
+(OSS, Git, code,     -->     (automation,
+CI/CD tools,                  scripts)
+artifact repo)
+        |                         |
+        v                         v
+   Developer /              Run / Operate
+   DevOps                   (containers,
+   Workstation              hybrid, cloud)
+        |                         |
+        v                         v
+                   Access
+               (databases)
+    </pre>
+    <ul>
+      <li><strong>Build:</strong> OSS components, Git, source code, CI/CD tools, artifact repositories</li>
+      <li><strong>Test/Provision:</strong> Automation scripts, testing frameworks</li>
+      <li><strong>Run/Operate:</strong> Containers, hybrid environments, cloud</li>
+      <li><strong>Access:</strong> Databases and data stores</li>
+      <li>Developer/DevOps workstation sits at the center of the pipeline</li>
+    </ul>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+<div class="quiz-section">
+    <h2>Week 13 Quiz -- Comprehensive Final Review</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> Dr. John Snow's 1849 cholera map is significant in data visualization history because it:</p>
+      <div class="options">
+        <div class="opt">Was the first computer-generated chart</div>
+        <div class="opt">Used 3D rendering to show disease patterns</div>
+        <div class="opt">Used spatial data to trace a disease outbreak to its source</div>
+        <div class="opt">Introduced the pie chart for epidemiological analysis</div>
+      </div>
+      <div class="explanation">Dr. John Snow mapped cholera deaths in London to trace the outbreak to a contaminated water pump on Broad Street. This is one of the earliest and most famous examples of using data visualization for problem-solving.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">2</span> Which NoSQL database type is best suited for analyzing relationships and network connections (e.g., mapping threat actor infrastructure)?</p>
+      <div class="options">
+        <div class="opt">Document (MongoDB)</div>
+        <div class="opt">Key-Value (Redis)</div>
+        <div class="opt">Column-Family (Cassandra)</div>
+        <div class="opt">Graph (Neo4j)</div>
+      </div>
+      <div class="explanation">Graph databases like Neo4j are designed for relationship-heavy data. They excel at network analysis, which maps directly to security use cases like threat actor infrastructure mapping and lateral movement analysis.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">3</span> In data preprocessing, which imputation method carries the last known value forward and is especially useful for time-series security data?</p>
+      <div class="options">
+        <div class="opt">Mean imputation</div>
+        <div class="opt">Forward fill</div>
+        <div class="opt">Mode imputation</div>
+        <div class="opt">Zero fill</div>
+      </div>
+      <div class="explanation">Forward fill carries the last known value forward to fill gaps. This is especially useful for time-series security data (like sensor readings or log gaps) where the most recent known state is the best estimate.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">4</span> The Los Alamos National Lab security dataset contains approximately:</p>
+      <div class="options">
+        <div class="opt">1.6 billion events across 12,425 users and 17,684 computers</div>
+        <div class="opt">500 million events across 5,000 users</div>
+        <div class="opt">100 million events across 1,000 users</div>
+        <div class="opt">10 billion events across 50,000 users</div>
+      </div>
+      <div class="explanation">The LANL dataset is a benchmark for security research: 12 GB, 1.6 billion events, 12,425 users, 17,684 computers, 62,974 processes. It includes Windows auth events, process events, DNS lookups, network flow, and red team events.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">5</span> In the Splunk data pipeline, what is the correct order from bottom to top?</p>
+      <div class="options">
+        <div class="opt">Dashboard -> Report -> Table -> Search -> Raw Data</div>
+        <div class="opt">Raw Data -> Dashboard -> Table -> Search -> Report</div>
+        <div class="opt">Raw Data -> Searches/SPL -> Table -> Report/Aggregation -> Dashboard</div>
+        <div class="opt">Searches/SPL -> Raw Data -> Report -> Table -> Dashboard</div>
+      </div>
+      <div class="explanation">The Splunk pyramid goes from Raw Data at the base, through Searches/SPL, then Table, then Report/Aggregation, and finally Dashboard at the top. Each layer adds more structure and abstraction.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">6</span> The SPL "eval" command in Splunk is used to:</p>
+      <div class="options">
+        <div class="opt">Delete fields from search results</div>
+        <div class="opt">Build new fields from expressions</div>
+        <div class="opt">Sort results by time</div>
+        <div class="opt">Filter events by source type</div>
+      </div>
+      <div class="explanation">The eval command in SPL creates new calculated fields from expressions. For example, you could create a "risk_score" field by combining other field values.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">7</span> In Von Neumann architecture, what is the key security principle regarding code?</p>
+      <div class="options">
+        <div class="opt">Code must always run in the cloud</div>
+        <div class="opt">All code must be encrypted at rest</div>
+        <div class="opt">Code should only run on dedicated hardware</div>
+        <div class="opt">Separation of instructions and data</div>
+      </div>
+      <div class="explanation">The Von Neumann architecture (CPU + Memory + I/O) stores both instructions and data in the same memory. The key code security principle is maintaining separation of instructions and data to prevent attacks like buffer overflows and code injection.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> What is the most important first step before performing any data analysis or visualization?</p>
+      <div class="options">
+        <div class="opt">Explore and understand your data (Step Zero)</div>
+        <div class="opt">Choose a visualization tool</div>
+        <div class="opt">Build a dashboard</div>
+        <div class="opt">Run a statistical test</div>
+      </div>
+      <div class="explanation">Step Zero is to explore your data first -- understand what you have through data dictionaries, df.describe(), and basic profiling. Garbage in, garbage out -- no visualization or model can compensate for misunderstood data.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> When "dragging and dropping" in a pivot table or visualization tool, you are fundamentally:</p>
+      <div class="options">
+        <div class="opt">Running SQL queries</div>
+        <div class="opt">Creating new data from scratch</div>
+        <div class="opt">Mapping measures across dimensions</div>
+        <div class="opt">Encrypting data fields</div>
+      </div>
+      <div class="explanation">Dragging and dropping in pivot tables and visualization tools means mapping measures (like Risk values) across dimensions (like Country, Reliability). Understanding this concept is key to building effective dashboards.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> Which of the following is an endpoint in network security?</p>
+      <div class="options">
+        <div class="opt">A firewall rule</div>
+        <div class="opt">An IoT device communicating with the network</div>
+        <div class="opt">A VLAN configuration</div>
+        <div class="opt">A DNS record</div>
+      </div>
+      <div class="explanation">An endpoint is any device communicating with the network -- desktops, laptops, servers, smartphones, tablets, and IoT devices. These are primary attack targets and require security measures like firewalls, antivirus, and IDS/IPS.</div>
+    </div>
+</div>
+</div>
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#00897B'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++; streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>

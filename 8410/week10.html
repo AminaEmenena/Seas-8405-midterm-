@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 10 - Persistent Threat Decision Trees & Linear Regression</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --text: #e8e8e8;
+    --accent1: #0ea5e9;
+    --accent2: #0f3460;
+    --page-color: #FF6B6B;
+    --page-tint: rgba(255,107,107,0.08);
+    --w1: #FF6B6B; --w2: #FFA94D; --w3: #FFD43B; --w4: #69DB7C;
+    --w5: #4DABF7; --w6: #9775FA; --w7: #F783AC; --w8: #00897B;
+    --w10: #FF6B6B; --w11: #FFA94D; --w12: #FFD43B; --w13: #69DB7C;
+    --correct: #51cf66; --wrong: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 19px;
+    line-height: 1.7;
+    padding: 0;
+    padding-right: 70px;
+  }
+  @media (max-width: 1100px) {
+    body { padding-right: 0; }
+  }
+
+  /* STICKY NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d1b2a;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+    border-bottom: 3px solid var(--accent1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topnav a {
+    color: #fff; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .topnav a:hover { transform: scale(1.05); }
+  .topnav a.w1 { background: var(--w1); color: #000; }
+  .topnav a.w2 { background: var(--w2); color: #000; }
+  .topnav a.w3 { background: var(--w3); color: #000; }
+  .topnav a.w4 { background: var(--w4); color: #000; }
+  .topnav a.w5 { background: var(--w5); color: #000; }
+  .topnav a.w6 { background: var(--w6); color: #000; }
+  .topnav a.w7 { background: var(--w7); color: #000; }
+  .topnav a.w8 { background: var(--w8); color: #fff; }
+  .topnav a.w10 { background: var(--w10); color: #000; }
+  .topnav a.w11 { background: var(--w11); color: #000; }
+  .topnav a.w12 { background: var(--w12); color: #000; }
+  .topnav a.w13 { background: var(--w13); color: #000; }
+  .topnav a.mega { background: var(--accent1); color: #fff; }
+  .topnav a.active { outline: 3px solid #fff; outline-offset: 2px; }
+  .topnav .title { font-size: 18px; font-weight: 800; color: var(--accent1); margin-right: 12px; }
+  .topnav .nav-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; width: 100%; }
+  .topnav .nav-label { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+
+  /* PAGE HEADER */
+  .page-hero {
+    text-align: center; padding: 40px 20px 24px;
+    background: linear-gradient(135deg, #0d1b2a, #1a1a2e);
+    border-bottom: 3px solid var(--page-color);
+  }
+  .page-hero h1 {
+    font-size: 2em; color: var(--page-color); margin-bottom: 6px;
+  }
+  .page-hero .sub { font-size: 1em; color: #aaa; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    background: #0d1b2a; padding: 18px 22px; margin: 0 0 24px; border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .progress-bar-container label { font-weight: 700; font-size: 1.05em; display: block; margin-bottom: 10px; color: var(--page-color); }
+  .progress-track { background: #333; border-radius: 10px; height: 24px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--correct), #37b24d); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-text { text-align: center; margin-top: 8px; font-size: 0.95em; color: #aaa; }
+
+  /* TL;DR BOX */
+  .tldr {
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(255,107,107,0.1));
+    border: 2px solid var(--page-color);
+    border-radius: 16px; padding: 20px 24px; margin: 0 0 28px;
+    position: relative;
+  }
+  .tldr-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.2em; font-weight: 800; color: var(--page-color);
+    margin-bottom: 14px;
+  }
+  .tldr-header .emoji { font-size: 1.4em; }
+  .tldr ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+  }
+  .tldr li {
+    background: rgba(255,255,255,0.05); padding: 10px 14px;
+    border-radius: 8px; font-size: 0.95em; line-height: 1.5;
+    border-left: 3px solid var(--page-color);
+  }
+  .tldr li strong { color: #fff; }
+  .tldr-footer {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85em; color: #888; text-align: center;
+  }
+
+  /* COLOR LEGEND */
+  .color-legend {
+    position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 99;
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 6px 8px;
+    background: rgba(13,27,42,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; font-size: 0.55em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .color-legend.collapsed .legend-item,
+  .color-legend.collapsed .color-legend-title span { display: none; }
+  .color-legend-title {
+    font-weight: 700; color: var(--page-color); font-size: 0.95em;
+    cursor: pointer; display: flex; align-items: center; gap: 3px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #aaa; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.red { background: rgba(233,69,96,0.6); border: 1px solid #e94560; }
+  .legend-dot.blue { background: rgba(77,171,247,0.6); border: 1px solid #4DABF7; }
+  .legend-dot.green { background: rgba(105,219,124,0.6); border: 1px solid #69DB7C; }
+  .legend-dot.orange { background: rgba(255,169,77,0.6); border: 1px solid #FFA94D; }
+  .legend-dot.purple { background: rgba(151,117,250,0.4); border: 1px dashed #e94560; }
+
+  @media (max-width: 1100px) {
+    .color-legend {
+      position: static; transform: none; margin: 0 0 20px;
+      flex-direction: row; flex-wrap: wrap; gap: 8px; font-size: 0.65em; padding: 8px 12px;
+    }
+    .color-legend-title { width: 100%; }
+    .legend-dot { width: 8px; height: 8px; }
+  }
+
+  /* STREAK & CELEBRATION */
+  .streak-display {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    font-weight: 700; font-size: 0.95em;
+  }
+  .streak-display.on-fire {
+    background: linear-gradient(90deg, rgba(255,107,107,0.3), rgba(255,169,77,0.3));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti { position: absolute; width: 10px; height: 10px; animation: confetti-fall 3s ease-out forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .quiz-q.just-correct { animation: correct-pop 0.3s ease-out; }
+  .encouragement {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: #fff; font-size: 1.5em; font-weight: 800;
+    z-index: 10000; animation: pop-in 0.5s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes pop-in { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 70% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+  /* TOPIC CARDS */
+  details {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--page-color); background: var(--card); transition: all 0.2s;
+  }
+  details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  summary {
+    cursor: pointer; font-size: 1.15em; font-weight: 700; color: #fff;
+    padding: 16px 20px; background: rgba(255,255,255,0.06);
+    border-left: 5px solid var(--page-color); user-select: none; transition: all 0.2s;
+    list-style: none; display: flex; justify-content: space-between; align-items: center;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '\25B6'; font-size: 0.9em; color: var(--page-color); transition: transform 0.3s; font-weight: 800; }
+  details[open] > summary { background: var(--page-color); color: #000; border-left-color: rgba(0,0,0,0.2); }
+  details[open] > summary::after { transform: rotate(90deg); color: #000; }
+  summary:hover { background: rgba(255,255,255,0.1); }
+  details[open] > summary:hover { background: var(--page-color); filter: brightness(1.1); }
+  details > div, details > section { padding: 16px 20px; background: var(--page-tint); }
+
+  /* CONTENT INSIDE DETAILS */
+  details h2, details h3 { color: var(--page-color); margin: 16px 0 8px; font-size: 1.1em; }
+  details h4 { color: var(--accent1); margin: 12px 0 6px; font-size: 1em; }
+  details p { margin: 8px 0; }
+  details ul, details ol { padding-left: 24px; margin: 8px 0; }
+  details li { margin: 6px 0; line-height: 1.6; }
+  details strong { color: #fff; }
+  details em { color: var(--page-color); font-style: normal; font-weight: 600; }
+
+  /* HIGHLIGHT BOXES */
+  .red { background: rgba(233,69,96,0.15); border-left: 4px solid #e94560; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .blue { background: rgba(77,171,247,0.15); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .green { background: rgba(105,219,124,0.15); border-left: 4px solid #69DB7C; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .warn { background: rgba(255,169,77,0.15); border-left: 4px solid #FFA94D; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+  .key { background: rgba(77,171,247,0.12); border-left: 4px solid #4DABF7; padding: 12px 16px; border-radius: 8px; margin: 10px 0; }
+
+  .mem {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15));
+    border: 2px dashed #e94560; border-radius: 12px; padding: 14px; margin: 14px 0; text-align: center;
+  }
+  .mem small { color: #aaa; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; display: block; margin-bottom: 4px; }
+  .mem strong { color: #e94560; font-size: 1.2em; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.95em; }
+  th { background: rgba(255,255,255,0.12); padding: 12px 16px; text-align: left; font-weight: 700; }
+  td { padding: 10px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* DIAGRAM BOXES */
+  .diagram-box, pre {
+    background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 16px 0;
+    text-align: center; font-family: monospace; font-size: 0.9em; line-height: 1.5;
+    overflow-x: auto; white-space: pre; color: #ddd;
+  }
+
+  /* QUIZ STYLING */
+  h2 { color: var(--page-color); margin: 20px 0 12px; font-size: 1.3em; }
+  .quiz-section { margin: 24px 0; padding: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .quiz-section h2 { color: var(--accent1); margin-bottom: 8px; font-size: 1.3em; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quiz-score-bar .score-text { font-size: 1.05em; font-weight: 700; color: var(--page-color); }
+  .quiz-score-bar .score-fill-track { flex: 1; min-width: 120px; height: 18px; background: #333; border-radius: 10px; overflow: hidden; }
+  .quiz-score-bar .score-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--correct), #37b24d); transition: width 0.4s ease; width: 0%; }
+  .quiz-reset-btn { padding: 8px 20px; border-radius: 8px; border: 2px solid var(--accent1); background: transparent; color: var(--accent1); font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+  .quiz-reset-btn:hover { background: var(--accent1); color: #fff; }
+  .quiz-q { margin: 16px 0; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+  .quiz-q p { font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .opt { padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; font-size: 0.95em; user-select: none; line-height: 1.5; }
+  .quiz-q .opt:hover { background: rgba(255,255,255,0.1); }
+  .quiz-q .opt.selected-correct { background: rgba(81,207,102,0.2); border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .quiz-q .opt.selected-wrong { background: rgba(255,107,107,0.2); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-q .opt.show-correct { border-color: var(--correct); color: var(--correct); }
+  .quiz-q .opt.answered { pointer-events: none; }
+  .explanation { display: none; margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9em; color: #ccc; border-left: 3px solid var(--correct); }
+  .explanation.show { display: block; }
+  .qnum { display: inline-block; min-width: 28px; height: 28px; line-height: 28px; text-align: center; background: var(--accent1); color: #fff; border-radius: 50%; font-size: 0.75em; font-weight: 800; margin-right: 8px; }
+
+  /* EXPAND/COLLAPSE ALL */
+  .expand-collapse-bar { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin: 0 0 16px; padding: 10px 0; }
+  .expand-collapse-bar button { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .expand-collapse-bar button:hover { background: var(--page-color); color: #000; border-color: var(--page-color); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { font-size: 17px; }
+    .topnav { padding: 8px; gap: 4px; }
+    .topnav a { padding: 6px 10px; font-size: 13px; }
+    .page-hero { padding: 24px 15px 16px; }
+    .page-hero h1 { font-size: 1.5em; }
+    .container { padding: 12px; }
+    summary { font-size: 1em; padding: 14px 16px; }
+    table { font-size: 0.85em; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="title" style="text-decoration:none">SEAS 8410</a>
+  <div class="nav-row">
+    <span class="nav-label">Midterm</span>
+    <a href="week1.html" class="w1">W1</a>
+    <a href="week2.html" class="w2">W2</a>
+    <a href="week3.html" class="w3">W3</a>
+    <a href="week4.html" class="w4">W4</a>
+    <a href="week5.html" class="w5">W5</a>
+    <a href="week6.html" class="w6">W6</a>
+  </div>
+  <div class="nav-row">
+    <span class="nav-label">Final</span>
+    <a href="week7.html" class="w7">W7</a>
+    <a href="week8.html" class="w8">W8</a>
+    <a href="week10.html" class="w10 active">W10</a>
+    <a href="week11.html" class="w11">W11</a>
+    <a href="week12.html" class="w12">W12</a>
+    <a href="week13.html" class="w13">W13</a>
+  </div>
+  <div class="nav-row">
+    <a href="mega.html" class="mega">Mega</a>
+    <a href="cheatsheet.html" class="mega">Cheat Sheet</a>
+    <a href="../index.html" style="background:rgba(255,255,255,0.1);">All Courses</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>Week 10 -- Persistent Threat Decision Trees &amp; Linear Regression</h1>
+  <div class="sub">SEAS 8410 -- Security Data Visualization &amp; Analytics -- Summer 2026</div>
+</div>
+
+<div class="container">
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-container">
+  <label>Quiz Progress</label>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</div>
+</div>
+
+<!-- TL;DR BOX -->
+<div class="tldr">
+  <div class="tldr-header"><span class="emoji">&#9889;</span> TL;DR -- Week 10 Key Points</div>
+  <ul>
+    <li><strong>APTs</strong> are prolonged, targeted cyberattacks -- "slow and low" -- by state-sponsored or organized crime groups aiming to remain undetected</li>
+    <li><strong>6 Tiers of Threat Actors</strong> range from Tier I ($10s, use others' tools) to Tier V-VI ($Bs, CREATE vulnerabilities through supply chain influence)</li>
+    <li><strong>APT Kill Chain</strong> -- 7 steps: Recon, Weaponize, Deliver, Exploit, Install, C2, Actions on Objectives</li>
+    <li><strong>CrowdStrike naming</strong> -- animal names by nation: Bear=Russia, Kitten=Iran, Panda=China, Chollima=DPRK</li>
+    <li><strong>Linear Regression</strong> -- Y = b0 + b1*X + e. b1 (slope) is the number you care about most</li>
+    <li><strong>Least Squares</strong> minimizes total SQUARED vertical distance; Gauss-Markov says it's the best unbiased linear estimator</li>
+  </ul>
+</div>
+
+<!-- COLOR LEGEND -->
+<div class="color-legend" id="colorLegend">
+  <div class="color-legend-title" onclick="document.getElementById('colorLegend').classList.toggle('collapsed')">&#127912; <span>Guide</span></div>
+  <div class="legend-item"><span class="legend-dot red"></span> Important</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Definition</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Best Practice</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Caution</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Study Tip</div>
+</div>
+
+<!-- EXPAND/COLLAPSE ALL -->
+<div class="expand-collapse-bar">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All</button>
+</div>
+
+<!-- Section 1: Persistent Threats -->
+<details>
+  <summary>&#128737;&#65039; 1. Persistent Threats -- The Threat Landscape</summary>
+  <div>
+    <div class="blue"><strong>CORE IDEA:</strong> Persistent threats are ongoing, recurring attack vectors that organizations face continuously. They range from common attacks to sophisticated APTs.</div>
+
+    <h3>Common Persistent Threats</h3>
+    <ul>
+      <li><strong>Phishing</strong> -- social engineering via deceptive messages</li>
+      <li><strong>Ransomware</strong> -- encrypts data, demands payment</li>
+      <li><strong>DDoS</strong> -- overwhelms systems with traffic</li>
+      <li><strong>Botnets</strong> -- networks of compromised devices</li>
+      <li><strong>Malware</strong> -- malicious software (viruses, trojans, worms)</li>
+      <li><strong>MITM</strong> -- intercepts communication between two parties</li>
+      <li><strong>Brute Force</strong> -- systematically tries all possible credentials</li>
+      <li><strong>Insider Threats</strong> -- malicious or negligent insiders</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Section 2: APTs -->
+<details>
+  <summary>&#128373;&#65039; 2. Advanced Persistent Threats (APTs) -- Slow and Low</summary>
+  <div>
+    <div class="red"><strong>KEY CONCEPT:</strong> APTs are prolonged, targeted cyberattacks where attackers gain access and remain undetected for an extended period. State-sponsored or organized crime. APTs are "slow" and "low."</div>
+
+    <h3>Breaking Down APT</h3>
+    <table>
+      <tr><th>Component</th><th>Meaning</th></tr>
+      <tr><td><strong>Advanced</strong></td><td>High expertise, custom malware, zero-day exploits</td></tr>
+      <tr><td><strong>Persistent</strong></td><td>Not deterred by failures, maintain effort months/years, strive to remain undetected</td></tr>
+      <tr><td><strong>Threat</strong></td><td>Data theft, service disruption, infrastructure damage</td></tr>
+    </table>
+
+    <h3>Threat Actors</h3>
+    <table>
+      <tr><th>Actor Type</th><th>Motivation</th></tr>
+      <tr><td><strong>Cybercriminals</strong></td><td>Financial gain</td></tr>
+      <tr><td><strong>State-sponsored</strong></td><td>Espionage, disruption</td></tr>
+      <tr><td><strong>Hacktivists</strong></td><td>Political/social causes</td></tr>
+      <tr><td><strong>Insiders</strong></td><td>Grievance or personal gain</td></tr>
+      <tr><td><strong>Terrorist groups</strong></td><td>Fear, destruction</td></tr>
+      <tr><td><strong>Competitors</strong></td><td>Business advantage</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>APT = "Slow and Low" -- advanced tools, persistent effort, real threat</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 3: 6 Tiers -->
+<details>
+  <summary>&#128200; 3. Six Tiers of Threat Actors (Board, 2013)</summary>
+  <div>
+    <div class="red"><strong>KNOW THESE TIERS:</strong> From "Resilient Military Systems and the Advanced Cyber Threat" (2013). Budget and capability escalate dramatically.</div>
+
+    <table>
+      <tr><th>Tier</th><th>Budget</th><th>Capabilities</th></tr>
+      <tr><td><strong>Tier I-II</strong></td><td>$10s</td><td>Exploit known vulnerabilities, use others' tools</td></tr>
+      <tr><td><strong>Tier III-IV</strong></td><td>$Millions</td><td>Discover unknown vulnerabilities, develop own tools, target executives, data mining</td></tr>
+      <tr><td><strong>Tier V-VI</strong></td><td>$Billions</td><td>CREATE vulnerabilities through supply chain, influence manufacturing, full spectrum cyber + military + intelligence</td></tr>
+    </table>
+
+    <div class="warn"><strong>Key distinction:</strong> Tier I-II EXPLOIT known vulns. Tier III-IV DISCOVER unknown vulns. Tier V-VI CREATE vulnerabilities by infiltrating the supply chain itself.</div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Tens, Millions, Billions" -- Exploit, Discover, CREATE</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 4: APT Kill Chain -->
+<details>
+  <summary>&#9876;&#65039; 4. APT Kill Chain &amp; Kaspersky 5-Stage Model</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> The APT Kill Chain describes the 7-step lifecycle of an advanced persistent attack, from initial reconnaissance to final objective.</div>
+
+    <h3>APT Kill Chain -- 7 Steps</h3>
+    <ol>
+      <li><strong>Reconnaissance</strong> -- gather information about target</li>
+      <li><strong>Weaponization</strong> -- create exploit payload</li>
+      <li><strong>Delivery</strong> -- send weapon to target (phishing, USB, malicious sites)</li>
+      <li><strong>Exploitation</strong> -- trigger vulnerability</li>
+      <li><strong>Installation</strong> -- install backdoor/malware</li>
+      <li><strong>Command &amp; Control (C2)</strong> -- establish remote control channel</li>
+      <li><strong>Actions on Objectives</strong> -- exfiltration, destruction, or other goals</li>
+    </ol>
+
+    <div class="diagram-box">Recon --> Weaponize --> Deliver --> Exploit --> Install --> C2 --> Actions</div>
+
+    <h3>Kaspersky 5-Stage Model</h3>
+    <ol>
+      <li><strong>Gain Access</strong></li>
+      <li><strong>Establish Foothold</strong></li>
+      <li><strong>Deepen Access</strong></li>
+      <li><strong>Move Laterally</strong></li>
+      <li><strong>Look, Learn, and Remain</strong></li>
+    </ol>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>Kill Chain: "R-W-D-E-I-C-A" -- Recon, Weapon, Deliver, Exploit, Install, C2, Act</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 5: APT Group Naming -->
+<details>
+  <summary>&#128058; 5. APT Group Naming Conventions</summary>
+  <div>
+    <div class="key"><strong>APT naming is NOT globally standardized.</strong> Different cybersecurity organizations use different schemes.</div>
+
+    <h3>Naming Schemes</h3>
+    <table>
+      <tr><th>Organization</th><th>Naming Convention</th><th>Example</th></tr>
+      <tr><td><strong>FireEye/Mandiant</strong></td><td>Numbers</td><td>APT28, APT29</td></tr>
+      <tr><td><strong>CrowdStrike</strong></td><td>Animal names by nation-state</td><td>Fancy Bear, Cozy Bear</td></tr>
+    </table>
+
+    <h3>CrowdStrike Animal Names by Nation</h3>
+    <table>
+      <tr><th>Animal</th><th>Nation-State</th></tr>
+      <tr><td><strong>Bear</strong></td><td>Russia</td></tr>
+      <tr><td><strong>Buffalo</strong></td><td>Vietnam</td></tr>
+      <tr><td><strong>Chollima</strong></td><td>North Korea (DPRK)</td></tr>
+      <tr><td><strong>Crane</strong></td><td>South Korea</td></tr>
+      <tr><td><strong>Hawk</strong></td><td>Syria</td></tr>
+      <tr><td><strong>Jackal</strong></td><td>Hacktivist groups</td></tr>
+      <tr><td><strong>Kitten</strong></td><td>Iran</td></tr>
+      <tr><td><strong>Leopard</strong></td><td>Pakistan</td></tr>
+    </table>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Bears drink vodka (Russia), Kittens purr in Persian (Iran), Chollima gallops in DPRK"</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 6: Linear Regression -->
+<details>
+  <summary>&#128202; 6. Linear Regression -- Fitting a Straight Line</summary>
+  <div>
+    <div class="blue"><strong>DEFINITION:</strong> Linear regression fits a straight line through scattered data points. The model is Y = b0 + b1*X + e</div>
+
+    <h3>Model Components</h3>
+    <table>
+      <tr><th>Symbol</th><th>Name</th><th>Meaning</th></tr>
+      <tr><td><strong>Y</strong></td><td>Response / Dependent</td><td>What you predict</td></tr>
+      <tr><td><strong>X</strong></td><td>Predictor / Independent</td><td>What you predict from</td></tr>
+      <tr><td><strong>b0</strong></td><td>Intercept</td><td>Y when X = 0</td></tr>
+      <tr><td><strong>b1</strong></td><td>Slope</td><td>Change in Y per 1-unit increase in X -- the number you care about most</td></tr>
+      <tr><td><strong>e</strong></td><td>Error term</td><td>Random scatter the line can't explain (assumed to average zero)</td></tr>
+    </table>
+
+    <div class="key"><strong>"Simple"</strong> = exactly one predictor X. <strong>"Linear"</strong> = straight line (first-order model).</div>
+
+    <h3>Slope Interpretation</h3>
+    <ul>
+      <li><strong>Positive slope</strong> -- X and Y rise together</li>
+      <li><strong>Negative slope</strong> -- one rises, the other falls</li>
+      <li><strong>Near-zero slope</strong> -- X tells little about Y</li>
+    </ul>
+
+    <div class="green"><strong>Security example:</strong> "Regress number of failed logins on hour of day -- a slope of 5 means each additional hour = 5 more failed logins on average."</div>
+
+    <div class="red"><strong>ALWAYS SCATTER PLOT FIRST</strong> to check that the relationship looks linear before fitting a regression line.</div>
+  </div>
+</details>
+
+<!-- Section 7: Least Squares & Gauss-Markov -->
+<details>
+  <summary>&#128207; 7. Least Squares &amp; Gauss-Markov Theorem</summary>
+  <div>
+    <h3>Least Squares Method</h3>
+    <div class="blue"><strong>DEFINITION:</strong> Least squares finds the best line by minimizing the total SQUARED vertical distance (residuals) from data points to the line.</div>
+
+    <p><strong>Why square the distances?</strong> Same reason as variance -- prevent positive and negative errors from canceling each other out.</p>
+
+    <p><strong>Residual</strong> = vertical distance from a data point to the fitted line (the prediction error for that specific point).</p>
+
+    <h3>Gauss-Markov Theorem</h3>
+    <div class="red"><strong>KEY THEOREM:</strong> Least squares gives unbiased estimates with the smallest variance among all unbiased linear estimators. In plain English: it's the best straight-line fit without extra assumptions.</div>
+
+    <h3>Normality Assumption</h3>
+    <div class="warn"><strong>Normality is needed ONLY for confidence intervals and hypothesis tests</strong> on slope/intercept -- NOT for fitting the line itself. Normal error model: errors ~ N(0, sigma^2).</div>
+
+    <div class="mem">
+      <small>Memory Aid</small>
+      <strong>"Least squares = minimize SQUARED residuals. Gauss-Markov = BLUE (Best Linear Unbiased Estimator)"</strong>
+    </div>
+  </div>
+</details>
+
+<!-- Section 8: HW8 - Weka & CIC Bot Dataset -->
+<details>
+  <summary>&#128187; 8. HW8 -- Weka &amp; CIC Bot Dataset</summary>
+  <div>
+    <div class="key"><strong>Hands-on application:</strong> Using Weka tool with the CIC (Canadian Institute for Cybersecurity) bot dataset to classify network traffic.</div>
+
+    <h3>Key Concepts from HW8</h3>
+    <ul>
+      <li><strong>CIC Bot Dataset</strong> -- from Canadian Institute for Cybersecurity, contains benign vs bot-generated traffic</li>
+      <li><strong>Visualization</strong> -- Label vs Destination Port scatter, showing how benign and bot traffic cluster differently</li>
+      <li><strong>Decision Stump Classifier</strong> -- simple one-level decision tree used as baseline classifier in Weka</li>
+      <li><strong>Confusion Matrix</strong> -- 2x2 table comparing predicted vs actual classification (benign vs bot)</li>
+      <li><strong>Accuracy Metrics</strong> -- precision, recall, F-measure from Weka output</li>
+    </ul>
+
+    <div class="warn"><strong>Weka tip:</strong> Always examine the confusion matrix, not just overall accuracy. A model can have high accuracy but terrible recall on the minority class (bots).</div>
+  </div>
+</details>
+
+<!-- Section 9: Exam Traps -->
+<details>
+  <summary>&#128683; 9. Exam Traps -- Don't Fall For These</summary>
+  <div>
+    <div class="warn"><strong>COMMON MISTAKES:</strong>
+      <ul>
+        <li>Swapping X (predictor) and Y (response) roles in regression</li>
+        <li>Confusing intercept (b0) with slope (b1) -- b1 is the one you care about most</li>
+        <li>Forgetting that least squares minimizes SQUARED distances, not absolute distances</li>
+        <li>Running hypothesis tests on slope without checking the normality assumption for errors</li>
+        <li>Thinking APT Kill Chain and Kaspersky model are the same -- they have different numbers of stages (7 vs 5)</li>
+        <li>Mixing up CrowdStrike animal names -- Bear is Russia, NOT China</li>
+        <li>Confusing Tier III-IV (discover unknown vulns) with Tier V-VI (CREATE vulns via supply chain)</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+</div><!-- end container -->
+
+<!-- QUIZ SECTION -->
+<div class="container">
+<div class="quiz-section">
+    <h2>Week 10 Quiz -- APTs, Kill Chain &amp; Linear Regression</h2>
+    <div class="quiz-score-bar">
+      <span class="score-text"><span class="score-correct">0</span> / <span class="score-total">10</span> correct</span>
+      <div class="score-fill-track"><div class="score-fill"></div></div>
+      <button class="quiz-reset-btn">Reset Quiz</button>
+      <div class="streak-display"><span>&#128293;</span> Streak: <span class="streak-count">0</span></div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">1</span> What distinguishes Tier V-VI threat actors from lower tiers?</p>
+      <div class="options">
+        <div class="opt">They exploit known vulnerabilities using others' tools</div>
+        <div class="opt">They discover unknown vulnerabilities and develop their own tools</div>
+        <div class="opt">They CREATE vulnerabilities through supply chain influence and manufacturing infiltration</div>
+        <div class="opt">They only conduct phishing attacks at scale</div>
+      </div>
+      <div class="explanation">Tier V-VI actors ($Billions budget) CREATE vulnerabilities by infiltrating supply chains and influencing manufacturing. Tier I-II exploit known vulns, Tier III-IV discover unknown vulns.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">2</span> In the APT Kill Chain, what is the correct order after Delivery?</p>
+      <div class="options">
+        <div class="opt">Installation, Exploitation, C2, Actions</div>
+        <div class="opt">Exploitation, Installation, C2, Actions on Objectives</div>
+        <div class="opt">C2, Exploitation, Installation, Actions</div>
+        <div class="opt">Exploitation, C2, Installation, Actions</div>
+      </div>
+      <div class="explanation">The 7-step Kill Chain is: Reconnaissance, Weaponization, Delivery, Exploitation, Installation, Command &amp; Control (C2), Actions on Objectives. After delivery comes exploitation, then installation.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">3</span> In CrowdStrike's naming convention, which animal represents Iranian threat groups?</p>
+      <div class="options">
+        <div class="opt">Bear</div>
+        <div class="opt">Chollima</div>
+        <div class="opt">Leopard</div>
+        <div class="opt">Kitten</div>
+      </div>
+      <div class="explanation">CrowdStrike uses Kitten for Iran, Bear for Russia, Chollima for North Korea, Leopard for Pakistan, Buffalo for Vietnam, Crane for South Korea, Hawk for Syria, and Jackal for hacktivists.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">4</span> In the linear regression model Y = b0 + b1*X + e, what does b1 represent?</p>
+      <div class="options">
+        <div class="opt">The change in Y for each 1-unit increase in X (slope)</div>
+        <div class="opt">The value of Y when X equals zero (intercept)</div>
+        <div class="opt">The random error term</div>
+        <div class="opt">The total variance explained</div>
+      </div>
+      <div class="explanation">b1 is the slope -- the change in Y per 1-unit increase in X. It's "the number you care about most." b0 is the intercept (Y when X=0), and e is the error term.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">5</span> Why does least squares minimize SQUARED distances rather than raw distances?</p>
+      <div class="options">
+        <div class="opt">Squared distances are easier to compute by hand</div>
+        <div class="opt">Raw distances always produce the same result</div>
+        <div class="opt">To prevent positive and negative errors from canceling each other out</div>
+        <div class="opt">Because the data must follow a normal distribution</div>
+      </div>
+      <div class="explanation">Same reason as variance -- squaring prevents positive and negative residuals from canceling out, ensuring all errors contribute to the total.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">6</span> What does the Gauss-Markov theorem guarantee about least squares estimates?</p>
+      <div class="options">
+        <div class="opt">They always produce normally distributed residuals</div>
+        <div class="opt">They are unbiased with the smallest variance among all unbiased linear estimators</div>
+        <div class="opt">They minimize the absolute distance from points to the line</div>
+        <div class="opt">They require the normality assumption to work</div>
+      </div>
+      <div class="explanation">Gauss-Markov says least squares = BLUE (Best Linear Unbiased Estimator). It gives the best straight-line fit without extra assumptions. Normality is only needed for confidence intervals and hypothesis tests.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="3">
+      <p><span class="qnum">7</span> How many stages does the Kaspersky APT model have?</p>
+      <div class="options">
+        <div class="opt">3</div>
+        <div class="opt">7</div>
+        <div class="opt">4</div>
+        <div class="opt">5</div>
+      </div>
+      <div class="explanation">The Kaspersky model has 5 stages: Gain Access, Establish Foothold, Deepen Access, Move Laterally, Look Learn and Remain. The Kill Chain has 7 steps -- don't confuse them.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <p><span class="qnum">8</span> A residual in linear regression is:</p>
+      <div class="options">
+        <div class="opt">The vertical distance from a data point to the fitted line</div>
+        <div class="opt">The horizontal distance from a data point to the fitted line</div>
+        <div class="opt">The slope of the regression line</div>
+        <div class="opt">The intercept of the regression line</div>
+      </div>
+      <div class="explanation">A residual is the vertical distance from a data point to the fitted line -- the prediction error for that specific observation. Least squares minimizes the sum of these squared residuals.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <p><span class="qnum">9</span> In the CIC bot dataset analysis using Weka, what classifier was used as a baseline?</p>
+      <div class="options">
+        <div class="opt">Random Forest</div>
+        <div class="opt">Naive Bayes</div>
+        <div class="opt">Decision Stump</div>
+        <div class="opt">K-Nearest Neighbors</div>
+      </div>
+      <div class="explanation">A decision stump is a simple one-level decision tree used as a baseline classifier in Weka. The CIC (Canadian Institute for Cybersecurity) bot dataset was used to classify benign vs bot traffic.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <p><span class="qnum">10</span> APTs are best described as being:</p>
+      <div class="options">
+        <div class="opt">Fast and loud -- designed to overwhelm defenses quickly</div>
+        <div class="opt">Slow and low -- designed to remain undetected for extended periods</div>
+        <div class="opt">Automated and random -- scanning for any available target</div>
+        <div class="opt">Short-lived -- completing objectives within minutes</div>
+      </div>
+      <div class="explanation">APTs are characterized as "slow and low" -- they gain access and strive to remain undetected for months or years, maintaining persistent effort unlike smash-and-grab attacks.</div>
+    </div>
+</div>
+</div>
+
+<script>
+(function() {
+  function showConfetti() {
+    const container = document.createElement('div');
+    container.className = 'celebration';
+    document.body.appendChild(container);
+    const colors = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#00897B'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 3000);
+  }
+
+  function showEncouragement(msg) {
+    const el = document.createElement('div');
+    el.className = 'encouragement';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  document.querySelectorAll('.quiz-section').forEach(section => {
+    const qs = section.querySelectorAll('.quiz-q');
+    const totalEl = section.querySelector('.score-total');
+    const correctEl = section.querySelector('.score-correct');
+    const fillEl = section.querySelector('.score-fill');
+    const resetBtn = section.querySelector('.quiz-reset-btn');
+    const streakEl = section.querySelector('.streak-count');
+    const streakDisplay = section.querySelector('.streak-display');
+    let answered = 0, correct = 0, streak = 0;
+
+    if (totalEl) totalEl.textContent = qs.length;
+
+    function updateScore() {
+      if (correctEl) correctEl.textContent = correct;
+      if (fillEl && qs.length > 0) fillEl.style.width = Math.round((correct / qs.length) * 100) + '%';
+      if (streakEl) streakEl.textContent = streak;
+      if (streakDisplay) streakDisplay.classList.toggle('on-fire', streak >= 3);
+      const progressFill = document.getElementById('progressFill');
+      if (progressFill && qs.length > 0) progressFill.style.width = Math.round((correct / qs.length) * 100) + '%';
+      const progressCorrect = document.querySelector('.progress-bar-container .score-correct');
+      if (progressCorrect) progressCorrect.textContent = correct;
+    }
+
+    qs.forEach(q => {
+      const correctIdx = parseInt(q.getAttribute('data-correct'));
+      const opts = q.querySelectorAll('.opt');
+      const explanation = q.querySelector('.explanation');
+
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          opts.forEach(o => o.classList.add('answered'));
+          answered++;
+
+          const isRight = idx === correctIdx;
+          if (isRight) {
+            opt.classList.add('selected-correct');
+            correct++; streak++;
+            q.classList.add('just-correct');
+            setTimeout(() => q.classList.remove('just-correct'), 300);
+            if (streak === 3) showEncouragement('3 in a row!');
+            else if (streak === 5) { showEncouragement('FIVE STREAK!'); showConfetti(); }
+            else if (streak === 10) { showEncouragement('PERFECT SCORE!'); showConfetti(); }
+          } else {
+            opt.classList.add('selected-wrong');
+            opts[correctIdx].classList.add('show-correct');
+            streak = 0;
+          }
+
+          if (explanation) {
+            if (!explanation.dataset.original) explanation.dataset.original = explanation.innerHTML;
+            const encouragements = ['Nice work!', 'Well done!', 'Exactly right!', 'You got it!', 'Spot on!', 'Nailed it!', 'Perfect!'];
+            const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            if (isRight) {
+              explanation.innerHTML = '<strong style="color:var(--correct)">Correct! ' + encouragement + '</strong><br><br><strong>Key takeaway:</strong> ' + explanation.dataset.original;
+            } else {
+              const correctText = opts[correctIdx].textContent.trim();
+              explanation.innerHTML = '<strong style="color:var(--wrong)">Not quite...</strong> The correct answer is: <em style="color:var(--correct)">' + correctText + '</em><br><br><strong>Remember this:</strong> ' + explanation.dataset.original;
+            }
+            explanation.classList.add('show');
+          }
+          updateScore();
+        });
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        answered = 0; correct = 0; streak = 0;
+        qs.forEach(q => {
+          q.classList.remove('answered', 'just-correct');
+          q.querySelectorAll('.opt').forEach(o => {
+            o.classList.remove('selected-correct', 'selected-wrong', 'show-correct', 'answered');
+          });
+          const exp = q.querySelector('.explanation');
+          if (exp) { exp.classList.remove('show'); }
+        });
+        updateScore();
+      });
+    }
+
+    updateScore();
+  });
+})();
+</script>
+
+</body>
+</html>
