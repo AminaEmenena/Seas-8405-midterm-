@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEAS 8410 - Quick Terms & Definitions</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      font-size: 9px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 8px;
+      background: #0ea5e9;
+      border-radius: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    nav .nav-brand { color: #fff; font-size: 11px; font-weight: bold; }
+    nav .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav .nav-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+    nav .nav-label { color: #ffd740; font-size: 9px; font-weight: bold; }
+    nav a { color: #e0f2fe; text-decoration: none; font-size: 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    nav a.active { color: #ffd740; border-bottom: 2px solid #ffd740; }
+    .print-btn {
+      background: #ffd740; color: #0c4a6e; border: none; padding: 3px 8px;
+      border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 9px;
+    }
+    .print-btn:hover { background: #ffca28; }
+
+    /* HEADER */
+    .sheet-title {
+      text-align: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #0ea5e9;
+      margin: 1px 0 2px 0;
+      padding: 1px 0;
+      border-bottom: 1px solid #0ea5e9;
+      border-top: 1px solid #0ea5e9;
+      letter-spacing: 0.2px;
+    }
+
+    /* COLUMNS LAYOUT */
+    .columns {
+      column-count: 3;
+      column-gap: 4px;
+      column-rule: 1px solid #ccc;
+    }
+
+    /* SECTIONS */
+    .sec {
+      margin-bottom: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 0.5px solid #bbb;
+      break-inside: avoid;
+    }
+
+    .sec-header {
+      padding: 1px 3px;
+      font-size: 8px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .sec-body {
+      padding: 1px 2px 1px 2px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .sec-body p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .sec-body p b {
+      font-weight: 700;
+    }
+
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 8px;
+      background: rgba(0,0,0,0.05);
+      padding: 0 1px;
+      border-radius: 1px;
+    }
+
+    /* S1 - Red */
+    .s1 .sec-header { background: #dc2626; color: #fff; }
+    .s1 .sec-body { background: #fef2f2; }
+    .s1 { border-color: #dc2626; }
+
+    /* S2 - Orange */
+    .s2 .sec-header { background: #ea580c; color: #fff; }
+    .s2 .sec-body { background: #fff7ed; }
+    .s2 { border-color: #ea580c; }
+
+    /* S3 - Amber */
+    .s3 .sec-header { background: #d97706; color: #fff; }
+    .s3 .sec-body { background: #fffbeb; }
+    .s3 { border-color: #d97706; }
+
+    /* S4 - Green */
+    .s4 .sec-header { background: #16a34a; color: #fff; }
+    .s4 .sec-body { background: #f0fdf4; }
+    .s4 { border-color: #16a34a; }
+
+    /* S5 - Blue */
+    .s5 .sec-header { background: #2563eb; color: #fff; }
+    .s5 .sec-body { background: #eff6ff; }
+    .s5 { border-color: #2563eb; }
+
+    /* S6 - Purple */
+    .s6 .sec-header { background: #7c3aed; color: #fff; }
+    .s6 .sec-body { background: #f5f3ff; }
+    .s6 { border-color: #7c3aed; }
+
+    /* S7 - Teal */
+    .s7 .sec-header { background: #0d9488; color: #fff; }
+    .s7 .sec-body { background: #f0fdfa; }
+    .s7 { border-color: #0d9488; }
+
+    /* S8 - Cyan */
+    .s8 .sec-header { background: #0891b2; color: #fff; }
+    .s8 .sec-body { background: #ecfeff; }
+    .s8 { border-color: #0891b2; }
+
+    /* S9 - Indigo */
+    .s9 .sec-header { background: #4f46e5; color: #fff; }
+    .s9 .sec-body { background: #eef2ff; }
+    .s9 { border-color: #4f46e5; }
+
+    /* S10 - Pink */
+    .s10 .sec-header { background: #db2777; color: #fff; }
+    .s10 .sec-body { background: #fdf2f8; }
+    .s10 { border-color: #db2777; }
+
+    /* S11 - Emerald */
+    .s11 .sec-header { background: #059669; color: #fff; }
+    .s11 .sec-body { background: #ecfdf5; }
+    .s11 { border-color: #059669; }
+
+    /* S12 - Slate */
+    .s12 .sec-header { background: #475569; color: #fff; }
+    .s12 .sec-body { background: #f8fafc; }
+    .s12 { border-color: #475569; }
+
+    /* S13 - Rose */
+    .s13 .sec-header { background: #be123c; color: #fff; }
+    .s13 .sec-body { background: #fff1f2; }
+    .s13 { border-color: #be123c; }
+
+    /* PRINT STYLES */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.12in;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        padding: 0;
+      }
+      nav { display: none !important; }
+      .print-btn { display: none !important; }
+
+      .sheet-title {
+        font-size: 6pt;
+        margin: 0;
+        padding: 0;
+        border-width: 0.5px;
+      }
+
+      .columns {
+        column-count: 3;
+        column-gap: 3px;
+        column-rule: 0.4px solid #999;
+      }
+
+      .sec {
+        margin-bottom: 1px;
+        border-width: 0.4px;
+        break-inside: avoid;
+      }
+
+      .sec-header {
+        padding: 0px 2px;
+        font-size: 5.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .sec-body {
+        padding: 0px 1px 0px 1px;
+        font-size: 5.55pt;
+        line-height: 1.07;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      code {
+        font-size: 5pt;
+      }
+
+      .s1 .sec-header { background: #dc2626 !important; color: #fff !important; }
+      .s1 .sec-body { background: #fef2f2 !important; }
+      .s2 .sec-header { background: #ea580c !important; color: #fff !important; }
+      .s2 .sec-body { background: #fff7ed !important; }
+      .s3 .sec-header { background: #d97706 !important; color: #fff !important; }
+      .s3 .sec-body { background: #fffbeb !important; }
+      .s4 .sec-header { background: #16a34a !important; color: #fff !important; }
+      .s4 .sec-body { background: #f0fdf4 !important; }
+      .s5 .sec-header { background: #2563eb !important; color: #fff !important; }
+      .s5 .sec-body { background: #eff6ff !important; }
+      .s6 .sec-header { background: #7c3aed !important; color: #fff !important; }
+      .s6 .sec-body { background: #f5f3ff !important; }
+      .s7 .sec-header { background: #0d9488 !important; color: #fff !important; }
+      .s7 .sec-body { background: #f0fdfa !important; }
+      .s8 .sec-header { background: #0891b2 !important; color: #fff !important; }
+      .s8 .sec-body { background: #ecfeff !important; }
+      .s9 .sec-header { background: #4f46e5 !important; color: #fff !important; }
+      .s9 .sec-body { background: #eef2ff !important; }
+      .s10 .sec-header { background: #db2777 !important; color: #fff !important; }
+      .s10 .sec-body { background: #fdf2f8 !important; }
+      .s11 .sec-header { background: #059669 !important; color: #fff !important; }
+      .s11 .sec-body { background: #ecfdf5 !important; }
+      .s12 .sec-header { background: #475569 !important; color: #fff !important; }
+      .s12 .sec-body { background: #f8fafc !important; }
+      .s13 .sec-header { background: #be123c !important; color: #fff !important; }
+      .s13 .sec-body { background: #fff1f2 !important; }
+    }
+
+    @media (max-width: 900px) {
+      .columns { column-count: 2; }
+    }
+    @media (max-width: 550px) {
+      .columns { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">SEAS 8410 TERMS</span>
+  <div class="nav-links">
+    <div class="nav-row">
+      <a href="index.html">Home</a>
+      <a href="cheatsheet.html">Midterm CS</a>
+      <a href="cheatsheet-final.html">Final CS</a>
+      <a href="cheatsheet-terms.html" class="active">Quick Terms</a>
+      <a href="../index.html">All Courses</a>
+      <button class="print-btn" onclick="window.print()">Print</button>
+    </div>
+  </div>
+</nav>
+
+<div class="sheet-title">SEAS 8410 QUICK TERMS & DEFINITIONS | EMERGENCY STUDY SHEET -- Key terms, definitions, and facts for the final exam</div>
+
+<div class="columns">
+
+  <!-- SECTION 1: VISUALIZATION & CHARTS -->
+  <div class="sec s1">
+    <div class="sec-header">1. Visualization & Charts</div>
+    <div class="sec-body">
+      <p><b>Bar chart:</b> compares categories, bars have GAPS between them</p>
+      <p><b>Histogram:</b> shows distribution of ONE numeric variable, bars TOUCH</p>
+      <p><b>Scatter plot:</b> shows relationship between TWO variables</p>
+      <p><b>Line chart:</b> shows trends over TIME</p>
+      <p><b>Pie chart:</b> shows parts of a whole, angle = relative frequency x 360, HARD TO READ</p>
+      <p><b>Heatmap:</b> shows values in a matrix using color intensity</p>
+      <p><b>Word cloud:</b> bigger word = more frequent</p>
+      <p><b>Data-ink ratio:</b> maximize data, minimize chart junk (Tufte)</p>
+      <p><b>Pre-attentive attributes:</b> color, size, orientation, shape -- brain processes before conscious thought</p>
+      <p><b>Perception hierarchy:</b> position > length > angle > area > color</p>
+      <p><b>Dashboard:</b> "visual display of most important info on single screen, monitored at a glance" (Stephen Few)</p>
+      <p><b>Expressiveness:</b> viz shows ALL and ONLY the facts (Mackinlay)</p>
+      <p><b>Effectiveness:</b> info is readily perceived (Mackinlay)</p>
+      <p><b>Top-left corner:</b> most important info goes here (eye starts there)</p>
+      <p><b>13 anti-patterns:</b> exceed screen, no context, too much detail, wrong measure, wrong viz type, meaningless variety, bad design, inaccurate encoding (Y-axis!), poor arrangement, bad highlighting, clutter, color misuse, ugly</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: DATA TYPES & SAMPLING -->
+  <div class="sec s2">
+    <div class="sec-header">2. Data Types & Sampling</div>
+    <div class="sec-body">
+      <p><b>Nominal:</b> labels with NO order (eye color, IP address, port number)</p>
+      <p><b>Ordinal:</b> labels WITH order (low/med/high, satisfaction scale)</p>
+      <p><b>Interval:</b> numbers, no true zero (temperature C/F, dates)</p>
+      <p><b>Ratio:</b> numbers, true zero (height, weight, age, packet size)</p>
+      <p><b>NOIR:</b> Nominal &lt; Ordinal &lt; Interval &lt; Ratio (increasing info)</p>
+      <p><b>Port number:</b> NOMINAL not ratio (arithmetic meaningless)</p>
+      <p><b>Temperature C/F:</b> INTERVAL not ratio (0 degrees is not "nothing")</p>
+      <p><b>Simple random sampling:</b> every unit has equal chance</p>
+      <p><b>Stratified:</b> sample a BIT from EVERY group</p>
+      <p><b>Cluster:</b> sample WHOLE groups (everything from a few)</p>
+      <p><b>Systematic:</b> every m-th item after random start</p>
+      <p><b>Population:</b> everything. <b>Sample:</b> slice you measure</p>
+      <p><b>Descriptive stats:</b> summarize data you have (mean, charts)</p>
+      <p><b>Inferential stats:</b> generalize from sample to population (hypothesis tests)</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: CENTER, SPREAD & SHAPE -->
+  <div class="sec s3">
+    <div class="sec-header">3. Center, Spread & Shape</div>
+    <div class="sec-body">
+      <p><b>Mean:</b> average, sensitive to outliers</p>
+      <p><b>Median:</b> middle value, ROBUST to outliers, use for skewed data</p>
+      <p><b>Mode:</b> most frequent, only center measure for nominal data</p>
+      <p><b>"Mean chases the tail":</b> right-skew = mean &gt; median, left-skew = mean &lt; median</p>
+      <p><b>Range:</b> max minus min</p>
+      <p><b>Variance:</b> average of squared deviations from mean, use n-1 for sample</p>
+      <p><b>Standard deviation:</b> square root of variance, back in original units</p>
+      <p><b>Z-score:</b> (value - mean) / SD, how many SDs from mean, unitless</p>
+      <p><b>Empirical Rule:</b> 68-95-99.7% within 1-2-3 SDs, BELL-SHAPED ONLY</p>
+      <p><b>Chebyshev:</b> at least 1-1/k^2 within k SDs, works for ANY shape</p>
+      <p><b>Correlation r:</b> measures LINEAR relationship, range [-1, +1], NOT causation</p>
+      <p><b>Parameter:</b> population measure (Greek: mu, sigma)</p>
+      <p><b>Statistic:</b> sample measure (Latin: X-bar, S)</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: DATA PREPROCESSING -->
+  <div class="sec s4">
+    <div class="sec-header">4. Data Preprocessing</div>
+    <div class="sec-body">
+      <p><b>Garbage in, garbage out:</b> bad data = bad results</p>
+      <p><b>Step Zero:</b> EXPLORE data first (<code>df.describe()</code>, data dictionary)</p>
+      <p><b><code>df.dropna()</code>:</b> remove rows with missing values</p>
+      <p><b><code>df.fillna()</code>:</b> fill missing values with specified value</p>
+      <p><b><code>df.drop_duplicates()</code>:</b> remove duplicate rows</p>
+      <p><b>Imputation:</b> filling missing data (mean/median/mode, ffill, bfill, KNN, model-based)</p>
+      <p><b>Feature engineering:</b> create NEW features from existing data, "secret sauce"</p>
+      <p><b>Normalization:</b> scale features so none dominates</p>
+      <p><b>Endpoint:</b> any device on network (laptop, phone, server, IoT)</p>
+      <p><b>Outlier:</b> value far from rest, wrecks mean but not median</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: HYPOTHESIS TESTING -->
+  <div class="sec s5">
+    <div class="sec-header">5. Hypothesis Testing</div>
+    <div class="sec-body">
+      <p><b>H0 (null):</b> boring default, always has = sign, like "innocent"</p>
+      <p><b>H1 (alternative):</b> your claim, has inequality</p>
+      <p><b>NEVER say "accept H0"</b> -- say "fail to reject"</p>
+      <p><b>Type I error (alpha):</b> false alarm, reject true H0</p>
+      <p><b>Type II error (beta):</b> missed detection, keep false H0</p>
+      <p><b>Power:</b> 1 - beta, ability to catch real effect</p>
+      <p><b>Alpha:</b> chosen BEFORE looking at data</p>
+      <p><b>p-value:</b> probability of data this extreme IF H0 is true</p>
+      <p><b>p &lt; alpha:</b> reject H0. <b>p &gt;= alpha:</b> fail to reject</p>
+      <p><b>Z-test:</b> Z = (X-bar - mu0) / (sigma / sqrt(n))</p>
+      <p><b>Standard error:</b> sigma / sqrt(n), shrinks with larger n</p>
+      <p><b>One-tailed:</b> rejection region in one tail. <b>Two-tailed:</b> both tails</p>
+      <p><b>Two-sided p-value:</b> DOUBLE the one-tail probability</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: TOOLS & STORAGE -->
+  <div class="sec s6">
+    <div class="sec-header">6. Tools & Storage</div>
+    <div class="sec-body">
+      <p><b>Excel:</b> quick analysis, pivot tables, ~1.5M row limit</p>
+      <p><b>Power BI:</b> drag-drop dashboards, PowerPoint embed, free GWU license</p>
+      <p><b>Tableau:</b> interactive dashboards, publish to cloud, alerting</p>
+      <p><b>Splunk:</b> SIEM, SPL queries, file/index-based, owned by Cisco</p>
+      <p><b>ELK:</b> open-source (Elasticsearch + Logstash + Kibana)</p>
+      <p><b>Python:</b> pandas + matplotlib + seaborn, most flexible</p>
+      <p><b>GP tools:</b> Swiss army knife (Power BI, Tableau, Looker)</p>
+      <p><b>Specialized tools:</b> Splunk (SIEM), Grafana (time-series), ArcGIS (geospatial)</p>
+      <p><b>SQL:</b> relational databases (Oracle, MySQL, PostgreSQL)</p>
+      <p><b>NoSQL:</b> MongoDB (document), Redis (cache), Cassandra (column), Neo4j (graph)</p>
+      <p><b>HDFS:</b> Hadoop, 128MB blocks, 3x replication, compute moves to data</p>
+      <p><b>Graph DB:</b> nodes + relationships, "5 hops" query easy</p>
+      <p><b>Star schema:</b> dimensions + facts, optimized for reporting</p>
+      <p><b>JSON:</b> current data format standard, replaced XML</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: SECURITY TOPICS -->
+  <div class="sec s7">
+    <div class="sec-header">7. Security Topics</div>
+    <div class="sec-body">
+      <p><b>CIA:</b> Confidentiality, Integrity, Availability</p>
+      <p><b>SAST:</b> static analysis, no execution, white-box, finds bugs early</p>
+      <p><b>DAST:</b> dynamic testing, app running, black-box, runtime vulns</p>
+      <p><b>Heartbleed:</b> CVE-2014-0160, OpenSSL missing bounds check</p>
+      <p><b>Equifax:</b> CVE-2017-5638, Apache Struts unpatched, 147M records</p>
+      <p><b>XZ Utils:</b> CVE-2024-3094, 3-year social engineering backdoor</p>
+      <p><b>CrowdStrike outage:</b> Channel File 291, 8.5M BSOD, SQA = security</p>
+      <p><b>DBIR 2025:</b> 60% human element, 22% credential abuse, 53% system intrusion</p>
+      <p><b>GDPR:</b> EU, consent required, right to delete, 72hr breach notification</p>
+      <p><b>CCPA:</b> California, right to know/delete/opt-out of sale</p>
+      <p><b>Von Neumann:</b> CPU + Memory + I/O, shared memory = injection attacks possible</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8: LOGS & GESTALT -->
+  <div class="sec s8">
+    <div class="sec-header">8. Logs & Gestalt</div>
+    <div class="sec-body">
+      <p><b>Log:</b> chronological record of events from IT components</p>
+      <p><b>System logs:</b> OS events, startups, shutdowns, errors</p>
+      <p><b>Application logs:</b> app errors, user activities</p>
+      <p><b>Network logs:</b> connections, traffic from routers/switches/firewalls</p>
+      <p><b>Security logs:</b> login attempts, policy violations, from AV/IDS/SIEM</p>
+      <p><b>Audit logs:</b> user activities for compliance/forensics</p>
+      <p><b>Web server logs:</b> client requests, server responses</p>
+      <p><b>Database logs:</b> queries, schema changes, SQL injection detection</p>
+      <p><b>Gestalt Proximity:</b> nearby objects = same group</p>
+      <p><b>Gestalt Similarity:</b> same color/shape = same group</p>
+      <p><b>Gestalt Closure:</b> brain completes incomplete shapes</p>
+      <p><b>Gestalt Continuity:</b> aligned objects = single entity</p>
+      <p><b>Gestalt Enclosure:</b> visual border = STRONGEST grouping</p>
+      <p><b>Gestalt Connection:</b> linked objects grouped, stronger than proximity</p>
+      <p><b>Strength order:</b> Enclosure &gt; Connection &gt; Proximity/Similarity</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9: APTs & THREAT ACTORS -->
+  <div class="sec s9">
+    <div class="sec-header">9. APTs & Threat Actors</div>
+    <div class="sec-body">
+      <p><b>APT:</b> Advanced (custom malware, zero-day) + Persistent (months/years) + Threat (data theft/disruption)</p>
+      <p><b>APTs are "slow and low"</b></p>
+      <p><b>Threat actor types:</b> cybercriminals, state-sponsored, hacktivists, insiders, terrorists, competitors</p>
+      <p><b>Tier I-II:</b> exploit KNOWN vulns ($10s)</p>
+      <p><b>Tier III-IV:</b> discover UNKNOWN vulns ($Ms)</p>
+      <p><b>Tier V-VI:</b> CREATE vulnerabilities in supply chain ($Bs)</p>
+      <p><b>Kill chain:</b> Recon -> Weaponize -> Deliver -> Exploit -> Install -> C2 -> Actions on Objectives</p>
+      <p><b>Kaspersky model:</b> Gain Access -> Foothold -> Deepen -> Lateral -> Look/Learn/Remain</p>
+      <p><b>CrowdStrike:</b> Bear=Russia, Chollima=DPRK, Kitten=Iran, Leopard=Pakistan, Hawk=Syria, Jackal=Hacktivist</p>
+    </div>
+  </div>
+
+  <!-- SECTION 10: REGRESSION & CLASSIFICATION -->
+  <div class="sec s10">
+    <div class="sec-header">10. Regression & Classification</div>
+    <div class="sec-body">
+      <p><b>Linear regression:</b> Y = b0 + b1*X + error, straight line through scatter</p>
+      <p><b>b0 (intercept):</b> Y when X = 0</p>
+      <p><b>b1 (slope):</b> change in Y per 1-unit increase in X (the important number)</p>
+      <p><b>Least squares:</b> minimizes squared vertical distances (residuals)</p>
+      <p><b>Gauss-Markov:</b> least squares = best unbiased linear fit</p>
+      <p><b>Always scatter plot FIRST before fitting</b></p>
+      <p><b>Logistic regression:</b> S-curve (sigmoid), predicts probability [0,1] for yes/no</p>
+      <p><b>Cutoff:</b> probability threshold for "yes" (default 0.5, adjustable)</p>
+      <p><b>Lower cutoff</b> = catch more but more false alarms</p>
+      <p><b>Confusion matrix:</b> 2x2 of predicted vs actual (TP, TN, FP, FN)</p>
+      <p><b>Sensitivity:</b> of real YES, how many caught? TP / (TP + FN)</p>
+      <p><b>Specificity:</b> of real NO, how many cleared? TN / (TN + FP)</p>
+      <p><b>Accuracy alone is misleading:</b> 99% normal data -> lazy model 99% accurate, 0% sensitivity</p>
+      <p><b>ROC curve:</b> sensitivity vs (1-specificity) across all cutoffs</p>
+      <p><b>AUC:</b> 0.5 = coin flip (BAD), 1.0 = perfect</p>
+    </div>
+  </div>
+
+  <!-- SECTION 11: ANOVA & ADVANCED TESTS -->
+  <div class="sec s11">
+    <div class="sec-header">11. ANOVA & Advanced Tests</div>
+    <div class="sec-body">
+      <p><b>ANOVA:</b> compare means of 3+ groups (extends t-test)</p>
+      <p><b>F-statistic:</b> between-group variance / within-group variance</p>
+      <p><b>Large F:</b> groups differ more than random noise explains</p>
+      <p><b>Why not multiple t-tests:</b> inflates false positive rate (~14% for 3 groups)</p>
+      <p><b>ANOVA assumptions:</b> independence, normality, equal variance</p>
+      <p><b>Tukey post-hoc:</b> which specific groups differ (after ANOVA rejects)</p>
+      <p><b>Two-way ANOVA:</b> 2 factors + INTERACTION (read interaction row FIRST)</p>
+      <p><b>Interaction:</b> effect of one factor DEPENDS on level of other</p>
+      <p><b>MANOVA:</b> multiple correlated response variables at once</p>
+      <p><b>Kruskal-Wallis:</b> non-parametric alternative to one-way ANOVA</p>
+      <p><b>Friedman:</b> non-parametric alternative to two-way ANOVA</p>
+      <p><b>Sign test:</b> tests median, count plus/minus signs, Binomial(n, 0.5)</p>
+      <p><b>Security data is often non-normal:</b> skewed, heavy-tailed, zero-inflated, ordinal</p>
+    </div>
+  </div>
+
+  <!-- SECTION 12: COLLABORATION -->
+  <div class="sec s12">
+    <div class="sec-header">12. Collaboration</div>
+    <div class="sec-body">
+      <p><b>Collaboration features:</b> sharing, real-time editing, commenting, version control, interactive dashboards, data sync, security, mobile, alerts, ecosystem integration</p>
+      <p><b>Power BI + Excel:</b> publish workbooks directly to Power BI workspace</p>
+      <p><b>Power BI + PowerPoint:</b> embed LIVE interactive reports in slides</p>
+      <p><b>Tableau:</b> publish to cloud, subscriptions/alerts, commenting, mobile-responsive</p>
+      <p><b>Key:</b> people + training + data-driven culture matter as much as tools</p>
+    </div>
+  </div>
+
+  <!-- SECTION 13: OUTLIER DETECTION -->
+  <div class="sec s13">
+    <div class="sec-header">13. Outlier Detection</div>
+    <div class="sec-body">
+      <p><b>IQR:</b> Q3 - Q1 (width of middle 50%)</p>
+      <p><b>Mild outlier:</b> past Q1 - 1.5*IQR or Q3 + 1.5*IQR</p>
+      <p><b>Extreme outlier:</b> past Q1 - 3*IQR or Q3 + 3*IQR</p>
+      <p><b>Mean is fragile</b> (outliers drag it), <b>median is robust</b></p>
+      <p><b>In security:</b> outlier might BE the attack -- investigate before deleting</p>
+      <p><b>Boxplot:</b> visual outlier detector built from quartiles</p>
+      <p><b>Decision tree:</b> flowchart classifier (root -> internal nodes -> leaves)</p>
+      <p><b>Overfitting:</b> tree too deep memorizes noise, fix with pruning</p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
