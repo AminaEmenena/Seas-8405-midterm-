@@ -243,7 +243,17 @@
         <li><b>Bitcoin vs Schneier:</b> Bitcoin is decentralized (no bank), uses Proof-of-Work consensus. Schneier model uses blind signatures with central bank. Both solve double-spend but through different mechanisms.</li>
         <li><b>Consensus mechanisms:</b> PoW (computational puzzle, energy-intensive, Bitcoin), PoS (stake-based, energy-efficient, Ethereum 2.0). Permissioned vs permissionless blockchains.</li>
         <li><b>Apps:</b> Cryptocurrency, supply chain tracking, medical records, voting systems, IoT device identity, digital identity, NFTs. Ronin hack (2022): $620M stolen via compromised validator keys.</li>
-        <li><b>Merkle trees:</b> Binary hash tree. Leaf nodes = transaction hashes. Each parent = hash of children. Root hash in block header. Enables efficient verification of any transaction without downloading entire block.</li>
+        <li><b>Merkle trees:</b> Binary hash tree. Leaf nodes = transaction hashes. Each parent = hash of children. Root hash in block header. Enables efficient verification of any transaction without downloading entire block. SPV nodes use Merkle proofs: only need log2(n) hashes to verify one transaction in block of n transactions.</li>
+        <li><b>Schneier's 4 protocols in detail:</b> Protocol #1: basic serial-number check (bank verifies coin not spent). #2: identity embedded in coin (bank can trace). #3: blind signatures (bank signs coin without seeing serial number -- anonymity achieved, but double-spend not caught until deposit). #4: secret splitting with XOR -- identity I split into k random pairs (a_i, a_i XOR I). Bank verifies random half at withdrawal. On double-spend, two different halves revealed -- XOR any matching pair recovers full identity I.</li>
+        <li><b>Bitcoin vs Schneier model:</b> Schneier requires trusted central bank (issues/verifies coins). Bitcoin eliminates central authority -- uses PoW consensus + distributed ledger. Both solve double-spend: Schneier via identity reveal on deposit, Bitcoin via blockchain confirmations (6 blocks = practically irreversible). Bitcoin is pseudonymous (addresses), not anonymous.</li>
+        <li><b>Mining process:</b> Miners collect unconfirmed transactions into candidate block. Must find nonce such that SHA-256(block header + nonce) < target difficulty. Average 10 min/block for Bitcoin. Block reward halves every 210,000 blocks (~4 years). Started at 50 BTC, currently 3.125 BTC. Difficulty adjusts every 2,016 blocks.</li>
+        <li><b>51% attack:</b> Attacker controlling >50% of network hash power can: (1) double-spend by creating longer chain, (2) prevent transactions from confirming, (3) prevent other miners from finding blocks. CANNOT: steal coins from addresses, change block reward, create coins from nothing. Cost: billions for Bitcoin network.</li>
+        <li><b>Double-spend problem:</b> Digital data is easily copied -- how to prevent spending same coin twice? Solutions: centralized (bank tracks all coins -- Schneier), decentralized (blockchain consensus confirms transaction ordering -- Bitcoin). Bitcoin's solution: first valid transaction seen by network gets confirmed; second attempt rejected by honest nodes.</li>
+        <li><b>Smart contract vulnerabilities:</b> Reentrancy (DAO hack -- re-enters withdraw before balance updates). Integer overflow/underflow. Front-running (miners reorder transactions). Oracle manipulation. Immutable code = bugs are permanent.</li>
+        <li><b>Genesis block:</b> Block 0 -- first block in any blockchain. Bitcoin genesis block mined Jan 3, 2009 by Satoshi. Contains The Times headline: "Chancellor on brink of second bailout for banks." Hardcoded into client software. Cannot be spent (by design).</li>
+        <li><b>Hard fork vs soft fork:</b> Hard fork: backward-INCOMPATIBLE rule change, ALL nodes must upgrade or split (e.g., Ethereum/Ethereum Classic after DAO hack). Soft fork: backward-compatible, old nodes still accept new blocks (e.g., SegWit). Hard forks can create new cryptocurrency.</li>
+        <li><b>Blockchain types:</b> Public/permissionless (anyone can join, read, write -- Bitcoin, Ethereum). Private/permissioned (single org controls access -- Hyperledger Fabric). Consortium (group of orgs share control -- R3 Corda for banking). Trade-off: decentralization vs performance vs privacy.</li>
+        <li><b>Tokenization:</b> Representing real-world assets as blockchain tokens. Fungible (ERC-20: interchangeable). Non-fungible (ERC-721/NFTs: unique). Security tokens (real asset ownership, subject to securities law).</li>
       </ul>
     </div>
   </div>
@@ -266,6 +276,14 @@
         <li><b>Standard curves:</b> NIST P-256 (secp256r1), P-384, P-521. Bitcoin uses secp256k1. Curve25519 (Daniel Bernstein) -- designed for speed and side-channel resistance.</li>
         <li><b>Advantages over RSA:</b> Smaller keys, faster key generation, faster signatures, lower power consumption, less bandwidth. Better for IoT/mobile/embedded/constrained devices. RSA has more mature ecosystem and is simpler to understand.</li>
         <li><b>Vulnerabilities:</b> ECC is vulnerable to quantum computers (like RSA) -- Shor's algorithm. More dependent on quality randomness than RSA (bad random k in ECDSA = private key leak, as happened with PS3 hack). Side-channel attacks if implementation leaks timing info.</li>
+        <li><b>Scalar multiplication detail (double-and-add):</b> To compute kP: write k in binary, scan left-to-right. For each bit: double current result. If bit=1, also add P. Example: 11P -- 11=1011 binary. Start R=P. Bit 0: R=2P. Bit 1: R=4P+P=5P. Bit 1: R=10P+P=11P. Only O(log k) operations instead of O(k). This efficiency is what makes ECC practical.</li>
+        <li><b>ECDH protocol steps:</b> (1) Agree on curve E and generator point G with large prime order n. (2) Alice picks random a (1 < a < n), computes A=aG, sends A to Bob. (3) Bob picks random b (1 < b < n), computes B=bG, sends B to Alice. (4) Alice computes shared secret S=aB=a(bG)=abG. (5) Bob computes S=bA=b(aG)=baG=abG. Same point. Eavesdropper sees A=aG and B=bG but cannot compute abG (ECDLP).</li>
+        <li><b>ECDSA signing:</b> Hash h=H(m). Pick random k, R=kG, r=R_x mod n. s=k^(-1)(h+r*d) mod n. Sig=(r,s). Verify: u1=h*s^(-1), u2=r*s^(-1) mod n. R'=u1*G+u2*Q. Valid if R'_x mod n = r.</li>
+        <li><b>PS3 hack detail:</b> Sony reused same k for every ECDSA signature. Two sigs with same k: s1-s2=k^(-1)(h1-h2) mod n. Solve for k, then d=r^(-1)(k*s-h) mod n. k MUST be unique per signature. Fix: deterministic k (RFC 6979).</li>
+        <li><b>Why index-calculus fails on EC:</b> Index calculus works for discrete log in Z_p* because elements have useful algebraic structure (smooth factoring). Elliptic curve groups lack this -- no notion of "smooth" points. Best known attack is Pollard's rho: O(sqrt(n)) -- fully exponential. This is why 256-bit ECC matches 3072-bit RSA.</li>
+        <li><b>Curve25519:</b> Daniel Bernstein. Montgomery curve over GF(2^255-19). Constant-time (side-channel resistant), no NIST influence (post-Snowden trust). Used in Signal, WhatsApp, SSH, WireGuard. Ed25519 = Edwards form for signatures.</li>
+        <li><b>Key size ratio grows:</b> At 80-bit security ECC is 6.4x smaller than RSA. At 256-bit security ECC is 30x smaller. ECC advantage increases with security level.</li>
+        <li><b>ECC in practice:</b> TLS 1.3 mandates ECDHE for key exchange. Bitcoin uses secp256k1 for all addresses and transaction signing. Signal Protocol uses Curve25519. Apple iMessage uses NIST P-256. US government Suite B specifies P-256 (SECRET) and P-384 (TOP SECRET).</li>
       </ul>
     </div>
   </div>
@@ -290,6 +308,13 @@
         <li><b>Apps:</b> Cloud computing on encrypted data, genomics/medical research, CryptoNets (neural networks on encrypted data), PIR (private information retrieval), DARPA DPRIVE (hardware accelerator), Google FHE Transpiler (converts plaintext C++ to encrypted-data code), encrypted word search, secure auctions.</li>
         <li><b>Pinocchio:</b> Verifiable computation -- 288-byte proofs, 10ms verification. Client can verify cloud computed correctly without re-doing computation.</li>
         <li><b>Side-channel:</b> RevEAL paper showed side-channel attacks on Microsoft SEAL library. Mathematical security != implementation security. Timing attacks can leak information even from "secure" HE.</li>
+        <li><b>RSA HE worked example:</b> p=23, q=11, n=253, phi=220, e=39, d=79. E(17)=17^39 mod 253=139. E(13)=13^39 mod 253=91. Multiply: 139*91 mod 253=221. E(17*13)=E(221)=221^39 mod 253=221. Match! Addition: E(17)+E(13)=230. E(30)=30^39 mod 253=207. 230!=207. RSA is NOT additively homomorphic.</li>
+        <li><b>Paillier key gen:</b> Primes p,q. n=pq, lambda=lcm(p-1,q-1), g=n+1, mu=lambda^(-1) mod n. Public=(n,g), Private=(lambda,mu). Enc: c=g^m*r^n mod n^2 (random r). Dec: m=L(c^lambda mod n^2)*mu mod n, L(x)=(x-1)/n.</li>
+        <li><b>Paillier voting example:</b> 5 voters, yes=1, no=0. Each encrypts vote: E(1), E(0), E(1), E(1), E(0). Multiply all ciphertexts: E(1)*E(0)*E(1)*E(1)*E(0) = E(1+0+1+1+0) = E(3). Decrypt once: result=3. Three yes votes, two no. No individual vote ever decrypted. Authority only learns tally.</li>
+        <li><b>HE word search vs FHE:</b> Homomorphic word search: server searches encrypted index, returns encrypted results. Leaks: search pattern (same query = same encrypted query), access pattern (which documents match). Linkable queries compromise privacy over time. True FHE search: query encrypted differently each time (probabilistic), server learns nothing about query or results. Much slower but no leakage.</li>
+        <li><b>Libraries:</b> Microsoft SEAL (BFV, CKKS). IBM HElib (BGV, CKKS). Google FHE Transpiler (C++ to FHE code). Intel HEXL (hardware accel). PALISADE/OpenFHE (multi-scheme, gov use). Lattigo (Go). ISO/IEC 18033 standardizes HE primitives.</li>
+        <li><b>DARPA DPRIVE:</b> Data Protection in Virtual Environments. Goal: ASIC hardware to make FHE practical (reduce 10,000x overhead to near-realtime). Partners: Intel, Microsoft, Duality Technologies.</li>
+        <li><b>MPC protocols beyond Yao:</b> GMW (Boolean circuits + oblivious transfer). BGW (information-theoretic, no crypto assumptions, needs honest majority). SPDZ (handles dishonest majority via MACs). Real-world: Boston wage equity study (2017) compared salaries across companies via MPC without revealing individual data.</li>
       </ul>
     </div>
   </div>
@@ -314,6 +339,15 @@
         <li><b>Export-grade ciphers:</b> Deliberately weak 40-bit keys mandated by US export regulations (1990s). FREAK/Logjam attacks exploited servers still supporting export ciphers. Lesson: old weak crypto persists and gets exploited.</li>
         <li><b>Digital certificates:</b> X.509 standard. CA trust chain: Root CA (self-signed, pre-installed in browsers) - Intermediate CA - End entity cert. Always check revocation (CRL or OCSP). Certificate pinning: app remembers expected cert to prevent MITM with rogue CA.</li>
         <li><b>Forward secrecy:</b> Ephemeral DH (DHE/ECDHE) -- new key pair per session. If long-term private key compromised, past sessions remain secure. TLS 1.3 REQUIRES forward secrecy (no static RSA key exchange).</li>
+        <li><b>TLS handshake detail:</b> (1) ClientHello: version, suites, client_random, extensions (SNI). (2) ServerHello: chosen suite, server_random. (3) Certificate: X.509 chain. (4) ServerKeyExchange: DH/ECDH params+sig (DHE/ECDHE only). (5) CertificateRequest (optional mutual auth). (6) ServerHelloDone. (7) ClientKeyExchange: pre-master secret. (8) ChangeCipherSpec: switch to encrypted. (9) Finished: hash of all handshake messages.</li>
+        <li><b>HSTS (HTTP Strict Transport Security):</b> Server sends Strict-Transport-Security header. Browser remembers site requires HTTPS. Prevents SSL stripping attacks (MITM downgrades HTTPS to HTTP). Preload list: browsers ship with hardcoded HSTS domains. max-age directive controls duration.</li>
+        <li><b>Certificate pinning:</b> App stores expected cert or public key hash. Verifies server cert matches pin on connection. Prevents MITM even with rogue CA cert. Used by mobile apps. Risk: pin rotation requires app update. HPKP deprecated in favor of Certificate Transparency.</li>
+        <li><b>FREAK attack:</b> Factoring RSA Export Keys. MITM downgrades TLS to export-grade RSA (512-bit). Attacker factors 512-bit key in hours. Affected major sites (NSA.gov, FBI.gov). Root cause: 1990s US export crypto regulations left legacy weak ciphers enabled. <b>Logjam:</b> Similar but targets DHE. Downgrades to 512-bit DH. Pre-compute discrete log for common 512-bit primes. Fix: disable export ciphers, use 2048+ bit DH.</li>
+        <li><b>TLS 1.3 major changes:</b> (1) 0-RTT resumption (send data with first message -- risk of replay). (2) Removed RSA key exchange (forward secrecy mandatory). (3) Only AEAD ciphers (AES-GCM, ChaCha20-Poly1305). (4) Removed compression (prevents CRIME). (5) Removed renegotiation. (6) Simplified handshake: 1-RTT (was 2-RTT). (7) Encrypted handshake messages (ServerHello encrypted). (8) Removed static DH, RC4, DES, 3DES, MD5, SHA-1.</li>
+        <li><b>PGP web of trust vs PKI:</b> Web of trust: decentralized, users sign each other's keys, trust is transitive (if I trust Alice and Alice signed Bob's key, I can trust Bob). No central authority. PKI: hierarchical, Root CA at top, intermediate CAs, end-entity certs. Centralized trust anchors pre-installed in browsers/OS. PKI scales better but single point of failure (CA compromise).</li>
+        <li><b>Email virus deterrence:</b> Signed-only policy: reject unsigned email (viruses lack private key). Encrypted-only: viruses cannot encrypt to correct recipient. Combined sign-then-encrypt eliminates most email malware.</li>
+        <li><b>Kerberos:</b> Ticket-based auth. (1) AS Exchange: client to Authentication Server, receives TGT. (2) TGS Exchange: present TGT to Ticket Granting Server, get service ticket. (3) Client/Server: present service ticket to access service. Uses symmetric crypto (AES). Single sign-on. Time-sensitive: requires synchronized clocks (prevents replay).</li>
+        <li><b>Certificate formats:</b> PKCS#7: signed/encrypted data (cert chains, S/MIME). PKCS#10: CSR format. PKCS#12: cert+private key bundle (.pfx/.p12). X.509v3: standard cert with extensions. PEM: Base64 DER with header/footer. DER: binary encoding.</li>
       </ul>
     </div>
   </div>
@@ -335,7 +369,16 @@
         <li><b>Cracking WPA2-PSK:</b> Capture 4-way handshake (specifically Message 2 with SNonce + MIC). Offline dictionary attack: guess password - derive PMK via PBKDF2 - derive PTK - compute MIC - compare to captured MIC. If match, password found. NOT a crypto break -- vulnerability is weak/short passwords. Strong random passphrase = secure.</li>
         <li><b>KRACK (Key Reinstallation Attack, 2017):</b> Replays handshake message 3 - forces client to reinstall already-in-use key - nonce reuse. Targets the 4-way handshake IMPLEMENTATION, NOT AES itself. Affects clients (not APs). Allows packet decryption/injection. Fix: patch client software to reject replayed messages.</li>
         <li><b>WPA3 (2018):</b> SAE (Simultaneous Authentication of Equals)/Dragonfly replaces 4-way handshake with password-authenticated key exchange. Benefits: forward secrecy (each session has unique keys, compromising password doesn't reveal past sessions), brute-force protection (online only, no offline dictionary attack), individualized encryption (unique keys per client even with same PSK), PMF (Protected Management Frames) required -- prevents deauth attacks. 128-bit personal / 192-bit enterprise (CNSA suite). Mandatory for Wi-Fi 6 (802.11ax) certified devices.</li>
-        <li><b>Attacks:</b> Evil Twin (fake AP with same SSID, stronger signal, intercepts traffic -- VPN protects). Rogue AP (unauthorized AP on corporate network, bypasses firewall -- detected by wireless IDS). DoS: RF jamming (physical layer), disassociation/deauthentication flooding (management frames -- WPA3 PMF mitigates). War driving: scanning for vulnerable networks.</li>
+        <li><b>Attacks:</b> Evil Twin (fake AP with same SSID, stronger signal, intercepts traffic -- VPN protects). Rogue AP (unauthorized AP on corporate network, bypasses firewall -- detected by wireless IDS). DoS: RF jamming (physical layer), disassociation/deauthentication flooding (management frames -- WPA3 PMF mitigates). War driving: scanning for vulnerable networks using GPS + WiFi scanner (Kismet, Wigle).</li>
+        <li><b>802.1X EAP 7-step process:</b> (1) Client associates with AP (open). (2) AP blocks all traffic except EAP (port blocked). (3) Client sends EAP-Start/Identity. (4) AP forwards to RADIUS server (EAP over RADIUS). (5) RADIUS challenges client (credentials/cert). (6) Client responds, RADIUS validates. (7) RADIUS sends Accept -- AP opens port. EAPOL = EAP over LAN (Layer 2 frames between client and AP). RADIUS uses UDP 1812/1813.</li>
+        <li><b>RADIUS AAA:</b> Authentication (who are you?), Authorization (what can you access?), Accounting (what did you do?). Centralized credential management. Supports multiple auth methods via EAP. TACACS+ (Cisco): similar but uses TCP, separates AAA functions, encrypts entire payload (RADIUS only encrypts password).</li>
+        <li><b>RC4 two-phase detail:</b> KSA: init S[0..255]=identity. For i=0-255: j=(j+S[i]+key[i mod keylen]) mod 256, swap S[i],S[j]. Result: key-dependent permutation. PRGA: i=j=0. Each byte: i=(i+1)%256, j=(j+S[i])%256, swap S[i],S[j], output S[(S[i]+S[j])%256]. XOR output with plaintext = ciphertext.</li>
+        <li><b>WEP cracking method:</b> (1) Collect packets (inject ARP to generate traffic). (2) 24-bit IV repeats in ~5 hours. (3) Same IV: C1 XOR C2 = P1 XOR P2. (4) FMS attack: weak IVs leak key bytes via KSA bias. (5) ~40K-85K weak IVs = full key recovery. Tools: aircrack-ng. Under 5 minutes.</li>
+        <li><b>WPA2 4-way handshake detail:</b> M1: AP sends ANonce. Client derives PTK (has PMK+ANonce+SNonce+MACs). M2: Client sends SNonce+MIC. AP derives PTK, verifies MIC. M3: AP sends GTK (encrypted w/ PTK)+MIC. Client installs PTK+GTK. M4: Client ACK. Both have PTK (unicast) and GTK (multicast/broadcast).</li>
+        <li><b>PBKDF2 for PSK:</b> PMK = PBKDF2-SHA1(passphrase, SSID, 4096, 256). Passphrase 8-63 chars. SSID=salt. 4096 iterations slow brute-force. Weak passwords still vulnerable to dictionary attacks despite stretching.</li>
+        <li><b>WPA3 OWE:</b> Opportunistic Wireless Encryption for open networks. Unauthenticated DH = encrypted but NOT authenticated (still vulnerable to evil twin). No password needed. Each client gets unique keys. Better than no encryption.</li>
+        <li><b>Rogue AP detection:</b> Wireless IDS scans for unauthorized APs. Methods: MAC address database comparison, signal strength triangulation, wired-side monitoring. 802.11w PMF prevents spoofed deauth to force clients to rogue AP.</li>
+        <li><b>PUFs (Physically Unclonable Functions):</b> Hardware auth using manufacturing variations. Each chip has unique physical characteristics (gate delays, capacitances). Challenge-response: cannot be cloned even by manufacturer. Used for IoT device identity, key generation without storage, anti-counterfeiting.</li>
       </ul>
     </div>
   </div>
@@ -506,6 +549,56 @@
         <li><b>Wireless timeline:</b> WEP (1997, broken) - WPA/TKIP (2003, band-aid) - WPA2/AES-CCMP (2004, standard) - KRACK (2017, implementation attack) - WPA3/SAE (2018, current).</li>
         <li><b>Ronin hack (2022):</b> $620M stolen -- compromised validator keys on blockchain bridge. Largest crypto hack.</li>
         <li><b>DAO hack (2016):</b> $60M via smart contract reentrancy bug. Led to Ethereum hard fork (ETH/ETC split).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PROTOCOL COMPARISON -->
+  <div class="week" style="border-color: #4e342e;">
+    <div class="week-header" style="background: #4e342e; color: #fff;">PROTOCOL COMPARISON: PGP vs S/MIME vs TLS vs IPsec</div>
+    <div class="week-body" style="background: #EFEBE9;">
+      <ul>
+        <li><b>PGP:</b> Layer=Application. Crypto selection=Unilateral (sender). Auth=Web of Trust. Non-repudiation=YES. Order=Sign-then-encrypt. Key mgmt=Manual/keyservers. Granularity=Per message. Use=Email, file encryption.</li>
+        <li><b>S/MIME:</b> Layer=Application. Crypto selection=Unilateral. Auth=PKI (X.509 certs from CA). Non-repudiation=YES. Order=Sign-then-encrypt. Key mgmt=CA-issued certs. Granularity=Per message. Use=Enterprise email. Easier to deploy in corporate environment than PGP.</li>
+        <li><b>TLS:</b> Layer=Transport (between app and TCP). Crypto selection=Negotiated (ClientHello/ServerHello). Auth=PKI certs (usually server-only). Non-repudiation=NO (shared session keys). Order=Sign-then-encrypt. Key mgmt=PKI + ephemeral DH. Granularity=Per session. Use=HTTPS, secure web. 6 keys/session.</li>
+        <li><b>IPsec:</b> Layer=Network (IP). Crypto selection=Negotiated (IKE). Auth=Pre-shared keys or certs. Non-repudiation=NO. Order=Encrypt-then-sign. Key mgmt=IKE (automated). Granularity=Per packet. Modes: Transport (payload only) vs Tunnel (entire IP packet wrapped). Use=VPNs. Transparent to applications. AH (auth only) vs ESP (auth+encrypt).</li>
+        <li><b>Key differences:</b> Only PGP/S/MIME provide non-repudiation. Only TLS/IPsec negotiate crypto. Only IPsec encrypts-then-signs. TLS is session-based; PGP/S/MIME are message-based. IPsec is transparent to apps; TLS requires app support (HTTPS). PGP has no central authority; all others use some form of PKI.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONSENSUS COMPARISON -->
+  <div class="week" style="border-color: #880e4f;">
+    <div class="week-header" style="background: #880e4f; color: #fff;">BLOCKCHAIN CONSENSUS: PoW vs PoS vs DPoS vs PBFT</div>
+    <div class="week-body" style="background: #FCE4EC;">
+      <ul>
+        <li><b>PoW (Proof of Work):</b> Miners solve SHA-256 puzzle (find nonce where hash < target). First to solve wins block reward. Energy-intensive (Bitcoin uses ~150 TWh/year). Security: 51% of hash power to attack. Finality: probabilistic (6 confirmations ~1 hour). Throughput: ~7 TPS (Bitcoin). Sybil-resistant: cost of compute. Used by: Bitcoin, Litecoin, Monero.</li>
+        <li><b>PoS (Proof of Stake):</b> Validators stake cryptocurrency as collateral. Selected to propose blocks proportional to stake. Slashing: lose stake for malicious behavior. Energy-efficient (99.9% less than PoW). Nothing-at-stake problem: validators can cheaply vote on multiple forks. Finality: faster (~12s Ethereum). Throughput: ~30 TPS. Used by: Ethereum (post-Merge 2022), Cardano, Solana.</li>
+        <li><b>DPoS (Delegated PoS):</b> Token holders vote for delegates/witnesses who produce blocks. Small fixed set of validators (21-101 typically). Very fast (1-3s blocks, ~1000+ TPS). Trade-off: more centralized (cartel risk). Used by: EOS, TRON, Lisk. Democratic but concentration of power possible.</li>
+        <li><b>PBFT (Practical Byzantine Fault Tolerance):</b> Permissioned consensus. Leader proposes block, validators vote in rounds (pre-prepare, prepare, commit). Tolerates <n/3 faulty nodes. Deterministic finality (no forks). Low throughput at scale (O(n^2) messages). Used by: Hyperledger Fabric, private blockchains. Best for consortium/enterprise where participants are known.</li>
+        <li><b>Summary:</b> PoW=most decentralized, least efficient. PoS=balanced. DPoS=fastest, least decentralized. PBFT=instant finality, permissioned only. Blockchain trilemma: cannot optimize decentralization + security + scalability simultaneously (pick 2).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ADDITIONAL EXAM TRAPS -->
+  <div class="week" style="border-color: #b71c1c;">
+    <div class="week-header" style="background: #b71c1c; color: #fff;">MORE EXAM TRAPS</div>
+    <div class="week-body" style="background: #FFEBEE;">
+      <ul>
+        <li>Paillier ciphertext MULTIPLICATION = plaintext ADDITION (do NOT confuse operations)</li>
+        <li>ElGamal is multiplicatively homomorphic AND probabilistic (unlike deterministic RSA)</li>
+        <li>Bootstrapping evaluates the DECRYPTION circuit homomorphically (not encryption)</li>
+        <li>CKKS = approximate (ML/float). BFV = exact integers. Do not swap them</li>
+        <li>WPA uses TKIP (still RC4). WPA2 uses AES-CCMP (completely replaces RC4)</li>
+        <li>KRACK = nonce reuse via replayed M3. Targets CLIENTS not APs. Does NOT break AES</li>
+        <li>OWE provides encryption but NOT authentication (still vulnerable to evil twin)</li>
+        <li>802.1X is for BOTH wired AND wireless (not wireless-only)</li>
+        <li>PEAP = server cert only. EAP-TLS = mutual certs (both sides)</li>
+        <li>Bitcoin is pseudonymous (linkable addresses), NOT anonymous</li>
+        <li>Hard fork = backward-INCOMPATIBLE (chain splits). Soft fork = compatible</li>
+        <li>PBKDF2 uses SSID as salt -- same password, different network = different PMK</li>
+        <li>Heartbleed = OpenSSL implementation bug, NOT TLS protocol flaw</li>
       </ul>
     </div>
   </div>
