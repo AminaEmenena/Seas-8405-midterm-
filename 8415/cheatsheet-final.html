@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEAS 8415 - Final Cheat Sheet</title>
+  <title>SEAS 8415 - Final Cheat Sheet (Post-Midterm)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -99,30 +99,6 @@
     }
 
     /* WEEK COLORS */
-    .w1 .week-header { background: #c62828; color: #fff; }
-    .w1 .week-body { background: #FFE4E1; }
-    .w1 { border-color: #c62828; }
-
-    .w2 .week-header { background: #e65100; color: #fff; }
-    .w2 .week-body { background: #FFF3E0; }
-    .w2 { border-color: #e65100; }
-
-    .w3 .week-header { background: #f9a825; color: #1a1a1a; }
-    .w3 .week-body { background: #FFFDE7; }
-    .w3 { border-color: #f9a825; }
-
-    .w4 .week-header { background: #2e7d32; color: #fff; }
-    .w4 .week-body { background: #E8F5E9; }
-    .w4 { border-color: #2e7d32; }
-
-    .w5 .week-header { background: #1565c0; color: #fff; }
-    .w5 .week-body { background: #E3F2FD; }
-    .w5 { border-color: #1565c0; }
-
-    .w6 .week-header { background: #6a1b9a; color: #fff; }
-    .w6 .week-body { background: #F3E5F5; }
-    .w6 { border-color: #6a1b9a; }
-
     .w8 .week-header { background: #c2185b; color: #fff; }
     .w8 .week-body { background: #FCE4EC; }
     .w8 { border-color: #c2185b; }
@@ -204,18 +180,6 @@
         margin-bottom: 0;
       }
 
-      .w1 .week-header { background: #c62828 !important; color: #fff !important; }
-      .w1 .week-body { background: #FFE4E1 !important; }
-      .w2 .week-header { background: #e65100 !important; color: #fff !important; }
-      .w2 .week-body { background: #FFF3E0 !important; }
-      .w3 .week-header { background: #f9a825 !important; color: #1a1a1a !important; }
-      .w3 .week-body { background: #FFFDE7 !important; }
-      .w4 .week-header { background: #2e7d32 !important; color: #fff !important; }
-      .w4 .week-body { background: #E8F5E9 !important; }
-      .w5 .week-header { background: #1565c0 !important; color: #fff !important; }
-      .w5 .week-body { background: #E3F2FD !important; }
-      .w6 .week-header { background: #6a1b9a !important; color: #fff !important; }
-      .w6 .week-body { background: #F3E5F5 !important; }
       .w8 .week-header { background: #c2185b !important; color: #fff !important; }
       .w8 .week-body { background: #FCE4EC !important; }
       .w9 .week-header { background: #5e35b1 !important; color: #fff !important; }
@@ -242,15 +206,6 @@
   <span class="nav-brand">SEAS 8415 FINAL</span>
   <div class="nav-links">
     <div class="nav-row">
-      <span class="nav-row-label">Midterm:</span>
-      <a href="week1.html">W1</a>
-      <a href="week2.html">W2</a>
-      <a href="week3.html">W3</a>
-      <a href="week4.html">W4</a>
-      <a href="week5.html">W5</a>
-      <a href="week6.html">W6</a>
-    </div>
-    <div class="nav-row">
       <span class="nav-row-label">Final:</span>
       <a href="week8.html">W8</a>
       <a href="week9.html">W9</a>
@@ -267,108 +222,28 @@
   </div>
 </nav>
 
-<div class="sheet-title">SEAS 8415 FINAL CHEAT SHEET (Weeks 1&ndash;12) | Final Exam | Weeks 1-12 | 2 hours | Closed book | 1 cheat sheet (8.5x11 both sides) | Honorlock</div>
+<div class="sheet-title">SEAS 8415 FINAL CHEAT SHEET (Weeks 8&ndash;12 Post-Midterm) | Final Exam | Post-Midterm (Weeks 8-12) | 2 hours | 1 cheat sheet (8.5x11 both sides)</div>
 
 <div class="columns">
-
-  <!-- WEEK 1 -->
-  <div class="week w1">
-    <div class="week-header">W1 - Ciphers &amp; Hashing</div>
-    <div class="week-body">
-      <ul>
-        <li><b>Classical ciphers:</b> Caesar (shift, monoalpha, broken by freq analysis). Vigenere (polyalpha, repeating keyword, broken by Kasiski). Bifid (Polybius grid, combines sub+trans). Rail Fence (transposition, zigzag rows). Sub CHANGES letters, trans REARRANGES positions.</li>
-        <li><b>Shannon:</b> Perfect secrecy = P(M|C)=P(M). OTP = ONLY perfectly secure cipher. Key must be truly random, >= msg length, used ONCE, kept secret. Impractical at scale. 5 criteria (1949): degree of secrecy, free from complexity, simple implementation, C<=P, limited error propagation - STILL VALID TODAY.</li>
-        <li><b>Symmetric vs Asymmetric:</b> Sym = same key, fast (100-1000x), bulk data (AES/DES/3DES). Asym = key pair, slow, solves key distrib (RSA/ECC/DH). Hybrid = asym for key exchange, sym for data (TLS model). N users need N(N-1)/2 sym keys.</li>
-        <li><b>Kerckhoffs:</b> Security in KEY, not algorithm. All modern algos public. Computational security = practical alternative to perfect secrecy: cost to break > value of info.</li>
-        <li><b>Hashing:</b> One-way, fixed output, collision resistant, avalanche effect. SHA-256 (current), MD5 (128-bit, BROKEN), SHA-1 (160-bit, deprecated). NOT encryption - irreversible. Salting = random string before hashing, defeats rainbow tables. HMAC = keyed hash for integrity+auth (NOT confidentiality). Key stretching: PBKDF2, bcrypt (deliberately slow).</li>
-        <li><b>Data states:</b> At rest (AES), in transit (TLS), in use (enclaves, HE). Protect all three. Block ciphers = fixed-size blocks (AES=128-bit). Stream = bit/byte at a time (RC4, ChaCha20).</li>
-        <li><b>PRNG:</b> Uncorrelated, long period, uniform. CSPRNG required for crypto. Weak PRNG = predictable keys. Nonce = used ONCE, prevents replay.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 2 -->
-  <div class="week w2">
-    <div class="week-header">W2 - Asymmetric Crypto &amp; Key Exchange</div>
-    <div class="week-body">
-      <ul>
-        <li><b>Diffie-Hellman (1976):</b> First pub key exchange. Shared secret = g^(ab) mod p. Based on discrete log problem. DOES NOT authenticate - vulnerable to MITM. Calc: g=2,p=19,a=6,b=3 - Y=2^6 mod 19=7, C=2^3 mod 19=8, S=8^6 mod 19=18=7^3 mod 19.</li>
-        <li><b>RSA (1977):</b> Based on factoring N=p*q. phi(n)=(p-1)(q-1). Choose e coprime to phi, d=e^(-1) mod phi. Encrypt: C=M^e mod n. Decrypt: M=C^d mod n. Public=(n,e), Private=(n,d). Trap-door one-way function.</li>
-        <li><b>Digital signatures:</b> Sign w/ private key, verify w/ public key. Provides auth+integrity+non-repudiation. Hash msg - encrypt hash w/ priv key = signature. Non-repudiation: signer cannot deny.</li>
-        <li><b>PKI:</b> CA issues X.509 certificates. Chain of trust: Root CA - Intermediate CA - End entity. Revocation: CRL, OCSP. Hybrid encryption: RSA for key exchange, AES for bulk data.</li>
-        <li><b>ECC preview:</b> Lighter than RSA. ECC-256 ~ RSA-3072. Ideal for IoT/mobile. Based on ECDLP. CAB Forum requires RSA min 3072 bits now.</li>
-        <li><b>PQC:</b> Shor's algo breaks RSA/DH/ECC. "Harvest now, decrypt later." NIST winners: CRYSTALS-Kyber (key exchange), CRYSTALS-Dilithium (sigs), SPHINCS+ (hash-based sigs). SIKE BROKEN 2022. Migration target: 2035.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 3 -->
-  <div class="week w3">
-    <div class="week-header">W3 - Number Theory &amp; Math</div>
-    <div class="week-body">
-      <ul>
-        <li><b>Modular arithmetic:</b> a mod n = remainder. GCD critical for RSA key gen. Euler's totient phi(n). Primes >3 are form 6k+/-1. Extended Euclidean for modular inverse.</li>
-        <li><b>Fermat's Little Theorem:</b> a^(p-1) = 1 mod p (p prime). Chinese Remainder Theorem for solving simultaneous congruences.</li>
-        <li><b>DLP:</b> Given g, p, g^x mod p, find x. Computationally hard = basis for DH/ElGamal. No efficient classical algorithm known.</li>
-        <li><b>Key space:</b> n-bit key = 2^n possibilities. Brute force avg = 2^(N-1). DES: 2^56=7.2x10^16. AES-128: 2^128=3.4x10^38. N+k bits = space x 2^k.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 4 -->
-  <div class="week w4">
-    <div class="week-header">W4 - Symmetric Encryption Deep Dive</div>
-    <div class="week-body">
-      <ul>
-        <li><b>Block ciphers:</b> DES (56-bit, BROKEN 1999), 3DES (112-bit effective, deprecated, 3x slower), AES (128/192/256-bit, current standard, selected 2001).</li>
-        <li><b>AES (Rijndael):</b> Won NIST competition (Daemen &amp; Rijmen, Belgium). SPN structure (NOT Feistel). 128-bit block. 10/12/14 rounds for 128/192/256-bit keys. 4 ops: SubBytes (S-box, nonlinear) - ShiftRows - MixColumns (NOT in final round) - AddRoundKey. State array. GF(2^8) arithmetic.</li>
-        <li><b>Modes:</b> ECB (deterministic, NEVER use - same block=same cipher, penguin). CBC (IV chains blocks, XOR prev). CTR (counter, parallelizable, no padding). GCM (CTR+auth tag = confidentiality+integrity, gold standard).</li>
-        <li><b>Feistel (DES) vs SPN (AES):</b> Feistel splits block in half, same structure enc/dec. SPN = full block sub+perm, different ops enc vs dec.</li>
-        <li><b>Shannon:</b> Confusion = complex key-ciphertext relationship (S-boxes). Diffusion = each plaintext bit affects many ciphertext bits (ShiftRows/MixColumns).</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 5 -->
-  <div class="week w5">
-    <div class="week-header">W5 - Zero Knowledge Proofs &amp; Trust</div>
-    <div class="week-body">
-      <ul>
-        <li><b>ZKP:</b> Prove knowledge without revealing secret. 3 properties: Completeness (honest prover convinces), Soundness (cheater can't fool), Zero-knowledge (verifier learns nothing). Cheating prob = 1/2^n after n rounds.</li>
-        <li><b>Ali Baba Cave:</b> Peggy proves secret word to Victor. Interactive back-and-forth. Fiat-Shamir heuristic converts interactive to non-interactive via hash. zk-SNARKs (~100s bytes, ~10ms, trusted setup, quantum VULNERABLE). zk-STARKs (~100s KB, 50-100ms, NO trusted setup, quantum RESISTANT).</li>
-        <li><b>Trusting Trust (Thompson 1984):</b> Turing Award. Compiler can hide backdoor. Self-replicating Trojan persists even with clean source. Trust is fundamental.</li>
-        <li><b>Why Cryptosystems Fail (Anderson):</b> >90% failures = implementation/config errors, NOT broken math. Banking "phantom withdrawals." Need learning mechanism like aviation.</li>
-        <li><b>Why Johnny Can't Encrypt:</b> PGP usability study. 1/3 sent secrets unencrypted. Quill pen icon miscommunicated. Crypto must be usable or people bypass it.</li>
-        <li><b>OWASP Crypto Failures (#2):</b> 3 categories: loss of confidentiality, non-repudiation failure, failed integrity. Access control = SEPARATE category.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- WEEK 6 -->
-  <div class="week w6">
-    <div class="week-header">W6 - AES &amp; Algorithm Selection</div>
-    <div class="week-body">
-      <ul>
-        <li><b>AES competition:</b> 15 candidates, Rijndael selected. Criteria: security, performance, flexibility. S-boxes: nonlinear substitution. Key schedule: RotWord, SubWord, Rcon XOR.</li>
-        <li><b>Deep Crack:</b> DES brute force in 22 hours (1998). Proved 56-bit keys insufficient.</li>
-        <li><b>SKIPJACK/EES:</b> NSA cipher w/ key escrow (Clipper Chip). Matt Blaze found vulnerability. Controversial, abandoned. Can't have strong encryption AND guaranteed govt access.</li>
-        <li><b>PQC transition:</b> NIST FIPS 203 (ML-KEM/Kyber), FIPS 204 (ML-DSA/Dilithium), FIPS 205 (SLH-DSA/SPHINCS+). Grover's halves key length: AES-128-64 (broken), AES-256-128 (safe). Need AES-256 post-quantum.</li>
-      </ul>
-    </div>
-  </div>
 
   <!-- WEEK 8 -->
   <div class="week w8">
     <div class="week-header">W8 - Blockchain &amp; Digital Cash</div>
     <div class="week-body">
       <ul>
-        <li><b>Schneier digital cash:</b> Anonymous, untraceable. 4 protocols: basic - secret splitting w/ XOR identity reveal. 6 properties (Okamoto &amp; Ohta): Independence, Security, Privacy, Off-line, Transferability, Divisibility.</li>
-        <li><b>DigiCash:</b> David Chaum 1989 - bankruptcy 1998. First practical digital cash attempt.</li>
-        <li><b>Byzantine Generals (Lamport):</b> Consensus w/ malicious nodes. Solvable if >2/3 loyal (oral messages), ANY number (written/signed messages). Paxos: consensus for unreliable networks, less robust but cheaper than Byzantine.</li>
-        <li><b>Blockchain:</b> Tamper-evident/resistant distributed ledger (NISTIR 8202). No central authority. DLT: all participants access immutable records. Smart contracts auto-execute rules.</li>
-        <li><b>Virtues:</b> Verifiable, Immutable, Tamper-resistant, Addresses double-spend.</li>
-        <li><b>Node types:</b> Full (stores entire chain), Publishing (full + creates blocks), Lightweight (no copy, passes to full nodes).</li>
-        <li><b>Apps:</b> Crypto, supply chain, medical records, voting, IoT.</li>
+        <li><b>Schneier digital cash:</b> Anonymous, untraceable. 4 protocols building toward double-spend detection: Protocol #1 (basic digital check), #2 (identity verification), #3 (anonymous via blind signatures - bank signs without seeing content), #4 (secret splitting w/ XOR identity reveal on double-spend). Key: bank cannot trace spending, but CAN detect cheating.</li>
+        <li><b>6 properties of ideal digital cash (Okamoto &amp; Ohta):</b> Independence (no physical device dependency), Security (cannot be copied/reused), Privacy/Untraceability (bank cannot link withdrawal to spending), Off-line Payment (no need to contact bank during transaction), Transferability (pass to others), Divisibility (make change).</li>
+        <li><b>DigiCash:</b> David Chaum 1989 - bankruptcy 1998. First practical digital cash attempt. Used blind signatures for anonymity. Failed commercially but proved concept.</li>
+        <li><b>Blind signatures:</b> Signer signs document without seeing content. Like signing through carbon paper in sealed envelope. Enables anonymous digital cash -- bank signs coin without knowing serial number.</li>
+        <li><b>Byzantine Generals (Lamport):</b> Consensus w/ malicious nodes. Problem: generals must agree on attack/retreat, but some are traitors. Solvable if >2/3 loyal (oral messages). ANY number of traitors handled with written/signed messages (digital signatures). Lamport: 2013 Turing Award. Also: Time/Clocks/Ordering paper (1978).</li>
+        <li><b>Paxos:</b> Lamport's consensus protocol for unreliable networks. Less robust than Byzantine fault tolerance but cheaper/more practical. Used in distributed databases.</li>
+        <li><b>Blockchain:</b> Tamper-evident/tamper-resistant distributed digital ledger (NISTIR 8202). No central authority. DLT: all participants access immutable records. Write-only (append-only). Smart contracts auto-execute rules on-chain. Consensus mechanisms replace trusted third party.</li>
+        <li><b>Virtues:</b> Verifiable (anyone can audit), Immutable (write-only, cannot alter history), Tamper-resistant (changing one block invalidates chain), Addresses double-spend (consensus prevents spending same coin twice).</li>
+        <li><b>Node types:</b> Full (stores entire blockchain, validates all transactions), Publishing/Mining (full + creates new blocks, earns rewards), Lightweight/SPV (no full copy, passes transactions to full nodes for validation).</li>
+        <li><b>Bitcoin vs Schneier:</b> Bitcoin is decentralized (no bank), uses Proof-of-Work consensus. Schneier model uses blind signatures with central bank. Both solve double-spend but through different mechanisms.</li>
+        <li><b>Consensus mechanisms:</b> PoW (computational puzzle, energy-intensive, Bitcoin), PoS (stake-based, energy-efficient, Ethereum 2.0). Permissioned vs permissionless blockchains.</li>
+        <li><b>Apps:</b> Cryptocurrency, supply chain tracking, medical records, voting systems, IoT device identity, digital identity, NFTs. Ronin hack (2022): $620M stolen via compromised validator keys.</li>
+        <li><b>Merkle trees:</b> Binary hash tree. Leaf nodes = transaction hashes. Each parent = hash of children. Root hash in block header. Enables efficient verification of any transaction without downloading entire block.</li>
       </ul>
     </div>
   </div>
@@ -378,12 +253,19 @@
     <div class="week-header">W9 - Elliptic Curve Cryptography</div>
     <div class="week-body">
       <ul>
-        <li><b>ECC:</b> Discovered 1985 by Koblitz and Miller independently. Levchin Prize 2021. Equation: y^2 = x^3 + ax + b (Weierstrass). Symmetric about x-axis. Point at Infinity = identity element.</li>
-        <li><b>Validity:</b> 4a^3 + 27b^2 != 0 (no singularities). Point Addition: line through P,Q intersects curve at 3rd point, reflect = P+Q. Point Doubling: tangent at P, intersect, reflect = 2P.</li>
-        <li><b>ECDLP:</b> Given P and Q=kP, find k. Computationally hard - NO sub-exponential algorithm known (unlike integer factoring for RSA). This is why ECC keys can be shorter.</li>
-        <li><b>Key advantage:</b> 160-bit ECC = 1024-bit RSA. 256-bit ECC = 3072-bit RSA. Shorter keys = speed + low power + bandwidth. Better for IoT/mobile/embedded. RSA more mature ecosystem.</li>
-        <li><b>ECDH:</b> ECC version of DH key exchange. <b>ECDSA:</b> ECC digital signatures. Used in Bitcoin, TLS 1.3.</li>
-        <li><b>Finite fields/Galois fields:</b> GF(p^n). Algebraic hierarchy: Group - Ring - Field. ECC vulnerable to quantum (like RSA). More dependent on true randomness than RSA.</li>
+        <li><b>ECC:</b> Discovered 1985 independently by Neal Koblitz and Victor Miller. Levchin Prize 2021 awarded to both. Next-generation public-key crypto -- more secure AND more efficient than RSA. Based on algebraic structure of elliptic curves over finite fields.</li>
+        <li><b>Equation:</b> y^2 = x^3 + ax + b (Weierstrass form). Curve is symmetric about x-axis. Point at Infinity (O) = identity element (like 0 in addition). Curves form an abelian group.</li>
+        <li><b>Validity:</b> 4a^3 + 27b^2 != 0 (discriminant non-zero -- ensures no singularities/cusps/self-intersections). If discriminant = 0, curve is NOT valid for crypto.</li>
+        <li><b>Point Addition:</b> Draw line through P and Q, intersects curve at 3rd point R', reflect over x-axis = P+Q. <b>Point Doubling:</b> Draw tangent at P, intersect curve, reflect = 2P. Adding point to itself at infinity: P + O = P. P + (-P) = O (inverse is reflection).</li>
+        <li><b>Scalar multiplication:</b> Q = kP means adding P to itself k times. This is the trapdoor one-way function: "dotting" k times is easy (O(log k) with double-and-add), but finding k from P and Q is hard.</li>
+        <li><b>ECDLP:</b> Given generator P and public key Q=kP, find private key k. Computationally hard -- NO sub-exponential algorithm known even after 30+ years of research (unlike integer factoring for RSA which has sub-exponential algorithms like GNFS). This is WHY ECC keys can be shorter.</li>
+        <li><b>Key size equivalences:</b> 160-bit ECC = 1024-bit RSA. 256-bit ECC = 3072-bit RSA. 384-bit ECC = 7680-bit RSA. 512-bit ECC = 15360-bit RSA. Shorter keys = faster computation + less power + less bandwidth + smaller certificates.</li>
+        <li><b>ECDH:</b> ECC version of Diffie-Hellman key exchange. Alice picks private a, sends aG. Bob picks private b, sends bG. Shared secret = abG = baG. Used in TLS 1.3.</li>
+        <li><b>ECDSA:</b> ECC digital signatures. Sign with private key, verify with public key. Used in Bitcoin (secp256k1 curve), Ethereum, TLS 1.3, SSH, code signing.</li>
+        <li><b>Finite fields/Galois fields:</b> GF(p) for prime p or GF(2^m) for binary. Algebraic hierarchy: Group (one op, closure, assoc, identity, inverse) - Ring (two ops) - Field (two ops, both with inverses except 0). ECC operates over these finite structures.</li>
+        <li><b>Standard curves:</b> NIST P-256 (secp256r1), P-384, P-521. Bitcoin uses secp256k1. Curve25519 (Daniel Bernstein) -- designed for speed and side-channel resistance.</li>
+        <li><b>Advantages over RSA:</b> Smaller keys, faster key generation, faster signatures, lower power consumption, less bandwidth. Better for IoT/mobile/embedded/constrained devices. RSA has more mature ecosystem and is simpler to understand.</li>
+        <li><b>Vulnerabilities:</b> ECC is vulnerable to quantum computers (like RSA) -- Shor's algorithm. More dependent on quality randomness than RSA (bad random k in ECDSA = private key leak, as happened with PS3 hack). Side-channel attacks if implementation leaks timing info.</li>
       </ul>
     </div>
   </div>
@@ -393,14 +275,21 @@
     <div class="week-header">W10 - Homomorphic Encryption &amp; MPC</div>
     <div class="week-body">
       <ul>
-        <li><b>MPC:</b> Compute function on joint inputs without revealing individual inputs. Yao's Millionaire's Protocol: who is richer w/o revealing wealth? Uses RSA.</li>
-        <li><b>Additive secret sharing:</b> Split salary into random shares summing to original. Distribute shares across parties. Sum columns = total. Average w/o revealing individuals.</li>
-        <li><b>HE types:</b> PHE (one op unlimited), SWHE (both ops limited depth), FHE (both ops unlimited). RSA = PHE for multiplication: E(m1)*E(m2)=E(m1*m2). NOT additive. Paillier = PHE for addition: E(m1)*E(m2)=E(m1+m2). Probabilistic (random r). Used for secure voting.</li>
-        <li><b>History:</b> RAD 1978 "Privacy Homomorphisms" - Gentry 2009 first FHE (ideal lattices, bootstrapping). MacArthur Fellow 2014. Bootstrapping = homomorphically evaluate decryption circuit to refresh noisy ciphertext. Key breakthrough AND performance bottleneck.</li>
-        <li><b>4 generations:</b> 1st (ideal lattices, atrocious perf), 2nd (LWE, leveled FHE), 3rd (simpler, faster), 4th (CKKS approximate arithmetic for ML). Performance: 8x improvement/year. Bootstrapping: 1800s (2011) - 0.5s (2021).</li>
-        <li><b>Schemes:</b> BFV = exact integer arithmetic. CKKS = approximate (ML/floating point). Paillier = additive only.</li>
-        <li><b>Apps:</b> Cloud computing, genomics, CryptoNets (NN on encrypted data), PIR, DARPA DPRIVE. Google FHE Transpiler: converts plaintext C++ to encrypted-data code.</li>
-        <li><b>Side-channel:</b> RevEAL paper on Microsoft SEAL. Mathematical security != implementation security.</li>
+        <li><b>MPC (Multi-Party Computation):</b> Compute function on joint inputs without revealing individual inputs. Yao's Millionaire's Protocol (1982): who is richer w/o revealing wealth? Uses RSA encryption. Average Salary Problem: use additive secret sharing to compute average without revealing individual salaries.</li>
+        <li><b>Additive secret sharing:</b> Split salary S into random shares s1+s2+s3=S. Distribute one share to each party. Each party sums their column of shares. Sum of column sums = total of all salaries. No party learns any individual value. Requires honest majority.</li>
+        <li><b>Yao's protocol detail:</b> Alice picks random x, encrypts x with Bob's public key to get E(x). Sends E(x)-i+1 through E(x)-i+n to Bob. Bob decrypts all with private key, checks modular results against random prime. Determines ordering without revealing amounts.</li>
+        <li><b>HE types:</b> <b>PHE</b> (Partially HE): one operation unlimited times. <b>SWHE</b> (Somewhat HE): both add+multiply, but limited depth (noise grows). <b>FHE</b> (Fully HE): both operations unlimited times -- the "holy grail." Any computable function can be expressed as addition + multiplication.</li>
+        <li><b>RSA = PHE for multiplication:</b> E(m1)*E(m2) = (m1^e mod n)*(m2^e mod n) = (m1*m2)^e mod n = E(m1*m2). RSA is NOT additively homomorphic: E(m1)+E(m2) != E(m1+m2). RSA is deterministic (same plaintext = same ciphertext).</li>
+        <li><b>Paillier = PHE for addition:</b> c = g^m * r^n mod n^2. Multiplying ciphertexts = encryption of sum: E(m1)*E(m2) = E(m1+m2). Probabilistic (random r makes same plaintext encrypt differently each time). Invented 1999. Used for secure voting (sum encrypted votes without decrypting individual ballots).</li>
+        <li><b>ElGamal = PHE for multiplication:</b> Like RSA, multiplicatively homomorphic. Also probabilistic (unlike RSA).</li>
+        <li><b>History:</b> RAD 1978 paper (Rivest, Adleman, Dertouzos) coined "privacy homomorphisms" -- posed the open problem. Gentry 2009: first FHE scheme using ideal lattices. Key insight: bootstrapping. MacArthur Fellow 2014. Solved problem open for 31 years.</li>
+        <li><b>Bootstrapping:</b> Homomorphically evaluate the decryption circuit using an encrypted version of the secret key. Refreshes noisy ciphertext so computation can continue. Both the KEY BREAKTHROUGH and the PERFORMANCE BOTTLENECK of FHE.</li>
+        <li><b>4 generations of HE:</b> 1st (Gentry 2009, ideal lattices, atrocious perf), 2nd (BV/BGV, LWE-based, leveled FHE without bootstrapping), 3rd (BFV/TFHE, simpler, faster), 4th (CKKS, approximate arithmetic for ML/floating point). Performance: ~8x improvement/year. Bootstrapping: 1800s (2011) - 0.5s (2021).</li>
+        <li><b>Schemes:</b> BFV = exact integer arithmetic (counting, database queries). CKKS = approximate arithmetic (ML, floating point, acceptable small error). BGV = exact, good for bit-level operations. TFHE = fast bootstrapping, gate-by-gate evaluation.</li>
+        <li><b>Noise management:</b> Every HE operation adds noise. Multiplication adds MORE noise than addition. When noise exceeds threshold, decryption fails. Leveled FHE: set max depth in advance, no bootstrapping needed. FHE: bootstrapping resets noise at cost of performance.</li>
+        <li><b>Apps:</b> Cloud computing on encrypted data, genomics/medical research, CryptoNets (neural networks on encrypted data), PIR (private information retrieval), DARPA DPRIVE (hardware accelerator), Google FHE Transpiler (converts plaintext C++ to encrypted-data code), encrypted word search, secure auctions.</li>
+        <li><b>Pinocchio:</b> Verifiable computation -- 288-byte proofs, 10ms verification. Client can verify cloud computed correctly without re-doing computation.</li>
+        <li><b>Side-channel:</b> RevEAL paper showed side-channel attacks on Microsoft SEAL library. Mathematical security != implementation security. Timing attacks can leak information even from "secure" HE.</li>
       </ul>
     </div>
   </div>
@@ -410,14 +299,21 @@
     <div class="week-header">W11 - Real World Systems (Email, SSL/TLS)</div>
     <div class="week-body">
       <ul>
-        <li><b>5 security services:</b> Authentication, Key Agreement, Confidentiality, Integrity, Nonrepudiation.</li>
-        <li><b>Secure email:</b> Sender unilaterally chooses crypto (no negotiation). S/MIME needs X.509 from CA.</li>
-        <li><b>PGP:</b> hash(MD5) - sign(RSA priv) - ZIP - encrypt(IDEA session key) - encrypt session key(RSA pub). Combines fast symmetric + secure asymmetric.</li>
-        <li><b>Sign-then-encrypt (PGP/SSL):</b> Signature over plaintext, hides signatories. Must decrypt before authenticating. <b>Encrypt-then-sign (IPsec):</b> Verify before decrypting, efficient for automation. But forgery risk.</li>
-        <li><b>SSL/TLS:</b> Auth + confidentiality + integrity. Does NOT provide nonrepudiation. SSL deprecated 2015. TLS 1.3 = current (RFC 8446). Attacks: Heartbleed/BEAST/CRIME/POODLE targeted implementations.</li>
-        <li><b>TLS protocols:</b> Record (how to transmit) + Handshake (key agreement). ClientHello - ServerHello. Sits between application and transport layers. HTTP:80 - HTTPS:443.</li>
-        <li><b>6 secret keys per session:</b> 3 each direction (encryption key, HMAC key, IV). Cipher suite = key exchange algo + encryption algo + hash algo + compression.</li>
-        <li><b>Export-grade ciphers:</b> Deliberately weak 40-bit keys (US export regulations). Digital certificates: X.509, CA trust chain, check revocation.</li>
+        <li><b>5 security services:</b> Authentication (who are you?), Key Agreement (establish shared secret), Confidentiality (encryption), Integrity (detect tampering), Nonrepudiation (cannot deny action). Not all protocols provide all five.</li>
+        <li><b>Network threats:</b> Data on untrusted networks faces: sniffing (passive eavesdropping), tampering (active modification), spoofed gateways (MITM), replay attacks. Need crypto at multiple layers.</li>
+        <li><b>Secure email:</b> Sender UNILATERALLY chooses crypto (no negotiation with recipient -- key difference from TLS). S/MIME needs X.509 certificate from CA. "Encryption does no good unless you turn it on!" Encrypted messages should ALSO be signed -- encryption alone does NOT guarantee integrity.</li>
+        <li><b>PGP pipeline:</b> hash(MD5) - sign(RSA priv key) - ZIP compress - encrypt message(IDEA session key) - encrypt session key(RSA pub key of recipient). Combines fast symmetric (IDEA for bulk data) + secure asymmetric (RSA for key exchange). Web of Trust model (no CA needed).</li>
+        <li><b>Sign-then-encrypt (PGP/SSL):</b> Create signature over plaintext, then encrypt everything. Hides signatories (privacy). But: must decrypt before you can authenticate -- cannot verify integrity until decryption. Receiver cannot prove to 3rd party who signed.</li>
+        <li><b>Encrypt-then-sign (IPsec):</b> Encrypt first, then sign ciphertext. Can verify signature before decrypting -- efficient for automated/gateway processing. But: anyone can strip signature and re-sign (forgery risk). Signature is over ciphertext, not plaintext.</li>
+        <li><b>SSL/TLS:</b> Provides auth + confidentiality + integrity. Does NOT provide nonrepudiation (shared session keys -- either party could have sent). SSL deprecated 2015 (SSLv3 broken by POODLE). TLS 1.3 = current standard (RFC 8446, 2018). The "S" in HTTPS.</li>
+        <li><b>TLS architecture:</b> Sits between application layer and transport layer. Two sub-protocols: Record Protocol (HOW to transmit -- fragmentation, compression, MAC, encryption) + Handshake Protocol (key agreement, authentication). HTTP:80 vs HTTPS:443.</li>
+        <li><b>TLS Handshake:</b> ClientHello (supported cipher suites, random nonce) - ServerHello (selected suite, certificate, random nonce) - Key Exchange (pre-master secret encrypted with server's public key) - Both derive master secret - Both derive 6 session keys.</li>
+        <li><b>6 secret keys per session:</b> 3 keys in EACH direction (client-to-server and server-to-client): encryption key, HMAC key, IV. Total = 6 keys. Derived from master secret + client random + server random.</li>
+        <li><b>Cipher suite format:</b> Key exchange algo (RSA/DHE/ECDHE) + bulk encryption algo (AES-128/AES-256) + hash/MAC algo (SHA-256/SHA-384) + compression. Example: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256.</li>
+        <li><b>TLS attacks:</b> Heartbleed (OpenSSL buffer over-read, leaked server memory/private keys), BEAST (CBC predictable IV), CRIME/BREACH (compression side-channel), POODLE (SSLv3 padding oracle). All targeted IMPLEMENTATIONS, not the underlying math.</li>
+        <li><b>Export-grade ciphers:</b> Deliberately weak 40-bit keys mandated by US export regulations (1990s). FREAK/Logjam attacks exploited servers still supporting export ciphers. Lesson: old weak crypto persists and gets exploited.</li>
+        <li><b>Digital certificates:</b> X.509 standard. CA trust chain: Root CA (self-signed, pre-installed in browsers) - Intermediate CA - End entity cert. Always check revocation (CRL or OCSP). Certificate pinning: app remembers expected cert to prevent MITM with rogue CA.</li>
+        <li><b>Forward secrecy:</b> Ephemeral DH (DHE/ECDHE) -- new key pair per session. If long-term private key compromised, past sessions remain secure. TLS 1.3 REQUIRES forward secrecy (no static RSA key exchange).</li>
       </ul>
     </div>
   </div>
@@ -427,54 +323,64 @@
     <div class="week-header">W12 - Wireless Crypto &amp; Stream Ciphers</div>
     <div class="week-body">
       <ul>
-        <li><b>Wireless:</b> STA (station/device), AP (access point, ~100m range). Open medium = eavesdrop risk. Home (single router) vs Enterprise (centralized RADIUS/TACACS+, lightweight APs). Supplicant = client device.</li>
-        <li><b>802.1X + EAP + RADIUS:</b> Centralized auth framework. PEAP (server certs) vs EAP-TLS (client certs).</li>
-        <li><b>RC4:</b> Stream cipher. Key Setup (S-box) - Keystream Gen - XOR plaintext. Key reuse = fatal (XOR cancels keystream).</li>
-        <li><b>WEP:</b> RC4 + 24-bit IV + 40-bit key. IV repeats in hours. FMS attack. No replay protection. No tamper detection. Single global key. CRC-32 linear (not crypto hash) = bit-flipping possible. Crackable in 5 hours.</li>
-        <li><b>WPA:</b> TKIP (48-bit IV, hashed IV+key, MIC). Stepping stone, inherited WEP/RC4 weaknesses.</li>
-        <li><b>WPA2 (802.11i):</b> AES-CCMP replaces RC4. 4-way handshake (ANonce/SNonce - PTK from PMK). PSK vs Enterprise. Cracking WPA2-PSK: capture handshake msg 2, offline dictionary - PMK - PTK - MIC match. NOT crypto broken, just weak passwords.</li>
-        <li><b>KRACK:</b> Replays handshake - key reinstallation - nonce reuse. Targets implementation NOT AES. Affects clients. Patch to fix.</li>
-        <li><b>WPA3:</b> SAE/Dragonfly (replaces 4-way), forward secrecy, brute force protection, individualized encryption, PMF required, 128-bit personal / 192-bit enterprise. Mandatory for Wi-Fi 6.</li>
-        <li><b>Attacks:</b> Evil Twin (fake AP, stronger signal, intercepts traffic - VPN protects). Rogue AP (unauthorized on corp network, bypasses firewall). DoS: freq jamming, disassociation attacks.</li>
+        <li><b>Wireless architecture:</b> STA (station/client device), AP (access point, ~100m range). Open broadcast medium = anyone within range can eavesdrop. No physical access needed. Fundamental trade-off: convenience vs security. Supplicant = client device requesting access.</li>
+        <li><b>Home vs Enterprise:</b> Home: single router handles everything, PSK (pre-shared key) for all users. Enterprise: centralized auth via RADIUS/TACACS+ backend servers, lightweight APs managed by wireless controller, per-user credentials, certificate-based auth.</li>
+        <li><b>802.1X + EAP + RADIUS:</b> 802.1X = port-based access control (wired AND wireless). EAP = Extensible Authentication Protocol (framework, not single protocol). 7-step process: supplicant - authenticator (AP) - authentication server (RADIUS). EAPOL between client/AP, EAP over RADIUS to backend.</li>
+        <li><b>EAP variants:</b> PEAP = server-side certs only (server proves identity, client uses password inside TLS tunnel). EAP-TLS = mutual TLS with client AND server certificates (strongest, but harder to deploy -- every device needs cert).</li>
+        <li><b>RC4 stream cipher:</b> Two phases: Key Setup (initialize 256-byte S-box, swap based on key) - Keystream Generation (generate pseudo-random bytes). XOR keystream with plaintext = ciphertext. Byte-oriented, fast on limited hardware (why chosen for WEP).</li>
+        <li><b>RC4 key reuse = fatal:</b> If same keystream used twice: C1 XOR C2 = P1 XOR P2 (keystream cancels out). Attacker gets relationship between plaintexts. With known plaintext, recovers everything. Solution: prepend unique IV to key for each packet.</li>
+        <li><b>WEP (Wired Equivalent Privacy) -- BROKEN:</b> RC4 + 24-bit IV + 40-bit key (later 104-bit). Failures: (1) 24-bit IV = only 16.7M values, repeats in hours on busy network, (2) FMS attack exploits weak IVs in RC4 key schedule, (3) NO replay protection, (4) CRC-32 is linear (NOT crypto hash) -- bit-flipping attack: attacker modifies ciphertext AND recomputes valid CRC without knowing key, can redirect traffic, (5) Single global key shared by all users, (6) No key management protocol. Crackable in <5 minutes with aircrack-ng.</li>
+        <li><b>WPA (Wi-Fi Protected Access):</b> TKIP = Temporal Key Integrity Protocol. Fixes over WEP: 48-bit IV (won't repeat for years), per-packet key mixing (hashed IV+key), MIC (Michael) for integrity (replaces CRC-32), sequence counter (replay protection). But: still RC4 underneath, still inherits some RC4 weaknesses. Designed as firmware-only upgrade for WEP hardware -- stepping stone.</li>
+        <li><b>WPA2 (802.11i):</b> AES-CCMP replaces RC4 entirely. CCMP = Counter mode with CBC-MAC Protocol (encryption + integrity in one). 4-way handshake: (1) AP sends ANonce, (2) STA sends SNonce + MIC, (3) AP sends GTK + MIC, (4) STA sends ACK. PTK derived from: PMK + ANonce + SNonce + MAC addresses. PSK mode: PMK = PBKDF2(passphrase, SSID, 4096, 256). Enterprise mode: PMK from RADIUS/802.1X.</li>
+        <li><b>Cracking WPA2-PSK:</b> Capture 4-way handshake (specifically Message 2 with SNonce + MIC). Offline dictionary attack: guess password - derive PMK via PBKDF2 - derive PTK - compute MIC - compare to captured MIC. If match, password found. NOT a crypto break -- vulnerability is weak/short passwords. Strong random passphrase = secure.</li>
+        <li><b>KRACK (Key Reinstallation Attack, 2017):</b> Replays handshake message 3 - forces client to reinstall already-in-use key - nonce reuse. Targets the 4-way handshake IMPLEMENTATION, NOT AES itself. Affects clients (not APs). Allows packet decryption/injection. Fix: patch client software to reject replayed messages.</li>
+        <li><b>WPA3 (2018):</b> SAE (Simultaneous Authentication of Equals)/Dragonfly replaces 4-way handshake with password-authenticated key exchange. Benefits: forward secrecy (each session has unique keys, compromising password doesn't reveal past sessions), brute-force protection (online only, no offline dictionary attack), individualized encryption (unique keys per client even with same PSK), PMF (Protected Management Frames) required -- prevents deauth attacks. 128-bit personal / 192-bit enterprise (CNSA suite). Mandatory for Wi-Fi 6 (802.11ax) certified devices.</li>
+        <li><b>Attacks:</b> Evil Twin (fake AP with same SSID, stronger signal, intercepts traffic -- VPN protects). Rogue AP (unauthorized AP on corporate network, bypasses firewall -- detected by wireless IDS). DoS: RF jamming (physical layer), disassociation/deauthentication flooding (management frames -- WPA3 PMF mitigates). War driving: scanning for vulnerable networks.</li>
       </ul>
     </div>
   </div>
 
   <!-- KEY SIZE EQUIVALENCES -->
   <div class="week" style="border-color: #00695c;">
-    <div class="week-header" style="background: #00695c; color: #fff;">KEY SIZE EQUIVALENCES</div>
+    <div class="week-header" style="background: #00695c; color: #fff;">KEY SIZE EQUIVALENCES (ECC vs RSA vs Symmetric)</div>
     <div class="week-body" style="background: #E0F2F1;">
       <ul>
-        <li>80-bit sym = 1024-bit RSA = 160-bit ECC</li>
-        <li>112-bit sym = 2048-bit RSA = 224-bit ECC</li>
-        <li><b>128-bit sym = 3072-bit RSA = 256-bit ECC</b></li>
-        <li>192-bit sym = 7680-bit RSA = 384-bit ECC</li>
-        <li><b>256-bit sym = 15360-bit RSA = 512-bit ECC</b></li>
+        <li>80-bit sym = 1024-bit RSA = 160-bit ECC (minimum, legacy)</li>
+        <li>112-bit sym = 2048-bit RSA = 224-bit ECC (transitional)</li>
+        <li><b>128-bit sym = 3072-bit RSA = 256-bit ECC (current standard, NIST P-256)</b></li>
+        <li>192-bit sym = 7680-bit RSA = 384-bit ECC (NIST P-384)</li>
+        <li><b>256-bit sym = 15360-bit RSA = 512-bit ECC (highest security)</b></li>
+        <li>CAB Forum requires RSA min 3072 bits. ECC 256-bit provides equivalent security with 12x smaller key.</li>
+        <li>ECDLP has NO sub-exponential algorithm -- RSA's integer factoring DOES (GNFS). This is why ECC keys are shorter.</li>
       </ul>
     </div>
   </div>
 
   <!-- COMPARISON TABLE -->
   <div class="week" style="border-color: #37474f;">
-    <div class="week-header" style="background: #37474f; color: #fff;">EMAIL vs SSL/TLS vs IPsec</div>
+    <div class="week-header" style="background: #37474f; color: #fff;">EMAIL vs SSL/TLS vs IPsec COMPARISON</div>
     <div class="week-body" style="background: #ECEFF1;">
       <ul>
-        <li><b>Email (PGP):</b> Unilateral crypto (sender chooses), single message, nonrepudiation YES (signs plaintext), sign-then-encrypt.</li>
-        <li><b>SSL/TLS:</b> Negotiated cipher suite, session-based, nonrepudiation NO, sits above transport layer, 6 keys/session, sign-then-encrypt.</li>
-        <li><b>IPsec:</b> Negotiated, encrypts-then-signs, nonrepudiation NO, transparent to user, network layer. Verify before decrypt.</li>
+        <li><b>Email (PGP):</b> Unilateral crypto (sender chooses, no negotiation), single message granularity, nonrepudiation YES (signs plaintext with private key), sign-then-encrypt order, Web of Trust (no CA), provides all 5 security services.</li>
+        <li><b>SSL/TLS:</b> Negotiated cipher suite (ClientHello/ServerHello), session-based (multiple messages), nonrepudiation NO (shared session keys), sign-then-encrypt, sits above transport layer, 6 keys/session (3 per direction), requires PKI/certificates.</li>
+        <li><b>IPsec:</b> Negotiated (IKE), encrypts-then-signs, nonrepudiation NO, transparent to user/application, operates at network layer (encrypts IP packets), two modes: transport (payload only) vs tunnel (entire packet). Verify signature before decrypting.</li>
+        <li><b>Key difference:</b> Only PGP provides nonrepudiation. TLS/IPsec use shared session keys -- either party could have generated the MAC. PGP signs with sender's private key (only sender has it).</li>
       </ul>
     </div>
   </div>
 
   <!-- HE TYPES -->
   <div class="week" style="border-color: #283593;">
-    <div class="week-header" style="background: #283593; color: #fff;">HE TYPES AT A GLANCE</div>
+    <div class="week-header" style="background: #283593; color: #fff;">HOMOMORPHIC ENCRYPTION AT A GLANCE</div>
     <div class="week-body" style="background: #E8EAF6;">
       <ul>
-        <li><b>PHE:</b> One operation unlimited. RSA=multiply, Paillier=add, ElGamal=multiply.</li>
-        <li><b>SWHE:</b> Both operations, limited depth.</li>
-        <li><b>FHE:</b> Both operations, unlimited. Gentry 2009, bootstrapping.</li>
-        <li><b>Schemes:</b> BFV=exact integers. CKKS=approximate/ML. Paillier=addition only.</li>
+        <li><b>PHE:</b> One operation unlimited. RSA=multiply (deterministic), Paillier=add (probabilistic), ElGamal=multiply (probabilistic).</li>
+        <li><b>SWHE:</b> Both add+multiply, limited circuit depth. Noise grows with operations. No bootstrapping.</li>
+        <li><b>FHE:</b> Both operations, unlimited depth. Gentry 2009. Bootstrapping refreshes noise. Any function = add+multiply.</li>
+        <li><b>Schemes:</b> BFV=exact integers (database queries). CKKS=approximate/ML (floating point, small error OK). BGV=exact, bit-level ops. TFHE=fast gate-by-gate bootstrapping.</li>
+        <li><b>RSA HE test:</b> E(3)*E(4) should = E(12). Example: n=33, e=7. E(3)=3^7 mod 33=2187 mod 33=9. E(4)=4^7 mod 33=16384 mod 33=16. 9*16=144 mod 33=12. E(12)=12^7 mod 33=12. Confirmed: 12=12.</li>
+        <li><b>Paillier HE test:</b> E(m1)*E(m2) mod n^2 = E(m1+m2). Multiplying ciphertexts = adding plaintexts. Random r makes each encryption unique.</li>
+        <li><b>Performance:</b> ~8x improvement/year since 2011. Bootstrapping: 1800s (2011) to 0.5s (2021). Still 1000-1,000,000x slower than plaintext operations. Hardware acceleration (DARPA DPRIVE) aims to close gap.</li>
       </ul>
     </div>
   </div>
@@ -484,25 +390,54 @@
     <div class="week-header" style="background: #2e7d32; color: #fff;">WIRELESS SECURITY EVOLUTION</div>
     <div class="week-body" style="background: #E8F5E9;">
       <ul>
-        <li><b>WEP:</b> RC4+24-bit IV, broken in hours, CRC-32 (linear), FMS attack.</li>
-        <li><b>WPA:</b> TKIP (RC4+48-bit IV+MIC), temporary fix, inherited RC4 weaknesses.</li>
-        <li><b>WPA2:</b> AES-CCMP, 4-way handshake, PSK/Enterprise. KRACK vuln (implementation).</li>
-        <li><b>WPA3:</b> SAE/Dragonfly, forward secrecy, 192-bit enterprise, mandatory Wi-Fi 6.</li>
+        <li><b>WEP:</b> RC4 stream cipher + 24-bit IV + 40-bit key. IV repeats in hours. FMS weak key attack. CRC-32 (linear, bit-flipping possible). No replay protection. Single global key. Cracked in minutes.</li>
+        <li><b>WPA:</b> TKIP wrapper around RC4. 48-bit IV + per-packet key mixing + MIC (Michael) + sequence counter. Firmware upgrade for WEP hardware. Still inherits RC4 weaknesses.</li>
+        <li><b>WPA2:</b> AES-CCMP (block cipher, real crypto). 4-way handshake derives PTK from PMK+nonces+MACs. PSK (home) vs Enterprise (RADIUS/802.1X). KRACK vulnerability targets handshake implementation, not AES.</li>
+        <li><b>WPA3:</b> SAE/Dragonfly (PAKE), forward secrecy, no offline dictionary attack, individualized encryption, PMF required, 128/192-bit. Mandatory Wi-Fi 6. Fixes every major WPA2 weakness.</li>
+        <li><b>Progression:</b> WEP (no real security) - WPA (band-aid) - WPA2 (solid but implementation flaws) - WPA3 (forward secrecy + resistance to offline attacks).</li>
       </ul>
     </div>
   </div>
 
   <!-- WHAT PROVIDES WHAT -->
   <div class="week" style="border-color: #4a148c;">
-    <div class="week-header" style="background: #4a148c; color: #fff;">WHAT PROVIDES WHAT?</div>
+    <div class="week-header" style="background: #4a148c; color: #fff;">SECURITY SERVICES: WHAT PROVIDES WHAT?</div>
     <div class="week-body" style="background: #F3E5F5;">
       <ul>
-        <li><b>HMAC:</b> Integrity YES | Auth YES | Confidentiality NO | Non-repudiation NO (shared key).</li>
-        <li><b>Digital Sigs:</b> Integrity YES | Auth YES | Non-repudiation YES | Confidentiality NO.</li>
-        <li><b>Sym Encryption:</b> Confidentiality YES | Integrity NO | Auth NO. Add HMAC or GCM for integrity.</li>
-        <li><b>Hashing:</b> Integrity YES | Confidentiality NO | Auth NO (no key). Irreversible.</li>
-        <li><b>PGP:</b> Auth+Integrity+Non-repudiation+Confidentiality (signs plaintext, then encrypts).</li>
-        <li><b>SSL/TLS:</b> Auth+Confidentiality+Integrity. NO non-repudiation.</li>
+        <li><b>Digital Sigs (ECDSA/RSA):</b> Integrity YES | Auth YES | Non-repudiation YES | Confidentiality NO. Sign with private key, verify with public.</li>
+        <li><b>HMAC:</b> Integrity YES | Auth YES | Confidentiality NO | Non-repudiation NO (shared key -- either party could produce).</li>
+        <li><b>Sym Encryption (AES):</b> Confidentiality YES | Integrity NO | Auth NO. Add HMAC or use GCM mode for integrity.</li>
+        <li><b>PGP:</b> Auth+Integrity+Non-repudiation+Confidentiality (signs plaintext with private key, then encrypts). ALL 5 services.</li>
+        <li><b>SSL/TLS:</b> Auth+Confidentiality+Integrity. NO non-repudiation (shared session keys).</li>
+        <li><b>Hashing (SHA-256):</b> Integrity YES (detect changes) | Confidentiality NO | Auth NO (no key) | Non-repudiation NO. Irreversible.</li>
+        <li><b>HE:</b> Confidentiality YES (data stays encrypted) | Computation YES | Integrity depends on scheme. Does NOT authenticate.</li>
+        <li><b>Blockchain:</b> Integrity YES (tamper-evident) | Non-repudiation YES (signed transactions) | Availability YES (distributed). Confidentiality: only if transactions are encrypted.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BLOCKCHAIN & CONSENSUS -->
+  <div class="week" style="border-color: #c2185b;">
+    <div class="week-header" style="background: #c2185b; color: #fff;">BLOCKCHAIN &amp; CONSENSUS QUICK REF</div>
+    <div class="week-body" style="background: #FCE4EC;">
+      <ul>
+        <li><b>Byzantine fault tolerance:</b> Oral messages: need >2/3 loyal (n >= 3f+1 where f=traitors). Written/signed messages: tolerate ANY number of traitors.</li>
+        <li><b>Schneier Protocol #4:</b> Secret splitting with XOR. Identity string split into pairs. Bank chooses random subset to verify. Remaining pairs embedded in coin. Double-spend: two copies reveal ALL identity pairs -- XOR recovers identity.</li>
+        <li><b>Consensus types:</b> PoW (Bitcoin, energy-intensive, 51% attack risk), PoS (Ethereum, stake-based, nothing-at-stake problem), PBFT (permissioned, <1/3 faulty), Paxos (crash tolerance, not Byzantine).</li>
+        <li><b>Smart contracts:</b> Self-executing code on blockchain. "Code is law." Risks: bugs are permanent (immutable), reentrancy attacks (DAO hack 2016, $60M), oracle problem (external data feeds).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TLS DEEP DIVE -->
+  <div class="week" style="border-color: #00838f;">
+    <div class="week-header" style="background: #00838f; color: #fff;">TLS HANDSHAKE &amp; SESSION KEYS</div>
+    <div class="week-body" style="background: #E0F7FA;">
+      <ul>
+        <li><b>Handshake flow:</b> (1) ClientHello: version, cipher suites, client_random. (2) ServerHello: selected suite, server_random, certificate. (3) Client verifies cert chain. (4) Key exchange (pre-master secret). (5) Both derive master secret. (6) Both derive 6 session keys.</li>
+        <li><b>6 keys:</b> Client write encryption key, Client write MAC key, Client write IV, Server write encryption key, Server write MAC key, Server write IV.</li>
+        <li><b>TLS 1.3 changes:</b> Removed RSA key exchange (forward secrecy required). Only AEAD ciphers (AES-GCM, ChaCha20-Poly1305). 1-RTT handshake (faster). Removed compression (CRIME attack). Removed renegotiation.</li>
+        <li><b>Cipher suite example:</b> TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 = ECDHE key exchange, RSA auth, AES-128-GCM encryption, SHA-256 for PRF.</li>
       </ul>
     </div>
   </div>
@@ -512,27 +447,26 @@
     <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS &amp; GOTCHAS</div>
     <div class="week-body" style="background: #FFEBEE;">
       <ul>
-        <li>SSL/TLS does NOT provide nonrepudiation (PGP does)</li>
-        <li>RSA is multiplicatively homomorphic (NOT additively)</li>
-        <li>Paillier is additively homomorphic (NOT multiplicatively)</li>
-        <li>WPA2 KRACK targets handshake implementation, NOT AES</li>
-        <li>ECC 256-bit = RSA 3072-bit security (not equal bit count)</li>
-        <li>Bootstrapping = solution AND bottleneck for FHE</li>
-        <li>ECDLP has NO sub-exponential algorithm (unlike integer factoring for RSA)</li>
-        <li>WEP uses CRC-32 (NOT crypto hash) - bit-flipping possible</li>
-        <li>TLS uses 6 secret keys per session (3 per direction)</li>
-        <li>Sign-then-encrypt = PGP/SSL. Encrypt-then-sign = IPsec</li>
-        <li>Byzantine: >2/3 loyal needed (oral). Any number (written/signed)</li>
-        <li>4a^3 + 27b^2 != 0 for valid elliptic curve</li>
-        <li>ECB = NEVER use (same block = same cipher, penguin example)</li>
-        <li>MixColumns NOT in AES final round</li>
-        <li>Quantum resistant != quantum proof (water-resistant vs waterproof)</li>
-        <li>Anderson: >90% failures = config/implementation, NOT broken math</li>
-        <li>Kindervag coined Zero Trust in 2009 (NOT 2010)</li>
-        <li>OWASP crypto failures: 3 categories (NOT access control)</li>
-        <li>Salting != Seeding (salt=unique hashes, seed=PRNG start)</li>
-        <li>WPA2-PSK cracking = weak passwords, NOT broken crypto</li>
-        <li>RC4 key reuse = fatal (XOR cancels keystream)</li>
+        <li>SSL/TLS does NOT provide nonrepudiation (PGP does -- because PGP signs with private key)</li>
+        <li>RSA is multiplicatively homomorphic (NOT additively). Paillier is additively homomorphic (NOT multiplicatively)</li>
+        <li>WPA2 KRACK targets handshake IMPLEMENTATION, NOT the AES algorithm itself</li>
+        <li>ECC 256-bit = RSA 3072-bit security (not equal bit count). ECDLP has NO sub-exponential algorithm</li>
+        <li>Bootstrapping = solution AND bottleneck for FHE. Refreshes noise but is computationally expensive</li>
+        <li>WEP uses CRC-32 (NOT a crypto hash) -- CRC is linear, enables bit-flipping attacks</li>
+        <li>TLS uses 6 secret keys per session (3 per direction: encryption, MAC, IV)</li>
+        <li>Sign-then-encrypt = PGP/SSL (hides signatories). Encrypt-then-sign = IPsec (verify before decrypt)</li>
+        <li>Byzantine: >2/3 loyal needed for oral messages. ANY number of traitors with written/signed messages</li>
+        <li>4a^3 + 27b^2 != 0 for valid elliptic curve (non-zero discriminant = no singularities)</li>
+        <li>WPA2-PSK cracking = weak passwords, NOT broken crypto. Strong passphrase = secure</li>
+        <li>RC4 key reuse = fatal (XOR of two ciphertexts cancels keystream, reveals P1 XOR P2)</li>
+        <li>Paillier is probabilistic (random r), RSA is deterministic. Both are PHE but for different operations</li>
+        <li>RAD 1978 POSED the HE problem. Gentry 2009 SOLVED it (31 years later)</li>
+        <li>WPA3 SAE prevents OFFLINE dictionary attacks (unlike WPA2-PSK which allows offline cracking)</li>
+        <li>Email crypto is UNILATERAL (sender chooses). TLS crypto is NEGOTIATED (both sides agree)</li>
+        <li>Forward secrecy: compromise of long-term key does NOT reveal past sessions (ephemeral DH)</li>
+        <li>ECDSA with bad random k = private key leak (PS3 hack). ECC more dependent on randomness than RSA</li>
+        <li>TLS 1.3 removed static RSA key exchange -- REQUIRES forward secrecy (DHE/ECDHE only)</li>
+        <li>Point at Infinity = identity element in ECC (like 0 in addition, like 1 in multiplication)</li>
       </ul>
     </div>
   </div>
@@ -542,46 +476,52 @@
     <div class="week-header" style="background: #455a64; color: #fff;">KEY FORMULAS &amp; NUMBERS</div>
     <div class="week-body" style="background: #ECEFF1;">
       <ul>
-        <li><b>RSA:</b> n=pxq, phi(n)=(p-1)(q-1), exd=1 mod phi(n). Encrypt: c=m^e mod n. Decrypt: m=c^d mod n.</li>
-        <li><b>DH:</b> Shared secret = g^(ab) mod p. Alice sends g^a mod p, Bob sends g^b mod p.</li>
-        <li><b>ECC:</b> y^2 = x^3 + ax + b. Valid if 4a^3 + 27b^2 != 0. Q=kP (ECDLP: find k).</li>
-        <li><b>Key space:</b> n-bit = 2^n. Brute force avg = 2^(N-1). N(N-1)/2 sym keys for N users.</li>
-        <li><b>ZKP cheating:</b> 1/2^n after n rounds. 20 rounds ~ 1 in a million.</li>
-        <li><b>AES rounds:</b> 128-bit=10, 192-bit=12, 256-bit=14. Grover's: effective key = bits/2.</li>
-        <li><b>Hash sizes:</b> MD5=128-bit (broken). SHA-1=160 (deprecated). SHA-256=256 (current). Birthday attack = 2^(n/2).</li>
-        <li><b>HE perf:</b> 8x improvement/year. Bootstrapping: 1800s (2011) - 0.5s (2021). Pinocchio: 288-byte proofs.</li>
-        <li><b>WEP:</b> 24-bit IV + 40-bit key. <b>WPA:</b> 48-bit IV. <b>WPA3:</b> 128/192-bit.</li>
+        <li><b>ECC:</b> y^2 = x^3 + ax + b. Valid if 4a^3 + 27b^2 != 0. Q=kP (ECDLP: given P, Q, find k). Point addition: line through P,Q, reflect 3rd intersection.</li>
+        <li><b>RSA HE (multiply):</b> E(m1)*E(m2) = (m1*m2)^e mod n = E(m1*m2). Enc: c=m^e mod n. Dec: m=c^d mod n.</li>
+        <li><b>Paillier HE (add):</b> c = g^m * r^n mod n^2. E(m1)*E(m2) mod n^2 = E(m1+m2).</li>
+        <li><b>ECDH:</b> Alice: aG. Bob: bG. Shared: abG = baG (commutativity of scalar multiplication).</li>
+        <li><b>WPA2 key derivation:</b> PMK = PBKDF2(passphrase, SSID, 4096 iterations, 256 bits). PTK = PRF(PMK, ANonce, SNonce, MAC_AP, MAC_STA).</li>
+        <li><b>WEP:</b> 24-bit IV (16.7M values) + 40/104-bit key. <b>WPA:</b> 48-bit IV (281 trillion). <b>WPA3:</b> 128/192-bit.</li>
+        <li><b>HE performance:</b> ~8x improvement/year. Bootstrapping: 1800s (2011) to 0.5s (2021). Pinocchio: 288-byte proofs, 10ms verify.</li>
+        <li><b>Byzantine:</b> n >= 3f+1 generals needed (f = max traitors tolerated) for oral messages.</li>
+        <li><b>TLS:</b> 6 keys/session. Master secret derived from pre-master + client_random + server_random.</li>
       </ul>
     </div>
   </div>
 
   <!-- KEY PEOPLE & TIMELINE -->
   <div class="week" style="border-color: #0d47a1;">
-    <div class="week-header" style="background: #0d47a1; color: #fff;">KEY PEOPLE &amp; TIMELINE</div>
+    <div class="week-header" style="background: #0d47a1; color: #fff;">KEY PEOPLE &amp; TIMELINE (Post-Midterm)</div>
     <div class="week-body" style="background: #E3F2FD;">
       <ul>
-        <li><b>Shannon</b> (1949): perfect secrecy, confusion/diffusion, 5 criteria. <b>Diffie &amp; Hellman</b> (1976): key exchange. <b>RSA</b> (1977): Rivest/Shamir/Adleman. <b>RAD</b> (1978): privacy homomorphisms.</li>
-        <li><b>Thompson</b> (1984): Trusting Trust, Turing Award. <b>GMR</b> (1985): formalized ZKP. <b>Koblitz &amp; Miller</b> (1985): ECC independently.</li>
-        <li><b>Chaum</b> (1989): DigiCash. <b>Anderson</b> (1993): Why Cryptosystems Fail. <b>Clipper Chip</b> (1993): proposed, abandoned.</li>
-        <li><b>Deep Crack</b> (1998): DES brute-forced 22hrs. <b>Whitten &amp; Tygar</b> (1999): Johnny Can't Encrypt.</li>
-        <li><b>Daemen &amp; Rijmen</b> (2000): Rijndael selected as AES. <b>Jericho Forum</b> (2007): de-perimeterization.</li>
-        <li><b>Kindervag</b> (2009): coined Zero Trust. <b>Gentry</b> (2009): first FHE. MacArthur 2014.</li>
-        <li><b>NIST SP 800-207</b> (2020): ZTA. <b>Ronin hack</b> (2022): $620M. <b>SIKE broken</b> (2022). <b>CISA ZTMM v2.0</b> (2023). <b>PQC migration</b>: 2035.</li>
-        <li><b>Lamport:</b> Byzantine Generals. <b>Matt Blaze:</b> broke Clipper Chip. <b>Snowden:</b> "John Dobbertin" in Zcash ceremony.</li>
+        <li><b>RAD (1978):</b> Rivest, Adleman, Dertouzos -- coined "privacy homomorphisms," posed the FHE problem.</li>
+        <li><b>Yao (1982):</b> Millionaire's Protocol -- first MPC formulation. Garbled circuits.</li>
+        <li><b>Koblitz &amp; Miller (1985):</b> Independently discovered ECC. Levchin Prize 2021.</li>
+        <li><b>Chaum (1989):</b> DigiCash -- first practical anonymous digital cash. Blind signatures. Bankruptcy 1998.</li>
+        <li><b>Lamport:</b> Byzantine Generals Problem. Paxos protocol. 2013 Turing Award. Time/Clocks/Ordering (1978).</li>
+        <li><b>Paillier (1999):</b> Additively homomorphic encryption scheme. Probabilistic. Used in secure voting.</li>
+        <li><b>Gentry (2009):</b> First FHE scheme (ideal lattices + bootstrapping). MacArthur Fellow 2014. Solved 31-year open problem.</li>
+        <li><b>Satoshi Nakamoto (2008/2009):</b> Bitcoin whitepaper and launch. Decentralized digital cash using PoW + blockchain.</li>
+        <li><b>TLS timeline:</b> SSL 1.0 (never released) - SSL 2.0 (1995) - SSL 3.0 (1996) - TLS 1.0 (1999) - TLS 1.2 (2008) - TLS 1.3 (2018, RFC 8446).</li>
+        <li><b>Wireless timeline:</b> WEP (1997, broken) - WPA/TKIP (2003, band-aid) - WPA2/AES-CCMP (2004, standard) - KRACK (2017, implementation attack) - WPA3/SAE (2018, current).</li>
+        <li><b>Ronin hack (2022):</b> $620M stolen -- compromised validator keys on blockchain bridge. Largest crypto hack.</li>
+        <li><b>DAO hack (2016):</b> $60M via smart contract reentrancy bug. Led to Ethereum hard fork (ETH/ETC split).</li>
       </ul>
     </div>
   </div>
 
-  <!-- EXCEL FORMULAS -->
+  <!-- EXCEL QUICK REFERENCE -->
   <div class="week" style="border-color: #006064;">
-    <div class="week-header" style="background: #006064; color: #fff;">EXCEL QUICK REFERENCE</div>
+    <div class="week-header" style="background: #006064; color: #fff;">EXCEL QUICK REFERENCE (Post-Midterm)</div>
     <div class="week-body" style="background: #E0F7FA;">
       <ul>
-        <li><b>Core:</b> <code>=MOD(a,n)</code> modular. <code>=POWER(base,exp)</code>. <code>=GCD(a,b)</code>. <code>=CODE("A")</code>=65. <code>=CHAR(65)</code>="A".</li>
-        <li><b>RSA enc:</b> <code>=MOD(POWER(msg,e),n)</code>. Dec: <code>=MOD(POWER(cipher,d),n)</code>. Sign: use d. Verify: use e.</li>
-        <li><b>DH:</b> A=<code>=MOD(POWER(g,a),p)</code>. B=<code>=MOD(POWER(g,b),p)</code>. Secret=<code>=MOD(POWER(B,a),p)</code>.</li>
-        <li><b>Caesar:</b> <code>=CHAR(MOD(CODE(UPPER(A1))-65+key,26)+65)</code>. Vigenere: <code>=CHAR(MOD(CODE(A1)+CODE(B1)-130,26)+65)</code>.</li>
-        <li><b>Mod inverse (brute):</b> Col A: 1,2,3... Col B: <code>=MOD(A1*e,phi)</code>. Find row where B=1.</li>
+        <li><b>Core:</b> <code>=MOD(a,n)</code> modular. <code>=POWER(base,exp)</code>. <code>=GCD(a,b)</code>.</li>
+        <li><b>RSA HE test:</b> E(m)=<code>=MOD(POWER(m,e),n)</code>. Verify: E(m1)*E(m2) mod n = E(m1*m2). <code>=MOD(E1*E2,n)</code> should equal <code>=MOD(POWER(m1*m2,e),n)</code>.</li>
+        <li><b>Paillier verify:</b> <code>=MOD(E1*E2,n^2)</code> should = E(m1+m2).</li>
+        <li><b>ECC discriminant:</b> <code>=4*POWER(a,3)+27*POWER(b,2)</code>. If non-zero, curve is valid.</li>
+        <li><b>ECDH:</b> Shared secret = <code>=MOD(POWER(g,a*b),p)</code> (simplified for small numbers).</li>
+        <li><b>WPA2 key space:</b> 24-bit IV: <code>=POWER(2,24)</code> = 16,777,216. 48-bit IV: <code>=POWER(2,48)</code> = 281 trillion.</li>
+        <li><b>Mod inverse (brute):</b> Col A: 1,2,3... Col B: <code>=MOD(A1*e,phi)</code>. Find row where B=1. That A value = d.</li>
       </ul>
     </div>
   </div>
