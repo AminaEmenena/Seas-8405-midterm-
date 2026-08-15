@@ -67,7 +67,6 @@
       border-radius: 2px;
       overflow: hidden;
       border: 0.5px solid #bbb;
-      break-inside: avoid;
     }
 
     .week-header {
@@ -145,15 +144,15 @@
       body {
         background: white;
         color: black;
-        font-size: 5.1pt;
-        line-height: 1.04;
+        font-size: 5.55pt;
+        line-height: 1.07;
         padding: 0;
       }
       nav { display: none !important; }
       .print-btn { display: none !important; }
 
       .sheet-title {
-        font-size: 5.5pt;
+        font-size: 6pt;
         margin: 0;
         padding: 0;
         border-width: 0.5px;
@@ -168,20 +167,19 @@
       .week {
         margin-bottom: 1px;
         border-width: 0.4px;
-        break-inside: avoid;
       }
 
       .week-header {
         padding: 0px 2px;
-        font-size: 5.1pt;
+        font-size: 5.5pt;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
       .week-body {
         padding: 0px 1px 0px 1px;
-        font-size: 5.1pt;
-        line-height: 1.04;
+        font-size: 5.55pt;
+        line-height: 1.07;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
@@ -191,7 +189,7 @@
       }
 
       code {
-        font-size: 4.7pt;
+        font-size: 5pt;
       }
 
       .week-body li {
@@ -252,17 +250,10 @@
     <div class="week-body">
       <ul>
         <li><b>LOG:</b> Chronological record of events from IT components (OS, apps, network devices, security tools). Entry contains: timestamp, event type, source, user/IP/severity.</li>
-        <li><b>LOG TYPES (SANS-AWD):</b> System (OS/hardware events, startups, shutdowns, driver failures), Application (app errors, user activities, config changes, crashes), Network (traffic from routers/switches/firewalls/IDS, connection attempts, bandwidth), Security (antivirus/IDS/SIEM events - CRUCIAL for incident response, malware detection, policy violations), Audit (compliance, forensics, user logins, file access, privilege escalation tracking), Web Server (client requests, server responses from IIS/Apache, HTTP status codes, referrer tracking), Database (queries, data modifications, schema changes, SQL injection detection, failed auth attempts).</li>
-        <li><b>LOG USE CASES:</b> System logs catch hardware failures before cascading outages. Security logs feed SIEM correlation rules. Audit logs prove compliance to regulators. Web server logs reveal scanning/enumeration. Database logs detect data exfiltration attempts.</li>
-        <li><b>LOG BEST PRACTICES:</b> Centralize (send all to SIEM), set retention policies (some regulations require 3yr, some 7yr, some indefinite), protect integrity (tamper-proof storage, hash chains), normalize formats (different vendors different formats), correlate across sources (single event in multiple logs = richer picture), alert on anomalies (baseline normal, flag deviations), implement log rotation to manage data size.</li>
-        <li><b>LOG VISUALIZATION:</b> Transforming raw log data into charts/graphs so analysts can quickly identify potential incidents, track progression, and respond. Essential for forensics, compliance, anomaly detection. Timeline charts for temporal patterns, heat maps for density, network graphs for connections.</li>
-        <li><b>GESTALT - PROXIMITY:</b> Near objects = grouped. Directs scanning direction -- horizontal spacing encourages left-to-right scanning, vertical spacing encourages top-to-bottom scanning. Use whitespace deliberately in dashboards to create logical groupings.</li>
-        <li><b>GESTALT - SIMILARITY:</b> Objects alike in color/size/shape perceived as grouped. Use same color for related data across multiple charts. Consistent color coding across dashboard = instant pattern recognition.</li>
-        <li><b>GESTALT - CLOSURE:</b> Brain completes incomplete shapes into whole/closed/regular forms. Ambiguous stimuli perceived as complete. Allows sparse design -- don't need to draw everything, viewer's brain fills gaps.</li>
-        <li><b>GESTALT - CONTINUITY:</b> Aligned objects perceived as following smooth continuous paths. Dashed line perceived as single continuous line, not separate segments. Use for trend lines, flow indicators.</li>
-        <li><b>GESTALT - ENCLOSURE:</b> STRONGEST principle. Bounded region = group. Use borders/shading for MOST important groupings in dashboards. Overrides all other principles.</li>
-        <li><b>GESTALT - CONNECTION:</b> Objects linked by lines perceived as grouped. Stronger than proximity but WEAKER than enclosure. Use for flowcharts, network diagrams, org charts, attack path visualization.</li>
-        <li><b>STRENGTH ORDER:</b> Enclosure > Connection > Proximity/Similarity. Use enclosure for critical groupings, connection for relationships, proximity for layout.</li>
+        <li><b>LOG TYPES (7):</b> System (OS/hardware), Application (app errors/crashes), Network (routers/firewalls/IDS), Security (SIEM/IDS - CRUCIAL for IR), Audit (compliance/forensics), Web Server (HTTP requests/responses), Database (queries/SQL injection).</li>
+        <li><b>LOG PRACTICES:</b> Centralize to SIEM, set retention (3-7yr+), protect integrity (tamper-proof), normalize formats, correlate across sources, alert on anomalies, log rotation. Viz: timeline charts, heat maps, network graphs.</li>
+        <li><b>GESTALT PRINCIPLES:</b> Proximity (near=grouped), Similarity (alike=grouped), Closure (brain completes shapes), Continuity (smooth paths), Enclosure (STRONGEST - borders/shading), Connection (linked by lines, stronger than proximity but weaker than enclosure).</li>
+        <li><b>STRENGTH ORDER:</b> Enclosure > Connection > Proximity/Similarity. Use enclosure for critical groupings.</li>
         <li><b>DECISION TREES:</b> Flowchart classifier. Root node (top, no parent, first question), Internal nodes (splits/questions), Branches (answers/paths), Leaf nodes (bottom, no children, final class label). Depth = longest path root to leaf. Handles BOTH numeric and categorical predictors.</li>
         <li><b>TREE TYPES:</b> Classification tree = categorical target (spam/not-spam, attack/normal). Regression tree = numeric target (predicted response time, predicted loss amount). Same splitting logic, different leaf output.</li>
         <li><b>HOW TREES BUILD:</b> Recursive partitioning -- at each node pick split that maximizes purity gain (reduces impurity most). 100% one class = pure leaf. No distributional assumptions needed (unlike hypothesis tests). Works with missing data, mixed types.</li>
@@ -279,9 +270,8 @@
     <div class="week-body">
       <ul>
         <li><b>CLOUD MODELS:</b> IaaS (you manage OS/apps/data - AWS EC2), PaaS (you manage apps/data only - Heroku), SaaS (just use it - Office 365). Shared responsibility model: provider secures infrastructure, customer secures what they put on it. More managed = less customer responsibility.</li>
-        <li><b>IAAS SECURITY:</b> Customer responsible for OS patching, firewall rules, access controls, encryption. Provider handles physical security, hypervisor. <b>PAAS:</b> Customer handles app code, data, user access. Provider handles OS, runtime, middleware. <b>SAAS:</b> Customer handles user access, data classification. Provider handles almost everything else.</li>
-        <li><b>CLOUD DATA SOURCES:</b> CloudWatch (AWS monitoring/metrics), GuardDuty (AWS threat detection), CloudTrail (AWS API call logging), Defender (Azure threat protection), Sentinel (Azure SIEM), VPC Flow Logs (network traffic), Access Advisor (IAM usage). Audit logs, access logs, API call logs, network flow logs.</li>
-        <li><b>CLOUD VIZ CHALLENGES:</b> Scale (enormous volume from distributed resources), Multi-tenancy (shared infra complicates attribution), Ephemeral infrastructure (resources spin up/down rapidly, persistent monitoring hard), geographic distribution, API-driven changes harder to track than physical.</li>
+        <li><b>SHARED RESPONSIBILITY:</b> IaaS=customer manages OS/patching/firewall. PaaS=customer manages app/data. SaaS=customer manages user access/data classification. More managed=less customer responsibility.</li>
+        <li><b>CLOUD TOOLS:</b> CloudWatch (AWS metrics), GuardDuty (threat detection), CloudTrail (API logging), Defender/Sentinel (Azure), VPC Flow Logs. <b>CHALLENGES:</b> Scale, multi-tenancy, ephemeral infra, geographic distribution.</li>
         <li><b>CROWDSTRIKE 2025:</b> Avg breakout time 48 min (fastest 51 sec). Vishing up 442%. Initial access via vulns 52%. Access broker ads up 50%. China-nexus activity up 150%. FAMOUS CHOLLIMA (DPRK) using GenAI for fake IT worker campaigns.</li>
         <li><b>PARAMETRIC:</b> Assume normal distribution, test MEAN, use means/SDs. Examples: Z-test (known sigma, large n), t-test (unknown sigma, small n). More power when assumptions hold. NOT robust to outliers. Use when bell-shaped, large n, continuous ratio/interval data.</li>
         <li><b>NON-PARAMETRIC:</b> Distribution-free, test MEDIAN, use ranks/signs. Sign test, Wilcoxon, Kruskal-Wallis. Robust to outliers. Slightly lower power but fewer assumptions. Use when skewed, ordinal, outliers, small n, non-normal. Still need continuous + at least ordinal scale. NOT "assumption-free" -- just fewer assumptions.</li>
@@ -326,10 +316,8 @@
     <div class="week-header">W11 - Collaboration Tools & Logistic Regression</div>
     <div class="week-body">
       <ul>
-        <li><b>COLLABORATION:</b> Two or more people/orgs working toward common goal. Characteristics: shared goals, mutual respect, open communication, shared decision-making, shared accountability. People + training + data-driven culture matter as much as tools.</li>
-        <li><b>COLLABORATION FEATURES:</b> Sharing/access controls (view/comment/edit per user), Real-time editing (like Google Docs), Commenting/annotation on data points, Version control (track changes/revert), Interactive dashboards (filters/drill-down), Data integration/sync across sources, Security features (encryption/secure auth), User-friendly interface, Alerts/notifications, Mobile access, Ecosystem integration (Excel critical for finance sector).</li>
-        <li><b>POWER BI:</b> Publish Excel to workspace, create interactive reports/dashboards, embed live in PowerPoint (interactive in BOTH edit AND slideshow modes), mobile apps with annotation and sharing, sharing permissions (org-wide/existing access/specific people). Tight Microsoft ecosystem integration.</li>
-        <li><b>TABLEAU:</b> Publish to Tableau Cloud, subscriptions (scheduled email delivery of views), metrics tracking, threshold alerts (get notified when KPI crosses boundary), commenting on visualizations, mobile-responsive layouts. KEY DIFF: Power BI = Excel/PowerPoint embedding. Tableau = threshold alerting + subscriptions.</li>
+        <li><b>COLLABORATION:</b> Shared goals, open communication, shared accountability. Features: access controls, real-time editing, version control, interactive dashboards, alerts, mobile access.</li>
+        <li><b>POWER BI:</b> Excel/PowerPoint embedding (interactive in edit AND slideshow), sharing permissions. <b>TABLEAU:</b> Threshold alerts, subscriptions (scheduled email). KEY DIFF: Power BI=PowerPoint. Tableau=alerting+subscriptions.</li>
         <li><b>LOGISTIC REGRESSION:</b> Predicts probability (0-1) of binary yes/no outcome using S-shaped SIGMOID curve. Always stays within [0,1] unlike linear regression. Formula: P(Y=1) = 1/(1+e^-(b0+b1X)). Use for binary outcomes (attack/normal, malware/benign, fraud/legit). NOT for continuous Y.</li>
         <li><b>WHY NOT LINEAR FOR YES/NO?</b> Straight line shoots below 0 or above 1 -- nonsensical for probability. You can't have -0.3 probability of attack. Logistic S-curve stays in valid [0,1] range naturally.</li>
         <li><b>SIGMOID SHAPE:</b> Flattens near 0 at one end, flattens near 1 at other end, smooth S-shaped transition in middle. Small changes in X near the center produce big changes in probability. Changes at extremes barely move the probability.</li>
@@ -357,13 +345,12 @@
         <li><b>ASSUMPTIONS:</b> Independence (each measurement from different unit), Normality (approx normal within each group -- check with Shapiro-Wilk test or Q-Q plots), Equal variance/homoscedasticity (check with Levene's test or Bartlett's test). Bartlett's is more powerful but more sensitive to non-normality.</li>
         <li><b>MINITAB:</b> Stat > ANOVA > One-Way. Read F-statistic, p-value, R-squared from output. R-squared = proportion of variance explained by groups. Also: Stat > Stack > Rows for reshaping, Stat > Basic Stats > Graph Summary for normality check, Stat > ANOVA > Test for Equal Variances.</li>
         <li><b>POST-HOC:</b> Tukey HSD after significant F to find WHICH groups differ. "ANOVA says someone is different. Tukey says WHO is different." Pairwise comparisons with family-wise error control.</li>
-        <li><b>SOC EXAMPLE:</b> 3 SOC teams, 8 incidents each. Means: A=52.5min, B=31.8min, C=68.5min. Grand mean=50.9min. F=32.75, df=(2,21), p=0.000. F_crit(0.05,2,21)=3.47. Since 32.75>>3.47, reject H0. Tukey: all pairwise comparisons significant (p<0.01). Team B is fastest, Team C is slowest.</li>
+        <li><b>SOC EXAMPLE:</b> 3 teams, 8 incidents each. F=32.75, df=(2,21), p=0.000, F_crit=3.47. Reject H0. Tukey: all pairs significant. Team B fastest, C slowest.</li>
         <li><b>TWO-WAY ANOVA:</b> 2 factors, tests THREE things: Main effect A, Main effect B, and INTERACTION (A*B). Asks THREE questions. Read INTERACTION FIRST in output -- it's the most important concept.</li>
         <li><b>INTERACTION:</b> Effect of one factor DEPENDS on other factor's level. Non-parallel lines in interaction plot = interaction EXISTS. Parallel lines = no interaction. If interaction significant: interpret main effects WITH CAUTION -- can't make blanket statements like "method A is better" without specifying the level of the other factor.</li>
         <li><b>SECURITY 2-WAY EXAMPLE:</b> Factor A: Training type (Online/In-Person). Factor B: Experience (Junior/Senior). Response: % threats detected. Interaction p=0.004 (significant). In-person helps juniors MORE than seniors. Cannot say "in-person is better" without specifying experience level.</li>
         <li><b>MANOVA:</b> Multiple correlated response variables simultaneously. Why not multiple ANOVAs? 1) Inflates Type I error, 2) Ignores correlations between responses, 3) Can't detect differences in COMBINATIONS of outcomes that individual tests miss.</li>
-        <li><b>MANOVA DETAILS:</b> H0: mean VECTOR equal across groups. Test stat: Wilks' Lambda (smaller = more evidence against H0). Extra assumptions: multivariate normality, homogeneity of covariance matrices (Box's M test -- sensitive to non-normality), no severe multicollinearity (r>0.9 problematic), n per group must > number of response variables.</li>
-        <li><b>MANOVA EXAMPLE:</b> 3 SOC teams, 3 metrics (detection rate, FP rate, MTTR). Wilks' Lambda=0.312, F(6,72)=8.94, p<0.001. Follow-up: detection p=0.003, FP rate p=0.041, MTTR p=0.218. MANOVA reveals combined profile differs even when individual MTTR is not significant alone.</li>
+        <li><b>MANOVA:</b> H0: mean VECTOR equal. Wilks' Lambda (smaller=more evidence against H0). Assumptions: multivariate normality, covariance homogeneity (Box's M), no multicollinearity (r>0.9 bad), n per group > number of responses. Reveals combined profile differences individual tests miss.</li>
         <li><b>NON-PARAMETRIC ALTERNATIVES:</b> Kruskal-Wallis (replaces one-way ANOVA, ranks-based), Friedman (replaces two-way/repeated measures ANOVA). Use when non-normal.</li>
         <li><b>SECURITY DATA NON-NORMAL REASONS:</b> Zero-inflated counts (most days 0 incidents), skewed response times (few take 10x longer), ordinal severity (CVSS 0-10), heavy tails (power-law losses), small samples (breach investigations n=5-15), categorical variables (severity levels). Almost NEVER bell-shaped.</li>
         <li><b>WHEN ASSUMPTIONS FAIL:</b> Normality fails -> Kruskal-Wallis. Unequal variances -> Welch's ANOVA. Blocked/repeated measures non-normal -> Friedman.</li>
@@ -411,16 +398,12 @@
 
   <!-- CONFUSION MATRIX -->
   <div class="week" style="border-color: #db2777;">
-    <div class="week-header" style="background: #db2777; color: #fff;">CONFUSION MATRIX & CLASSIFICATION METRICS</div>
+    <div class="week-header" style="background: #db2777; color: #fff;">CONFUSION MATRIX QUICK REF</div>
     <div class="week-body" style="background: #fdf2f8;">
       <ul>
-        <li><b>TP:</b> Predicted attack, WAS attack (correct catch). <b>TN:</b> Predicted normal, WAS normal (correct clear).</li>
-        <li><b>FP (Type I):</b> Predicted attack, was NORMAL (false alarm -- annoying but not catastrophic). <b>FN (Type II):</b> Predicted normal, was ATTACK (missed detection -- DANGEROUS in security).</li>
-        <li><b>Sensitivity/Recall/TPR</b> = TP/(TP+FN) -- "of all real attacks, how many caught?" THE metric security cares about most.</li>
-        <li><b>Specificity/TNR</b> = TN/(TN+FP) -- "of all normal traffic, how many correctly identified?"</li>
-        <li><b>Accuracy</b> = (TP+TN)/total. MISLEADING with imbalanced data. 99% normal -> lazy "all normal" model = 99% accuracy, 0% sensitivity. USELESS.</li>
-        <li><b>Cutoff tradeoff:</b> Lower cutoff -> higher sensitivity (catch more) but lower specificity (more false alarms). Higher cutoff -> reverse. No free lunch. Security prefers low cutoff.</li>
-        <li><b>ROC/AUC:</b> Plot sensitivity vs 1-specificity across all cutoffs. Hugs top-left = good. Diagonal = coin flip. AUC: 0.5=random (BAD), 0.7-0.8=fair, 0.8-0.9=good, >0.9=excellent, 1.0=perfect.</li>
+        <li><b>TP:</b> Predicted attack, WAS attack. <b>TN:</b> Predicted normal, WAS normal. <b>FP (Type I):</b> False alarm. <b>FN (Type II):</b> Missed attack (DANGEROUS).</li>
+        <li><b>Sensitivity</b>=TP/(TP+FN) "how many attacks caught?" <b>Specificity</b>=TN/(TN+FP). <b>Accuracy</b>=(TP+TN)/total (misleading if imbalanced). <b>ROC:</b> sensitivity vs 1-specificity. AUC: 0.5=bad, 0.8=good, 1.0=perfect.</li>
+        <li><b>Cutoff:</b> Lower=catch more+more false alarms. Higher=miss more. Security prefers low cutoff (catch attacks, accept false alarms).</li>
       </ul>
     </div>
   </div>
@@ -430,75 +413,30 @@
     <div class="week-header" style="background: #059669; color: #fff;">ANOVA FAMILY COMPARISON</div>
     <div class="week-body" style="background: #ecfdf5;">
       <ul>
-        <li><b>t-test:</b> 2 groups, 1 factor, 1 response. Compares two means.</li>
-        <li><b>One-Way ANOVA:</b> 3+ groups, 1 factor, 1 response. F=MSB/MSW. Tukey post-hoc for pairwise. Assumptions: independence, normality, equal variance.</li>
-        <li><b>Two-Way ANOVA:</b> 2 factors, 1 response. Tests main effects + INTERACTION (read FIRST). Non-parallel lines = interaction. Balanced design preferred.</li>
-        <li><b>Repeated Measures:</b> 1+ factors, 1 response, same subjects measured multiple times.</li>
-        <li><b>MANOVA:</b> 1+ factors, 2+ CORRELATED responses. Uses Wilks' Lambda. Extra assumptions: multivariate normality, homogeneous covariance (Box's M), no multicollinearity. Avoids inflated Type I from multiple ANOVAs.</li>
-        <li><b>NON-PARAMETRIC:</b> Kruskal-Wallis (replaces 1-way ANOVA), Friedman (replaces 2-way/blocked). For non-normal security data.</li>
-        <li><b>WHY NOT MULTIPLE t-TESTS?</b> 3 groups = 3 comparisons. Alpha inflates from 0.05 to ~14%. ANOVA controls family-wise error rate.</li>
+        <li><b>t-test:</b> 2 groups. <b>1-Way ANOVA:</b> 3+ groups, F=MSB/MSW, Tukey post-hoc. <b>2-Way:</b> 2 factors, tests main effects+INTERACTION (read first). <b>MANOVA:</b> 2+ correlated responses, Wilks' Lambda, Box's M for covariance.</li>
+        <li><b>NON-PARAMETRIC:</b> Kruskal-Wallis (replaces 1-way), Friedman (replaces 2-way/blocked). <b>WHY NOT MULTIPLE t-TESTS?</b> 3 groups at alpha=0.05 inflates to ~14%. ANOVA controls family-wise error.</li>
       </ul>
     </div>
   </div>
 
   <!-- REGRESSION & MODELING -->
   <div class="week" style="border-color: #0891b2;">
-    <div class="week-header" style="background: #0891b2; color: #fff;">REGRESSION & CLASSIFICATION MODELS</div>
+    <div class="week-header" style="background: #0891b2; color: #fff;">MODELS QUICK REF</div>
     <div class="week-body" style="background: #ecfeff;">
       <ul>
-        <li><b>LINEAR:</b> Y=b0+b1X+e. Continuous Y. b1=slope=most important (unit change in X -> b1 change in Y). Least squares minimizes sum of squared residuals. Gauss-Markov = BLUE. Scatter plot FIRST. Normality only for CI/tests, not fitting.</li>
-        <li><b>LOGISTIC:</b> Binary Y (0/1). Sigmoid curve P(Y=1)=1/(1+e^-(b0+b1X)). Always stays [0,1]. Cutoff tradeoff: lower = more catches + more false alarms. Challenger example: 0.86 failure prob at 53F.</li>
-        <li><b>DECISION TREE:</b> Root/internal/leaf/branch. Recursive partitioning for purity. Overfitting -> pruning (bottom-up preferred). CART=binary splits, cost-complexity pruning. ID3=multi-way, info gain. C4.5=gain ratio. No distributional assumptions. Classification (categorical) vs regression (numeric) tree.</li>
-        <li><b>WHEN TO USE:</b> Continuous outcome -> linear regression. Binary outcome -> logistic regression. Non-linear/categorical splits, need explainability -> decision tree. Non-normal 3+ groups -> Kruskal-Wallis (not ANOVA).</li>
+        <li><b>LINEAR:</b> Y=b0+b1X+e. Continuous Y. b1=slope (most important). Least squares=BLUE. Scatter plot FIRST. <b>LOGISTIC:</b> Binary Y. P=1/(1+e^-(b0+b1X)). Sigmoid [0,1]. Challenger: 0.86 at 53F.</li>
+        <li><b>TREE:</b> Root/internal/leaf. Recursive partitioning. CART=binary, ID3=multi-way, C4.5=gain ratio. Prune bottom-up. <b>USE:</b> Continuous->linear. Binary->logistic. Explainable->tree. Non-normal 3+ groups->Kruskal-Wallis.</li>
       </ul>
     </div>
   </div>
 
-  <!-- WHAT MODEL TO USE -->
-  <div class="week" style="border-color: #6d28d9;">
-    <div class="week-header" style="background: #6d28d9; color: #fff;">WHAT MODEL TO USE - QUICK DECISION GUIDE</div>
-    <div class="week-body" style="background: #f5f3ff;">
-      <ul>
-        <li><b>Predict continuous number?</b> -> Linear regression (Y=b0+b1X+e). Check linearity with scatter plot first.</li>
-        <li><b>Predict yes/no probability?</b> -> Logistic regression (sigmoid). NOT linear regression (goes outside [0,1]).</li>
-        <li><b>Classify with explainable rules?</b> -> Decision tree. No distributional assumptions. Easy to show executives.</li>
-        <li><b>Compare 2 group means, normal data?</b> -> Two-sample t-test.</li>
-        <li><b>Compare 3+ group means, normal data?</b> -> One-way ANOVA + Tukey post-hoc.</li>
-        <li><b>Compare 3+ groups, NON-normal?</b> -> Kruskal-Wallis (non-parametric ANOVA).</li>
-        <li><b>Test median, non-parametric?</b> -> Sign test. R~Binomial(n,0.5). Discard ties.</li>
-        <li><b>2 factors + interaction?</b> -> Two-way ANOVA. Read interaction FIRST.</li>
-        <li><b>Multiple correlated outcomes?</b> -> MANOVA. Don't run separate ANOVAs.</li>
-        <li><b>Non-normal correlation?</b> -> Spearman rho (ranks). Normal -> Pearson r.</li>
-        <li><b>Blocked/repeated, non-normal?</b> -> Friedman test (replaces repeated measures ANOVA).</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- APT & THREAT ACTOR REFERENCE -->
+  <!-- APT QUICK REF -->
   <div class="week" style="border-color: #4f46e5;">
-    <div class="week-header" style="background: #4f46e5; color: #fff;">APT & THREAT ACTORS REFERENCE</div>
+    <div class="week-header" style="background: #4f46e5; color: #fff;">APT QUICK REF</div>
     <div class="week-body" style="background: #eef2ff;">
       <ul>
-        <li><b>TIERS:</b> I-II ($10s, script kiddies, EXPLOIT known vulns, use others' tools) | III-IV ($Ms, organized crime/state, DISCOVER unknown vulns, develop own tools, target executives) | V-VI ($Bs, nation-state elite, CREATE vulns through supply chain, influence manufacturing). Progression: Exploit->Discover->CREATE.</li>
-        <li><b>KILL CHAIN (7):</b> Recon->Weaponize->Deliver->Exploit->Install->C2->Actions. Defense: break any link. <b>KASPERSKY (5):</b> Gain Access->Foothold->Deepen->Lateral->Look/Learn/Remain.</li>
-        <li><b>KEY STATS (CrowdStrike 2025):</b> 48min avg breakout (51sec fastest). Vishing +442%. Initial access via vulns 52%. China-nexus +150%. FAMOUS CHOLLIMA using GenAI for fake IT workers.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- CROWDSTRIKE ANIMAL NAMES -->
-  <div class="week" style="border-color: #1e40af;">
-    <div class="week-header" style="background: #1e40af; color: #fff;">CROWDSTRIKE ANIMAL NAMING CONVENTION</div>
-    <div class="week-body" style="background: #eff6ff;">
-      <ul>
-        <li><b>Bear</b> = Russia (Fancy Bear=APT28/GRU, Cozy Bear=APT29/SVR, Voodoo Bear=Sandworm)</li>
-        <li><b>Panda</b> = China (Wicked Panda=APT41, Aquatic Panda, Mustang Panda)</li>
-        <li><b>Kitten</b> = Iran (Charming Kitten=APT35, Remix Kitten, Pioneer Kitten)</li>
-        <li><b>Chollima</b> = North Korea/DPRK (Labyrinth Chollima, Famous Chollima=fake IT workers+GenAI, Stardust Chollima)</li>
-        <li><b>Leopard</b> = Pakistan | <b>Buffalo</b> = Vietnam | <b>Crane</b> = South Korea | <b>Hawk</b> = Syria</li>
-        <li><b>Spider</b> = eCrime/cybercriminal (Wizard Spider=Trickbot/Conti, Scattered Spider=social engineering)</li>
-        <li><b>Jackal</b> = Hacktivists | <b>Ocelot</b> = Colombia</li>
-        <li><b>TRAP:</b> Bear=RUSSIA not China. Panda=CHINA not Russia. Naming NOT globally standardized -- Mandiant/FireEye uses numbers (APT28, APT29), Microsoft uses weather (Blizzard, Typhoon).</li>
+        <li><b>TIERS:</b> I-II=EXPLOIT known ($10s) | III-IV=DISCOVER unknown ($Ms) | V-VI=CREATE via supply chain ($Bs). <b>KILL CHAIN (7):</b> Recon->Weaponize->Deliver->Exploit->Install->C2->Actions. <b>KASPERSKY (5):</b> Access->Foothold->Deepen->Lateral->Remain.</li>
+        <li><b>NAMING:</b> Bear=Russia, Panda=China, Kitten=Iran, Chollima=DPRK, Spider=eCrime, Jackal=Hacktivists, Leopard=Pakistan, Buffalo=Vietnam. NOT standardized: CrowdStrike=animals, Mandiant=numbers (APT28), Microsoft=weather.</li>
       </ul>
     </div>
   </div>
@@ -516,93 +454,54 @@
     </div>
   </div>
 
-  <!-- HYPOTHESIS TESTING (POST-MIDTERM CONTEXT) -->
+  <!-- HYPOTHESIS TESTING -->
   <div class="week" style="border-color: #475569;">
-    <div class="week-header" style="background: #475569; color: #fff;">HYPOTHESIS TESTING - POST-MIDTERM CONTEXT</div>
+    <div class="week-header" style="background: #475569; color: #fff;">HYPOTHESIS TESTING QUICK REF</div>
     <div class="week-body" style="background: #f8fafc;">
       <ul>
-        <li><b>SETUP:</b> H0 has = sign. H1 has inequality. H1 decides WHERE rejection region. Alpha decides HOW BIG. Never "accept H0" -- "fail to reject."</li>
-        <li><b>ERRORS:</b> Type I = alpha = false alarm (reject true H0). Type II = beta = missed detection. Power = 1-beta. In security, Type II usually WORSE (missed attack). Bigger samples reduce BOTH.</li>
-        <li><b>SIGN TEST:</b> H0: M=m0. Count pluses. R~Binomial(n,0.5). Discard ties, shrink n. Non-parametric analog of t-test for median.</li>
-        <li><b>ANOVA H-TEST:</b> H0: all group means equal. F=MSB/MSW. Large F = reject. Post-hoc Tukey for which groups differ.</li>
-        <li><b>SECURITY:</b> H0 = "system normal." Type I = false alarm (wastes time). Type II = missed attack (catastrophic). Lower cutoff = catch more but more false alarms.</li>
-        <li><b>P-VALUE:</b> P(data this extreme | H0 true). p<alpha -> reject. Two-sided: DOUBLE the one-tail probability. p=2*P(Z>=|z|). P-value is NOT P(H0 is true). P-value is NOT the probability the null is true.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- KEY PEOPLE & CONTRIBUTIONS -->
-  <div class="week" style="border-color: #92400e;">
-    <div class="week-header" style="background: #92400e; color: #fff;">KEY PEOPLE & CONTRIBUTIONS</div>
-    <div class="week-body" style="background: #fffbeb;">
-      <ul>
-        <li><b>Stephen Few:</b> Dashboard design expert. "Single screen at a glance." Anti-clutter. No 3D charts. Context required ("compared to what?"). Meaningful use of color. Maximize data-ink.</li>
-        <li><b>Edward Tufte:</b> Data-ink ratio -- maximize data, minimize non-data ink (chartjunk). "Above all else, show the data." Sparklines. Small multiples. Graphical excellence = complex ideas communicated with clarity.</li>
-        <li><b>Jock Mackinlay:</b> Expressiveness principle (ALL and ONLY the data) + Effectiveness principle (readily perceived). Ranked visual encodings: Position > Length > Angle > Area > Color. Foundation for automated visualization.</li>
-        <li><b>Leslie Lamport:</b> Paxos consensus algorithm, Byzantine fault tolerance. Distributed systems theory. LaTeX creator. Foundational work for distributed security systems and blockchain consensus.</li>
-        <li><b>Board (2013):</b> Six-tier threat actor taxonomy (I-VI). Framework for classifying adversary capability from script kiddies ($10s) to nation-state full-spectrum ($Bs). Exploit -> Discover -> Create progression.</li>
-        <li><b>John Snow (1854):</b> Cholera map -- original security data visualization. Mapped deaths geographically to identify contaminated water pump as source. Proved power of data visualization for investigation.</li>
-        <li><b>Leo Breiman (1984):</b> CART algorithm -- Classification and Regression Trees. Binary splits, cost-complexity pruning. Foundation of modern tree-based ML.</li>
-        <li><b>J. Ross Quinlan (1986):</b> ID3 algorithm (information gain), later C4.5 (gain ratio). Multi-way splits. Extended decision tree methodology.</li>
-        <li><b>Lockheed Martin:</b> Cyber Kill Chain (7 steps). Recon through Actions on Objectives. Break any link = stop the attack. Defensive framework used across industry.</li>
+        <li><b>SETUP:</b> H0 has = sign. H1 has inequality. Never "accept H0" -- "fail to reject." P-value = P(data this extreme | H0 true). NOT P(H0 true). p&lt;alpha -> reject. Two-sided: double one-tail p.</li>
+        <li><b>ERRORS:</b> Type I=alpha=false alarm. Type II=beta=missed detection. Power=1-beta. Security: Type II WORSE (missed attack). Bigger samples reduce BOTH.</li>
+        <li><b>SIGN TEST:</b> H0: M=m0. Count pluses. R~Binomial(n,0.5). Discard ties, shrink n. <b>ANOVA:</b> H0: all means equal. F=MSB/MSW. Post-hoc Tukey for which differ.</li>
       </ul>
     </div>
   </div>
 
   <!-- EXAM TRAPS - FINAL -->
   <div class="week" style="border-color: #b71c1c;">
-    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS - FINAL SPECIFIC (25 TRAPS)</div>
+    <div class="week-header" style="background: #b71c1c; color: #fff;">EXAM TRAPS - FINAL (15 KEY TRAPS)</div>
     <div class="week-body" style="background: #ffebee;">
       <ul>
-        <li><b>1.</b> Sensitivity = TP/(TP+FN) catches attacks. Specificity = TN/(TN+FP) clears normals. Don't swap numerators/denominators.</li>
-        <li><b>2.</b> AUC=0.5 is BAD (random coin flip), NOT good. AUC=1.0 is perfect. 0.7=fair, 0.8=good, 0.9=excellent.</li>
-        <li><b>3.</b> ANOVA F=MSB/MSW (between/within), NOT within/between. Large F = reject.</li>
-        <li><b>4.</b> Two-way ANOVA: read INTERACTION first. Non-parallel lines = interaction exists. Can't interpret main effects alone when interaction significant.</li>
-        <li><b>5.</b> Non-normal data -> Kruskal-Wallis, NOT regular ANOVA. Security data is almost NEVER bell-shaped.</li>
-        <li><b>6.</b> Binary outcome (yes/no) -> logistic regression, NOT linear. Linear produces values outside [0,1].</li>
-        <li><b>7.</b> APT Tiers V-VI CREATE vulnerabilities (supply chain), not just discover them. I-II exploit, III-IV discover, V-VI CREATE.</li>
-        <li><b>8.</b> CrowdStrike Bear=RUSSIA. Panda=China. Kitten=Iran. Chollima=DPRK. Don't mix up. Bear is NOT China.</li>
-        <li><b>9.</b> "Accept H0" is WRONG. Say "fail to reject H0." Never proven, just insufficient evidence.</li>
-        <li><b>10.</b> Accuracy misleading with imbalanced data. 99% normal -> 99% accurate model with 0% sensitivity = useless.</li>
-        <li><b>11.</b> Gestalt: Enclosure is STRONGEST, not proximity. Use borders/shading for key groupings.</li>
-        <li><b>12.</b> Sign test: discard TIES, count only pluses. R~Binomial(n,0.5) where n EXCLUDES ties. Tests MEDIAN not mean.</li>
-        <li><b>13.</b> Non-parametric is NOT "assumption-free" -- still needs continuous + ordinal. Just fewer assumptions.</li>
-        <li><b>14.</b> Kill Chain = 7 steps (Lockheed Martin). Kaspersky = 5 stages. Don't confuse the two models.</li>
-        <li><b>15.</b> MANOVA uses Wilks' Lambda. Box's M test checks homogeneity of covariance matrices. Multiple ANOVAs inflate Type I error.</li>
-        <li><b>16.</b> Decision tree root = top (no parent). Leaf = bottom (no children). Bigger tree is NOT always better (overfits). Prune bottom-up.</li>
-        <li><b>17.</b> Scatter plot FIRST before fitting regression. Check linearity. b1 (slope) matters most, not b0 (intercept).</li>
-        <li><b>18.</b> Lower cutoff = catch more true positives AND more false alarms. Higher cutoff = miss more. No free lunch.</li>
-        <li><b>19.</b> P-value is NOT the probability H0 is true. It's P(data this extreme | H0 true). Common exam trick.</li>
-        <li><b>20.</b> CART = binary splits only. ID3 = can do multi-way splits. C4.5 = gain ratio (improved ID3). Don't confuse algorithms.</li>
-        <li><b>21.</b> Residual = actual - predicted (vertical distance to line). Pattern in residuals = model is WRONG (non-linearity).</li>
-        <li><b>22.</b> Normality needed for CI/tests on regression coefficients, NOT for fitting the line. Gauss-Markov = BLUE regardless.</li>
-        <li><b>23.</b> In security: FN (Type II, missed attack) is WORSE than FP (Type I, false alarm). Opposite of most textbook emphasis.</li>
-        <li><b>24.</b> Naming conventions NOT globally standardized. CrowdStrike=animals, Mandiant=numbers (APT28), Microsoft=weather (Blizzard/Typhoon).</li>
-        <li><b>25.</b> MANOVA requires n per group > number of response variables. Box's M is sensitive to non-normality. Wilks' Lambda: smaller = more evidence against H0.</li>
+        <li><b>1.</b> Sensitivity=TP/(TP+FN) catches attacks. Specificity=TN/(TN+FP) clears normals. Don't swap.</li>
+        <li><b>2.</b> AUC=0.5 is BAD (coin flip). 0.7=fair, 0.8=good, 0.9=excellent, 1.0=perfect.</li>
+        <li><b>3.</b> F=MSB/MSW (between/within), NOT within/between. Large F=reject.</li>
+        <li><b>4.</b> Two-way ANOVA: read INTERACTION first. Non-parallel lines=interaction. Can't interpret main effects alone.</li>
+        <li><b>5.</b> Non-normal -> Kruskal-Wallis, NOT ANOVA. Security data almost NEVER bell-shaped.</li>
+        <li><b>6.</b> Binary outcome -> logistic (sigmoid [0,1]), NOT linear (goes outside [0,1]).</li>
+        <li><b>7.</b> APT Tiers V-VI CREATE vulns (supply chain). I-II exploit, III-IV discover, V-VI CREATE.</li>
+        <li><b>8.</b> Bear=RUSSIA. Panda=China. Kitten=Iran. Chollima=DPRK. Bear is NOT China.</li>
+        <li><b>9.</b> "Accept H0" is WRONG. Say "fail to reject." P-value is NOT P(H0 true).</li>
+        <li><b>10.</b> Accuracy misleading with imbalanced data. 99% normal -> 0% sensitivity = useless.</li>
+        <li><b>11.</b> Sign test: discard TIES, shrink n. R~Binomial(n,0.5). Tests MEDIAN not mean.</li>
+        <li><b>12.</b> Non-parametric NOT "assumption-free" -- still needs continuous+ordinal. Just fewer assumptions.</li>
+        <li><b>13.</b> Kill Chain=7 steps (Lockheed Martin). Kaspersky=5 stages. Don't confuse.</li>
+        <li><b>14.</b> In security: FN (Type II, missed attack) WORSE than FP (Type I, false alarm).</li>
+        <li><b>15.</b> Normality needed for CI/tests on coefficients, NOT for fitting regression line. Gauss-Markov=BLUE regardless.</li>
       </ul>
     </div>
   </div>
 
   <!-- QUICK DECISION GUIDE -->
   <div class="week" style="border-color: #b45309;">
-    <div class="week-header" style="background: #b45309; color: #fff;">QUICK DECISION GUIDE - EXAM Q&A</div>
+    <div class="week-header" style="background: #b45309; color: #fff;">QUICK EXAM Q&A</div>
     <div class="week-body" style="background: #fffbeb;">
       <ul>
-        <li><b>"Binary outcome model?"</b> -> Logistic regression (sigmoid, [0,1]). <b>"Continuous outcome model?"</b> -> Linear regression (Y=b0+b1X+e).</li>
-        <li><b>"3+ group comparison, normal?"</b> -> ANOVA. <b>"3+ groups, NOT normal?"</b> -> Kruskal-Wallis.</li>
-        <li><b>"Test median, non-parametric?"</b> -> Sign test. R~Binomial(n,0.5). Discard ties.</li>
-        <li><b>"2 factors, check interaction?"</b> -> Two-way ANOVA. Read interaction FIRST. Non-parallel lines = interaction.</li>
-        <li><b>"Multiple correlated responses?"</b> -> MANOVA. Don't run separate ANOVAs (inflates Type I).</li>
-        <li><b>"IDS misses attack?"</b> -> Type II (FN). <b>"IDS false alert?"</b> -> Type I (FP). <b>Which worse in security?</b> -> Type II.</li>
-        <li><b>"AUC=0.52?"</b> -> Terrible (near random). <b>"99% accuracy, 0% sensitivity?"</b> -> Useless model, imbalanced data.</li>
-        <li><b>"Non-parallel interaction plot?"</b> -> Interaction exists, interpret BEFORE main effects.</li>
-        <li><b>"APT tier that CREATES vulns?"</b> -> V-VI ($Bs, supply chain). <b>"Uses others' tools?"</b> -> I-II ($10s).</li>
-        <li><b>"Strongest Gestalt principle?"</b> -> Enclosure. <b>"Tree too deep?"</b> -> Overfitting. Fix: prune bottom-up.</li>
-        <li><b>"Avg breakout time (CS 2025)?"</b> -> 48 minutes (fastest 51 sec). <b>"Bear = which country?"</b> -> Russia.</li>
-        <li><b>"Power BI vs Tableau strength?"</b> -> Power BI = PowerPoint embedding. Tableau = threshold alerting.</li>
-        <li><b>"Why not multiple ANOVAs?"</b> -> Inflates Type I, ignores correlations, misses combination differences. Use MANOVA.</li>
-        <li><b>"Challenger O-ring lesson?"</b> -> Model predicted danger at cold temps (0.86 at 53F). Warning ignored. Decision failure, not model failure.</li>
-        <li><b>"Expressiveness principle?"</b> -> Mackinlay. ALL and ONLY the data. <b>"Data-ink ratio?"</b> -> Tufte. Max data, min junk.</li>
+        <li><b>"Binary outcome?"</b> Logistic. <b>"Continuous?"</b> Linear reg. <b>"3+ groups normal?"</b> ANOVA. <b>"3+ NOT normal?"</b> Kruskal-Wallis. <b>"Test median?"</b> Sign test.</li>
+        <li><b>"IDS misses attack?"</b> Type II (FN). <b>"False alert?"</b> Type I (FP). <b>"Which worse?"</b> Type II. <b>"AUC=0.52?"</b> Terrible (near random).</li>
+        <li><b>"Non-parallel interaction plot?"</b> Interaction exists, interpret BEFORE main effects. <b>"Multiple correlated responses?"</b> MANOVA.</li>
+        <li><b>"Creates vulns?"</b> Tier V-VI ($Bs). <b>"Uses others' tools?"</b> I-II ($10s). <b>"Breakout time?"</b> 48min (51sec fastest). <b>"Bear?"</b> Russia.</li>
+        <li><b>"Power BI vs Tableau?"</b> Power BI=PowerPoint embedding. Tableau=threshold alerting. <b>"Expressiveness?"</b> Mackinlay. <b>"Data-ink?"</b> Tufte.</li>
+        <li><b>"Challenger lesson?"</b> Model predicted danger (0.86 at 53F). Warning ignored. Decision failure, not model failure.</li>
+        <li><b>"Strongest Gestalt?"</b> Enclosure. <b>"Tree too deep?"</b> Overfitting, prune bottom-up. <b>"Why not multiple ANOVAs?"</b> Inflates Type I. Use MANOVA.</li>
       </ul>
     </div>
   </div>
@@ -624,26 +523,6 @@
     </div>
   </div>
 
-  <!-- KEY VOCAB -->
-  <div class="week" style="border-color: #334155;">
-    <div class="week-header" style="background: #334155; color: #fff;">KEY VOCAB - FINAL</div>
-    <div class="week-body" style="background: #f1f5f9;">
-      <ul>
-        <li><b>GESTALT:</b> Enclosure(strongest)>Connection>Proximity/Similarity | <b>DASHBOARD:</b> Single screen at a glance (Few)</li>
-        <li><b>EXPRESSIVENESS:</b> ALL and ONLY facts (Mackinlay) | <b>EFFECTIVENESS:</b> Readily perceived | <b>DATA-INK:</b> Max data, min junk (Tufte)</li>
-        <li><b>SENSITIVITY:</b> TP/(TP+FN) catch rate | <b>SPECIFICITY:</b> TN/(TN+FP) clear rate | <b>AUC:</b> 0.5=bad, 1=perfect</li>
-        <li><b>MSB:</b> Between-group variance (signal) | <b>MSW:</b> Within-group variance (noise) | <b>F:</b> MSB/MSW | <b>INTERACTION:</b> Read first in 2-way ANOVA</li>
-        <li><b>APT:</b> Advanced+Persistent+Threat, "slow and low" | <b>KILL CHAIN:</b> 7 steps Recon->Actions | <b>SUPPLY CHAIN:</b> Tier V-VI upstream compromise</li>
-        <li><b>SIGMOID:</b> S-curve, always [0,1] | <b>CUTOFF:</b> Threshold for classification | <b>ROC:</b> Sensitivity vs 1-Specificity across cutoffs</li>
-        <li><b>RECURSIVE PARTITIONING:</b> How trees split | <b>PRUNING:</b> Remove unhelpful splits (bottom-up preferred) | <b>CART:</b> Binary splits | <b>ID3:</b> Multi-way</li>
-        <li><b>KRUSKAL-WALLIS:</b> Non-parametric ANOVA | <b>FRIEDMAN:</b> Non-parametric 2-way | <b>SPEARMAN:</b> Non-parametric correlation | <b>WILCOXON:</b> Non-parametric 2-sample</li>
-        <li><b>MANOVA:</b> Multiple correlated responses | <b>WILKS' LAMBDA:</b> MANOVA test stat | <b>BOX'S M:</b> Covariance homogeneity test | <b>TUKEY HSD:</b> Post-hoc pairwise</li>
-        <li><b>BREAKOUT TIME:</b> 48 min avg (CrowdStrike 2025) | <b>VISHING:</b> +442% | <b>FAMOUS CHOLLIMA:</b> DPRK, GenAI fake IT workers</li>
-        <li><b>LANL:</b> 12GB, 1.6B events, 12,425 users | <b>CIC:</b> Canadian bot detection dataset | <b>WEKA:</b> Open-source ML tool (Explorer->Preprocess->Classify)</li>
-        <li><b>SPLUNK SPL:</b> eval, stats, search, where, table, timechart, rex | <b>PROPS.CONF:</b> Parsing config | <b>SOURCE TYPE:</b> Data categorization</li>
-      </ul>
-    </div>
-  </div>
 
 </div>
 
