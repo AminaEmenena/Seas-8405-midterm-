@@ -209,8 +209,8 @@
       body {
         background: white;
         color: black;
-        font-size: 5.2pt;
-        line-height: 1.05;
+        font-size: 5.8pt;
+        line-height: 1.1;
         padding: 0;
       }
       nav { display: none !important; }
@@ -244,15 +244,15 @@
 
       .sec-body {
         padding: 0px 1px 0px 1px;
-        font-size: 5.2pt;
-        line-height: 1.05;
+        font-size: 5.8pt;
+        line-height: 1.1;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
       .ref-table {
-        font-size: 5.2pt;
-        line-height: 1.05;
+        font-size: 5.8pt;
+        line-height: 1.1;
       }
       .ref-table th {
         font-size: 4.8pt;
@@ -347,6 +347,10 @@
       <p><b>Categorical palette:</b> distinct colors for unrelated groups, max ~7</p>
       <p><b>Color blindness:</b> ~8% males, red-green most common, tools can swap palettes</p>
       <p><b>Bar vs Histogram:</b> labels on x-axis = bar. Number ranges on x-axis = histogram</p>
+      <p><b>Stem-and-leaf detail:</b> stem=tens, leaf=ones, preserves actual digits, good for small datasets (&lt;50)</p>
+      <p><b>Chart junk:</b> unnecessary visual elements that don't convey data (Tufte coined term)</p>
+      <p><b>Visualization history:</b> Dr. John Snow 1849 cholera map in London, overlayed infections on map -- first data viz</p>
+      <p><b>"Above all else, show the data":</b> Tufte's core principle -- remove everything that doesn't inform</p>
     </div>
   </div>
 
@@ -381,6 +385,21 @@
       <p><b>Frequency table:</b> freq f, relative freq f/total, percentage rel*100, cumulative freq</p>
       <p><b>Class recipe:</b> R=max-min, m=1+3.3*log(n), width=R/m rounded UP</p>
       <p><b>Pie angle:</b> relative freq * 360</p>
+      <p><b>Splunk pyramid:</b> Raw Data -> Searches(SPL) -> Table(data model) -> Report(aggregation) -> Dashboard</p>
+      <p><b>SPL:</b> Search Processing Language, Splunk's query language</p>
+      <p><b>eval command:</b> build new fields in Splunk, like Excel formula columns</p>
+      <p><b>stats command:</b> statistical functions (count, avg, sum) grouped by fields</p>
+      <p><b>Source Type:</b> arbitrary categorization of events in Splunk</p>
+      <p><b>Transform:</b> config file for field transformations in Splunk</p>
+      <p><b>Props.conf:</b> connects Source Type to the transformation rules</p>
+      <p><b>Databricks:</b> notebook-based analytics, Spark behind scenes, AI-powered dashboarding</p>
+      <p><b>Snowflake:</b> cloud data warehouse, SQL + Python notebooks</p>
+      <p><b>Cold storage:</b> long-term log retention on optical disk, cost-effective</p>
+      <p><b>Kimball:</b> data warehouse methodology, star schemas with dimensions and facts</p>
+      <p><b>S3 bucket:</b> AWS object storage, versioning, commonly used for security data</p>
+      <p><b>HDFS replication:</b> default 3 copies across machines for fault tolerance</p>
+      <p><b>Spark:</b> in-memory execution engine, replaced MapReduce, much faster</p>
+      <p><b>"Tell the story":</b> who is audience? what action? what data supports? context -> insight -> action</p>
     </div>
   </div>
 
@@ -411,7 +430,19 @@
       <p><b>Chebyshev:</b> any shape, at least 1-1/k^2 within k SD. k=2: 75%. k=3: 89%</p>
       <p><b>Z-score:</b> (Xi-mean)/SD, unitless, |Z|>3 = likely outlier</p>
       <p><b>Correlation r:</b> Cov(X,Y)/(Sx*Sy), range [-1,+1], unitless, NOT causation, only LINEAR</p>
-      <p><b>Covariance:</b> positive = move together, negative = opposite</p>
+      <p><b>Covariance:</b> positive = move together, negative = opposite, units = product of original units</p>
+      <p><b><code>df.info()</code>:</b> shows dtypes, null counts, memory usage</p>
+      <p><b><code>df.shape</code>:</b> returns (rows, columns) tuple</p>
+      <p><b><code>df.head()</code>:</b> shows first 5 rows by default</p>
+      <p><b>KNN imputation:</b> uses k nearest neighbors to estimate missing, preserves relationships, O(n^2)</p>
+      <p><b>Model-based imputation:</b> regression/decision tree/neural net predicts missing values</p>
+      <p><b>Forward fill (ffill):</b> carry last known value forward, good for time-series</p>
+      <p><b>Backward fill (bfill):</b> carry next known value backward</p>
+      <p><b>Coefficient of Variation (CV):</b> (S/X-bar)*100%, compares variability across different units</p>
+      <p><b>Bimodal:</b> dataset with two modes (two peaks in distribution)</p>
+      <p><b>Outlier detection:</b> z-score method (|Z|>3) or IQR method (beyond fences)</p>
+      <p><b><code>df.duplicated().any()</code>:</b> returns True if any duplicate rows exist</p>
+      <p><b><code>df.astype()</code>:</b> convert column data types (string to int, etc.)</p>
     </div>
   </div>
 
@@ -429,6 +460,16 @@
       <p><b>Power = 1-beta.</b> Alpha chosen BEFORE data. Bigger n reduces BOTH errors</p>
       <p><b>One-tailed:</b> one rejection region. <b>Two-tailed:</b> both tails (alpha/2 each)</p>
       <p><b>6 steps:</b> 1.State H0/H1 2.Pick alpha 3.Choose statistic 4.Find distribution 5.Rejection region 6.Compute & decide</p>
+      <p><b>Dev data sources:</b> code repo logs (Git/SVN), CI/CD logs, APM, change management, privileged access, ACLs/RBAC</p>
+      <p><b>Mobile data sources:</b> app usage logs, device location, communication logs, social media</p>
+      <p><b>GDPR fines:</b> up to 4% global revenue or 20M EUR</p>
+      <p><b>CCPA expanded by CPRA</b> (California Privacy Rights Act)</p>
+      <p><b>One-tailed test:</b> H1 has > or &lt;, rejection region in ONE tail</p>
+      <p><b>Two-tailed test:</b> H1 has !=, rejection regions in BOTH tails, alpha/2 each side</p>
+      <p><b>Rejection region:</b> range of values extreme enough to reject H0</p>
+      <p><b>Critical point:</b> boundary between reject and don't-reject regions</p>
+      <p><b>Test statistic:</b> single number computed from sample data to decide</p>
+      <p><b>Bigger samples:</b> reduce BOTH Type I and Type II errors simultaneously</p>
     </div>
   </div>
 
@@ -448,6 +489,15 @@
       <p><b>p-value:</b> P(data this extreme | H0 true). Small p = evidence against H0</p>
       <p><b>Decision:</b> p &lt; alpha -> reject. p >= alpha -> fail to reject</p>
       <p><b>Two-sided:</b> p = 2*P(Z >= |z|) -- DOUBLE the tail probability</p>
+      <p><b>Supply chain attack:</b> tamper with third-party code to compromise downstream, 925/week per org (Check Point)</p>
+      <p><b>Exposed secrets:</b> credit cards, passwords, API tokens, certificates, private keys in source code</p>
+      <p><b>10 steps secure code:</b> 1.secure practices 2.code reviews 3.SAST/DAST 4.vuln mgmt 5.update deps 6.security in SDLC 7.threat modeling 8.secure deploy 9.monitor/audit 10.security culture</p>
+      <p><b>p-value is NOT</b> P(H0 is true), it IS P(data this extreme | H0 true)</p>
+      <p><b>Standard error shrinks with larger n:</b> same gap becomes more convincing</p>
+      <p><b>Left-sided p:</b> P(Z&lt;=z). <b>Right-sided p:</b> P(Z>=z). <b>Two-sided p:</b> 2*P(Z>=|z|)</p>
+      <p><b>Wire example:</b> n=16, X-bar=967.8, sigma=128, H0:mu=1000, H1:mu&lt;1000. SE=32. Z=-1.006. p=0.1562>0.05, don't reject</p>
+      <p><b>CVE:</b> MITRE program, catalogs publicly disclosed vulnerabilities</p>
+      <p><b>NIST:</b> National Institute of Standards and Technology, standards/guidelines</p>
     </div>
   </div>
 
@@ -463,7 +513,12 @@
       <p><b>Mild fence:</b> Q1-1.5*IQR to Q3+1.5*IQR. <b>Extreme:</b> Q1-3*IQR to Q3+3*IQR</p>
       <p><b>Extreme</b> -> usually discard. <b>Mild</b> -> investigate first</p>
       <p><b>Security:</b> outlier may BE the attack -- don't auto-delete!</p>
-      <p><b>Robust stats:</b> median, MAD, Huber loss (when can't delete outliers)</p>
+      <p><b>Robust stats:</b> median, MAD (Median Absolute Deviation), Huber loss, trimmed mean</p>
+      <p><b>Application:</b> software/hardware/API for specific tasks, frontend+backend+storage+communication</p>
+      <p><b>App security:</b> protect throughout lifecycle (design->dev->deploy->maintain)</p>
+      <p><b>13 anti-patterns expanded:</b> 1.exceed screen(short-term memory~4 chunks) 2.no context("compared to WHAT?") 3.excess detail(10+ digits) 4.wrong measure(show variance not raw) 5.wrong viz(pie when bar better) 6.meaningless variety 7.bad design(3D charts) 8.inaccurate encoding(Y-axis not at 0) 9.poor arrangement(top-left=prime) 10.bad highlight(everything=nothing) 11.clutter 12.color misuse 13.ugly</p>
+      <p><b>Boxplot components:</b> box spans Q1 to Q3, line at median, whiskers to last point within fences</p>
+      <p><b>Salary example:</b> with CEO outlier mean=$26K, without=$17.78K, median barely moved (17.5 vs 17.0)</p>
     </div>
   </div>
 
@@ -481,6 +536,18 @@
       <p><b>Gestalt Connection:</b> linked objects, stronger than proximity but weaker than enclosure</p>
       <p><b>Strength:</b> Enclosure > Connection > Proximity/Similarity > Continuity > Closure</p>
       <p><b>CrowdStrike 2025:</b> breakout time avg 48 min (fastest 51 sec), vishing +442%, China-nexus +150%</p>
+      <p><b>Log entry contains:</b> timestamp, event type, source, relevant details</p>
+      <p><b>System logs:</b> OS events, startups, shutdowns, hardware changes, software installs, errors</p>
+      <p><b>Application logs:</b> app errors, user activities, performance issues, config changes</p>
+      <p><b>Network logs:</b> from routers, switches, firewalls, IDS/IPS</p>
+      <p><b>Security logs:</b> from antivirus, IDS, SIEM. Login attempts, policy violations, detected threats</p>
+      <p><b>Audit logs:</b> user logins, file access, config changes -- for compliance and forensics</p>
+      <p><b>Web server logs:</b> IIS/Apache, client requests, server responses, errors</p>
+      <p><b>Database logs:</b> user queries, data modifications, schema changes, SQL injection detection</p>
+      <p><b>Log best practices:</b> centralize (SIEM), retention policies, protect integrity, normalize formats, correlate, alert</p>
+      <p><b>CrowdStrike 2025:</b> FAMOUS CHOLLIMA used GenAI for fake IT worker identities</p>
+      <p><b>Proximity:</b> directs scanning direction (horizontal spacing -> left-to-right reading)</p>
+      <p><b>Similarity:</b> use same color for related data across different charts</p>
     </div>
   </div>
 
@@ -498,6 +565,15 @@
       <p><b>CART</b> (Breiman 1984, binary splits) vs <b>ID3/C4.5</b> (Quinlan, multi-way)</p>
       <p><b>Classification tree</b> (categorical target) vs <b>Regression tree</b> (numeric target)</p>
       <p><b>No distributional assumptions needed</b> (unlike hypothesis tests)</p>
+      <p><b>Non-parametric still needs:</b> continuous data, at-least ordinal scale</p>
+      <p><b>Sign test steps:</b> 1.State H0/H1 2.Set alpha 3.Compute signs(ignore ties) 4.R=count pluses 5.Compare R to Binomial(n,0.5) 6.Decide</p>
+      <p><b>Left-sided sign test:</b> H1: M&lt;m0 (few pluses = reject)</p>
+      <p><b>Right-sided sign test:</b> H1: M>m0 (many pluses = reject)</p>
+      <p><b>Two-sided sign test:</b> H1: M!=m0 (too few OR too many pluses = reject)</p>
+      <p><b>Decision tree advantages:</b> no distributional assumptions, handles numeric+categorical, easy to explain</p>
+      <p><b>Classification tree:</b> categorical target (spam/not spam, attack/normal)</p>
+      <p><b>Regression tree:</b> numeric target (predicted values at leaves)</p>
+      <p><b>Depth:</b> longest path from root to leaf. Deeper = more complex = overfitting risk</p>
     </div>
   </div>
 
@@ -520,6 +596,17 @@
       <p><b>Always SCATTER PLOT FIRST</b> to check linearity</p>
       <p><b>Security example:</b> slope=5 on "failed logins vs hour" means each hour = 5 more failed logins</p>
       <p><b>Positive slope:</b> rise together. <b>Negative:</b> one rises other falls. <b>Near-zero:</b> X tells little about Y</p>
+      <p><b>Threat:</b> data theft, service disruption, infrastructure damage</p>
+      <p><b>APT detection challenge:</b> stealthy and persistent nature, need continuous monitoring + rapid incident response</p>
+      <p><b>Tier I:</b> rely on others for malicious code, use known exploits</p>
+      <p><b>Tier II:</b> greater experience, develop own tools from known vulns</p>
+      <p><b>Tier III:</b> discover unknown vulns, install rootkits, target executives, sell stolen data</p>
+      <p><b>Tier IV:</b> organized criminal/state, highly technical, work in teams</p>
+      <p><b>Tier V:</b> "influence" commercial products during design/manufacturing, supply chain manipulation</p>
+      <p><b>Tier VI:</b> full spectrum cyber+military+intelligence capabilities, achieve political/military/economic outcomes</p>
+      <p><b>APT groups NOT globally standardized:</b> Mandiant uses numbers (APT28), CrowdStrike uses animal names</p>
+      <p><b>Simple = one predictor X. Multiple = more than one predictor</b></p>
+      <p><b>Linear = straight line (first-order model), linear in the parameters</b></p>
     </div>
   </div>
 
@@ -543,6 +630,19 @@
       <p><b>Accuracy:</b> (TP+TN)/total. Can be MISLEADING: 99% normal traffic -> lazy "always no" model = 99% accurate but 0% sensitivity</p>
       <p><b>ROC curve:</b> sensitivity vs 1-specificity across ALL cutoffs. Perfect = hugs top-left corner</p>
       <p><b>AUC:</b> 0.5 = coin flip (BAD). 1.0 = perfect. Higher is better</p>
+      <p><b>Collaboration characteristics:</b> shared goals, mutual respect, open communication, shared decision-making, shared accountability, consensus building, negotiation, conflict resolution</p>
+      <p><b>Key collaboration factor - People:</b> communication, data-driven culture, ability to interpret visualizations</p>
+      <p><b>Training and support:</b> users need to know features, adequate tech support</p>
+      <p><b>Power BI mobile:</b> annotate tiles/reports/visuals, share via email from iOS/Android</p>
+      <p><b>Power BI sharing:</b> people in org, people with existing access, specific people</p>
+      <p><b>Tableau:</b> subscriptions (scheduled emails), metrics (track key numbers), alerts (threshold notifications)</p>
+      <p><b>Sigmoid curve:</b> flattens near 0 at one end, near 1 at other, smooth transition in middle</p>
+      <p><b>Challenger O-ring:</b> model predicted 0.86 failure probability at 53F, 0.05 at 81F. Cold launch = risky</p>
+      <p><b>FP = flagged something fine = Type I = false alarm</b></p>
+      <p><b>FN = missed something real = Type II = dangerous miss in security</b></p>
+      <p><b>99% accuracy trap:</b> if 99% of traffic is normal, "always normal" model = 99% accurate but 0% sensitivity</p>
+      <p><b>ROC shape:</b> perfect = hugs top-left corner (right angle). Useless = diagonal (coin flip)</p>
+      <p><b>AUC comparison:</b> use to compare multiple models, higher AUC = better classifier</p>
     </div>
   </div>
 
@@ -570,6 +670,22 @@
       <p><b>ANOVA family:</b> t-test(2 groups,1 response), One-Way(3+,1), Two-Way(2 factors,1,interaction), Repeated Measures(1+,1,same subjects), MANOVA(1+,2+ responses)</p>
       <p><b>Non-parametric equivalents:</b> Kruskal-Wallis(one-way), Friedman(two-way), Spearman(correlation)</p>
       <p><b>Security data non-normal:</b> zero-inflated counts, skewed response times, ordinal severity (CVSS), heavy tails (power-law losses), small samples (breach investigations n=5-15), categorical variables</p>
+      <p><b>Between-group variance (MSB):</b> how different group means are from grand mean = SIGNAL</p>
+      <p><b>Within-group variance (MSW):</b> spread inside each group = NOISE</p>
+      <p><b>F = Signal/Noise.</b> Large F = groups really differ</p>
+      <p><b>Shapiro-Wilk test:</b> checks normality assumption</p>
+      <p><b>Levene's test:</b> checks equal variance assumption</p>
+      <p><b>Bartlett's test:</b> alternative equal variance check</p>
+      <p><b>SOC example:</b> Teams A(52.5min) B(31.8min) C(68.5min). F=32.75, p=0.000, reject H0</p>
+      <p><b>Interaction example:</b> in-person training helps Juniors more than Seniors. Can't just say "in-person better"</p>
+      <p><b>Non-parallel lines:</b> in interaction plot = interaction EXISTS</p>
+      <p><b>MANOVA test:</b> Wilks' Lambda. Follow up with individual ANOVAs per response</p>
+      <p><b>Box's M test:</b> checks homogeneity of covariance matrices for MANOVA</p>
+      <p><b>Multicollinearity:</b> if r>0.9 between responses, consider dropping one</p>
+      <p><b>Zero-inflated counts:</b> most days zero incidents, rare days many -- not normal</p>
+      <p><b>Skewed response times:</b> few major incidents take 10x longer -- mean distorted</p>
+      <p><b>CVSS scores:</b> ordinal (Low/Med/High/Critical), not equal intervals -- can't assume normality</p>
+      <p><b>Power-law/Pareto:</b> cyber losses follow heavy-tailed distributions, extreme values more common than normal predicts</p>
     </div>
   </div>
 
@@ -594,6 +710,70 @@
       <p><b>CI/CD:</b> Build Products -> Test/Provision -> Run/Operate -> Access. Developer workstation at center</p>
       <p><b>Python viz:</b> seaborn gallery (violin plots, pair plots, heatmaps, box plots)</p>
       <p><b>Behind pivots:</b> dragging dimensions = measures across dimensions (risk/country/reliability)</p>
+      <p><b>LANL dataset:</b> Los Alamos National Lab, Windows auth events + process events + DNS + network flow + red team events</p>
+      <p><b>CIC dataset:</b> Canadian Institute for Cybersecurity, bot detection dataset used in HW8</p>
+      <p><b>Weka:</b> open-source ML tool, Explorer -> Preprocess -> Classify -> Visualize</p>
+      <p><b>Decision stump:</b> simplest classifier (single split), used as baseline in Weka</p>
+      <p><b>End-to-end CI/CD:</b> Build Products(OSS, Git, CI/CD tools) -> Test/Provision(automation) -> Run/Operate(containers, cloud) -> Access(databases)</p>
+      <p><b>Developer/DevOps workstation:</b> at center of CI/CD, installs tools, manages consoles, accesses internet</p>
+      <p><b>Seaborn:</b> Python statistical visualization library, built on matplotlib, gallery includes violin/pair/heat/box plots</p>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: WHAT CHART TO USE -->
+  <div class="sec s15">
+    <div class="sec-header">Quick Ref - What Chart to Use</div>
+    <div class="sec-body">
+      <table class="ref-table">
+        <tr><th>Goal</th><th>Chart</th></tr>
+        <tr><td>Compare categories</td><td>Bar (gaps between bars)</td></tr>
+        <tr><td>Distribution</td><td>Histogram (bars touch)</td></tr>
+        <tr><td>Trend over time</td><td>Line chart</td></tr>
+        <tr><td>2 variables relationship</td><td>Scatter plot</td></tr>
+        <tr><td>Parts of whole</td><td>Pie (but bar is better)</td></tr>
+        <tr><td>Matrix values</td><td>Heatmap</td></tr>
+        <tr><td>Text frequency</td><td>Word cloud</td></tr>
+        <tr><td>Small numeric data</td><td>Dot plot or Stem-and-leaf</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: WHEN TO USE WHAT TEST -->
+  <div class="sec s16">
+    <div class="sec-header">Quick Ref - When to Use What Test</div>
+    <div class="sec-body">
+      <table class="ref-table">
+        <tr><th>If you see...</th><th>Answer is...</th></tr>
+        <tr><td>Skewed data center?</td><td>Median (not mean)</td></tr>
+        <tr><td>Nominal data center?</td><td>Mode</td></tr>
+        <tr><td>Bell-shaped rule?</td><td>Empirical 68-95-99.7</td></tr>
+        <tr><td>Any shape rule?</td><td>Chebyshev 1-1/k^2</td></tr>
+        <tr><td>r=0.85, X causes Y?</td><td>NO, correlation != causation</td></tr>
+        <tr><td>p=0.03, alpha=0.05?</td><td>Reject H0</td></tr>
+        <tr><td>p=0.08, alpha=0.05?</td><td>Fail to reject</td></tr>
+        <tr><td>IDS misses real attack?</td><td>Type II (beta)</td></tr>
+        <tr><td>IDS flags normal traffic?</td><td>Type I (alpha)</td></tr>
+        <tr><td>3+ groups compare means?</td><td>ANOVA (not multiple t-tests)</td></tr>
+        <tr><td>Non-normal 3+ groups?</td><td>Kruskal-Wallis</td></tr>
+        <tr><td>Yes/no prediction?</td><td>Logistic regression (not linear)</td></tr>
+        <tr><td>Numeric prediction?</td><td>Linear regression</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: PYTHON QUICK REF -->
+  <div class="sec s14">
+    <div class="sec-header">Quick Ref - Python Commands</div>
+    <div class="sec-body">
+      <p><b><code>pd.read_csv('file.csv')</code></b> -- load CSV</p>
+      <p><b><code>df.describe()</code></b> -- count, mean, std, min, Q1, median, Q3, max</p>
+      <p><b><code>df.info()</code></b> -- dtypes, null counts</p>
+      <p><b><code>df.dropna()</code></b> -- remove nulls</p>
+      <p><b><code>df.fillna(value)</code></b> -- fill nulls</p>
+      <p><b><code>df.drop_duplicates()</code></b> -- remove dupes</p>
+      <p><b><code>df.loc[df['col']>5]</code></b> -- filter rows</p>
+      <p><b><code>plt.bar(), plt.scatter(), plt.plot(), plt.hist()</code></b> -- matplotlib charts</p>
+      <p><b><code>sns.heatmap(), sns.boxplot(), sns.pairplot()</code></b> -- seaborn charts</p>
     </div>
   </div>
 
