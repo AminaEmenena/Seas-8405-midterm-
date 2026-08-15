@@ -101,6 +101,25 @@
       border-radius: 1px;
     }
 
+    /* Quick-ref table styles */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+      line-height: 1.1;
+    }
+    .ref-table th {
+      background: rgba(0,0,0,0.08);
+      text-align: left;
+      padding: 1px 2px;
+      font-size: 8px;
+      font-weight: 700;
+    }
+    .ref-table td {
+      padding: 0px 2px;
+      border-top: 0.5px solid #ddd;
+    }
+
     /* S1 - Red */
     .s1 .sec-header { background: #dc2626; color: #fff; }
     .s1 .sec-body { background: #fef2f2; }
@@ -166,6 +185,21 @@
     .s13 .sec-body { background: #fff1f2; }
     .s13 { border-color: #be123c; }
 
+    /* S14 - Dark Blue (for ref tables) */
+    .s14 .sec-header { background: #1e40af; color: #fff; }
+    .s14 .sec-body { background: #eff6ff; }
+    .s14 { border-color: #1e40af; }
+
+    /* S15 - Dark Green (for ref tables) */
+    .s15 .sec-header { background: #065f46; color: #fff; }
+    .s15 .sec-body { background: #ecfdf5; }
+    .s15 { border-color: #065f46; }
+
+    /* S16 - Dark Red (for exam traps) */
+    .s16 .sec-header { background: #991b1b; color: #fff; }
+    .s16 .sec-body { background: #fef2f2; }
+    .s16 { border-color: #991b1b; }
+
     /* PRINT STYLES */
     @media print {
       @page {
@@ -175,15 +209,15 @@
       body {
         background: white;
         color: black;
-        font-size: 5.55pt;
-        line-height: 1.07;
+        font-size: 5.2pt;
+        line-height: 1.05;
         padding: 0;
       }
       nav { display: none !important; }
       .print-btn { display: none !important; }
 
       .sheet-title {
-        font-size: 6pt;
+        font-size: 5.5pt;
         margin: 0;
         padding: 0;
         border-width: 0.5px;
@@ -203,21 +237,31 @@
 
       .sec-header {
         padding: 0px 2px;
-        font-size: 5.5pt;
+        font-size: 5pt;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
       .sec-body {
         padding: 0px 1px 0px 1px;
-        font-size: 5.55pt;
-        line-height: 1.07;
+        font-size: 5.2pt;
+        line-height: 1.05;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .ref-table {
+        font-size: 5.2pt;
+        line-height: 1.05;
+      }
+      .ref-table th {
+        font-size: 4.8pt;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
       code {
-        font-size: 5pt;
+        font-size: 4.8pt;
       }
 
       .s1 .sec-header { background: #dc2626 !important; color: #fff !important; }
@@ -246,6 +290,12 @@
       .s12 .sec-body { background: #f8fafc !important; }
       .s13 .sec-header { background: #be123c !important; color: #fff !important; }
       .s13 .sec-body { background: #fff1f2 !important; }
+      .s14 .sec-header { background: #1e40af !important; color: #fff !important; }
+      .s14 .sec-body { background: #eff6ff !important; }
+      .s15 .sec-header { background: #065f46 !important; color: #fff !important; }
+      .s15 .sec-body { background: #ecfdf5 !important; }
+      .s16 .sec-header { background: #991b1b !important; color: #fff !important; }
+      .s16 .sec-body { background: #fef2f2 !important; }
     }
 
     @media (max-width: 900px) {
@@ -272,253 +322,358 @@
   </div>
 </nav>
 
-<div class="sheet-title">SEAS 8410 QUICK TERMS & DEFINITIONS | EMERGENCY STUDY SHEET -- Key terms, definitions, and facts for the final exam</div>
+<div class="sheet-title">SEAS 8410 QUICK TERMS & DEFINITIONS BY WEEK | EMERGENCY STUDY SHEET -- Key terms, definitions, and facts for the final exam</div>
 
 <div class="columns">
 
-  <!-- SECTION 1: VISUALIZATION & CHARTS -->
+  <!-- W1 - VISUALIZATION FUNDAMENTALS -->
   <div class="sec s1">
-    <div class="sec-header">1. Visualization & Charts</div>
+    <div class="sec-header">W1 - Visualization Fundamentals</div>
     <div class="sec-body">
-      <p><b>Bar chart:</b> compares categories, bars have GAPS between them</p>
-      <p><b>Histogram:</b> shows distribution of ONE numeric variable, bars TOUCH</p>
-      <p><b>Scatter plot:</b> shows relationship between TWO variables</p>
-      <p><b>Line chart:</b> shows trends over TIME</p>
-      <p><b>Pie chart:</b> shows parts of a whole, angle = relative frequency x 360, HARD TO READ</p>
-      <p><b>Heatmap:</b> shows values in a matrix using color intensity</p>
-      <p><b>Word cloud:</b> bigger word = more frequent</p>
-      <p><b>Data-ink ratio:</b> maximize data, minimize chart junk (Tufte)</p>
-      <p><b>Pre-attentive attributes:</b> color, size, orientation, shape -- brain processes before conscious thought</p>
+      <p><b>Bar chart:</b> compares categories, bars have GAPS</p>
+      <p><b>Histogram:</b> distribution of ONE numeric var, bars TOUCH, x-axis = number ranges</p>
+      <p><b>Scatter plot:</b> relationship between TWO variables, no connecting line</p>
+      <p><b>Line chart:</b> trends over TIME, connected points</p>
+      <p><b>Pie chart:</b> parts of whole, angle = rel.freq x 360, HARD TO READ, bar always better</p>
+      <p><b>Heatmap:</b> matrix values using color intensity</p>
+      <p><b>Dot plot:</b> individual values for small datasets</p>
+      <p><b>Stem-and-leaf:</b> small datasets, preserves actual digits</p>
+      <p><b>Word cloud:</b> bigger word = more frequent, good for text analysis</p>
+      <p><b>Data-ink ratio (Tufte):</b> maximize data ink, minimize chart junk, remove unnecessary gridlines/borders/3D</p>
+      <p><b>Pre-attentive attributes:</b> color, size, orientation, shape -- processed in &lt;200ms</p>
       <p><b>Perception hierarchy:</b> position > length > angle > area > color</p>
-      <p><b>Dashboard:</b> "visual display of most important info on single screen, monitored at a glance" (Stephen Few)</p>
-      <p><b>Expressiveness:</b> viz shows ALL and ONLY the facts (Mackinlay)</p>
-      <p><b>Effectiveness:</b> info is readily perceived (Mackinlay)</p>
-      <p><b>Top-left corner:</b> most important info goes here (eye starts there)</p>
-      <p><b>13 anti-patterns:</b> exceed screen, no context, too much detail, wrong measure, wrong viz type, meaningless variety, bad design, inaccurate encoding (Y-axis!), poor arrangement, bad highlighting, clutter, color misuse, ugly</p>
+      <p><b>Sequential palette:</b> low-to-high single hue gradient</p>
+      <p><b>Diverging palette:</b> center point with two hues diverging</p>
+      <p><b>Categorical palette:</b> distinct colors for unrelated groups, max ~7</p>
+      <p><b>Color blindness:</b> ~8% males, red-green most common, tools can swap palettes</p>
+      <p><b>Bar vs Histogram:</b> labels on x-axis = bar. Number ranges on x-axis = histogram</p>
     </div>
   </div>
 
-  <!-- SECTION 2: DATA TYPES & SAMPLING -->
+  <!-- W2 - DATA SOURCES, TOOLS & STATISTICAL FOUNDATIONS -->
   <div class="sec s2">
-    <div class="sec-header">2. Data Types & Sampling</div>
+    <div class="sec-header">W2 - Data Sources, Tools & Stats</div>
     <div class="sec-body">
-      <p><b>Nominal:</b> labels with NO order (eye color, IP address, port number)</p>
-      <p><b>Ordinal:</b> labels WITH order (low/med/high, satisfaction scale)</p>
-      <p><b>Interval:</b> numbers, no true zero (temperature C/F, dates)</p>
-      <p><b>Ratio:</b> numbers, true zero (height, weight, age, packet size)</p>
-      <p><b>NOIR:</b> Nominal &lt; Ordinal &lt; Interval &lt; Ratio (increasing info)</p>
-      <p><b>Port number:</b> NOMINAL not ratio (arithmetic meaningless)</p>
-      <p><b>Temperature C/F:</b> INTERVAL not ratio (0 degrees is not "nothing")</p>
-      <p><b>Simple random sampling:</b> every unit has equal chance</p>
-      <p><b>Stratified:</b> sample a BIT from EVERY group</p>
-      <p><b>Cluster:</b> sample WHOLE groups (everything from a few)</p>
-      <p><b>Systematic:</b> every m-th item after random start</p>
-      <p><b>Population:</b> everything. <b>Sample:</b> slice you measure</p>
-      <p><b>Descriptive stats:</b> summarize data you have (mean, charts)</p>
-      <p><b>Inferential stats:</b> generalize from sample to population (hypothesis tests)</p>
+      <p><b>Security data sources:</b> firewalls, IDS/IPS, endpoint AV, IAM/MFA/SSO, DLP, vuln scanners, threat intel, honeypots, SIEM, cloud logs</p>
+      <p><b>JSON:</b> name-value pairs, current standard, replaced XML</p>
+      <p><b>CSV:</b> legacy flat files, simple</p>
+      <p><b>SQL databases:</b> Oracle, MySQL, PostgreSQL -- structured, ACID</p>
+      <p><b>NoSQL:</b> MongoDB (document), Redis (key-value/cache), Cassandra (column), Neo4j (graph)</p>
+      <p><b>Graph DB:</b> nodes + relationships, "5 hops" query easy, augments LLMs</p>
+      <p><b>HDFS:</b> Hadoop, 128MB blocks, 3x replication, compute moves to data, Spark engine</p>
+      <p><b>Time-series DB:</b> InfluxDB, indexed by time</p>
+      <p><b>Star schema:</b> dimensions + facts, Kimball method, Power BI/Tableau designed for them</p>
+      <p><b>Excel:</b> pivot tables, ~1.5M rows, quick first look</p>
+      <p><b>Power BI:</b> GP tool, drag-drop, cloud+desktop, PowerPoint integration, free GWU license, marketplace</p>
+      <p><b>Tableau:</b> GP tool, interactive, Data Flow ETL, alerting</p>
+      <p><b>Splunk:</b> SIEM, SPL queries, file/index-based, Cisco owned, not open source</p>
+      <p><b>ELK:</b> open source (Elasticsearch + Logstash + Kibana)</p>
+      <p><b>Python:</b> pandas/matplotlib/seaborn, most flexible, LLMs write code for you</p>
+      <p><b>GP vs Specialized:</b> GP = Swiss army knife. Specialized = Splunk(SIEM), Grafana(time-series), ArcGIS(geo)</p>
+      <p><b>Descriptive stats:</b> summarize what you HAVE (mean, charts)</p>
+      <p><b>Inferential stats:</b> sample -> conclusions about POPULATION (hypothesis tests)</p>
+      <p><b>Population:</b> everything. <b>Sample:</b> slice you measure. Must be representative</p>
+      <p><b>4 sampling:</b> Simple Random (equal chance), Stratified (bit from EVERY group), Cluster (WHOLE groups), Systematic (every m-th)</p>
+      <p><b>Stratified vs Cluster:</b> stratified = bit from every group. Cluster = everything from few groups. EASY TO CONFUSE</p>
+      <p><b>4 data types NOIR:</b> Nominal (labels no order: IP, port#, gender), Ordinal (ordered labels: severity), Interval (numbers no true zero: temp C/F), Ratio (true zero: weight, age, bytes)</p>
+      <p><b>Type test:</b> Label or number? Label->order? No=nominal Yes=ordinal. Number->zero=nothing? Yes=ratio No=interval</p>
+      <p><b>Port number = NOMINAL. Temperature C/F = INTERVAL. Packet size = RATIO</b></p>
+      <p><b>Frequency table:</b> freq f, relative freq f/total, percentage rel*100, cumulative freq</p>
+      <p><b>Class recipe:</b> R=max-min, m=1+3.3*log(n), width=R/m rounded UP</p>
+      <p><b>Pie angle:</b> relative freq * 360</p>
     </div>
   </div>
 
-  <!-- SECTION 3: CENTER, SPREAD & SHAPE -->
+  <!-- W3 - ENDPOINT SECURITY, PREPROCESSING & NUMERIC MEASURES -->
   <div class="sec s3">
-    <div class="sec-header">3. Center, Spread & Shape</div>
+    <div class="sec-header">W3 - Endpoint Security, Preprocessing & Measures</div>
     <div class="sec-body">
-      <p><b>Mean:</b> average, sensitive to outliers</p>
-      <p><b>Median:</b> middle value, ROBUST to outliers, use for skewed data</p>
-      <p><b>Mode:</b> most frequent, only center measure for nominal data</p>
-      <p><b>"Mean chases the tail":</b> right-skew = mean &gt; median, left-skew = mean &lt; median</p>
-      <p><b>Range:</b> max minus min</p>
-      <p><b>Variance:</b> average of squared deviations from mean, use n-1 for sample</p>
-      <p><b>Standard deviation:</b> square root of variance, back in original units</p>
-      <p><b>Z-score:</b> (value - mean) / SD, how many SDs from mean, unitless</p>
-      <p><b>Empirical Rule:</b> 68-95-99.7% within 1-2-3 SDs, BELL-SHAPED ONLY</p>
-      <p><b>Chebyshev:</b> at least 1-1/k^2 within k SDs, works for ANY shape</p>
-      <p><b>Correlation r:</b> measures LINEAR relationship, range [-1, +1], NOT causation</p>
-      <p><b>Parameter:</b> population measure (Greek: mu, sigma)</p>
-      <p><b>Statistic:</b> sample measure (Latin: X-bar, S)</p>
+      <p><b>Endpoint:</b> any device on network (laptop, phone, server, IoT, tablet)</p>
+      <p><b>ML Pipeline:</b> Dataset -> Clean -> Feature Eng -> Train -> Score -> Evaluate</p>
+      <p><b>"Garbage In, Garbage Out":</b> bad data = bad results, data prep = 80% of work</p>
+      <p><b>Step Zero:</b> EXPLORE first -- <code>df.describe()</code>, <code>df.info()</code>, data dictionary</p>
+      <p><b><code>df.dropna()</code>:</b> remove null rows. <b><code>df.fillna(value)</code>:</b> fill nulls. <b><code>df.drop_duplicates()</code>:</b> remove dupes</p>
+      <p><b><code>df.replace()</code>:</b> swap values. <b><code>df.astype()</code>:</b> convert types. <b><code>df.reset_index(drop=True)</code>:</b> reindex</p>
+      <p><b>Text:</b> <code>str.lower()</code>, <code>str.upper()</code>, <code>str.strip()</code>, <code>str.replace()</code></p>
+      <p><b><code>df.loc</code>:</b> <code>df.loc[df['col']>5]</code> boolean mask, <code>df.loc[0:5,'A':'C']</code> slice</p>
+      <p><b>Imputation:</b> Mean/Median/Mode (simple, underestimates variability), Constant (0/"Unknown"), Forward Fill, Backward Fill, KNN (k nearest neighbors), Model-based (regression/tree/neural net)</p>
+      <p><b>Feature engineering:</b> create NEW features from existing, "secret sauce", needs domain knowledge</p>
+      <p><b>Normalization:</b> scale features so none dominates, accelerates training</p>
+      <p><b>Mean (X-bar):</b> average, SENSITIVE to outliers (billionaire in room)</p>
+      <p><b>Median:</b> middle value, rank=(n+1)/2, ROBUST to outliers, use for skewed (salaries, home prices)</p>
+      <p><b>Mode:</b> most frequent, ONLY center for nominal data, can be unimodal/bimodal/multimodal</p>
+      <p><b>Shape:</b> mean=median=mode -> symmetric. Mode&lt;Median&lt;Mean -> right-skew. Mean&lt;Median&lt;Mode -> left-skew</p>
+      <p><b>"Mean chases the tail":</b> mean always pulled toward the long tail</p>
+      <p><b>Range:</b> max-min. <b>Variance S^2:</b> sum(Xi-Xbar)^2/(n-1). <b>SD S:</b> sqrt(S^2) back in original units</p>
+      <p><b>Why square deviations?</b> Plain gaps cancel. <b>Why n-1?</b> Bessel correction for sample bias</p>
+      <p><b>Parameter</b> (population Greek: mu, sigma) vs <b>Statistic</b> (sample Latin: X-bar, S)</p>
+      <p><b>Empirical Rule:</b> 68-95-99.7% within 1-2-3 SD, BELL-SHAPED ONLY</p>
+      <p><b>Chebyshev:</b> any shape, at least 1-1/k^2 within k SD. k=2: 75%. k=3: 89%</p>
+      <p><b>Z-score:</b> (Xi-mean)/SD, unitless, |Z|>3 = likely outlier</p>
+      <p><b>Correlation r:</b> Cov(X,Y)/(Sx*Sy), range [-1,+1], unitless, NOT causation, only LINEAR</p>
+      <p><b>Covariance:</b> positive = move together, negative = opposite</p>
     </div>
   </div>
 
-  <!-- SECTION 4: DATA PREPROCESSING -->
+  <!-- W4 - USER SECURITY & HYPOTHESIS TESTING -->
   <div class="sec s4">
-    <div class="sec-header">4. Data Preprocessing</div>
+    <div class="sec-header">W4 - User Security & Hypothesis Testing</div>
     <div class="sec-body">
-      <p><b>Garbage in, garbage out:</b> bad data = bad results</p>
-      <p><b>Step Zero:</b> EXPLORE data first (<code>df.describe()</code>, data dictionary)</p>
-      <p><b><code>df.dropna()</code>:</b> remove rows with missing values</p>
-      <p><b><code>df.fillna()</code>:</b> fill missing values with specified value</p>
-      <p><b><code>df.drop_duplicates()</code>:</b> remove duplicate rows</p>
-      <p><b>Imputation:</b> filling missing data (mean/median/mode, ffill, bfill, KNN, model-based)</p>
-      <p><b>Feature engineering:</b> create NEW features from existing data, "secret sauce"</p>
-      <p><b>Normalization:</b> scale features so none dominates</p>
-      <p><b>Endpoint:</b> any device on network (laptop, phone, server, IoT)</p>
-      <p><b>Outlier:</b> value far from rest, wrecks mean but not median</p>
+      <p><b>User:</b> any entity with ID + permissions, includes bots/APIs/service accounts</p>
+      <p><b>DBIR 2025:</b> 60% breaches human element, 22% credential abuse, 20% vuln exploitation, 16% phishing</p>
+      <p><b>System Intrusion:</b> 53% of breaches. Internal actors: 10x more records than external</p>
+      <p><b>Privacy:</b> GDPR (EU consent, 72hr notify), CCPA (CA know/delete/opt-out), PIPEDA (Canada), LGPD (Brazil), DPA 2018 (UK)</p>
+      <p><b>H0 (null):</b> boring default, = sign, "innocent". <b>H1 (alt):</b> your claim, inequality</p>
+      <p><b>NEVER "accept H0"</b> -> "fail to reject H0"</p>
+      <p><b>Type I (alpha):</b> false alarm = reject true H0. <b>Type II (beta):</b> missed detection = keep false H0</p>
+      <p><b>Power = 1-beta.</b> Alpha chosen BEFORE data. Bigger n reduces BOTH errors</p>
+      <p><b>One-tailed:</b> one rejection region. <b>Two-tailed:</b> both tails (alpha/2 each)</p>
+      <p><b>6 steps:</b> 1.State H0/H1 2.Pick alpha 3.Choose statistic 4.Find distribution 5.Rejection region 6.Compute & decide</p>
     </div>
   </div>
 
-  <!-- SECTION 5: HYPOTHESIS TESTING -->
+  <!-- W5 - CODE SECURITY & HYPOTHESIS MECHANICS -->
   <div class="sec s5">
-    <div class="sec-header">5. Hypothesis Testing</div>
+    <div class="sec-header">W5 - Code Security & Hypothesis Mechanics</div>
     <div class="sec-body">
-      <p><b>H0 (null):</b> boring default, always has = sign, like "innocent"</p>
-      <p><b>H1 (alternative):</b> your claim, has inequality</p>
-      <p><b>NEVER say "accept H0"</b> -- say "fail to reject"</p>
-      <p><b>Type I error (alpha):</b> false alarm, reject true H0</p>
-      <p><b>Type II error (beta):</b> missed detection, keep false H0</p>
-      <p><b>Power:</b> 1 - beta, ability to catch real effect</p>
-      <p><b>Alpha:</b> chosen BEFORE looking at data</p>
-      <p><b>p-value:</b> probability of data this extreme IF H0 is true</p>
-      <p><b>p &lt; alpha:</b> reject H0. <b>p &gt;= alpha:</b> fail to reject</p>
-      <p><b>Z-test:</b> Z = (X-bar - mu0) / (sigma / sqrt(n))</p>
-      <p><b>Standard error:</b> sigma / sqrt(n), shrinks with larger n</p>
-      <p><b>One-tailed:</b> rejection region in one tail. <b>Two-tailed:</b> both tails</p>
-      <p><b>Two-sided p-value:</b> DOUBLE the one-tail probability</p>
+      <p><b>Code security:</b> identify/assess/mitigate vulns. CIA (Confidentiality, Integrity, Availability)</p>
+      <p><b>Von Neumann:</b> CPU(Control+ALU) + Memory + I/O. Shared memory = injection attacks possible</p>
+      <p><b>Heartbleed (2014):</b> CVE-2014-0160, OpenSSL missing bounds check, fix: validate payload length</p>
+      <p><b>Equifax (2017):</b> CVE-2017-5638, Apache Struts unpatched 6 months, 147M records</p>
+      <p><b>XZ Utils (2024):</b> CVE-2024-3094, 3yr social engineering, backdoor in liblzma targeting sshd</p>
+      <p><b>CrowdStrike (2024):</b> Channel File 291, Content Validator had own bug, 8.5M BSOD. SQA = security</p>
+      <p><b>SAST:</b> static, no execution, white-box, early. <b>DAST:</b> dynamic, running, black-box, runtime</p>
+      <p><b>Rule:</b> No Security Scans & Reviews -> No Code to Production</p>
+      <p><b>Z-test:</b> Z = (X-bar - mu0) / (sigma/sqrt(n)). SE = sigma/sqrt(n)</p>
+      <p><b>p-value:</b> P(data this extreme | H0 true). Small p = evidence against H0</p>
+      <p><b>Decision:</b> p &lt; alpha -> reject. p >= alpha -> fail to reject</p>
+      <p><b>Two-sided:</b> p = 2*P(Z >= |z|) -- DOUBLE the tail probability</p>
     </div>
   </div>
 
-  <!-- SECTION 6: TOOLS & STORAGE -->
+  <!-- W6 - APP SECURITY, DASHBOARDS & OUTLIER DETECTION -->
   <div class="sec s6">
-    <div class="sec-header">6. Tools & Storage</div>
+    <div class="sec-header">W6 - App Security, Dashboards & Outliers</div>
     <div class="sec-body">
-      <p><b>Excel:</b> quick analysis, pivot tables, ~1.5M row limit</p>
-      <p><b>Power BI:</b> drag-drop dashboards, PowerPoint embed, free GWU license</p>
-      <p><b>Tableau:</b> interactive dashboards, publish to cloud, alerting</p>
-      <p><b>Splunk:</b> SIEM, SPL queries, file/index-based, owned by Cisco</p>
-      <p><b>ELK:</b> open-source (Elasticsearch + Logstash + Kibana)</p>
-      <p><b>Python:</b> pandas + matplotlib + seaborn, most flexible</p>
-      <p><b>GP tools:</b> Swiss army knife (Power BI, Tableau, Looker)</p>
-      <p><b>Specialized tools:</b> Splunk (SIEM), Grafana (time-series), ArcGIS (geospatial)</p>
-      <p><b>SQL:</b> relational databases (Oracle, MySQL, PostgreSQL)</p>
-      <p><b>NoSQL:</b> MongoDB (document), Redis (cache), Cassandra (column), Neo4j (graph)</p>
-      <p><b>HDFS:</b> Hadoop, 128MB blocks, 3x replication, compute moves to data</p>
-      <p><b>Graph DB:</b> nodes + relationships, "5 hops" query easy</p>
-      <p><b>Star schema:</b> dimensions + facts, optimized for reporting</p>
-      <p><b>JSON:</b> current data format standard, replaced XML</p>
+      <p><b>Dashboard (Few):</b> "single screen, at a glance". <b>Mackinlay:</b> expressiveness + effectiveness</p>
+      <p><b>13 anti-patterns:</b> 1.exceed screen 2.no context 3.excess detail 4.wrong measure 5.wrong viz 6.meaningless variety 7.bad design 8.inaccurate encoding(Y-axis!) 9.poor arrangement(top-left=prime) 10.bad highlighting 11.clutter 12.color misuse 13.ugly</p>
+      <p><b>Bar > Pie</b> always for comparison</p>
+      <p><b>Outlier wrecks mean</b> (salary: 26 vs 17.78 without), median barely moves</p>
+      <p><b>Boxplot:</b> Q1(25th), Q2/Median(50th), Q3(75th). IQR = Q3-Q1</p>
+      <p><b>Mild fence:</b> Q1-1.5*IQR to Q3+1.5*IQR. <b>Extreme:</b> Q1-3*IQR to Q3+3*IQR</p>
+      <p><b>Extreme</b> -> usually discard. <b>Mild</b> -> investigate first</p>
+      <p><b>Security:</b> outlier may BE the attack -- don't auto-delete!</p>
+      <p><b>Robust stats:</b> median, MAD, Huber loss (when can't delete outliers)</p>
     </div>
   </div>
 
-  <!-- SECTION 7: SECURITY TOPICS -->
+  <!-- W7 - LOG SECURITY & GESTALT PRINCIPLES -->
   <div class="sec s7">
-    <div class="sec-header">7. Security Topics</div>
-    <div class="sec-body">
-      <p><b>CIA:</b> Confidentiality, Integrity, Availability</p>
-      <p><b>SAST:</b> static analysis, no execution, white-box, finds bugs early</p>
-      <p><b>DAST:</b> dynamic testing, app running, black-box, runtime vulns</p>
-      <p><b>Heartbleed:</b> CVE-2014-0160, OpenSSL missing bounds check</p>
-      <p><b>Equifax:</b> CVE-2017-5638, Apache Struts unpatched, 147M records</p>
-      <p><b>XZ Utils:</b> CVE-2024-3094, 3-year social engineering backdoor</p>
-      <p><b>CrowdStrike outage:</b> Channel File 291, 8.5M BSOD, SQA = security</p>
-      <p><b>DBIR 2025:</b> 60% human element, 22% credential abuse, 53% system intrusion</p>
-      <p><b>GDPR:</b> EU, consent required, right to delete, 72hr breach notification</p>
-      <p><b>CCPA:</b> California, right to know/delete/opt-out of sale</p>
-      <p><b>Von Neumann:</b> CPU + Memory + I/O, shared memory = injection attacks possible</p>
-    </div>
-  </div>
-
-  <!-- SECTION 8: LOGS & GESTALT -->
-  <div class="sec s8">
-    <div class="sec-header">8. Logs & Gestalt</div>
+    <div class="sec-header">W7 - Log Security & Gestalt Principles</div>
     <div class="sec-body">
       <p><b>Log:</b> chronological record of events from IT components</p>
-      <p><b>System logs:</b> OS events, startups, shutdowns, errors</p>
-      <p><b>Application logs:</b> app errors, user activities</p>
-      <p><b>Network logs:</b> connections, traffic from routers/switches/firewalls</p>
-      <p><b>Security logs:</b> login attempts, policy violations, from AV/IDS/SIEM</p>
-      <p><b>Audit logs:</b> user activities for compliance/forensics</p>
-      <p><b>Web server logs:</b> client requests, server responses</p>
-      <p><b>Database logs:</b> queries, schema changes, SQL injection detection</p>
-      <p><b>Gestalt Proximity:</b> nearby objects = same group</p>
-      <p><b>Gestalt Similarity:</b> same color/shape = same group</p>
-      <p><b>Gestalt Closure:</b> brain completes incomplete shapes</p>
-      <p><b>Gestalt Continuity:</b> aligned objects = single entity</p>
-      <p><b>Gestalt Enclosure:</b> visual border = STRONGEST grouping</p>
-      <p><b>Gestalt Connection:</b> linked objects grouped, stronger than proximity</p>
-      <p><b>Strength order:</b> Enclosure &gt; Connection &gt; Proximity/Similarity</p>
+      <p><b>7 log types:</b> System (OS/hardware), Application (app errors), Network (connections/traffic), Security (logins/violations from AV/IDS/SIEM), Audit (compliance/forensics), Web Server (client requests IIS/Apache), Database (queries/schema/SQL injection)</p>
+      <p><b>Gestalt Proximity:</b> nearby=group, directs scan direction</p>
+      <p><b>Gestalt Similarity:</b> same visual=group, consistent color</p>
+      <p><b>Gestalt Closure:</b> incomplete perceived complete</p>
+      <p><b>Gestalt Continuity:</b> aligned=single entity</p>
+      <p><b>Gestalt Enclosure:</b> border=STRONGEST grouping</p>
+      <p><b>Gestalt Connection:</b> linked objects, stronger than proximity but weaker than enclosure</p>
+      <p><b>Strength:</b> Enclosure > Connection > Proximity/Similarity > Continuity > Closure</p>
+      <p><b>CrowdStrike 2025:</b> breakout time avg 48 min (fastest 51 sec), vishing +442%, China-nexus +150%</p>
     </div>
   </div>
 
-  <!-- SECTION 9: APTs & THREAT ACTORS -->
+  <!-- W8 - PARAMETRIC VS NON-PARAMETRIC & DECISION TREES -->
+  <div class="sec s8">
+    <div class="sec-header">W8 - Parametric vs Non-Parametric & Trees</div>
+    <div class="sec-body">
+      <p><b>Parametric:</b> assumes normal, tests mean, more powerful, sensitive to outliers (Z-test, t-test)</p>
+      <p><b>Non-parametric:</b> distribution-free, tests median, robust to outliers (sign test, Kruskal-Wallis)</p>
+      <p><b>Decision:</b> bell-shaped -> parametric. Skewed/ordinal/outliers -> non-parametric</p>
+      <p><b>Sign test:</b> H0: M=m0, count pluses (Xi>m0), R ~ Binomial(n, 0.5), discard ties, shrink n</p>
+      <p><b>Decision tree:</b> flowchart. Root(top) -> Internal nodes(questions) -> Leaves(final labels)</p>
+      <p><b>Recursive partitioning:</b> split on variable maximizing purity</p>
+      <p><b>Overfitting:</b> too deep = memorizes noise. Fix: early stopping or pruning (bottom-up better)</p>
+      <p><b>CART</b> (Breiman 1984, binary splits) vs <b>ID3/C4.5</b> (Quinlan, multi-way)</p>
+      <p><b>Classification tree</b> (categorical target) vs <b>Regression tree</b> (numeric target)</p>
+      <p><b>No distributional assumptions needed</b> (unlike hypothesis tests)</p>
+    </div>
+  </div>
+
+  <!-- W10 - APTs & LINEAR REGRESSION -->
   <div class="sec s9">
-    <div class="sec-header">9. APTs & Threat Actors</div>
+    <div class="sec-header">W10 - APTs & Linear Regression</div>
     <div class="sec-body">
-      <p><b>APT:</b> Advanced (custom malware, zero-day) + Persistent (months/years) + Threat (data theft/disruption)</p>
-      <p><b>APTs are "slow and low"</b></p>
-      <p><b>Threat actor types:</b> cybercriminals, state-sponsored, hacktivists, insiders, terrorists, competitors</p>
-      <p><b>Tier I-II:</b> exploit KNOWN vulns ($10s)</p>
-      <p><b>Tier III-IV:</b> discover UNKNOWN vulns ($Ms)</p>
-      <p><b>Tier V-VI:</b> CREATE vulnerabilities in supply chain ($Bs)</p>
-      <p><b>Kill chain:</b> Recon -> Weaponize -> Deliver -> Exploit -> Install -> C2 -> Actions on Objectives</p>
-      <p><b>Kaspersky model:</b> Gain Access -> Foothold -> Deepen -> Lateral -> Look/Learn/Remain</p>
-      <p><b>CrowdStrike:</b> Bear=Russia, Chollima=DPRK, Kitten=Iran, Leopard=Pakistan, Hawk=Syria, Jackal=Hacktivist</p>
+      <p><b>APT:</b> Advanced (custom malware, zero-day) + Persistent (months/years undetected) + Threat (data theft/disruption). APTs are "slow" and "low"</p>
+      <p><b>Threat actors:</b> cybercriminals, state-sponsored, hacktivists, insiders, terrorists, competitors</p>
+      <p><b>6 Tiers:</b> I-II ($10s) exploit known vulns. III-IV ($Ms) discover unknown. V-VI ($Bs) CREATE vulns via supply chain</p>
+      <p><b>Kill chain 7 steps:</b> Recon -> Weaponize -> Deliver -> Exploit -> Install -> C2 -> Actions on Objectives</p>
+      <p><b>Kaspersky 5 stages:</b> Gain Access -> Foothold -> Deepen -> Lateral -> Look/Learn/Remain</p>
+      <p><b>CrowdStrike naming:</b> Bear=Russia, Buffalo=Vietnam, Chollima=DPRK, Crane=S.Korea, Hawk=Syria, Jackal=Hacktivist, Kitten=Iran, Leopard=Pakistan</p>
+      <p><b>Linear regression:</b> Y = b0 + b1*X + e. b0=intercept (Y when X=0). b1=slope (change in Y per 1-unit X)</p>
+      <p><b>Y=response/dependent. X=predictor/independent.</b> Slope is the number you care about most</p>
+      <p><b>Least squares:</b> minimizes sum of SQUARED residuals (vertical distances to line)</p>
+      <p><b>Residual:</b> vertical distance from data point to fitted line</p>
+      <p><b>Gauss-Markov:</b> least squares = best unbiased linear estimator (BLUE)</p>
+      <p><b>Normality:</b> NOT needed to fit line. Only needed for confidence intervals and hypothesis tests on slope</p>
+      <p><b>Always SCATTER PLOT FIRST</b> to check linearity</p>
+      <p><b>Security example:</b> slope=5 on "failed logins vs hour" means each hour = 5 more failed logins</p>
+      <p><b>Positive slope:</b> rise together. <b>Negative:</b> one rises other falls. <b>Near-zero:</b> X tells little about Y</p>
     </div>
   </div>
 
-  <!-- SECTION 10: REGRESSION & CLASSIFICATION -->
+  <!-- W11 - COLLABORATION & LOGISTIC REGRESSION -->
   <div class="sec s10">
-    <div class="sec-header">10. Regression & Classification</div>
+    <div class="sec-header">W11 - Collaboration & Logistic Regression</div>
     <div class="sec-body">
-      <p><b>Linear regression:</b> Y = b0 + b1*X + error, straight line through scatter</p>
-      <p><b>b0 (intercept):</b> Y when X = 0</p>
-      <p><b>b1 (slope):</b> change in Y per 1-unit increase in X (the important number)</p>
-      <p><b>Least squares:</b> minimizes squared vertical distances (residuals)</p>
-      <p><b>Gauss-Markov:</b> least squares = best unbiased linear fit</p>
-      <p><b>Always scatter plot FIRST before fitting</b></p>
-      <p><b>Logistic regression:</b> S-curve (sigmoid), predicts probability [0,1] for yes/no</p>
-      <p><b>Cutoff:</b> probability threshold for "yes" (default 0.5, adjustable)</p>
-      <p><b>Lower cutoff</b> = catch more but more false alarms</p>
-      <p><b>Confusion matrix:</b> 2x2 of predicted vs actual (TP, TN, FP, FN)</p>
-      <p><b>Sensitivity:</b> of real YES, how many caught? TP / (TP + FN)</p>
-      <p><b>Specificity:</b> of real NO, how many cleared? TN / (TN + FP)</p>
-      <p><b>Accuracy alone is misleading:</b> 99% normal data -> lazy model 99% accurate, 0% sensitivity</p>
-      <p><b>ROC curve:</b> sensitivity vs (1-specificity) across all cutoffs</p>
-      <p><b>AUC:</b> 0.5 = coin flip (BAD), 1.0 = perfect</p>
+      <p><b>Collaboration:</b> shared goals, mutual respect, open communication, shared accountability</p>
+      <p><b>Collaboration features:</b> sharing/access controls, real-time editing, commenting/annotation, version control, interactive dashboards, data integration/sync, security features, user-friendly interface, alerts/notifications, mobile access, ecosystem integration</p>
+      <p><b>Power BI:</b> publish Excel to workspace, embed live reports in PowerPoint (interactive in edit+slideshow), mobile annotate+share, sharing permissions (org/existing/specific)</p>
+      <p><b>Tableau:</b> publish to cloud, alerting (subscriptions/metrics/threshold alerts), commenting, mobile-responsive layouts</p>
+      <p><b>Logistic regression:</b> predicts probability [0,1] for yes/no using S-curve (sigmoid)</p>
+      <p><b>Why not linear for yes/no:</b> straight line can go below 0 or above 1 (nonsense for probability)</p>
+      <p><b>Challenger O-ring:</b> 0.86 failure probability at 53F, 0.05 at 81F. Cold = risky</p>
+      <p><b>Cutoff (threshold):</b> probability above which you label "yes". Default 0.5 but it's a DIAL</p>
+      <p><b>Lower cutoff:</b> catch more true positives BUT more false alarms. <b>Higher:</b> fewer false alarms BUT miss more</p>
+      <p><b>Confusion matrix:</b> 2x2 of predicted vs actual. Diagonal=correct. Off-diagonal=wrong</p>
+      <p><b>TP</b>=True Positive(correct yes). <b>TN</b>=True Negative(correct no). <b>FP</b>=False Positive(false alarm=Type I). <b>FN</b>=False Negative(miss=Type II)</p>
+      <p><b>Sensitivity:</b> TP/(TP+FN) "of real attacks, how many caught?" -- security cares about this most</p>
+      <p><b>Specificity:</b> TN/(TN+FP) "of normal traffic, how much left alone?"</p>
+      <p><b>Accuracy:</b> (TP+TN)/total. Can be MISLEADING: 99% normal traffic -> lazy "always no" model = 99% accurate but 0% sensitivity</p>
+      <p><b>ROC curve:</b> sensitivity vs 1-specificity across ALL cutoffs. Perfect = hugs top-left corner</p>
+      <p><b>AUC:</b> 0.5 = coin flip (BAD). 1.0 = perfect. Higher is better</p>
     </div>
   </div>
 
-  <!-- SECTION 11: ANOVA & ADVANCED TESTS -->
+  <!-- W12 - ANOVA & NON-PARAMETRIC TESTS -->
   <div class="sec s11">
-    <div class="sec-header">11. ANOVA & Advanced Tests</div>
+    <div class="sec-header">W12 - ANOVA & Non-Parametric Tests</div>
     <div class="sec-body">
-      <p><b>ANOVA:</b> compare means of 3+ groups (extends t-test)</p>
-      <p><b>F-statistic:</b> between-group variance / within-group variance</p>
-      <p><b>Large F:</b> groups differ more than random noise explains</p>
-      <p><b>Why not multiple t-tests:</b> inflates false positive rate (~14% for 3 groups)</p>
-      <p><b>ANOVA assumptions:</b> independence, normality, equal variance</p>
-      <p><b>Tukey post-hoc:</b> which specific groups differ (after ANOVA rejects)</p>
-      <p><b>Two-way ANOVA:</b> 2 factors + INTERACTION (read interaction row FIRST)</p>
-      <p><b>Interaction:</b> effect of one factor DEPENDS on level of other</p>
-      <p><b>MANOVA:</b> multiple correlated response variables at once</p>
-      <p><b>Kruskal-Wallis:</b> non-parametric alternative to one-way ANOVA</p>
-      <p><b>Friedman:</b> non-parametric alternative to two-way ANOVA</p>
-      <p><b>Sign test:</b> tests median, count plus/minus signs, Binomial(n, 0.5)</p>
-      <p><b>Security data is often non-normal:</b> skewed, heavy-tailed, zero-inflated, ordinal</p>
+      <p><b>ANOVA:</b> compare means of 3+ groups. Extends t-test. H0: mu1=mu2=...=muk. H1: at least one differs</p>
+      <p><b>Why not multiple t-tests:</b> 3 groups at alpha=0.05 -> 3 comparisons -> false positive inflates to ~14%</p>
+      <p><b>F-statistic</b> = MSB/MSW = Between-group variance / Within-group variance. Large F -> reject H0</p>
+      <p><b>Between-group:</b> how different group means are from grand mean (SIGNAL)</p>
+      <p><b>Within-group:</b> spread inside each group (NOISE)</p>
+      <p><b>3 assumptions:</b> 1.Independence 2.Normality (Shapiro-Wilk/Q-Q) 3.Homogeneity of variance (Levene's/Bartlett's)</p>
+      <p><b>When normality fails:</b> use Kruskal-Wallis (non-parametric, ranks-based)</p>
+      <p><b>When equal variance fails:</b> use Welch's ANOVA</p>
+      <p><b>Tukey post-hoc:</b> after ANOVA rejects, tells you WHICH specific groups differ</p>
+      <p><b>SOC example:</b> F=32.75, p=0.000 -> reject -> Tukey: all three teams differ</p>
+      <p><b>Two-Way ANOVA:</b> 2 factors, asks 3 questions: main effect A, main effect B, INTERACTION A*B</p>
+      <p><b>Interaction is MOST IMPORTANT concept:</b> effect of one factor DEPENDS on other factor's level</p>
+      <p><b>Non-parallel lines</b> in interaction plot = interaction exists</p>
+      <p><b>Read INTERACTION ROW FIRST</b> in Minitab output. If significant, interpret main effects with caution</p>
+      <p><b>MANOVA:</b> multiple CORRELATED response variables. H0: mean VECTOR equal across groups</p>
+      <p><b>Why not multiple ANOVAs:</b> inflates Type I, ignores correlation, misses combination effects</p>
+      <p><b>Wilks' Lambda:</b> MANOVA test statistic</p>
+      <p><b>ANOVA family:</b> t-test(2 groups,1 response), One-Way(3+,1), Two-Way(2 factors,1,interaction), Repeated Measures(1+,1,same subjects), MANOVA(1+,2+ responses)</p>
+      <p><b>Non-parametric equivalents:</b> Kruskal-Wallis(one-way), Friedman(two-way), Spearman(correlation)</p>
+      <p><b>Security data non-normal:</b> zero-inflated counts, skewed response times, ordinal severity (CVSS), heavy tails (power-law losses), small samples (breach investigations n=5-15), categorical variables</p>
     </div>
   </div>
 
-  <!-- SECTION 12: COLLABORATION -->
+  <!-- W13 - COURSE RECAP -->
   <div class="sec s12">
-    <div class="sec-header">12. Collaboration</div>
+    <div class="sec-header">W13 - Course Recap</div>
     <div class="sec-body">
-      <p><b>Collaboration features:</b> sharing, real-time editing, commenting, version control, interactive dashboards, data sync, security, mobile, alerts, ecosystem integration</p>
-      <p><b>Power BI + Excel:</b> publish workbooks directly to Power BI workspace</p>
-      <p><b>Power BI + PowerPoint:</b> embed LIVE interactive reports in slides</p>
-      <p><b>Tableau:</b> publish to cloud, subscriptions/alerts, commenting, mobile-responsive</p>
-      <p><b>Key:</b> people + training + data-driven culture matter as much as tools</p>
+      <p><b>Visualization history:</b> Dr. John Snow 1849 cholera map (overlayed infected citizens on map)</p>
+      <p><b>Simple charts:</b> pies, bars, line, 3D bar (mostly single dimension)</p>
+      <p><b>NoSQL types:</b> document(MongoDB), key-value(Redis/DynamoDB), column-family(Cassandra/HBase), graph(Neo4j/Neptune)</p>
+      <p><b>Time-series DB:</b> InfluxDB, OpenTSDB, TimescaleDB</p>
+      <p><b>GP tools:</b> drag-drop, cloud+desktop, rich components, data source integrations, PowerPoint, licensing</p>
+      <p><b>Step Zero:</b> explore data FIRST, data dictionary, <code>df.describe()</code></p>
+      <p><b>Big data:</b> Hadoop(batch), Kafka(streaming), Spark(in-memory engine)</p>
+      <p><b>Splunk pyramid:</b> Raw Data -> Searches(SPL) -> Table(data model) -> Report(aggregation/pivot) -> Dashboard</p>
+      <p><b>SPL:</b> eval (build new fields like Excel formula columns), stats functions by fields, count</p>
+      <p><b>Source Type:</b> arbitrary categorization of events. <b>Transform:</b> config file for field transformations. <b>Props.conf:</b> connects source type to transform</p>
+      <p><b>Endpoint:</b> any device communicating with network. Primary attack targets</p>
+      <p><b>User security data:</b> auth/access logs, user account info, network traffic, firewall logs</p>
+      <p><b>LANL dataset:</b> 12GB, 1.6B events, 12,425 users, 17,684 computers, 62,974 processes</p>
+      <p><b>Von Neumann:</b> CPU + Memory + I/O, instruction set separate from data</p>
+      <p><b>CI/CD:</b> Build Products -> Test/Provision -> Run/Operate -> Access. Developer workstation at center</p>
+      <p><b>Python viz:</b> seaborn gallery (violin plots, pair plots, heatmaps, box plots)</p>
+      <p><b>Behind pivots:</b> dragging dimensions = measures across dimensions (risk/country/reliability)</p>
     </div>
   </div>
 
-  <!-- SECTION 13: OUTLIER DETECTION -->
-  <div class="sec s13">
-    <div class="sec-header">13. Outlier Detection</div>
+  <!-- QUICK REFERENCE: ANOVA DECISION GUIDE -->
+  <div class="sec s14">
+    <div class="sec-header">Quick Ref - ANOVA Decision Guide</div>
     <div class="sec-body">
-      <p><b>IQR:</b> Q3 - Q1 (width of middle 50%)</p>
-      <p><b>Mild outlier:</b> past Q1 - 1.5*IQR or Q3 + 1.5*IQR</p>
-      <p><b>Extreme outlier:</b> past Q1 - 3*IQR or Q3 + 3*IQR</p>
-      <p><b>Mean is fragile</b> (outliers drag it), <b>median is robust</b></p>
-      <p><b>In security:</b> outlier might BE the attack -- investigate before deleting</p>
-      <p><b>Boxplot:</b> visual outlier detector built from quartiles</p>
-      <p><b>Decision tree:</b> flowchart classifier (root -> internal nodes -> leaves)</p>
-      <p><b>Overfitting:</b> tree too deep memorizes noise, fix with pruning</p>
+      <table class="ref-table">
+        <tr><th>Scenario</th><th>Test (Normal)</th><th>Non-Normal Alt</th></tr>
+        <tr><td>2 groups, 1 response</td><td>t-test</td><td>Wilcoxon</td></tr>
+        <tr><td>3+ groups, 1 response</td><td>One-Way ANOVA</td><td>Kruskal-Wallis</td></tr>
+        <tr><td>2 factors, 1 response</td><td>Two-Way ANOVA</td><td>Friedman</td></tr>
+        <tr><td>2+ groups, 2+ responses</td><td>MANOVA</td><td>--</td></tr>
+        <tr><td>Correlation</td><td>Pearson</td><td>Spearman</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: KEY FORMULAS -->
+  <div class="sec s15">
+    <div class="sec-header">Quick Ref - Key Formulas</div>
+    <div class="sec-body">
+      <p><b>Z-test:</b> Z = (X-bar - mu0)/(sigma/sqrt(n)). SE = sigma/sqrt(n)</p>
+      <p><b>Variance:</b> sum(Xi-Xbar)^2/(n-1). <b>SD:</b> sqrt(variance)</p>
+      <p><b>IQR:</b> Q3-Q1. Mild: Q1-1.5*IQR to Q3+1.5*IQR. Extreme: 3*IQR</p>
+      <p><b>Class recipe:</b> R=max-min, m=1+3.3*log(n), width=R/m up</p>
+      <p><b>F = MSB/MSW.</b> Sensitivity = TP/(TP+FN). Specificity = TN/(TN+FP)</p>
+      <p><b>Regression:</b> Y = b0 + b1*X + e. <b>Pie angle:</b> rel.freq * 360</p>
+      <p><b>AUC:</b> 0.5=coin flip, 1.0=perfect. <b>Empirical:</b> 68-95-99.7 (bell only)</p>
+      <p><b>Chebyshev:</b> 1-1/k^2 within k SD. k=2: 75%. k=3: 89%. Any shape</p>
+      <p><b>Correlation:</b> r = Cov(X,Y)/(Sx*Sy). Range [-1,+1]. Unitless</p>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: CROWDSTRIKE ANIMALS -->
+  <div class="sec s13">
+    <div class="sec-header">Quick Ref - CrowdStrike Animal Names</div>
+    <div class="sec-body">
+      <table class="ref-table">
+        <tr><th>Animal</th><th>Nation/Group</th><th>Animal</th><th>Nation/Group</th></tr>
+        <tr><td>Bear</td><td>Russia</td><td>Crane</td><td>S. Korea</td></tr>
+        <tr><td>Buffalo</td><td>Vietnam</td><td>Hawk</td><td>Syria</td></tr>
+        <tr><td>Chollima</td><td>DPRK</td><td>Jackal</td><td>Hacktivist</td></tr>
+        <tr><td>Kitten</td><td>Iran</td><td>Leopard</td><td>Pakistan</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE: CONFUSION MATRIX -->
+  <div class="sec s14">
+    <div class="sec-header">Quick Ref - Confusion Matrix</div>
+    <div class="sec-body">
+      <table class="ref-table">
+        <tr><th></th><th>Predicted YES</th><th>Predicted NO</th></tr>
+        <tr><td><b>Actual YES</b></td><td>TP (correct yes)</td><td>FN (miss=Type II)</td></tr>
+        <tr><td><b>Actual NO</b></td><td>FP (false alarm=Type I)</td><td>TN (correct no)</td></tr>
+      </table>
+      <p><b>Diagonal=right, off-diagonal=wrong.</b> Security cares about sensitivity (catching attacks) more than accuracy</p>
+    </div>
+  </div>
+
+  <!-- EXAM TRAPS -->
+  <div class="sec s16">
+    <div class="sec-header">EXAM TRAPS -- Common Mistakes</div>
+    <div class="sec-body">
+      <p><b>"Accept H0"</b> WRONG -> "fail to reject"</p>
+      <p><b>Pie bad, bar good.</b> Bar has GAPS, histogram TOUCH</p>
+      <p><b>Mean chases tail.</b> Median for skewed data</p>
+      <p><b>n-1</b> for SAMPLE variance. N for population</p>
+      <p><b>Port#=NOMINAL.</b> Temp C/F=INTERVAL</p>
+      <p><b>Alpha BEFORE data.</b> Two-sided: DOUBLE the p</p>
+      <p><b>ANOVA F = between/within</b> (not within/between)</p>
+      <p><b>Interaction:</b> read FIRST in output</p>
+      <p><b>AUC 0.5 = BAD</b> (coin flip). 1.0 = good</p>
+      <p><b>Kruskal-Wallis</b> for non-normal, not ANOVA</p>
+      <p><b>Logistic</b> for yes/no, not linear</p>
+      <p><b>APT Tier V-VI CREATE vulns</b> (not just exploit)</p>
+      <p><b>Bear=Russia, Kitten=Iran</b> (not reversed)</p>
+      <p><b>Sensitivity</b> = catching attacks. <b>Specificity</b> = leaving normal alone</p>
+      <p><b>Scatter plot FIRST</b> before fitting regression</p>
     </div>
   </div>
 
